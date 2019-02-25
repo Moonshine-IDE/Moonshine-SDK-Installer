@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<air version="30.0"/>
+	<packages>
+		<item integrated="true">
+			<title>Project Management</title>
+			<description><![CDATA[Browse project tree, add and remove files]]></description>
+			<image></image>
+			<componentDependencyIDs></componentDependencyIDs>
+		</item>
+		<item integrated="true">
+			<title>Project Templates</title>
+			<description><![CDATA[Create new projects from templates]]></description>
+			<image></image>
+			<componentDependencyIDs></componentDependencyIDs>
+		</item>
+		<item integrated="true">
+			<title>Editor</title>
+			<description><![CDATA[Text editing, syntax highlighting search]]></description>
+			<image></image>
+			<componentDependencyIDs></componentDependencyIDs>
+		</item>
+		<item integrated="true">
+			<title>Visual Editor</title>
+			<description><![CDATA[GUI designer for Apache Flex and PrimeFaces interfaces]]></description>
+			<image></image>
+			<componentDependencyIDs></componentDependencyIDs>
+		</item>
+		<item integrated="true">
+			<title>Tour de Flex</title>
+			<description><![CDATA[Examples for Apache Flex]]></description>
+			<image></image>
+			<componentDependencyIDs></componentDependencyIDs>
+		</item>
+		<item integrated="true">
+			<title>Away3D Modeler</title>
+			<description><![CDATA[Create and edit 3D models]]></description>
+			<image></image>
+			<componentDependencyIDs></componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Editor Enhancements</title>
+			<description><![CDATA[Type-ahead, Follow References, Etc.]]></description>
+			<image></image>
+			<componentDependencyIDs>openjava</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Flex/ActionScript Compilation</title>
+			<description><![CDATA[Compile Flex Applications]]></description>
+			<image></image>
+			<componentDependencyIDs>flex,openjava</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Apache Royale Compilation</title>
+			<description><![CDATA[Compile and launch Royale projects]]></description>
+			<image></image>
+			<componentDependencyIDs>royale,openjava</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Feathers Compilation</title>
+			<description><![CDATA[Compile and launch Feathers projects]]></description>
+			<image></image>
+			<componentDependencyIDs>feathers,openjava</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Apache Ant Integration</title>
+			<description><![CDATA[Run scripts to automate builds and packaging]]></description>
+			<image></image>
+			<componentDependencyIDs>ant,openjava</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Subversion Integration</title>
+			<description><![CDATA[Import and update Subversion projects]]></description>
+			<image></image>
+			<componentDependencyIDs>svn</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>Git Integration</title>
+			<description><![CDATA[Import and update Git projects]]></description>
+			<image></image>
+			<componentDependencyIDs>git</componentDependencyIDs>
+		</item>
+		<item integrated="false">
+			<title>PrimeFaces Project Preview</title>
+			<description><![CDATA[Preview PrimeFaces interfaces in browser using lightweight Payara server]]></description>
+			<image></image>
+			<componentDependencyIDs>openjava,maven</componentDependencyIDs>
+		</item>
+	</packages>
+	<components>
+		<item id="flex">
+			<title>Apache Flex SDK</title>
+			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
+			<image>/helperResources/images/logoApacheFlex.png</image>
+			<pathValidation>flex-sdk-description.xml</pathValidation>
+			<sdkType>flex</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>http://flex.apache.org</website>
+			<download>
+				<windows>
+					<version version="4.16.1" displayVersion="4.16.1">
+		                <path></path>
+		                <file></file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="4.16.1" displayVersion="4.16.1">
+		                <path></path>
+		                <file></file>
+		            </version>
+				</mac>
+			</download>
+		</item>
+		<item id="royale">
+			<title>Apache Royale</title>
+			<description><![CDATA[Required for: Royale Project Compilation, Editor Essentials]]></description>
+			<image>/helperResources/images/logoRoyale.png</image>
+			<pathValidation>royale-asjs/royale-sdk-description.xml</pathValidation>
+			<sdkType>royale</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://royale.apache.org</website>
+			<download>
+				<windows>
+					<version version="0.9.4" displayVersion="0.9.4">
+		                <path>http://moonshine-ide.com/downloads/royale/</path>
+		                <file>apache-royale-0.9.4-bin-js.zip</file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="0.9.4" displayVersion="0.9.4">
+		                <path>http://moonshine-ide.com/downloads/royale/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+		                <file>apache-royale-0.9.4-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+		            </version>
+				</mac>
+			</download>
+		</item>
+		<item id="openjava">
+			<title>OpenJDK</title>
+			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
+			<image>/helperResources/images/logoOpenJDK.png</image>
+			<pathValidation></pathValidation>
+			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://openjdk.java.net</website>
+			<download>
+				<windows>
+					<version version="1.8.0" displayVersion="1.8.0u201">
+		                <path>http://moonshine-ide.com/downloads/ant/</path>
+		                <file>apache-ant-1.10.1-bin.zip</file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="1.8.0" displayVersion="1.8.0u201">
+		                <path>http://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+		                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+		            </version>
+				</mac>
+			</download>
+		</item>
+		<item id="ant">
+			<title>Apache Ant</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoAnt.png</image>
+			<pathValidation>bin/ant</pathValidation>
+			<sdkType>ant</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://ant.apache.org</website>
+			<download>
+				<windows>
+					<version version="1.10.1" displayVersion="1.10.1">
+		                <path>http://moonshine-ide.com/downloads/ant/</path>
+		                <file>apache-ant-1.10.1-bin.zip</file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="1.10.1" displayVersion="1.10.1">
+		                <path>http://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+		                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+		            </version>
+				</mac>
+			</download>
+		</item>
+		<item id="maven">
+			<title>Apache Maven</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoMaven.png</image>
+			<pathValidation>bin/mvn</pathValidation>
+			<sdkType>maven</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://maven.apache.org</website>
+			<download>
+				<windows>
+					<version version="3.6.0" displayVersion="3.6.0">
+		                <path>http://moonshine-ide.com/downloads/maven/</path>
+		                <file>apache-maven-3.6.0-bin.zip</file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="3.6.0" displayVersion="3.6.0">
+		                <path>http://moonshine-ide.com/downloads/maven/</path>
+		                <file>apache-maven-3.6.0-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+		            </version>
+				</mac>
+			</download>
+		</item>
+		<item id="feathers">
+			<title>Feathers</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoFeathers.png</image>
+			<pathValidation></pathValidation>
+			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://feathersui.com</website>
+			<download>
+				<windows>
+					<version version="4.0.0" displayVersion="4.0.0">
+		            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+	              		<file>feathers-sdk-4.0.0-bin.zip</file>
+	            	</version>
+	 			</windows>
+				<mac>
+					<version version="4.0.0" displayVersion="4.0.0">
+	                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+	              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
+	             </version>
+				</mac>
+			</download>
+		</item>
+		<item id="svn">
+			<title>Subversion</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoSVN.png</image>
+			<pathValidation></pathValidation>
+			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://feathersui.com</website>
+			<download>
+				<windows>
+					<version version="4.0.0" displayVersion="4.0.0">
+		            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+	              		<file>feathers-sdk-4.0.0-bin.zip</file>
+	            	</version>
+	 			</windows>
+				<mac>
+					<version version="4.0.0" displayVersion="4.0.0">
+	                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+	              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
+	             </version>
+				</mac>
+			</download>
+		</item>
+		<item id="git">
+			<title>Git</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoGit.png</image>
+			<pathValidation></pathValidation>
+			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://feathersui.com</website>
+			<download>
+				<windows>
+					<version version="4.0.0" displayVersion="4.0.0">
+		            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+	              		<file>feathers-sdk-4.0.0-bin.zip</file>
+	            	</version>
+	 			</windows>
+				<mac>
+					<version version="4.0.0" displayVersion="4.0.0">
+	                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+	              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
+	             </version>
+				</mac>
+			</download>
+		</item>
+	</components>
+</config>

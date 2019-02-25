@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 initialize="onInitialized(event)" creationComplete="onCreationCompletes(event)">
+	<fx:Metadata>
+		[Event(name="DOWNLOAD_COMPONENT", type="actionScripts.events.HelperEvent")]
+		[Event(name="OPEN_MOON_SETTINGS", type="actionScripts.events.HelperEvent")]
+		[Event(name="COMPONENT_DOWNLOADED", type="actionScripts.events.HelperEvent")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import actionScripts.events.HelperEvent;
+			import actionScripts.interfaces.IHelperMoonshineBridge;
+			import actionScripts.locator.HelperModel;
+			import actionScripts.managers.DetectionManager;
+			import actionScripts.managers.StartupHelper;
+			import actionScripts.valueObjects.ComponentVO;
+			import actionScripts.valueObjects.HelperConstants;
+			
+			import components.renderers.ComponentRenderer;
+			import components.renderers.PackageRenderer;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PUBLIC VARIABLES
+			//
+			//--------------------------------------------------------------------------
+			
+			public var dependencyCheckUtil:IHelperMoonshineBridge;
+			public var isRunningInsideMoonshine:Boolean;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PRIVATE VARIABLES
+			//
+			//--------------------------------------------------------------------------
+			
+			[Bindable] private var packageList:ArrayCollection;
+			
+			private var model:HelperModel = HelperModel.getInstance();
+			private var startupHelper:StartupHelper = new StartupHelper();
+			private var detectionManager:DetectionManager = new DetectionManager();
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PUBLIC API
+			//
+			//--------------------------------------------------------------------------
+			
+			public function updateComponentStatusAsDownloaded(id:String):void
+			{
+				for each (var item:ComponentVO in model.components)
+				{
+					if (item.id == id)
+					{
+						item.isAlreadyDownloaded = true;
+						this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, item));
+						break;
+					}
+				}
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PROTECTED API
+			//
+			//--------------------------------------------------------------------------
+			
+			protected function onInitialized(event:FlexEvent):void
+			{
+				HelperConstants.IS_MACOS = !NativeApplication.supportsSystemTrayIcon;
+				HelperConstants.IS_RUNNING_IN_MOON = isRunningInsideMoonshine;
+			}
+			
+			protected function onCreationCompletes(event:FlexEvent):void
+			{
+				model.moonshineBridge = dependencyCheckUtil;
+				
+				attachStartupHelperListeners(true);
+				startupHelper.setLocalPathConfig();
+				startupHelper.loadMoonshineConfig();
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PRIVATE API
+			//
+			//--------------------------------------------------------------------------
+			
+			private function attachStartupHelperListeners(attach:Boolean):void
+			{
+				if (attach)
+				{
+					startupHelper.addEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
+					startupHelper.addEventListener(StartupHelper.EVENT_CONFIG_ERROR, onConfigError);
+				}
+				else
+				{
+					startupHelper.removeEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
+					startupHelper.removeEventListener(StartupHelper.EVENT_CONFIG_ERROR, onConfigError);
+				}
+			}
+			
+			private function filterSearch(filter:Boolean=true):void
+			{
+				if (!filter)
+				{
+					model.packages.filterFunction = null;
+					model.components.filterFunction = null;
+					model.packages.refresh();
+					model.components.refresh();
+					return;
+				}
+				
+				if (rgType.selectedValue == "feature")
+				{
+					model.packages.filterFunction = filterPackages;
+					model.packages.refresh();
+				}
+				else
+				{
+					model.components.filterFunction = filterComponents;
+					model.components.refresh();
+				}
+			}
+			
+			private function filterPackages(item:Object):Boolean
+			{
+				return !item.isIntegrated;
+			}
+			
+			private function filterComponents(item:Object):Boolean
+			{
+				return !item.isAlreadyDownloaded;
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  LISTENERS API
+			//
+			//--------------------------------------------------------------------------
+			
+			private function onConfigLoaded(event:HelperEvent):void
+			{
+				attachStartupHelperListeners(false);
+				onFilterTypeChanged(null);
+				detectionManager.detect();
+			}
+			
+			private function onConfigError(event:HelperEvent):void
+			{
+				// TODO: Show error
+				attachStartupHelperListeners(false);
+			}
+			
+			private function onFilterTypeChanged(event:Event):void
+			{
+				if (rgType.selectedValue == "feature")
+				{
+					lstItems.itemRenderer = new ClassFactory(PackageRenderer);
+					packageList = model.packages;
+				}
+				else
+				{
+					lstItems.itemRenderer = new ClassFactory(ComponentRenderer);
+					packageList = model.components;
+				}
+				
+				// update filter state
+				onFilterChange(null);
+			}
+			
+			private function onFilterChange(event:Event):void
+			{
+				filterSearch(cbFilter.selected);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:RadioButtonGroup id="rgType" change="onFilterTypeChanged(event)"/>
+	</fx:Declarations>
+	
+	<s:HGroup width="100%"
+			  verticalAlign="middle">
+		<s:CheckBox id="cbFilter" 
+					label="Only show features that need setup"
+					change="onFilterChange(event)"/>
+		<s:Spacer width="100%"/>
+		<s:RadioButton groupName="rgType" value="feature" label="By Feature"
+					   selected="true"/>
+		<s:RadioButton groupName="rgType" value="software" label="By Software"/>
+	</s:HGroup>
+	
+	<s:List id="lstItems" 
+			width="100%" height="100%"
+			dataProvider="{packageList}"
+			horizontalScrollPolicy="off" styleName="withBorderList"/>
+</s:VGroup>

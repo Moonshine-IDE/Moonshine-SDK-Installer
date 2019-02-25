@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   addedToStage="onAppAddedToStage(event)" preinitialize="onPreinit(event)" creationComplete="onCreationCompletes(event)" closing="onApplicationClosing(event)"
+					   width="790" height="570" xmlns:nativeApplicationUpdater="actionScripts.extSources.nativeApplicationUpdater.*" xmlns:components="components.*"
+					   frameRate="60" applicationDPI="120" backgroundColor="0xf5f5f5">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import actionScripts.ui.menu.MenuManager;
+			
+			import components.UpdaterView;
+			
+			import org.apache.flex.packageflexsdk.view.components.AboutDialog;
+			
+			//private var installerView:MoonshineAppStoreHelperLibMain;
+			private var updaterView:UpdaterView;
+			private var aboutView:AboutDialog;
+			private var menuManager:MenuManager;
+			private var appVersion:String;
+			
+			private function onPreinit(event:FlexEvent):void
+			{
+				// application version
+				var appDescriptor:XML = nativeApplication.applicationDescriptor;
+				var xmlns:Namespace = new Namespace(appDescriptor.namespace());
+				appVersion = appDescriptor.xmlns::versionNumber;
+			}
+			
+			private function onAppAddedToStage(event:Event):void
+			{
+				var win : NativeWindow = stage.nativeWindow;
+				win.x = (Capabilities.screenResolutionX - win.width) / 2;
+				win.y = (Capabilities.screenResolutionY - win.height) / 2;
+				
+				menuManager = new MenuManager();
+				menuManager.addEventListener("EVENT_ABOUT", onAboutWindow, false, 0, true);
+				menuManager.addEventListener("MENU_QUIT_EVENT", onQuitEvent, false, 0, true);
+			}
+			
+			protected function onCreationCompletes(event:FlexEvent):void
+			{
+				//updater.initialize();
+			}
+			
+			private function onUpdateFound():void
+			{
+				updaterView = new UpdaterView;
+				updaterView.updater = updater;
+				updaterView.downlaoding = downlaoding;
+				updaterView.resizable = updaterView.maximizable = false;
+				updaterView.alwaysInFront = true;
+				updaterView.addEventListener("UPDATEYES", btnYes_clickHandler);
+				updaterView.addEventListener("UPDATENO", btnNo_clickHandler);
+				updaterView.addEventListener("UPDATECANCEL", btnCancel_clickHandler);
+				updaterView.open();
+				
+				updaterView.move((Screen.mainScreen.bounds.width - updaterView.width)/2, (Screen.mainScreen.bounds.height - updaterView.height)/2);
+			}
+			
+			private function onAboutWindow(event:Event):void
+			{
+				// probable termination
+				if (aboutView) return;
+				
+				aboutView = new AboutDialog;
+				aboutView.minimizable = aboutView.maximizable = aboutView.resizable = false;
+				aboutView.alwaysInFront = true;
+				aboutView.installerVersion = appVersion;
+				aboutView.addEventListener(Event.CLOSE, onAboutViewClosed, false, 0, true);
+				aboutView.open();
+				
+				aboutView.move((Screen.mainScreen.bounds.width - aboutView.width)/2, (Screen.mainScreen.bounds.height - aboutView.height)/2);
+			}
+			
+			private function onAboutViewClosed(event:Event):void
+			{
+				aboutView = null;
+			}
+			
+			private function onQuitEvent(event:Event):void
+			{
+				NativeApplication.nativeApplication.exit();
+			}
+			
+			protected function onApplicationClosing(event:Event):void
+			{
+				if (aboutView) aboutView.close();
+				if (updaterView && !updaterView.closed) updaterView.close();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Script source="actionScripts/utils/AutoUpdater.as"/>
+	<fx:Style source="/assets/styles/InstallApacheFlexStyle.css"/>
+	<fx:Declarations>
+		<nativeApplicationUpdater:NativeApplicationUpdater id="updater" updateURL="https://moonshine-ide.com/downloads/MoonshineAppStoreHelperConfig.xml"
+														   initialized="updater_initializedHandler(event)"
+														   updateStatus="updater_updateStatusHandler(event)"
+														   error="updater_errorHandler(event)"
+														   downloadError="updater_errorHandler(event)"
+														   updateError="updater_errorHandler(event)"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	<!--<components:Main width="100%" height="100%"/>-->
+	<components:HelperInstaller width="100%" height="100%"/>
+</s:WindowedApplication>

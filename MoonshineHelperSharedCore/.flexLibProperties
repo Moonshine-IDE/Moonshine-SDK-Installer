@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="components.HelperView"/>
+    <classEntry path="actionScripts.utils.Parser"/>
+    <classEntry path="actionScripts.valueObjects.HelperConstants"/>
+    <classEntry path="actionScripts.valueObjects.ComponentTypes"/>
+    <classEntry path="actionScripts.managers.StartupHelper"/>
+    <classEntry path="actionScripts.managers.DetectionManager"/>
+    <classEntry path="components.renderers.PackageDependencyRenderer"/>
+    <classEntry path="actionScripts.utils.HelperUtils"/>
+    <classEntry path="actionScripts.interfaces.IHelperMoonshineBridge"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false" height="100">
+	<fx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			
+			import spark.components.BusyIndicator;
+			
+			import actionScripts.events.HelperEvent;
+			import actionScripts.utils.HelperUtils;
+			import actionScripts.valueObjects.ComponentVO;
+			import actionScripts.valueObjects.HelperConstants;
+			
+			private var busyIndicator:BusyIndicator;
+			
+			override public function set data(value:Object):void
+			{
+				if (value) 
+				{
+					super.data = value;
+					
+					// since using same List component with multiple
+					// data sources, toggling creates type differences
+					// to the containing object
+					if (data is ComponentVO)
+					{
+						if (data.isDownloading && !busyIndicator)
+						{
+							busyIndicator = new BusyIndicator();
+							busyIndicator.verticalCenter = 0;
+							busyIndicator.right = 10;
+							busyIndicator.width = 44;
+							addElementAt(busyIndicator, 1);
+						}
+						else if (!data.isDownloading && busyIndicator)
+						{
+							busyIndicator.stopAllMovieClips();
+							removeElement(busyIndicator);
+							busyIndicator = null;
+						}
+					}
+				}
+			}
+			
+			protected function onDownloadRequest(event:MouseEvent):void
+			{
+				if (HelperConstants.IS_RUNNING_IN_MOON)
+				{
+					HelperUtils.runAppStoreHelper();
+				}
+				else
+				{
+					this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, data, true));
+				}
+			}
+			
+			protected function onOpenMoonshineSettings(event:MouseEvent):void
+			{
+				this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_MOON_SETTINGS, data, true));
+			}
+			
+			protected function onLogoClicked(event:MouseEvent):void
+			{
+				if (data.website) navigateToURL(new URLRequest(data.website), "_blank");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="100%"
+			  verticalAlign="middle" paddingRight="20">
+		<s:Image source="{data.imagePath}"
+				 width="136"
+				 buttonMode="true" click="onLogoClicked(event)"/>
+		<s:VGroup width="100%">
+			<s:Label text="{data.title}" width="100%"
+					 styleName="uiTextRendererLabel"/>
+			<s:Label text="{data.description}" width="100%"
+					 maxDisplayedLines="2"
+					 styleName="uiTextRendererDescription"/>
+		</s:VGroup>
+		<s:Image id="imgDownloaded"
+				 width="50"
+				 source="@Embed('/helperResources/images/icoTickLabel.png')"
+				 includeInLayout="{data.isAlreadyDownloaded}" visible="{data.isAlreadyDownloaded}"/>
+		<s:Image id="imgDownload"
+				 width="50" buttonMode="true"
+				 source="@Embed('/helperResources/images/icoDownloadLabel.png')"
+				 includeInLayout="{!data.isAlreadyDownloaded &amp;&amp; !data.isDownloading &amp;&amp; !data.isDownloaded &amp;&amp; !data.isSelectedToDownload}" 
+				 visible="{!data.isAlreadyDownloaded &amp;&amp; !data.isDownloading &amp;&amp; !data.isDownloaded &amp;&amp; !data.isSelectedToDownload}"
+				 click="onDownloadRequest(event)"/>
+		<s:Image width="50"
+				 source="@Embed('/helperResources/images/icoQueuedLabel.png')"
+				 includeInLayout="{data.isSelectedToDownload &amp;&amp; !data.isDownloading}" visible="{data.isSelectedToDownload &amp;&amp; !data.isDownloading}"/>
+		<s:Image source="@Embed('/helperResources/images/icoConfigure.png')"
+				 includeInLayout="{!data.isAlreadyDownloaded &amp;&amp; HelperConstants.IS_RUNNING_IN_MOON}" 
+				 visible="{!data.isAlreadyDownloaded &amp;&amp; HelperConstants.IS_RUNNING_IN_MOON}"
+				 width="50"
+				 buttonMode="true" click="onOpenMoonshineSettings(event)"/>
+	</s:HGroup>
+	
+	<s:Image source="{HelperConstants.BG_LIST_DIVIDER}" width="100%" fillMode="repeat"
+			 bottom="0"/>
+</s:ItemRenderer>

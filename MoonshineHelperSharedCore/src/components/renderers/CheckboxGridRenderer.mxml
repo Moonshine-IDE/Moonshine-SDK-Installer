@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" minHeight="36" xmlns:controls="ws.tink.spark.controls.*">
+	<fx:Script>
+		<![CDATA[
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PUBLIC VARIABLES
+			//
+			//--------------------------------------------------------------------------
+			
+			[Bindable] public var textAlign					: String = "left";
+			
+			//--------------------------------------------------------------------------
+			//
+			//  OVERRIDDEN API
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * Set DATA
+			 */
+			override public function set data(value:Object):void {
+				
+				if ( value ) 
+				{
+					super.data = value;
+					cbDownload.enabled = value.isSelectionChangeAllowed;
+				}
+			}
+			
+			protected function onSelectionChanged(event:Event):void
+			{
+				data.isSelectedToDownload = cbDownload.selected;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:CheckBox id="cbDownload"
+				selected="{data.isSelectedToDownload}"
+				change="onSelectionChanged(event)"
+				horizontalCenter="0" verticalCenter="0"/>
+</s:GridItemRenderer>

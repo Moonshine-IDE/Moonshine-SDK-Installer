@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="onComplete(event)" xmlns:components="components.*" xmlns:controls="ws.tink.spark.controls.*"
+		 horizontalAlign="center" gap="0">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import actionScripts.events.HelperEvent;
+			import actionScripts.locator.HelperModel;
+			import actionScripts.utils.MoonshineNotifier;
+			import actionScripts.valueObjects.ComponentTypes;
+			import actionScripts.valueObjects.ComponentVO;
+			import actionScripts.valueObjects.HelperConstants;
+			
+			import assets.skins.DarkButtonSkin;
+			
+			import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
+			import org.apache.flex.packageflexsdk.util.ArchiveDownloader;
+			import org.apache.flex.packageflexsdk.view.events.GenericEvent;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  STATIC VARIABLES
+			//
+			//--------------------------------------------------------------------------
+			
+			private static var INSTALLER_APACHE_FLEX:InstallApacheFlex;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PRIVATE VARIABLES
+			//
+			//--------------------------------------------------------------------------
+			
+			private var model:HelperModel = HelperModel.getInstance();
+			private var packageLists:Array = [];
+			private var archiveDownloader:ArchiveDownloader;
+			private var viewResourceConstants:ViewResourceConstants;
+			private var isDownloadInProgress:Boolean;
+			private var itemDownloading:ComponentVO;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  PRIVATE API
+			//
+			//--------------------------------------------------------------------------
+			
+			private function onComplete(event:FlexEvent):void
+			{
+				// initiate the original installer source
+				INSTALLER_APACHE_FLEX = new InstallApacheFlex();
+				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+				INSTALLER_APACHE_FLEX.moonshineFlexVersion = getFlexSDKVersion();
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_PROGRESS, onInstallProgress, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_FINISH, onInstallationFinished, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
+				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
+			}
+			
+			private function requestAllInstallation():void
+			{
+				// generate list of downloads
+				for each (var item:ComponentVO in model.components)
+				{
+					if (!item.isAlreadyDownloaded)
+					{
+						item.isSelectedToDownload = true;
+						packageLists.push(item);
+					}
+				}
+				
+				// start download process
+				btnInstallAll.enabled = false;
+				flush();
+			}
+			
+			private function prepareBeforeDownloads():void
+			{
+				// create root directory
+				if (!HelperConstants.DEFAULT_INSTALLATION_PATH.exists) HelperConstants.DEFAULT_INSTALLATION_PATH.createDirectory();
+				
+				var sdkSubDir:File;
+				var sdkFolderName:String;
+				
+				// generate sub-folders
+				for each (var item:ComponentVO in model.components)
+				{
+					switch (item.type)
+					{
+						case ComponentTypes.TYPE_FLEX:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Flex_SDK");
+							break;
+						case ComponentTypes.TYPE_ROYALE:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Royale_SDK");
+							break;
+						case ComponentTypes.TYPE_ANT:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Ant");
+							break;
+						case ComponentTypes.TYPE_MAVEN:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Maven");
+							break;
+						case ComponentTypes.TYPE_OPENJAVA:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Java");
+							break;
+					}
+					
+					// create the sub-directory if not exists
+					if (!sdkSubDir.exists) sdkSubDir.createDirectory();
+				}
+			}
+			
+			private function flush():void
+			{
+				if (packageLists.length != 0 && !isDownloadInProgress) 
+				{
+					prepareBeforeDownloads();
+				}
+				
+				if (packageLists.length != 0)
+				{
+					isDownloadInProgress = true;
+					progressBar.visible = lblLastMessage.visible = true;
+					startSingleInstallation(packageLists.shift());
+				}
+				else
+				{
+					isDownloadInProgress = false;
+				}
+			}
+			
+			private function getFlexSDKVersion():String
+			{
+				for each (var item:ComponentVO in model.components)
+				{
+					if (item.type == ComponentTypes.TYPE_FLEX)
+					{
+						return item.version;
+					}
+				}
+				
+				return "4.16.1";
+			}
+			
+			private function startSingleInstallation(item:ComponentVO):void
+			{
+				itemDownloading = item;
+				if (item.type == ComponentTypes.TYPE_FLEX)
+				{
+					item.isDownloading = true;
+					INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+					INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+					INSTALLER_APACHE_FLEX.moonshineFlexVersion = getFlexSDKVersion();
+					INSTALLER_APACHE_FLEX.startInstallation();
+				}
+				else
+				{
+					archiveDownloader = new ArchiveDownloader(item);
+					archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
+					archiveDownloader.viewResourceConstants = viewResourceConstants;
+					archiveDownloader.startInstallation();
+				}
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  LISTENERS API
+			//
+			//--------------------------------------------------------------------------
+			
+			private function onInstallerIsReady(event:GenericEvent):void
+			{
+				INSTALLER_APACHE_FLEX.removeEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady);
+				viewResourceConstants = INSTALLER_APACHE_FLEX.viewResourceConstants;
+				// TODO: next ui settlements
+			}
+			
+			private function onInstallAborted(event:GenericEvent):void
+			{
+				if (itemDownloading)
+				{
+					itemDownloading.isDownloading = false;
+					itemDownloading.hasError = true;
+				}
+			}
+			
+			private function onInstallProgress(event:GenericEvent):void
+			{
+				progressBar.percent = event.value as Number;
+			}
+			
+			private function onInstallationFinished(event:GenericEvent):void
+			{
+				itemDownloading.isDownloaded = true;
+				itemDownloading.isDownloading = false;
+				MoonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+				
+				flush();
+			}
+			
+			private function onMessageUpdates(event:Event):void
+			{
+				lblLastMessage.text = INSTALLER_APACHE_FLEX.lastFilteredPublicMessage;
+			}
+			
+			private function onDownloadAComponentRequested(event:HelperEvent):void
+			{
+				(event.value as ComponentVO).isSelectedToDownload = true;
+				packageLists.push(event.value as ComponentVO);
+				if (!isDownloadInProgress) flush();
+			}
+			
+			private function onShowLog(event:MouseEvent):void
+			{
+				INSTALLER_APACHE_FLEX.showConsole(event);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="100">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="0x444444"/>
+			</s:fill>
+		</s:Rect>
+		<s:Image id="textIcon" 
+				 source="@Embed('/assets/images/logoMoonshine.png')"
+				 horizontalCenter="0" verticalCenter="0"/>
+	</s:Group>
+	
+	<s:Group width="100%" height="60">
+		<s:Button id="btnInstallAll" 
+				  label="INSTALL EVERYTHING NOW!"
+				  click="requestAllInstallation()"
+				  horizontalCenter="0" verticalCenter="0"/>
+		<s:Label id="lblInstalling" 
+				 text="Installing packages.."
+				 horizontalCenter="0" verticalCenter="0" 
+				 fontFamily="DejaVuSans" color="0xdb5fce" fontSize="14"
+				 visible="false" includeInLayout="false"/>
+	</s:Group>
+	
+	<s:VGroup width="96%" height="100%"
+			  horizontalAlign="center" verticalAlign="middle" paddingBottom="10">
+		<components:HelperView id="view" 
+							   width="100%" height="100%"
+							   DOWNLOAD_COMPONENT="onDownloadAComponentRequested(event)"
+							   isRunningInsideMoonshine="false" paddingBottom="10"/>
+		<controls:ProgressBar id="progressBar"
+							  width="60%" height="10"
+							  horizontalCenter="0" verticalCenter="0"
+							  visible="false"/>
+		<s:Label id="lblLastMessage"
+				 textAlign="center"
+				 width="70%" maxDisplayedLines="5"
+				 horizontalCenter="0" verticalCenter="0"
+				 visible="false"/>
+	</s:VGroup>
+	
+	<s:Group width="100%" height="70">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="0x444444"/>
+			</s:fill>
+		</s:Rect>
+		<s:Rect height="10" width="100%">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0x303030"/>
+					<s:GradientEntry color="0x444444"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		<s:Button id="installLogBtn"
+				  skinClass="assets.skins.DarkButtonSkin"
+				  height="32" width="160"
+				  label="INSTALL LOG"
+				  horizontalCenter="0" verticalCenter="0"
+				  click="onShowLog(event)"/>
+	</s:Group>
+</s:VGroup>

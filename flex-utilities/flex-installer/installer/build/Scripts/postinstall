@@ -1,0 +1,4 @@
+#!/bin/sh
+
+open /Applications/Moonshine\ App\ Store\ Helper.app
+exit 0

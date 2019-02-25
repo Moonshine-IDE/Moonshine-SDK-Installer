@@ -1,0 +1,813 @@
+<?xml version="1.0"?>
+<!--
+
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<project name="Installer" basedir="." default="build">
+
+    <!--load environment variables prefixed with env -->
+    <property environment="env"/>
+
+    <!--location of property file -->
+    <property file="${basedir}/local.properties" />
+	<condition property="CERT_PASSWORD_FILE" value="${CERT_PASSWORD_FILE_WIN}" >
+		<and>
+			<not>
+				<available file="${CERT_PASSWORD_FILE}" />
+			</not>
+			<available file="${CERT_PASSWORD_FILE_WIN}" />
+		</and>
+	</condition>
+	<condition property="CERT_PASSWORD_FILE" value="${CERT_PASSWORD_FILE_MAC}" >
+		<and>
+			<not>
+				<available file="${CERT_PASSWORD_FILE}" />
+			</not>
+			<available file="${CERT_PASSWORD_FILE_MAC}" />
+		</and>
+	</condition>
+	<condition property="RELEASE_KEYSTORE_FILE" value="${RELEASE_KEYSTORE_FILE_WIN}" >
+		<and>
+			<not>
+				<available file="${RELEASE_KEYSTORE_FILE}" />
+			</not>
+			<available file="${RELEASE_KEYSTORE_FILE_WIN}" />
+		</and>
+	</condition>
+	<condition property="RELEASE_KEYSTORE_FILE" value="${RELEASE_KEYSTORE_FILE_MAC}" >
+		<and>
+			<not>
+				<available file="${RELEASE_KEYSTORE_FILE}" />
+			</not>
+			<available file="${RELEASE_KEYSTORE_FILE_MAC}" />
+		</and>
+	</condition>
+
+    <property file="${basedir}/build.properties" description="Properties for Apache Flex SDK Installer project" />
+    <property file="${basedir}/build.number"/>
+	<property file="${CERT_PASSWORD_FILE}"/>
+
+    <property name="installer.version" value="${release.version}"/>
+    <property name="kit.prefix" value="apache-flex-sdk-installer-${installer.version}"/>
+    <property name="kit.prefix64" value="apache-flex-sdk-installer-${installer.version}-64bit"/>
+    <property name="source.kit" value="${kit.prefix}-src"/>
+    <property name="binary.kit" value="${kit.prefix}-bin"/>
+    <property name="LOCAL_CONFIG_FILE" value="${basedir}/src/installer/sdk-installer-config-4.0.xml" />
+
+    <!--<property name="commons.zip" value="http://projects.yoolab.org/maven/content/repositories/releases/org/as3commons/as3commons-zip/1.0.0-alpha.1/as3commons-zip-1.0.0-alpha.1.swc" />-->
+    <!-- use this one for now until we find a better source -->
+    <property name="commons.zip" value="https://github.com/bigosmallm/MakeApacheFlexForFlashBuilder/blob/master/libs/as3commons-zip-1.0.0-alpha.1.swc?raw=true" />
+    
+    <!--
+        Properties are immutable so value frozen first time property is set.
+        If FLEX_HOME is not set with -DFLEX_HOME=/path/to/flex/sdk on the ant command line
+        use the environment variable, if it exists. Else if windows, use FLEX_HOME_WIN
+        else use FLEX_HOME_MAC, which are both defined in build.properties.
+    -->
+    <condition property="FLEX_HOME" value="${env.FLEX_HOME}">
+        <isset property="env.FLEX_HOME" />
+    </condition>
+    <condition property="FLEX_HOME" value="${FLEX_HOME_WIN}">
+        <os family="windows"/>
+    </condition>
+    <condition property="FLEX_HOME" value="${FLEX_HOME_MAC}">
+        <os family="mac"/>
+    </condition>
+    <condition property="FLEX_HOME" value="${FLEX_HOME_LINUX}">
+        <os family="unix"/>
+    </condition>
+
+    <condition property="adl" value="adl.exe">
+        <os family="windows"/>
+    </condition>
+
+    <condition property="adl" value="adl">
+        <os family="mac"/>
+    </condition>
+
+    <condition property="runtime" value="win">
+        <os family="windows"/>
+    </condition>
+
+    <condition property="runtime" value="mac">
+        <os family="mac"/>
+    </condition>
+
+    <condition property="isWindows">
+        <os family="windows"/>
+    </condition>
+
+    <condition property="LOCAL_CONFIG_URL" value="file:///${LOCAL_CONFIG_FILE}">
+        <os family="windows"/>
+    </condition>
+    <property name="LOCAL_CONFIG_URL" value="file://${LOCAL_CONFIG_FILE}" />
+    
+    <!--
+        Properties are immutable so value frozen first time property is set.
+        If AIR_HOME is not set on the command line with -DAIR_HOME=/path/to/air/sdk on the
+        ant command line use the environment variable, if it exists. Else if windows, use
+        AIR_HOME_WIN else use AIR_HOME_MAC, which are both defined in build.properties.
+    -->
+    <condition property="AIR_HOME" value="${env.AIR_HOME}">
+        <isset property="env.AIR_HOME" />
+    </condition>
+    <condition property="AIR_HOME" value="${AIR_HOME_WIN}">
+        <os family="windows"/>
+    </condition>
+    <condition property="AIR_HOME" value="${AIR_HOME_MAC}">
+        <os family="mac"/>
+    </condition>
+    <condition property="AIR_HOME" value="${AIR_HOME_LINUX}">
+        <os family="unix"/>
+    </condition>
+	
+    <condition property="cert_pwd_not_found" >
+		<not>
+       		<available file="${CERT_PASSWORD_FILE}"/>
+		</not>
+    </condition>
+
+	<condition property="KEYSTORE" value="${RELEASE_KEYSTORE_FILE}" >
+		<available file="${CERT_PASSWORD_FILE}"/>
+	</condition>
+
+	<condition property="KEYSTORE" value="temp.p12" >
+		<not>
+			<available file="${CERT_PASSWORD_FILE}"/>
+		</not>
+	</condition>
+
+    <condition property="CERT_PASSWORD" value="${TEMP_PASS_CHANGE_THIS}" >
+		<not>
+       		<available file="${CERT_PASSWORD_FILE}"/>
+		</not>
+    </condition>
+
+    <!-- compilers -->
+    <property name="ADL" value="${AIR_HOME}/bin/adl"/>
+    <property name="ADT" value="${AIR_HOME}/lib/adt.jar"/>
+
+    <!-- additional tasks - mxmlc tag -->
+    <path id="flexTasks.path">
+        <fileset dir="${FLEX_HOME}">
+            <include name="lib/flexTasks.jar" />
+            <include name="ant/lib/flexTasks.jar" />
+        </fileset>
+    </path>
+    <taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
+
+    <!--
+        Optional jars but should be in place for a real release build.
+
+        For <rat> apache-rat-0.8.jar and apache-rat-tasks-0.8.jar should be in classpath.
+        See rat-report.
+    -->
+    <path id="anttask.classpath">
+        <fileset dir="${env.ANT_HOME}/lib">
+           <include name="**/apache-rat*.jar"/>
+        </fileset>
+        <fileset dir="${user.home}">
+           <include name=".ant/lib/**/apache-rat*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- AIR package extension -->
+    <condition property="extension" value="exe">
+        <os family="windows" />
+    </condition>
+    <condition property="extension" value="dmg">
+        <os family="mac" />
+    </condition>
+    <condition property="extension" value="deb">
+        <os family="unix" />
+    </condition>
+
+    <target name="build" depends="init,certificate,compile,packagenative,packagebundle,cleanup"
+        description="Compiles and packages application"/>
+
+    <target name="release" depends="clean,build,source-package,rat-report,sign,copy-misc"
+        description="Build the application and package up the distros for release."/>
+
+    <target name="init" depends="clean,createDirs,update-version-in-xml-files"
+        description="Creates the deploy folders and sets app extension"/>
+
+    <target name="clean" description="Cleans up old files.">
+        <delete dir="${BUILD_DIR}" failOnError="false" includeEmptyDirs="true" />
+        <delete dir="${DEPS_DIR}" failOnError="false" includeEmptyDirs="true" />
+        <delete dir="${LIBRARY_DIR}" failOnError="false" includeEmptyDirs="true" />
+        <delete dir="${RELEASE_DIR}" failOnError="false" includeEmptyDirs="true" />
+        <delete file="${basedir}/rat.report" failOnError="false"/>
+    </target>
+
+    <target name="cleanup" description="Cleans up old files." unless="no.cleanup">
+        <delete dir="${BUILD_DIR}" failOnError="false" includeEmptyDirs="true" />
+    </target>
+
+    <target name="createDirs">
+        <echo>***************************************${line.separator}Execute the update-version target once,${line.separator}and only once, when you modifiy this app.${line.separator}This will increment the version number to allow${line.separator}the app to be updated by the AIR installer.${line.separator}***************************************
+        </echo>
+        <mkdir dir="${BUILD_DIR}"/>
+        <mkdir dir="${RELEASE_DIR}"/>
+    </target>
+
+    <!-- Make sure version, esp, build.number, in APP_NAME-app.xml is in sync.  -->
+    <target name="update-version-in-xml-files" description="Update version in APP_NAME-app.xml.">
+        <echo message="version in ${APP_NAME}-app.xml will be ${installer.version}"/>
+        <replaceregexp byline="true">
+            <regexp pattern="&lt;versionNumber&gt;(\d+\.)?(\d+\.)?(\d+)&lt;/versionNumber&gt;"/>
+            <substitution expression="&lt;versionNumber&gt;${installer.version}&lt;/versionNumber&gt;"/>
+            <fileset dir="${SOURCE_DIR}">
+                <include name="${APP_NAME}-app.xml"/>
+            </fileset>
+        </replaceregexp>
+		<replaceregexp byline="true">
+            <regexp pattern="&lt;latest&gt;(\d+\.)?(\d+\.)?(\d+)&lt;/latest&gt;"/>
+            <substitution expression="&lt;latest&gt;${installer.version}&lt;/latest&gt;"/>
+            <fileset dir="${SOURCE_DIR}">
+                <include name="${APP_CONFIG_XML_NAME}.xml"/>
+            </fileset>
+        </replaceregexp>
+    </target>
+
+    <!--
+        Run this target once, and then rebuild, when you make a change to this app
+        so that the AIR Installer will allow the app to be updated. The build.number
+        property in the file build.property will be read and then incremented and the
+        nano version number in the <version> tag in InstallApacheFlex-app.xml will be
+        updated.
+    -->
+    <target name="update-version" description="Update the app version number so the installer will be updated.">
+         <tstamp>
+            <format property="touch.year" pattern="yyyy"/>
+        </tstamp>
+
+        <propertyfile file="build.number"
+            comment="Copyright ${touch.year} The Apache Software Foundation.">
+            <entry key="build.number" type="int" default="0" operation="+"/>
+        </propertyfile>
+
+    </target>
+
+    <target name="packagenative" depends="packageair"
+       description="Packages the AIR file from the build directory to create a native installer (exe/dmg) file">
+
+       <java jar="${ADT}" fork="true"
+           failonerror="true"
+           maxmemory="512m">
+           <arg value="-package"/>
+           <arg value="-target"/>
+           <arg value="native"/>
+           <arg value="${RELEASE_DIR}/${binary.kit}.${extension}"/>
+           <arg value="${BUILD_DIR}/${APP_NAME}.air"/>
+       </java>
+   </target>
+
+    <target name="packagebundle" if="isWindows"
+       description="Packages a 64-bit Windows version">
+       <property name="BUNDLE_DIR" value="${RELEASE_DIR}/Win64" />
+       <mkdir dir="${BUNDLE_DIR}" />
+       <copy file="${SOURCE_DIR}/${APP_NAME}-app.xml" tofile="${BUILD_DIR}/${APP_NAME}-app.xml" />
+       <replace file="${BUILD_DIR}/${APP_NAME}-app.xml" token="&gt;32&lt;" value="&gt;64&lt;" />
+       <copy file="${basedir}/binary_license/LICENSE" tofile="${BUILD_DIR}/LICENSE" />
+       <copy file="${basedir}/NOTICE" tofile="${BUILD_DIR}/NOTICE" />
+       <copy todir="${BUILD_DIR}/deps">
+          <fileset dir="${DEPS_DIR}" />
+       </copy>
+       <copy todir="${BUILD_DIR}/assets">
+          <fileset dir="${ASSETS_DIR}" />
+       </copy>
+       <copy file="${SOURCE_DIR}/${APP_CONFIG_XML_NAME}.xml" tofile="${BUILD_DIR}/${APP_CONFIG_XML_NAME}.xml" />
+       <java jar="${ADT}" fork="true" dir="${BUILD_DIR}"
+           failonerror="true"
+           maxmemory="512m">
+           <arg value="-package"/>
+           <arg value="-storetype"/>
+           <arg value="${STORETYPE}"/>	
+           <arg value="-keystore"/>
+           <arg value="${KEYSTORE}"/>
+           <arg value="-storepass"/>
+           <arg value="${CERT_PASSWORD}"/>
+           <arg value="-target"/>
+           <arg value="bundle"/>
+           <arg value="${BUNDLE_DIR}"/>   
+           <arg value="${APP_NAME}-app.xml"/>
+           <arg value="${APP_NAME}.swf"/>
+           <arg value="NOTICE"/>
+           <arg value="deps"/>
+           <arg value="LICENSE"/>
+           <arg value="${APP_CONFIG_XML_NAME}.xml"/>
+           <arg value="assets"/>
+       </java>
+       <zip basedir="${BUNDLE_DIR}" destfile="${RELEASE_DIR}/${kit.prefix64}-bin.zip"/>
+   </target>
+
+    <target name="check-as3commons.swc">
+        <available file="${LIBRARY_DIR}/as3commons-zip-1.0.0-alpha.1.swc" property="as3commons.swc.present"/>
+    </target>
+
+    <target name="get-as3commons.swc" depends="check-as3commons.swc" unless="as3commons.swc.present"
+        description="Download as3commons.swc and fail if checksum mismatch.">
+        <mkdir dir="${LIBRARY_DIR}"/>
+        <get src="${commons.zip}"
+            dest="${LIBRARY_DIR}/as3commons-zip-1.0.0-alpha.1.swc"
+            verbose="true"/>
+        <!-- skip checksum until we find a valid file
+        <get src="${commons.zip}.md5"
+            dest="${LIBRARY_DIR}/as3commons-zip-1.0.0-alpha.1.swc.md5"
+            verbose="true"/>
+        <checksum file="${LIBRARY_DIR}/as3commons-zip-1.0.0-alpha.1.swc" algorithm="md5" verifyProperty="isMD5ok"/>
+        <delete file="${LIBRARY_DIR}/as3commons-zip-1.0.0-alpha.1.swc.md5" failOnError="false"/>
+        <fail message="Checksum failure for ${LIBRARY_DIR}/as3commons-zip-1.0.0-alpha.1.swc">
+            <condition>
+                <isfalse value="${isMD5ok}"/>
+            </condition>
+        </fail>
+         -->
+    </target>
+
+    <target name="check-as3httpclient.swc">
+        <available file="${LIBRARY_DIR}/as3httpclient.swc" property="as3httpclient.swc.present"/>
+    </target>
+
+    <!-- This has a BSD license which is a reciprocal license with the Apache v2 license.  -->
+    <target name="get-as3httpclient.swc" depends="check-as3httpclient.swc" unless="as3httpclient.swc.present"
+            description="Download as3httpclient.swc">
+        <mkdir dir="${LIBRARY_DIR}"/>
+        <mkdir dir="${LIBRARY_DIR}/temp"/>
+        <get src="https://github.com/quetwo/as3httpclient/releases/download/1.0/as3httpclient.swc"
+             dest="${LIBRARY_DIR}/as3httpclient.swc"
+             />
+    </target>
+
+    <target name="compile" depends="get-as3commons.swc, get-as3httpclient.swc"
+        description="Compiles the AIR application to a SWF file and places SWF in a temp directory to be packaged.">
+        <mxmlc file="${SOURCE_DIR}/${APP_NAME}.${APP_EXTENSION}"
+            output="${BUILD_DIR}/${APP_NAME}.swf"
+            swf-version="23"
+            static-rsls="true"
+            accessible="true"
+            configname="air"
+            debug="${DEBUG_FLAG}"
+            failonerror="true"
+            fork="true"
+            link-report="${BUILD_DIR}/${APP_NAME}.lnk.xml"
+            maxmemory="512m">
+            <source-path path-element="${SOURCE_DIR}"/>
+            <source-path path-element="${COMMON_SOURCE_DIR}"/>
+            <external-library-path file="${AIR_HOME}/frameworks/libs/air/airglobal.swc" append="true"/>
+            <external-library-path file="${AIR_HOME}/frameworks/libs/air/applicationupdater.swc" append="true"/>
+            <library-path dir="${LIBRARY_DIR}" includes="*.swc" append="true"/>
+            <library-path dir="${ANT_ON_AIR_DIR}" includes="*.swc" append="true"/>
+            <!--<library-path dir="${LIBRARY_DIR}/temp/as3httpclient-master/lib" includes="*.swc" append="true"/>-->
+        </mxmlc>
+    </target>
+
+    <!-- Make sure to use the same certificate each time so we can update the app. -->
+    <target name="certificate" if="cert_pwd_not_found">
+        <antcall target="generate-certificate"/>
+    </target>
+
+    <target name="generate-certificate">
+    	<echo message="Using cert ${KEYSTORE}" />
+        <java jar="${ADT}" fork="true"
+            failonerror="true">
+            <arg value="-certificate"/>
+            <arg value="-cn"/>
+            <arg value="${CERT_NAME}"/>
+            <arg value="-ou"/>
+            <arg value="${CERT_ORG_UNIT}"/>
+            <arg value="-o"/>
+            <arg value="${CERT_ORG_NAME}"/>
+            <arg value="-c"/>
+            <arg value="${CERT_COUNTRY}"/>
+            <arg value="${CERT_KEY_TYPE}"/>
+            <arg value="${KEYSTORE}"/>
+            <arg value="${CERT_PASSWORD}"/>
+        </java>
+    </target>
+
+    <target name="check-as3crypto-license" >
+        <condition property="found-as3crypto-license" >
+            <available file="${DEPS_DIR}/as3crypto/LICENSE.txt"/>
+        </condition>
+    </target>
+    
+    <target name="get-as3crypto-license" depends="check-as3crypto-license" unless="found-as3crypto-license">
+        <mkdir dir="${DEPS_DIR}/as3crypto/temp" />
+        <get src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/as3crypto/Crypto.zip"
+        dest="${DEPS_DIR}/as3crypto/temp"
+        />
+        <unzip src="${DEPS_DIR}/as3crypto/temp/Crypto.zip" dest="${DEPS_DIR}/as3crypto">
+            <patternset>
+                <include name="LICENSE.txt"/>
+            </patternset>
+        </unzip>
+        <delete dir="${DEPS_DIR}/as3crypto/temp" />
+    </target>
+    
+    <target name="simple-untar-license" >
+        <mkdir dir="${DEPS_DIR}/as3-simple-untar" />
+        <get src="https://raw.githubusercontent.com/thdtjsdn/as3-simple-untar/master/src/de/ketzler/utils/SimpleUntar.as"
+			 dest="${DEPS_DIR}/as3-simple-untar/LICENSE"/>
+        <replaceregexp file="${DEPS_DIR}/as3-simple-untar/LICENSE"
+        match="package .*" replace=""
+        flags="s"
+        />
+    </target>
+    
+    <target name="packageair"
+        description="Packages the build SWF file from a temp directory to create an AIR file">
+    	<echo message="Using cert ${KEYSTORE}" />
+        <echo message="Using pass ${STOREPASS}" />
+        <echo message="Using type ${STORETYPE}" />
+        <mkdir dir="${DEPS_DIR}/as3httpclientlib" />
+        <get src="https://raw.githubusercontent.com/quetwo/as3httpclient/as3httpclient-work/License.txt"
+            dest="${DEPS_DIR}/as3httpclientlib"
+        />
+        <mkdir dir="${DEPS_DIR}/as3corelib" />
+        <get src="https://raw.githubusercontent.com/mikechambers/as3corelib/master/README"
+            dest="${DEPS_DIR}/as3corelib"
+            />
+        <antcall target="get-as3crypto-license" />
+        <antcall target="simple-untar-license" />
+		<echo message="Run Adobe Air ADT"/>
+        <java jar="${ADT}" fork="true"
+            failonerror="true"
+            maxmemory="512m">
+            <arg value="-package"/>
+            <arg line="-tsa http://timestamp.digicert.com"/>
+            <arg value="-storetype"/>
+            <arg value="${STORETYPE}"/>
+            <arg value="-keystore"/>
+            <arg value="${KEYSTORE}"/>
+            <arg value="-storepass"/>
+            <arg value="${CERT_PASSWORD}"/>
+            <arg value="${BUILD_DIR}/${APP_NAME}.air"/>
+            <arg value="${SOURCE_DIR}/${APP_NAME}-app.xml"/>
+		    <arg value="${basedir}/NOTICE"/>
+            <arg value="${DEPS_DIR}"/>
+            <arg value="-C"/>
+            <arg value="${basedir}/binary_license"/>
+            <arg value="${basedir}/binary_license/LICENSE"/>
+            <arg value="-C"/>
+            <arg value="${BUILD_DIR}"/>
+            <arg value="${BUILD_DIR}/${APP_NAME}.swf"/>
+            <arg value="-C"/>
+            <arg value="${SOURCE_DIR}"/>
+            <arg value="${SOURCE_DIR}/${APP_CONFIG_XML_NAME}.xml"/>
+            <arg value="${ASSETS_DIR}"/>
+        </java>
+    </target>
+
+	<target name="copy-misc" description="Copy config files to release directory">
+		<copy file="${basedir}/README" tofile="${RELEASE_DIR}/READme"/>
+	</target>
+
+    <!--
+        Packages the source distribution with ZIP and TAR_GZIP.
+        The source file line endings match the package type.
+    -->
+    <target name="source-package" description="Package source files.">
+        <mkdir dir="${BUILD_DIR}/temp"/>
+        <copy todir="${BUILD_DIR}/temp/${COMMON_PROJECT_NAME}" includeEmptyDirs="false">
+			<fileset dir="${COMMON_PROJECT_DIR}">
+				<exclude name="*.p12"/>
+				<exclude name="*.password"/>
+                <exclude name="rat.report"/>
+                <exclude name="libs/**"/>
+				<exclude name="bin/**"/>
+				<exclude name="bin-debug/**"/>
+                <exclude name="release/**"/>
+				<exclude name=".settings/**"/>
+				<exclude name="**/.actionScriptProperties"/>
+                <exclude name="**/.flexProperties"/>
+				<exclude name="**/.flexLibProperties"/>
+                <exclude name="**/.project"/>
+                <exclude name="**/.idea/**"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${BUILD_DIR}/temp/ant_on_air" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ant_on_air">
+                <include name="build.properties" />
+                <include name="build.xml" />
+            </fileset>
+        </copy>
+        <copy todir="${BUILD_DIR}/temp/ant_on_air/src" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ant_on_air/src">
+            </fileset>
+        </copy>
+        <copy todir="${BUILD_DIR}/temp/ant_on_air/locale" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ant_on_air/locale">
+            </fileset>
+        </copy>
+        <copy todir="${BUILD_DIR}/temp/ant_on_air/tests" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ant_on_air/tests">
+                <exclude name="*.swf" />
+                <exclude name="temp/" />
+            </fileset>
+        </copy>
+
+        <copy todir="${BUILD_DIR}/temp/${INSTALLER_PROJECT_NAME}" includeEmptyDirs="false">
+			<fileset dir="${basedir}/${INSTALLER_PROJECT_NAME}">
+				<exclude name="*.p12"/>
+				<exclude name="*.password"/>
+                <exclude name="rat.report"/>
+                <exclude name="libs/**"/>
+				<exclude name="bin/**"/>
+				<exclude name="bin-debug/**"/>
+				<exclude name="build/**"/>
+                <exclude name="release/**"/>
+				<exclude name="rc/**"/>
+				<exclude name=".settings/**"/>
+				<exclude name="**/.actionScriptProperties"/>
+                <exclude name="**/.flexProperties"/>
+				<exclude name="**/.flexLibProperties"/>
+                <exclude name="**/.project"/>
+                <exclude name="**/.idea/**"/>
+			</fileset>
+        </copy>
+
+		<!-- Bump these up to the top-level release directory.  -->
+		<copy todir="${BUILD_DIR}/temp" includeEmptyDirs="false">
+			<fileset dir="${basedir}">
+                <include name="build.*"/>
+                <include name="binary_license/LICENSE"/>
+                <include name="LICENSE"/>
+                <include name="NOTICE"/>
+                <include name="README"/>
+                <include name="RELEASE_GUIDE"/>
+				<include name="CONTRIBUTING"/>
+				<include name="CONTRIBUTORS"/>
+                <include name="RELEASE_NOTES"/>
+                <exclude name="installerBadge/**" />
+                <exclude name="installerLocaleEditor/**" />
+                <exclude name="common/**" />
+                <exclude name="ant_on_air/**" />
+                <exclude name="*.p12"/>
+                <exclude name="*.password"/>
+                <exclude name="rat.report"/>
+                <exclude name="build/**"/>
+                <exclude name="release/**"/>
+                <exclude name="local.properties"/>
+            </fileset>
+        </copy>
+
+        <fixcrlf srcdir="${BUILD_DIR}/temp" eol="crlf" encoding="UTF8" excludes="**/assets/**,**/*.ttf,**/*.png" fixlast="false"/>
+
+        <mkdir dir="${RELEASE_DIR}"/>
+        <zip destfile="${RELEASE_DIR}/${source.kit}.zip"
+            basedir="${BUILD_DIR}/temp"/>
+
+        <fixcrlf srcdir="${BUILD_DIR}/temp" eol="unix" encoding="UTF8" excludes="**/assets/**,**/*.ttf,**/*.png" fixlast="false"/>
+
+        <tar destfile="${RELEASE_DIR}/${source.kit}.tar.gz"
+            compression="gzip"
+            basedir="${BUILD_DIR}/temp"/>
+
+        <delete dir="${BUILD_DIR}/temp"/>
+		<delete dir="${BUILD_DIR}"/>
+    </target>
+
+    <!--
+        Packages the binary distribution with ZIP and TAR_GZIP.
+    -->
+    <target name="binary-package" description="Package binary files.">
+        <mkdir dir="${RELEASE_DIR}"/>
+
+        <zip destfile="${RELEASE_DIR}/${binary.kit}.zip">
+            <fileset dir="${basedir}/release">
+                <exclude name="**/*.zip"/>
+                <exclude name="**/*.tar*"/>
+            </fileset>
+        </zip>
+
+        <tar destfile="${RELEASE_DIR}/${binary.kit}.tar.gz" compression="gzip">
+          <zipfileset src="${RELEASE_DIR}/${binary.kit}.zip"/>
+        </tar>
+    </target>
+
+	<!--
+	    Run the Apache Rat audit tool against the source in the source kit.
+	    The report is written to rat.report.
+
+	    You need to place apache-rat-tasks-0.8.jar and apache-rat-0.8.jar in the
+	    anttask.classpath in order to do this.  If the jar isn't found, the report
+	    will not be generated.
+	-->
+    <target name="rat-report" depends="rat-taskdef" if="have.rattasks"
+        description="Report on licenses in source kit.">
+
+        <!-- Unzip the source kit -->
+        <unzip src="${RELEASE_DIR}/${source.kit}.zip" dest="${RELEASE_DIR}/temp"/>
+
+        <property name="rat.dir" value="${RELEASE_DIR}/temp"/>
+
+        <echo message="Checking files at ${rat.dir}, report is ${basedir}/rat.report"/>
+
+        <rat:report xmlns:rat="antlib:org.apache.rat.anttasks"
+            reportFile="${basedir}/rat.report">
+            <fileset dir="${rat.dir}">
+                <exclude name="**/Apache License Version 2.txt"/>
+                <!--          Start of source files           -->
+                <!-- generated source files that don't have Apache v2 license header -->
+                <exclude name="**/build.number"/>
+                <exclude name="**/.actionScriptProperties"/>
+                <exclude name="**/.flexProperties"/>
+				<exclude name="**/.flexLibProperties"/>
+                <exclude name="**/.project"/>
+                <exclude name="**/.fxpProperties"/>
+                <exclude name="**/.settings/**"/>
+                <exclude name="**/.idea/**"/>
+                <exclude name="**/*.iml"/>
+                <exclude name="CONTRIBUTING"/>
+                <exclude name="CONTRIBUTORS"/>
+                <!--          End of source files           -->
+                <!--          Start of binary files           -->
+                <!-- exclude media (png, ico) -->
+                <exclude name="**/*.ico"/>
+                <exclude name="**/*.png"/>
+                <!-- exclude fonts -->
+                <exclude name="**/*.ttf"/>
+                <!--          End of binary files           -->
+            </fileset>
+        </rat:report>
+
+        <delete dir="${RELEASE_DIR}/temp" failOnError="false"/>
+    </target>
+
+    <target name="rat-taskdef" description="Rat taskdef">
+        <available property="have.rattasks"
+            resource="org/apache/rat/anttasks/antlib.xml"
+            classpathref="anttask.classpath"/>
+
+        <antcall target="have-rattasks"/>
+        <antcall target="no-rattasks"/>
+    </target>
+
+    <target name="have-rattasks" if="have.rattasks">
+        <typedef resource="org/apache/rat/anttasks/antlib.xml"
+                 uri="antlib:org.apache.rat.anttasks"
+                 classpathref="anttask.classpath"/>
+    </target>
+
+    <target name="no-rattasks" unless="have.rattasks">
+        <echo message="Rat report not generated."/>
+        <echo message="rat jars (apache-rat-*.jar, apache-rat-tasks-*.jar)"/>
+        <echo message="not found in anttask.classpath"/>
+    </target>
+
+    <target name="create-SHA-512" >
+        <echo message="Generating SHA-512 hashes for release artifacts"/>
+        <checksum algorithm="SHA-512" fileext=".sha512" file="${RELEASE_DIR}/${source.kit}.zip" forceOverwrite="yes"/>
+        <checksum algorithm="SHA-512" fileext=".sha512" file="${RELEASE_DIR}/${source.kit}.tar.gz" forceOverwrite="yes"/>
+        <checksum algorithm="SHA-512" fileext=".sha512" file="${RELEASE_DIR}/${binary.kit}.${extension}" forceOverwrite="yes"/>
+        <antcall target="create-SHA-512-64bit" />
+    </target>
+    
+    <target name="create-SHA-512-64bit" if="isWindows">
+        <checksum algorithm="SHA-512" fileext=".sha512" file="${RELEASE_DIR}/${kit.prefix64}-bin.zip" forceOverwrite="yes"/>
+    </target>
+
+    <target name="sign" depends="create-SHA-512">
+        <echo message="Signing sources"/>
+
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${source.kit}.zip.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${source.kit}.zip" />
+		</exec>
+
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${source.kit}.tar.gz.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${source.kit}.tar.gz" />
+		</exec>
+
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${binary.kit}.${extension}.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${binary.kit}.${extension}" />
+		</exec>
+                <antcall target="sign64" />
+	</target>
+
+    <target name="sign64" if="isWindows">
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${kit.prefix64}-bin.zip.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${kit.prefix64}-bin.zip" />
+		</exec>
+    </target>
+
+    <target name="sign_exe" description="sign exe when on mac" >
+        <echo message="Signing exe"/>
+
+		<checksum file="${RELEASE_DIR}/${binary.kit}.exe" algorithm="SHA-512" forceOverwrite="yes" />
+
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${binary.kit}.exe.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${binary.kit}.exe" />
+		</exec>
+
+		<checksum file="${RELEASE_DIR}/${kit.prefix64}-bin.zip" algorithm="SHA-512" forceOverwrite="yes" />
+
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${kit.prefix64}-bin.zip.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${kit.prefix64}-bin.zip" />
+		</exec>
+	</target>
+
+	<target name="sign_dmg" description="sign dmg when on win" >
+        <echo message="Signing dmg"/>
+        
+		<checksum file="${RELEASE_DIR}/${binary.kit}.dmg" algorithm="SHA-512" forceOverwrite="yes" />
+
+		<exec executable="gpg">
+			<arg value="--armor" />
+			<arg value="--output" />
+			<arg value="${RELEASE_DIR}/${binary.kit}.dmg.asc" />
+			<arg value="--detach-sig" />
+			<arg value="${RELEASE_DIR}/${binary.kit}.dmg" />
+		</exec>
+	</target>
+	
+    <target name="debug" >
+        <copy file="${SOURCE_DIR}/${APP_NAME}-app.xml" todir="${BUILD_DIR}" />
+        <mkdir dir="${BUILD_DIR}/installer" />
+        <exec executable="${AIR_HOME}/bin/${adl}" dir="${BUILD_DIR}" failonerror="true">
+            <arg value="-runtime" />
+            <arg value="${AIR_HOME}/runtimes/air/${runtime}" />
+            <arg value="${BUILD_DIR}/${APP_NAME}-app.xml" />
+            <arg value="--" />
+            <arg value="-config=${LOCAL_CONFIG_URL}" />
+        </exec>
+    </target>
+
+    <target name="debug-locale" >
+        <copy file="${SOURCE_DIR}/${APP_NAME}-app.xml" todir="${BUILD_DIR}" />
+        <mkdir dir="${BUILD_DIR}/installer" />
+        <exec executable="${AIR_HOME}/bin/${adl}" dir="${BUILD_DIR}" failonerror="true">
+            <arg value="-runtime" />
+            <arg value="${AIR_HOME}/runtimes/air/${runtime}" />
+            <arg value="${BUILD_DIR}/${APP_NAME}-app.xml" />
+            <arg value="--" />
+            <arg value="-config=${LOCAL_CONFIG_URL}" />
+            <arg value="-language=${TEST_LOCALE}" />
+        </exec>
+    </target>
+
+    <target name="debug-for-real" >
+        <copy file="${SOURCE_DIR}/${APP_NAME}-app.xml" todir="${BUILD_DIR}" />
+        <mkdir dir="${BUILD_DIR}/installer" />
+        <exec executable="${AIR_HOME}/bin/${adl}" dir="${BUILD_DIR}" failonerror="true">
+            <arg value="-runtime" />
+            <arg value="${AIR_HOME}/runtimes/air/${runtime}" />
+            <arg value="${BUILD_DIR}/${APP_NAME}-app.xml" />
+        </exec>
+    </target>
+
+    <target name="debug64" >
+        <copy file="${SOURCE_DIR}/${APP_NAME}-app.xml" todir="${BUILD_DIR}" />
+        <replace file="${BUILD_DIR}/${APP_NAME}-app.xml" token="&gt;64&lt;" value="&gt;32&lt;" />
+        <mkdir dir="${BUILD_DIR}/installer" />
+        <exec executable="${AIR_HOME}/bin/${adl}" dir="${BUILD_DIR}" failonerror="true">
+            <arg value="-runtime" />
+            <arg value="${AIR_HOME}/runtimes/air/${runtime}" />
+            <arg value="${BUILD_DIR}/${APP_NAME}-app.xml" />
+            <arg value="--" />
+            <arg value="-64-bit-path=file:///C:/git/apache/flex/flex-utilities/flex-installer/release" />
+            <arg value="-64-bit-file=${kit.prefix64}-bin.zip" />
+        </exec>
+    </target>
+
+</project>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false" height="40">
+	<fx:Script>
+		<![CDATA[
+			import spark.components.BusyIndicator;
+			
+			import actionScripts.events.HelperEvent;
+			import actionScripts.utils.HelperUtils;
+			import actionScripts.valueObjects.HelperConstants;
+			
+			private var busyIndicator:BusyIndicator;
+			
+			override public function set data(value:Object):void
+			{
+				if (value) 
+				{
+					super.data = value;
+					
+					if (data.isDownloading && !busyIndicator)
+					{
+						busyIndicator = new BusyIndicator();
+						busyIndicator.verticalCenter = 0;
+						busyIndicator.right = 10;
+						busyIndicator.width = 26;
+						addElementAt(busyIndicator, 1);
+					}
+					else if (!data.isDownloading && busyIndicator)
+					{
+						busyIndicator.stopAllMovieClips();
+						removeElement(busyIndicator);
+						busyIndicator = null;
+					}
+					
+					setUI();
+				}
+			}
+			
+			protected function onDownloadRequest(event:MouseEvent):void
+			{
+				if (HelperConstants.IS_RUNNING_IN_MOON)
+				{
+					HelperUtils.runAppStoreHelper();
+				}
+				else
+				{
+					this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, data, true));
+				}
+			}
+			
+			protected function onOpenMoonshineSettings(event:MouseEvent):void
+			{
+				this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_MOON_SETTINGS, data, true));
+			}
+			
+			private function setUI():void
+			{
+				imgQueued.includeInLayout = imgQueued.visible = false;
+				if (data.isDownloading)
+				{
+					imgDownloaded.includeInLayout = imgDownloaded.visible = false;
+					imgDownload.includeInLayout = imgDownload.visible = false;
+				}
+				else if (data.isDownloaded)
+				{
+					imgDownloaded.includeInLayout = imgDownloaded.visible = true;
+					imgDownload.includeInLayout = imgDownload.visible = false;
+				}
+				else if (data.isSelectedToDownload)
+				{
+					imgDownloaded.includeInLayout = imgDownloaded.visible = false;
+					imgDownload.includeInLayout = imgDownload.visible = false;
+					imgQueued.includeInLayout = imgQueued.visible = true;
+				}
+				else
+				{
+					imgDownloaded.includeInLayout = imgDownloaded.visible = data.isAlreadyDownloaded;
+					imgDownload.includeInLayout = imgDownload.visible= !data.isAlreadyDownloaded;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:LinearGradient rotation="0">
+				<s:GradientEntry color="0xFFFFFF"/>
+				<s:GradientEntry color="0xe4e4e4"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup width="100%"
+			  verticalCenter="0"
+			  verticalAlign="middle"
+			  paddingRight="20">
+		<s:Label text="{data.title}" width="100%"
+				 styleName="uiTextRendererLabelSub"
+				 textAlign="right" paddingRight="10"/>
+		<s:Image id="imgDownloaded"
+				 width="50"
+				 source="@Embed('/helperResources/images/icoTickNoLabel.png')"
+				 includeInLayout="false" visible="false"
+				 toolTip="Installed"/>
+		<s:Image id="imgDownload"
+				 width="50" buttonMode="true"
+				 source="@Embed('/helperResources/images/icoDownloadNoLabel.png')"
+				 includeInLayout="false" visible="false"
+				 click="onDownloadRequest(event)" toolTip="Download"/>
+		<s:Image id="imgQueued" 
+				 width="50"
+				 source="@Embed('/helperResources/images/icoQueuedNoLabel.png')"
+				 includeInLayout="false" visible="false"
+				 toolTip="Queued"/>
+		<s:Spacer width="50"
+				  includeInLayout="{data.isDownloading}" visible="{data.isDownloading}"/>
+		<s:Image source="@Embed('/helperResources/images/icoConfigureNoLabel.png')"
+				 includeInLayout="{HelperConstants.IS_RUNNING_IN_MOON}" visible="{HelperConstants.IS_RUNNING_IN_MOON}"
+				 buttonMode="true" click="onOpenMoonshineSettings(event)"
+				 toolTip="Configure"/>
+	</s:HGroup>
+	
+	<s:Image source="{HelperConstants.BG_LIST_DIVIDER_WHITE}" width="100%" fillMode="repeat"
+			 bottom="0"/>
+</s:ItemRenderer>

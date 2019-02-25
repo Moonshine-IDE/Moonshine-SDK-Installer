@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>installer</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.apollobuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.apollonature</nature>
+		<nature>com.adobe.flexbuilder.project.flexnature</nature>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] ant_on_air-src</name>
+			<type>2</type>
+			<location>/Users/santanu/Desktop/flex-utilities-develop/flex-installer/ant_on_air/src</location>
+		</link>
+		<link>
+			<name>[source path] common-src</name>
+			<type>2</type>
+			<location>/Users/santanu/Desktop/flex-utilities-develop/flex-installer/common/src</location>
+		</link>
+		<link>
+			<name>[source path] external</name>
+			<type>2</type>
+			<location>/Users/santanu/Desktop/flex-utilities-develop/flex-installer/ant_on_air/external</location>
+		</link>
+	</linkedResources>
+</projectDescription>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ApacheFlexSDKInstallerLib</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.flexlibnature</nature>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] ant_on_air-src</name>
+			<type>2</type>
+			<location>/Users/santanu/Documents/Adobe Flash Builder 4.7/ProminicGITBranch/Moonshine-SDK-Installer/flex-utilities/flex-installer/ant_on_air/src</location>
+		</link>
+		<link>
+			<name>[source path] common-src</name>
+			<type>2</type>
+			<location>/Users/santanu/Documents/Adobe Flash Builder 4.7/ProminicGITBranch/Moonshine-SDK-Installer/flex-utilities/flex-installer/common/src</location>
+		</link>
+		<link>
+			<name>[source path] en_US</name>
+			<type>2</type>
+			<location>/Users/santanu/Documents/Adobe Flash Builder 4.7/ProminicGITBranch/Moonshine-SDK-Installer/flex-utilities/flex-installer/ant_on_air/locale/en_US</location>
+		</link>
+		<link>
+			<name>[source path] external</name>
+			<type>2</type>
+			<location>/Users/santanu/Documents/Adobe Flash Builder 4.7/ProminicGITBranch/Moonshine-SDK-Installer/flex-utilities/flex-installer/ant_on_air/external</location>
+		</link>
+		<link>
+			<name>bin-debug</name>
+			<type>2</type>
+			<location>/Users/santanu/Documents/Adobe Flash Builder 4.7/ProminicGITBranch/Moonshine-SDK-Installer/MoonshineAppStoreHelper/libs</location>
+		</link>
+	</linkedResources>
+</projectDescription>

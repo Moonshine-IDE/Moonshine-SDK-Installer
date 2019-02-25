@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="onCreationCompletes(event)" xmlns:controls="ws.tink.spark.controls.*">
+	<fx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			import flash.utils.setTimeout;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import assets.skins.DarkButtonSkin;
+			import assets.skins.LightButtonSkin;
+			
+			import flashx.textLayout.events.FlowElementMouseEvent;
+			
+			import org.apache.flex.packageflexsdk.model.InstallerComponentVO;
+			import org.apache.flex.packageflexsdk.model.OS;
+			import org.apache.flex.packageflexsdk.model.PackageVO;
+			import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
+			import org.apache.flex.packageflexsdk.util.ArchiveDownloader;
+			import org.apache.flex.packageflexsdk.util.ApacheURLLoader;
+			import org.apache.flex.packageflexsdk.util.CalcButtonWidth;
+			import org.apache.flex.packageflexsdk.util.MD5CompareUtil;
+			import org.apache.flex.packageflexsdk.view.events.GenericEvent;
+			
+			private static var MOONSHINE_CONFIG_AIR_VERSION:String;
+			private static var INSTALLER_APACHE_FLEX:InstallApacheFlex;
+			
+			[Bindable] private var packageLists:ArrayCollection;
+			[Bindable] private var copyrightComponentsDataProvider:ArrayCollection = new ArrayCollection();
+			[Bindable] private var viewResourceConstants:ViewResourceConstants;
+			[Bindable] private var standardButtonWidth:Number = 88;
+			[Bindable] private var currentLicenseLabel:String;
+			[Bindable] private var currentLicenseURL:String;
+			
+			private var os:OS = new OS();
+			private var defaultInstallPathToSDK:File;
+			private var flexVersionSelected:Object;
+			private var flexJSVersionSelected:Object;
+			private var airVersionSelected:Object;
+			private var flashPlayerVersionSelected:Object;
+			private var licensePropertyMap:Object = {};
+			private var lastLicenseItemSelected:int;
+			private var currentItemInstallationIndex:int;
+			private var archiveDownloader:ArchiveDownloader;
+			
+			protected function onCreationCompletes(event:FlexEvent):void
+			{
+				setLocalPathConfig();
+				loadMoonshineConfig();
+			}
+			
+			private function onInstallerIsReady(event:GenericEvent):void
+			{
+				INSTALLER_APACHE_FLEX.removeEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady);
+				viewResourceConstants = INSTALLER_APACHE_FLEX.viewResourceConstants;
+				flexVersionSelected = INSTALLER_APACHE_FLEX.flexVersionSelected;
+				flexJSVersionSelected = INSTALLER_APACHE_FLEX.flexJSVersionSelected;
+				airVersionSelected = INSTALLER_APACHE_FLEX.airVersionSelected;
+				
+				setButtonWidths();
+				cbCopyright.enabled = true;
+			}
+			
+			private function setButtonWidths():void
+			{
+				var calc:CalcButtonWidth = new CalcButtonWidth(hiddenButton);
+				standardButtonWidth = calc.maxButtonWidth([cancelBtn, installLogBtn]) + 10;
+			}
+			
+			private function onInstallProgress(event:GenericEvent):void
+			{
+				progressBar.percent = event.value as Number;
+			}
+			
+			private function onMessageUpdates(event:Event):void
+			{
+				lastMessage.text = INSTALLER_APACHE_FLEX.lastFilteredPublicMessage;
+			}
+			
+			private function onInstallationFinished(event:GenericEvent):void
+			{
+				packageLists[currentItemInstallationIndex].isDownloaded = true;
+				packageLists[currentItemInstallationIndex].isDownloading = false;
+				currentItemInstallationIndex++;
+				startInstallation();
+			}
+			
+			private function onInstallationSkipped(event:GenericEvent):void
+			{
+				packageLists[currentItemInstallationIndex].isDownloaded = false;
+				packageLists[currentItemInstallationIndex].isDownloading = false;
+				currentItemInstallationIndex++;
+				startInstallation();
+			}
+			
+			private function onInstallAborted(event:GenericEvent):void
+			{
+				packageLists[currentItemInstallationIndex].isDownloading = false;
+				packageLists[currentItemInstallationIndex].hasError = true;
+			}
+			
+			protected function setLocalPathConfig():void
+			{
+				var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
+				if (tmpUserFolderSplit[1] == "Users")
+				{
+					tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
+				}
+				
+				defaultInstallPathToSDK = new File("/" + tmpUserFolderSplit.join("/") + "/Downloads/MoonshineSDKs");
+			}
+			
+			protected function loadMoonshineConfig():void
+			{
+				var request:URLRequest = new URLRequest("/installer/moonshineAppStoreHelperConfig.xml?rand="+Math.random());
+				var loader:ApacheURLLoader = new ApacheURLLoader();
+				
+				try
+				{
+					loader.load(request);
+				}
+				catch (error:Error)
+				{
+					/*log("Unable to load Moonshine configuration file.");
+					abortInstallation("Unable to load Moonshine configuration file.");*/
+				}
+				
+				loader.addEventListener(IOErrorEvent.IO_ERROR, onMoonshineConfigError, false, 0, true);
+				loader.addEventListener(Event.COMPLETE, onMoonshineConfigLoaded, false, 0, true);
+			}
+			
+			protected function onMoonshineConfigLoaded(event:Event):void
+			{
+				removeLoaderListeners(event, onMoonshineConfigLoaded, onMoonshineConfigError);
+				
+				var data:XML = XML(event.target.data);
+				var isEverythingPresent:Boolean;
+				
+				MOONSHINE_CONFIG_AIR_VERSION = data.air.@version.toString();
+				
+				var royaleVersion:String;
+				var royaleURL:String;
+				if (os.isMac() || os.isLinux())
+				{
+					royaleURL = data.Royale.mac.version.path.toString() + data.Royale.mac.version.file.toString();
+					royaleVersion = data.Royale.mac.version.@displayVersion.toString();
+				}
+				else
+				{
+					royaleURL = data.Royale.windows.version.path.toString() + data.Royale.windows.version.file.toString();
+					royaleVersion = data.Royale.windows.version.@displayVersion.toString();
+				}
+				
+				var antVersion:String;
+				var antURL:String;
+				if (os.isMac() || os.isLinux())
+				{
+					antURL = data.Ant.mac.version.path.toString() + data.Ant.mac.version.file.toString();
+					antVersion = data.Ant.mac.version.@displayVersion.toString();
+				}
+				else
+				{
+					antURL = data.Ant.windows.version.path.toString() + data.Ant.windows.version.file.toString();
+					antVersion = data.Ant.windows.version.@displayVersion.toString();
+				}
+				
+				var mavenVersion:String;
+				var mavenURL:String;
+				if (os.isMac() || os.isLinux())
+				{
+					mavenURL = data.Maven.mac.version.path.toString() + data.Maven.mac.version.file.toString();
+					mavenVersion = data.Maven.mac.version.@displayVersion.toString();
+				}
+				else
+				{
+					mavenURL = data.Maven.windows.version.path.toString() + data.Maven.windows.version.file.toString();
+					mavenVersion = data.Maven.windows.version.@displayVersion.toString();
+				}
+				
+				// prepare the in-download items
+				packageLists = new ArrayCollection();
+				var tmpPackage:PackageVO = new PackageVO();
+				tmpPackage.packageType = PackageVO.TYPE_FLEX_SDK;
+				tmpPackage.version = data.flex.@version.toString();
+				tmpPackage.downloadingTo = defaultInstallPathToSDK.nativePath +"/Flex_SDK/Flex_"+ tmpPackage.version +"_AIR_"+ MOONSHINE_CONFIG_AIR_VERSION;
+				packageLists.addItem(tmpPackage);
+				/*tmpPackage = new PackageVO();
+				tmpPackage.packageType = PackageVO.TYPE_FLEXJS_SDK;
+				tmpPackage.version = data.flexJS.@version.toString();
+				tmpPackage.downloadingTo = defaultInstallPathToSDK.nativePath +"/FlexJS_SDK/FlexJS_"+ tmpPackage.version +"_AIR_"+ MOONSHINE_CONFIG_AIR_VERSION;
+				packageLists.addItem(tmpPackage);*/
+				tmpPackage = new PackageVO();
+				tmpPackage.packageType = PackageVO.TYPE_ROYALE_SDK;
+				tmpPackage.version = royaleVersion;
+				tmpPackage.packageURL = royaleURL; 
+				tmpPackage.downloadingTo = defaultInstallPathToSDK.nativePath +"/Royale_SDK/apache-royale-"+ tmpPackage.version +"-bin-js";
+				tmpPackage.isSelectionChangeAllowed = true;
+				//tmpPackage.arguments = "royale-asjs/royale-sdk-description.xml";
+				packageLists.addItem(tmpPackage);
+				tmpPackage = new PackageVO();
+				tmpPackage.packageType = PackageVO.TYPE_ANT_BIN;
+				tmpPackage.version = antVersion;
+				tmpPackage.packageURL = antURL; 
+				tmpPackage.downloadingTo = defaultInstallPathToSDK.nativePath +"/Ant/apache-ant-"+ tmpPackage.version;
+				tmpPackage.isSelectionChangeAllowed = true;
+				//tmpPackage.arguments = "bin/ant";
+				packageLists.addItem(tmpPackage);
+				tmpPackage = new PackageVO();
+				tmpPackage.packageType = PackageVO.TYPE_MAVEN;
+				tmpPackage.version = mavenVersion;
+				tmpPackage.packageURL = mavenURL;
+				tmpPackage.downloadingTo = defaultInstallPathToSDK.nativePath +"/Maven/apache-maven-"+ tmpPackage.version;
+				tmpPackage.isSelectionChangeAllowed = true;
+				//tmpPackage.arguments = "bin/mvn";
+				packageLists.addItem(tmpPackage);
+				
+				// initiate the original installer source
+				INSTALLER_APACHE_FLEX = new InstallApacheFlex();
+				INSTALLER_APACHE_FLEX.moonshineAIRversion = MOONSHINE_CONFIG_AIR_VERSION;
+				INSTALLER_APACHE_FLEX.moonshineFlexVersion = packageLists[currentItemInstallationIndex].version;
+				INSTALLER_APACHE_FLEX.moonshineFlexJSVersion = packageLists[currentItemInstallationIndex + 1].version;
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_PROGRESS, onInstallProgress, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_FINISH, onInstallationFinished, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
+				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
+			}
+			
+			protected function onMoonshineConfigError(event:IOErrorEvent):void
+			{
+				removeLoaderListeners(event, onMoonshineConfigLoaded, onMoonshineConfigError);
+				
+				/*log("Unable to load Moonshine configuration file.");
+				log(viewResourceConstants.ERROR_CONFIG_XML_LOAD + event.errorID);
+				abortInstallation("Unable to load Moonshine configuration file. " + event.toString());*/
+				
+				cbCopyright.enabled = false;
+			}
+			
+			private function handleLinkEvent(event:FlowElementMouseEvent):void
+			{
+				// probable termination
+				if (qaUserNotes.visible) return;
+				
+				qaUserNotes.visible = qaUserNotes.includeInLayout = true;
+				qaUserNotes.x = event.originalEvent.stageX;
+				qaUserNotes.y = event.originalEvent.stageY;
+				
+				setTimeout(function():void
+				{
+					stage.addEventListener(MouseEvent.CLICK, onQANoteHide);
+				}, 300);
+			}
+			
+			private function onQANoteHide(event:MouseEvent):void
+			{
+				stage.removeEventListener(MouseEvent.CLICK, onQANoteHide);
+				qaUserNotes.visible = qaUserNotes.includeInLayout = false;
+			}
+			
+			private function removeLoaderListeners(event:*, successFn:Function=null, ioErrFn:Function=null, errorFn:Function=null):void
+			{
+				if (successFn != null) event.target.removeEventListener(Event.COMPLETE, successFn);
+				if (errorFn != null) event.target.removeEventListener(ErrorEvent.ERROR, errorFn);
+				if (ioErrFn != null) event.target.removeEventListener(IOErrorEvent.IO_ERROR, ioErrFn);
+			}
+			
+			private function showAgreements(event:FlowElementMouseEvent):void
+			{
+				if (packageLists.length == 0) return;
+				
+				secondStepGroup.visible = secondStepGroup.includeInLayout = true;
+				if (copyrightComponentsDataProvider.length > 0) return;
+				
+				var req:URLRequest = new URLRequest(MD5CompareUtil.MD5_DOMAIN + flexVersionSelected.path + flexVersionSelected.prefix + "installer-config.xml");
+				var loader:ApacheURLLoader = new ApacheURLLoader();
+				loader.dataFormat = URLLoaderDataFormat.TEXT;
+				loader.addEventListener(Event.COMPLETE, handleFlexCopyrightLoaded);
+				loader.addEventListener(ErrorEvent.ERROR, handleCopyrightXMLError);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, handleCopyrightXMLError);
+				loader.load(req);
+			}
+			
+			protected function handleFlexCopyrightLoaded(event:Event):void
+			{
+				removeLoaderListeners(event, handleFlexCopyrightLoaded, handleCopyrightXMLError, handleCopyrightXMLError);
+				
+				var data:XML = XML(event.target.data);
+				var compDList:XMLList = data.component.copy();
+				var tmpChildrens:ArrayCollection = new ArrayCollection();
+				for each (var comp:XML in compDList)
+				{
+					var vo:InstallerComponentVO = new InstallerComponentVO(getLocalizedString(comp, "label"),
+						getLocalizedString(comp, "message"), getLocalizedString(comp, "license"),
+						getLocalizedString(comp, "licenseURL"),
+						comp.@id.toString(), comp.@required.toString() == "true");
+					licensePropertyMap[comp.@property.toString()] = vo;
+					tmpChildrens.addItem(vo);
+				}
+				
+				copyrightComponentsDataProvider.addItem({label:"Apache Flex®", children:tmpChildrens});
+				
+				tmpChildrens = new ArrayCollection();
+				var installComponent:InstallerComponentVO = new InstallerComponentVO("apache-royale-"+ packageLists[1].version +"-bin-js",
+					"The Apache License Version 2.0 applies to all releases of Apache Ant starting with Ant 1.6.1", "The Apache License Version 2.0",
+					"https://ant.apache.org/license.html",
+					"do.royale.install", true);
+				tmpChildrens.addItem(installComponent);
+				copyrightComponentsDataProvider.addItem({label:"Apache Royale™", children:tmpChildrens});
+				
+				tmpChildrens = new ArrayCollection();
+				installComponent = new InstallerComponentVO("apache-ant-"+ packageLists[2].version,
+					"The Apache License Version 2.0 applies to all releases of Apache Ant starting with Ant 1.6.1", "The Apache License Version 2.0",
+					"https://ant.apache.org/license.html",
+					"do.ant.install", true);
+				tmpChildrens.addItem(installComponent);
+				copyrightComponentsDataProvider.addItem({label:"Apache Ant™", children:tmpChildrens});
+				
+				tmpChildrens = new ArrayCollection();
+				installComponent = new InstallerComponentVO("apache-maven-"+ packageLists[3].version,
+					"The Apache License Version 2.0 applies to all releases of Apache Maven", "The Apache License Version 2.0",
+					"https://www.apache.org/licenses/",
+					"do.maven.install", true);
+				tmpChildrens.addItem(installComponent);
+				copyrightComponentsDataProvider.addItem({label:"Apache Maven™", children:tmpChildrens});
+				
+				hgSSBB.removeElement(biCopyrights);
+			}
+			
+			protected function handleCopyrightXMLError(event:Event):void
+			{
+				removeLoaderListeners(event, handleFlexCopyrightLoaded, handleCopyrightXMLError, handleCopyrightXMLError);
+				//log("Unable to load Copyright Agreements at this moment.");
+			}
+			
+			private function getLocalizedString(xml:XML, propName:String):String
+			{
+				var compBundle:XMLList;
+				for each (var locale:String in resourceManager.localeChain)
+				{
+					compBundle = xml[locale];
+					if (compBundle.length() == 1)
+					{
+						if (propName)
+						{
+							var xmlList:XMLList = compBundle[0][propName];
+							if (xmlList.length() == 1)
+							{
+								return xmlList[0].toString();
+							}
+						}
+						else
+						{
+							var s:String = compBundle[0].toString();
+							if (s.length > 0)
+							{
+								return s;
+							}
+						}
+					}
+				}
+				return "";
+			}
+			
+			private function getIconForFile(object:Object):Class
+			{
+				return null;
+			}
+			
+			private function closeApplication(event:Event):void
+			{
+				NativeApplication.nativeApplication.exit();
+			}
+			
+			protected function handleLicenceBtnClick(event:Event):void
+			{
+				navigateToURL(new URLRequest(currentLicenseURL), "_blank");
+			}
+			
+			protected function handleOptionalInstallsChange(event:Event):void
+			{
+				if (installComponentsList.dataDescriptor.isBranch(event.target.selectedItem)) 
+				{
+					return;
+				}
+				
+				var selectedItem:InstallerComponentVO = InstallerComponentVO(event.target.selectedItem);
+				optionalInstallsTxtArea.text = selectedItem.message;
+				
+				// Store the current selected item in order to have the license title update if the language is changed
+				lastLicenseItemSelected = installComponentsList.selectedIndex;
+				
+				licenseLinkBtn.includeInLayout = true;
+				currentLicenseLabel = selectedItem.licenseName;
+				currentLicenseURL = selectedItem.licenseURL;
+			}
+			
+			private function showConsole(event:Event):void
+			{
+				INSTALLER_APACHE_FLEX.showConsole(event);
+			}
+			
+			protected function startInstallation():void
+			{
+				copyright.visible = false;
+				progressBar.visible = true;
+				stepZeroButtonGroup.visible = false;
+				lastMessage.visible = true;
+				userNotes.visible = false;
+				lblInstalling.visible = true;
+				
+				// create appropriate folder for the SDK directory
+				if (!defaultInstallPathToSDK.exists) defaultInstallPathToSDK.createDirectory();
+				
+				var sdkSubDir:File;
+				var sdkFolderName:String;
+				
+				switch(currentItemInstallationIndex)
+				{
+					case 0:
+						sdkSubDir = defaultInstallPathToSDK.resolvePath("Flex_SDK");
+						break;
+					/*case 1:
+						sdkSubDir = defaultInstallPathToSDK.resolvePath("FlexJS_SDK");
+						break;*/
+					case 1:
+						sdkSubDir = defaultInstallPathToSDK.resolvePath("Royale_SDK");
+						break;
+					case 2:
+						sdkSubDir = defaultInstallPathToSDK.resolvePath("Ant");
+						break;
+					case 3:
+						sdkSubDir = defaultInstallPathToSDK.resolvePath("Maven");
+						break;
+					default:
+						progressBar.visible = progressBar.includeInLayout = false;
+						lblInstalling.text = viewResourceConstants.INFO_INSTALLATION_COMPLETE;
+						closeBtn.visible = true;
+						lastMessage.visible = false;
+						return;
+				}
+				
+				// terminate if it suppose to be skipped
+				if (!packageLists[currentItemInstallationIndex].isSelectedToDownload)
+				{
+					onInstallationSkipped(null);
+					return;
+				}
+				
+				if (!sdkSubDir.exists) sdkSubDir.createDirectory();
+				
+				// for Flex/JS
+				if (currentItemInstallationIndex < 1)
+				{
+					sdkSubDir = defaultInstallPathToSDK.resolvePath(packageLists[currentItemInstallationIndex].downloadingTo);
+					if (sdkSubDir.exists) 
+					{
+						// in case of existed already
+						// check if it's a valid SDK folder by securing one file
+						var tmpDescriptorFile:File = sdkSubDir.resolvePath("flex-sdk-description.xml");
+						if (tmpDescriptorFile.exists)
+						{
+							packageLists[currentItemInstallationIndex].isAlreadyDownloaded = true;
+							onInstallationFinished(null);
+							return;
+						}
+					}
+					
+					INSTALLER_APACHE_FLEX.setFlexPath(packageLists[currentItemInstallationIndex].downloadingTo);
+					packageLists[currentItemInstallationIndex].isDownloading = true;
+					INSTALLER_APACHE_FLEX.moonshineAIRversion = MOONSHINE_CONFIG_AIR_VERSION;
+					INSTALLER_APACHE_FLEX.moonshineFlexVersion = packageLists[currentItemInstallationIndex].version;
+					INSTALLER_APACHE_FLEX.startInstallation();
+				}
+				// for royale, ant, maven
+				else
+				{
+					archiveDownloader = new ArchiveDownloader(packageLists[currentItemInstallationIndex] as PackageVO);
+					archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
+					archiveDownloader.viewResourceConstants = viewResourceConstants;
+					archiveDownloader.startInstallation();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:Sine id="ease"/>
+		<s:BlurFilter id="blur"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="directoryState"/>
+		<s:State name="optionsState"/>
+		<s:State name="installState"/>
+	</s:states>
+	
+	<s:Rect top="0" height="100" left="0" right="0">
+		<s:fill>
+			<s:SolidColor color="0x444444"/>
+		</s:fill>
+	</s:Rect>
+	<s:Rect bottom="80" height="10" left="0" right="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x303030"/>
+				<s:GradientEntry color="0x444444"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	<s:Rect bottom="0" height="80" left="0" right="0">
+		<s:fill>
+			<s:SolidColor color="0x444444"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Image id="textIcon" source="@Embed('/assets/images/logoMoonshine.png')" horizontalCenter="0" top="22"/>
+	
+	<s:Group width="80%" top="100" height="70"
+			 horizontalCenter="0">
+		<s:RichEditableText id="userNotes" 
+							editable="false" focusEnabled="false" fontFamily="DejaVuSans" color="0x686868"
+							width="90%" horizontalCenter="0" verticalCenter="-6" textAlign="center">
+			<s:textFlow>
+				<s:TextFlow>
+					<s:p>This application will automatically download the packages listed below and make them available for use by Moonshine IDE <s:a click="handleLinkEvent(event)"><s:img alignmentBaseline="ideographicBottom" source="@Embed('/assets/images/icoQuestion.png')"/></s:a></s:p>
+				</s:TextFlow>
+			</s:textFlow>
+		</s:RichEditableText>
+		<s:Label id="lblInstalling" 
+				 text="Installing packages.." color="0xdb5fce" fontSize="14"
+				 horizontalCenter="0" verticalCenter="0" fontFamily="DejaVuSans"
+				 visible="false"/>
+	</s:Group>
+	
+	<s:DataGrid id="zeroStepGroup"
+				width="96%" height="202"
+				horizontalCenter="0" verticalCenter="0"
+				dataProvider="{packageLists}"
+				sortableColumns="false" variableRowHeight="true" borderVisible="false" horizontalScrollPolicy="off"
+				contentBackgroundColor="0x0" selectionColor="0xc165b8" skinClass="renderers.GridHeaderRenderer">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn headerText="Package" dataField="packageType" itemRenderer="renderers.GeneralGridRenderer"/>
+				<s:GridColumn headerText="Version" dataField="version" itemRenderer="renderers.GeneralGridRenderer" width="80"/>
+				<s:GridColumn headerText="Install Location" dataField="downloadingTo" itemRenderer="renderers.PathGridRenderer"/>
+				<!--<s:GridColumn headerText="" itemRenderer="renderers.CheckboxGridRenderer" width="80"/>-->
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+	
+	<s:Group width="80%"
+			 bottom="90" height="86" horizontalCenter="0">
+		<s:HGroup id="copyright"
+				  autoLayout="true" verticalAlign="baseline"
+				  horizontalCenter="0" verticalCenter="0">
+			<s:CheckBox id="cbCopyright"
+						enabled="false"/>
+			<s:RichEditableText id="txtCopyright" 
+								editable="false" focusEnabled="false"
+								width="100%" color="0xdb5fce">
+				<s:textFlow>
+					<s:TextFlow>
+						<s:p>I accept the <s:a click="showAgreements(event)">License Agreements</s:a> for Apache® Flex, Royale, Ant and Maven.</s:p>
+					</s:TextFlow>
+				</s:textFlow>
+			</s:RichEditableText>
+		</s:HGroup>
+		<!--<controls1:MultiStepProgressIndicator
+		steps="{_installationSteps}"/>-->
+		<controls:ProgressBar id="progressBar"
+							  width="60%"
+							  height="10"
+							  horizontalCenter="0" verticalCenter="0"
+							  visible="false"/>
+	</s:Group>
+	
+	<s:Panel id="secondStepGroup"
+			 title="{viewResourceConstants.INFO_LICENSE_AGREEMENTS}"
+			 width="80%"
+			 height="60%"
+			 visible="false" includeInLayout="false"
+			 horizontalCenter="0" verticalCenter="0"> 
+		<!--<s:layout>
+		<s:VerticalLayout
+		verticalAlign="middle"/>
+		</s:layout>-->
+		<s:HGroup
+			width="100%"
+			height="100%"
+			horizontalAlign="center"
+			paddingRight="10"
+			paddingLeft="10">
+			<mx:Tree id="installComponentsList"
+					 width="50%" height="100%"
+					 itemRenderer="renderers.TourDeTreeItemRenderer"
+					 dataProvider="{copyrightComponentsDataProvider}" labelField="label"
+					 color="0xEEEEEE"
+					 contentBackgroundColor="0x0"
+					 rollOverColor="0x393939"
+					 selectionColor="0x393939"
+					 alternatingItemColors="[0x444444, 0x4d4c4c]"
+					 verticalScrollBarStyleName="black"
+					 borderVisible="false"
+					 rowHeight="18"
+					 useRollOver="true"
+					 iconFunction="{getIconForFile}"
+					 borderStyle="none"
+					 change="handleOptionalInstallsChange(event)"/>
+			<s:VGroup width="50%"
+					  height="100%"
+					  horizontalAlign="center"
+					  gap="5" paddingTop="10" paddingBottom="10">
+				<s:Label text="{currentLicenseLabel}" fontWeight="bold"/>
+				<s:TextArea id="optionalInstallsTxtArea" text="{viewResourceConstants.INFO_NEED_TO_READ_AND_AGREE_TO_LICENSE}"
+							fontSize="12"
+							width="100%"
+							height="100%"
+							verticalScrollPolicy="off"
+							editable="false"/>
+				<s:Button id="licenseLinkBtn"
+						  label="View License"
+						  skinClass="assets.skins.LightButtonSkin"
+						  click="handleLicenceBtnClick(event)"
+						  includeInLayout="false"/>
+			</s:VGroup>
+		</s:HGroup>
+		<s:controlBarContent>
+			<s:HGroup id="hgSSBB" 
+					  width="100%" height="100%"
+					  verticalAlign="middle">
+				<s:Button id="secondStepBackBtn"
+						  skinClass="assets.skins.LightButtonSkin"
+						  width="{standardButtonWidth}"
+						  label="{viewResourceConstants.BTN_LABEL_CLOSE}"
+						  enabled="true"
+						  click="secondStepGroup.visible=false;secondStepGroup.includeInLayout=false"/>
+				<s:Spacer width="100%"/>
+				<s:BusyIndicator id="biCopyrights"/>
+			</s:HGroup>
+		</s:controlBarContent>
+	</s:Panel>
+	
+	<s:Group
+		left="0"
+		right="0"
+		bottom="0"
+		height="100">
+		<s:HGroup id="stepZeroButtonGroup"
+				  paddingLeft="20" paddingRight="20"
+				  width="100%" verticalCenter="0" gap="0">
+			<s:Button id="cancelBtn"
+					  skinClass="assets.skins.DarkButtonSkin"
+					  width="{standardButtonWidth}"
+					  height="32"
+					  label="{viewResourceConstants.BTN_LABEL_CANCEL}"
+					  click="closeApplication(event)"
+					  horizontalCenter="0" verticalCenter="0"/>
+			<s:Button id="installLogBtn"
+					  skinClass="assets.skins.DarkButtonSkin"
+					  width="{standardButtonWidth}"
+					  height="32"
+					  label="{viewResourceConstants.BTN_LABEL_INSTALL_LOG}"
+					  click="showConsole(event)"/>
+			<s:Spacer id="zeroSpacer" width="100%"/>
+			<s:Button id="installBtn"
+					  skinClass="assets.skins.DarkButtonSkin"
+					  width="220"
+					  height="32"
+					  right="10"
+					  enabled="{cbCopyright.selected}"
+					  label="{viewResourceConstants.BTN_LABEL_INSTALL}"
+					  click="startInstallation()"/>
+		</s:HGroup>
+		<s:Label id="lastMessage"
+				 textAlign="center" color="0xf5f5f5"
+				 width="70%" maxDisplayedLines="5"
+				 horizontalCenter="0" verticalCenter="0"
+				 visible="false"/>
+		<s:Button id="closeBtn"
+				  skinClass="assets.skins.DarkButtonSkin"
+				  width="{standardButtonWidth}"
+				  height="32"
+				  label="{viewResourceConstants.BTN_LABEL_CLOSE}"
+				  click="closeApplication(event)"
+				  horizontalCenter="0" verticalCenter="0"
+				  visible="false"/>
+	</s:Group>
+	
+	<s:BorderContainer id="qaUserNotes"
+					   width="200" autoLayout="true" borderColor="0x444444"
+					   visible="false" includeInLayout="false">
+		<s:backgroundFill>
+			<s:SolidColor color="0xbd60b9"/>
+		</s:backgroundFill>
+		<s:Label width="100%"
+				 paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+				 text="Due to App Store policy this feature cannot be bundled in with the App Store release of Moonshine IDE" maxDisplayedLines="5" color="0xf5f5f5"/>
+	</s:BorderContainer>
+	<!-- used to measure text -->
+	<s:Button id="hiddenButton" visible="false" includeInLayout="false"/>
+</s:Group>

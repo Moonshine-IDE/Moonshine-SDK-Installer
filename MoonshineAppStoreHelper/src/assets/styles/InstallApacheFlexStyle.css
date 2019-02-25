@@ -1,0 +1,203 @@
+/*
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+*/
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace st "ws.tink.spark.controls.*";
+
+s|WindowedApplication 
+{
+	skinClass:ClassReference("assets.skins.MoonshineApplicationSkin");
+}
+
+@font-face {
+	src: url("/assets/fonts/DejaVuSansMono.ttf");
+	fontFamily: "DejaVuMono";
+	embedAsCFF: true;
+}
+
+@font-face {
+	src: url("/assets/fonts/DejaVuSans.ttf");
+	fontFamily: "DejaVuSans";
+	embedAsCFF: true;
+}
+
+@font-face {
+	src: url("/assets/fonts/DejaVuSans-Oblique.ttf");
+	fontFamily: "DejaVuSans";
+	fontStyle: italic;
+	embedAsCFF: true;
+}
+
+@font-face {
+	src: url("/assets/fonts/DejaVuSansCondensed.ttf");
+	fontFamily: "DejaVuSansCond";
+	embedAsCFF: true;
+}
+
+@font-face {
+	src: url("/assets/fonts/DejaVuSerif-Italic.ttf");
+	fontFamily: "DejaVuSerif";
+	fontStyle: italic;
+	embedAsCFF: true;
+}
+
+global {
+	font-size: 12;
+	font-sharpness: 100;
+	font-thickness: 50;
+	modalTransparencyBlur: 0;
+	modalTransparency: 0.8;
+	modalTransparencyColor: #222222;
+	modalTransparencyDuration: 200;
+	color: #444444;
+}
+
+s|CheckBox s|RadioButton
+{
+	/*	skinClass: ClassReference("elements.skins.CheckboxSkin");*/
+	fontFamily: 'DejaVuSans';
+	fontSize: 12;
+	color: #444444;
+}
+
+s|TextArea 
+{
+	borderVisible : false;
+}
+
+s|List
+{
+	alternatingItemColors: #444444, #4d4c4c;
+	rollOverColor: #393939;
+	selectionColor: #c165b8;
+	color: #f5f5f5;
+	borderVisible: false;
+}
+
+s|VScrollBar
+{
+	skin-class: ClassReference('assets.skins.SparkVScrollBarSkin');
+}
+
+s|HScrollBar
+{
+	skin-class: ClassReference('assets.skins.SparkHScrollBarSkin');
+}
+
+st|StepRenderer st|ActivityIndicator
+{
+	skinClass : ClassReference("ws.tink.spark.skins.controls.StepActivityIndicatorSkin");
+}
+
+mx|ScrollBar
+{
+	thumb-color-left: #FFFFFF;
+	thumb-color-right: #F5F5F5;
+	thumb-left-side-line: #C9C9C9;
+	thumb-hline1: #C5C5C5;
+	thumb-hline2: #FFFFFF;
+	
+	thumb-skin: 		ClassReference('assets.skins.VScrollBarThumbSkin');
+	track-skin: 		ClassReference('assets.skins.VScrollBarTrackSkin');
+	up-arrow-skin: 		ClassReference(null);
+	down-arrow-skin: 	ClassReference(null);
+}
+
+mx|ScrollBar.black
+{
+	thumb-color-left: #616161;
+	thumb-color-right: #585858;
+	thumb-left-side-line: #3A3A3A;
+	thumb-hline1: #444444;
+	thumb-hline2: #777777;
+}
+
+st|StepRenderer st|ActivityIndicator st|Rotator
+{
+	skinClass : ClassReference("ws.tink.spark.skins.controls.StepRotatorSkin");
+}
+
+/*st|StepRenderer
+{
+	color 			: #FFFFFF;
+	activeColor		: #FFFFFF;
+	errorColor		: #B20E13;
+	completeColor	: #679d13;
+	borderColor		: #BFBFBF;
+}*/
+
+st|ProgressBar
+{
+	skinClass : ClassReference("ws.tink.spark.skins.controls.ProgressBarSkin");
+	chromeColor	: #974a5c;
+}
+
+s|Label.linkText {
+	color: #0000FF;
+	verticalAlign: middle;
+	textDecoration: none;
+}
+
+s|Label.linkTextHover {
+	color: #0000FF;
+	verticalAlign: middle;
+	textDecoration: underline;
+}
+
+.uiTextRendererLabel
+{
+	fontFamily: 'DejaVuSans';
+	fontSize: 16;
+	kerning: on;
+	cffHinting: none;
+	color: #000000;
+}
+
+.uiTextRendererLabelSub
+{
+	fontFamily: 'DejaVuSans';
+	fontSize: 14;
+	kerning: on;
+	cffHinting: none;
+	color: #000000;
+}
+
+.uiTextRendererDescription
+{
+	fontFamily: 'DejaVuSans';
+	fontSize: 12;
+	kerning: on;
+	cffHinting: none;
+	color: #444444;
+}
+
+.toolTip
+{
+	border-skin: ClassReference("org.apache.flex.packageflexsdk.util.TooltipSkin");
+}
+
+.noBorderList
+{
+	borderVisible: false;
+}
+
+.withBorderList
+{
+	borderVisible: true;
+}
