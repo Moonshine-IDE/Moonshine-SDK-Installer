@@ -11,9 +11,8 @@
 			
 			import actionScripts.ui.menu.MenuManager;
 			
+			import components.AboutDialog;
 			import components.UpdaterView;
-			
-			import org.apache.flex.packageflexsdk.view.components.AboutDialog;
 			
 			//private var installerView:MoonshineAppStoreHelperLibMain;
 			private var updaterView:UpdaterView;

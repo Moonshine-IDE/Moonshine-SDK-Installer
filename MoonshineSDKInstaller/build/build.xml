@@ -112,8 +112,8 @@
 	<property name="desktopMainSource" value="${applicationSourceDirectory}/MoonshineSDKInstaller.mxml" />
 	<property name="desktopApplicationDescriptor" value="${debug_dir}/MoonshineSDKInstaller-app.xml" />
 	<property name="desktopApplicationDescriptorOriginal" value="${applicationSourceDirectory}/MoonshineSDKInstaller-app.xml" />
-	<property name="apacheInstallerSourceDirectory" value="../../ApacheFlexSDKInstaller/flex-utilities/flex-installer"/>
-	<property name="mashLibrarySourceDirectory" value="../../ApacheFlexSDKInstaller/ApacheFlexSDKInstallerLib"/>
+	<property name="apacheInstallerSourceDirectory" value="../../flex-utilities/flex-installer"/>
+	<property name="mashLibrarySourceDirectory" value="../../ApacheFlexSDKInstallerLib"/>
 	
 	<!-- Desktop configuration -->
 	<property name="certSelfSignedNameOnly" value="MoonshineSelfSignedCertificate" />
