@@ -3,8 +3,8 @@ package actionScripts.managers
 	import flash.events.EventDispatcher;
 	import flash.filesystem.File;
 	
-	import actionScripts.business.DataAgent;
 	import actionScripts.events.HelperEvent;
+	import actionScripts.utils.FileUtils;
 	import actionScripts.utils.Parser;
 	import actionScripts.valueObjects.HelperConstants;
 
@@ -27,25 +27,29 @@ package actionScripts.managers
 			else
 			{
 				// TODO: need to decide on download directory
+				trace(File.userDirectory.nativePath);
 			}
 		}
 		
 		public function loadMoonshineConfig():void
 		{
-			new DataAgent(File.applicationDirectory.resolvePath("/helperResources/data/moonshineHelperConfig.xml").nativePath, onMoonshineConfigLoaded, onMoonshineConfigError);
+			var configFile:File = HelperConstants.IS_MACOS ? 
+				File.applicationDirectory.resolvePath("/helperResources/data/moonshineHelperConfig.xml") : 
+				new File(File.applicationDirectory.nativePath + "/helperResources/data/moonshineHelperConfig.xml");
+			FileUtils.readFromFileAsync(configFile, FileUtils.DATA_FORMAT_STRING, onMoonshineConfigLoaded, onMoonshineConfigError);
 		}
 		
-		protected function onMoonshineConfigLoaded(message:String=null, ...args):void
+		protected function onMoonshineConfigLoaded(value:Object):void
 		{
-			var config:XML = XML(args[0]);
+			var config:XML = new XML(value);
 			if (config) Parser.parseHelperConfig(config);
 			
 			dispatchEvent(new HelperEvent(EVENT_CONFIG_LOADED));
 		}
 		
-		protected function onMoonshineConfigError(errorMessage:String=null, ...args):void
+		protected function onMoonshineConfigError(value:String):void
 		{
-			dispatchEvent(new HelperEvent(EVENT_CONFIG_ERROR, errorMessage));
+			dispatchEvent(new HelperEvent(EVENT_CONFIG_ERROR, value));
 		}
 	}
 }

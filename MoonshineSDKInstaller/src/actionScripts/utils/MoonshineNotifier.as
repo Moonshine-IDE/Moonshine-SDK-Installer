@@ -3,8 +3,6 @@ package actionScripts.utils
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
-	import flash.filesystem.FileStream;
 	
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -25,11 +23,7 @@ package actionScripts.utils
 				
 				// save the recent update information
 				var updateXML:XML = new XML(UPDATE_XML_STRING.replace("$id", item.id));
-				
-				var tmpStream:FileStream = new FileStream();
-				tmpStream.open(moonshineStorage, FileMode.WRITE);
-				tmpStream.writeUTFBytes(updateXML);
-				tmpStream.close();
+				FileUtils.writeToFile(moonshineStorage, updateXML);
 				
 				// send update notification to Moonshine
 				sendUpdateNotificationToMoonshine();
