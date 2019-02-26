@@ -225,7 +225,7 @@
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoSVN.png</image>
 			<pathValidation></pathValidation>
-			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<download>
 				<windows>
@@ -247,7 +247,7 @@
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoGit.png</image>
 			<pathValidation></pathValidation>
-			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<download>
 				<windows>
