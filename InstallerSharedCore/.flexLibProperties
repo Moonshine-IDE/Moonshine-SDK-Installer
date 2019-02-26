@@ -10,6 +10,7 @@
     <classEntry path="components.renderers.PackageDependencyRenderer"/>
     <classEntry path="actionScripts.utils.HelperUtils"/>
     <classEntry path="actionScripts.interfaces.IHelperMoonshineBridge"/>
+    <classEntry path="actionScripts.utils.EnvironmentUtils"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
