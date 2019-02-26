@@ -108,7 +108,7 @@
     <!-- Application configuration -->
     <property name="swfFilename" value="${debug_dir}/MoonshineSDKInstaller.swf" />
 	<property name="applicationSourceDirectory" value="../src"/>
-	<property name="LibraryHelperSharedCore" value="../../MoonshineHelperSharedCore"/>
+	<property name="LibraryHelperSharedCore" value="../../InstallerSharedCore"/>
 	<property name="desktopMainSource" value="${applicationSourceDirectory}/MoonshineSDKInstaller.mxml" />
 	<property name="desktopApplicationDescriptor" value="${debug_dir}/MoonshineSDKInstaller-app.xml" />
 	<property name="desktopApplicationDescriptorOriginal" value="${applicationSourceDirectory}/MoonshineSDKInstaller-app.xml" />
