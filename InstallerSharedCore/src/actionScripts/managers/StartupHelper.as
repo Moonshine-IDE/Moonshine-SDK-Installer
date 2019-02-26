@@ -33,10 +33,8 @@ package actionScripts.managers
 		
 		public function loadMoonshineConfig():void
 		{
-			var configFile:File = HelperConstants.IS_MACOS ? 
-				File.applicationDirectory.resolvePath("/helperResources/data/moonshineHelperConfig.xml") : 
-				new File(File.applicationDirectory.nativePath + "/helperResources/data/moonshineHelperConfig.xml");
-			FileUtils.readFromFileAsync(configFile, FileUtils.DATA_FORMAT_STRING, onMoonshineConfigLoaded, onMoonshineConfigError);
+			var configFile:String = File.applicationDirectory.nativePath + "/helperResources/data/moonshineHelperConfig.xml";
+			FileUtils.readFromFileAsync(new File(configFile), FileUtils.DATA_FORMAT_STRING, onMoonshineConfigLoaded, onMoonshineConfigError);
 		}
 		
 		protected function onMoonshineConfigLoaded(value:Object):void
