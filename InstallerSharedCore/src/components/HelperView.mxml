@@ -82,6 +82,7 @@
 			{
 				model.moonshineBridge = dependencyCheckUtil;
 				
+				//environmentUtil.readValues();
 				attachStartupHelperListeners(true);
 				startupHelper.setLocalPathConfig();
 				startupHelper.loadMoonshineConfig();

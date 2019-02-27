@@ -120,6 +120,31 @@ package actionScripts.utils
 		}
 		
 		/**
+		 * Simple read to a given file/path
+		 * @required
+		 * target: File (read-destination)
+		 * dataFormat: String (return data type after read)
+		 * @return
+		 * Object
+		 */
+		public static function readFromFile(target:File, dataFormat:String=DATA_FORMAT_STRING):Object
+		{
+			var loadedBytes:ByteArray;
+			var loadedString:String;
+			var fs:FileStream = new FileStream();
+			fs.open(target, FileMode.READ);
+			if (dataFormat == DATA_FORMAT_STRING) loadedString = fs.readUTFBytes(fs.bytesAvailable);
+			else 
+			{
+				loadedBytes = new ByteArray();
+				fs.readBytes(loadedBytes);
+			}
+			fs.close();
+			
+			return (loadedString || loadedBytes);
+		}
+		
+		/**
 		 * Reads from file asynchronously
 		 * @required
 		 * target: File (read-destination)

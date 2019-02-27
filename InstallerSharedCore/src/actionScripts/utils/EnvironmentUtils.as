@@ -9,6 +9,7 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
+	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
 	public class EnvironmentUtils extends EventDispatcher
@@ -16,6 +17,12 @@ package actionScripts.utils
 		private var customProcess:NativeProcess;
 		private var customInfo:NativeProcessStartupInfo;
 		private var isErrorClose:Boolean;
+		
+		private var _environments:EnvironmentVO;
+		public function get environments():EnvironmentVO
+		{
+			return _environments;
+		}
 		
 		public function readValues():void
 		{
@@ -28,7 +35,7 @@ package actionScripts.utils
 				customInfo = new NativeProcessStartupInfo();
 				customInfo.executable = new File("c:\\Windows\\System32\\cmd.exe");
 				
-				customInfo.arguments = new Vector.<Object>(["/c", "set"]);
+				customInfo.arguments = new <String>["/c", "set"];
 				startShell(true);
 			}
 		}
@@ -74,8 +81,14 @@ package actionScripts.utils
 			match = data.match(/fatal: .*/);
 			if (match)
 			{
-				
+				isErrorClose = true;
 			}
+			else if (data != "")
+			{
+				Parser.parseEnvironmentFrom(data, (_environments = new EnvironmentVO()));
+			}
+			
+			startShell(false);
 		}
 		
 		private function shellError(e:ProgressEvent):void 

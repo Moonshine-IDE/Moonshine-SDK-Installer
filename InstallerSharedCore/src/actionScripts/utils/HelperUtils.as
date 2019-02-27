@@ -7,6 +7,7 @@ package actionScripts.utils
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
+	import actionScripts.valueObjects.HelperSDKVO;
 
 	public class HelperUtils
 	{
@@ -46,6 +47,40 @@ package actionScripts.utils
 			npInfo.arguments = arg;
 			var process:NativeProcess = new NativeProcess();
 			process.start(npInfo);
+		}
+		
+		public static function isSDKFolder(path:File):HelperSDKVO
+		{
+			var descriptor:File = path.resolvePath("royale-sdk-description.xml");
+			if (!descriptor.exists)
+			{
+				descriptor = path.resolvePath("royale-asjs/royale-sdk-description.xml");
+			}
+			if (!descriptor.exists)
+			{
+				descriptor = path.resolvePath("flex-sdk-description.xml");
+			}
+			
+			if (descriptor.exists)
+			{
+				// read the xml value to get SDK name
+				var tmpXML:XML = XML(FileUtils.readFromFile(descriptor));
+				var displayName:String = tmpXML["name"];
+				if (descriptor.name.indexOf("royale") > -1)
+				{
+					displayName += " " + tmpXML.version;
+				}
+				
+				var tmpSDK:HelperSDKVO = new HelperSDKVO();
+				tmpSDK.path = descriptor.parent;
+				tmpSDK.name = displayName;
+				tmpSDK.version = String(tmpXML.version);
+				tmpSDK.build = String(tmpXML.build);
+				
+				return tmpSDK;
+			}
+			
+			return null;
 		}
 	}
 }

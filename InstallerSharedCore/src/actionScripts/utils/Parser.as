@@ -1,16 +1,70 @@
 package actionScripts.utils
 {
+	import flash.filesystem.File;
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
+	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
+	import actionScripts.valueObjects.HelperSDKVO;
 	import actionScripts.valueObjects.PackageVO;
 
 	public class Parser
 	{
+		public static function parseEnvironmentFrom(values:String, to:EnvironmentVO):void
+		{
+			var lines:Array = values.split("\r\n");
+			var tmpPath:File;
+			for each (var line:String in lines)
+			{
+				if (line.indexOf("JAVA_HOME") != -1)
+				{
+					tmpPath = new File(line.split("=")[1]);
+					// validate the path against JDK
+					if (tmpPath.exists && tmpPath.resolvePath("bin/javac.exe").exists)
+					{
+						to.JAVA_HOME = tmpPath;
+					}
+				}
+				else if (line.indexOf("ANT_HOME") != -1)
+				{
+					tmpPath = new File(line.split("=")[1]);
+					if (tmpPath.exists)
+					{
+						to.ANT_HOME = tmpPath;
+					}
+				}
+				else if (line.indexOf("FLEX_HOME") != -1)
+				{
+					tmpPath = new File(line.split("=")[1]);
+					// validate if Flex SDK path
+					if (tmpPath.exists)
+					{
+						var tmpSDK:HelperSDKVO = HelperUtils.isSDKFolder(tmpPath);
+						if (tmpSDK && (tmpSDK.type == ComponentTypes.TYPE_FLEX || 
+										tmpSDK.type == ComponentTypes.TYPE_FEATHERS || 
+										tmpSDK.type == ComponentTypes.TYPE_ROYALE || 
+										tmpSDK.type == ComponentTypes.TYPE_FLEXJS))
+						{
+							to.FLEX_HOME = tmpSDK;
+						}
+					}
+				}
+				else if (line.indexOf("MAVEN_HOME") != -1)
+				{
+					tmpPath = new File(line.split("=")[1]);
+					if (tmpPath.exists)
+					{
+						to.MAVEN_HOME = tmpPath;
+					}
+				}
+			}
+		}
+		
 		public static function parseHelperConfig(xmlData:XML):void
 		{
 			var model:HelperModel = HelperModel.getInstance();
