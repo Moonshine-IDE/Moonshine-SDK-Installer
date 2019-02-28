@@ -138,18 +138,18 @@
 			<image>/helperResources/images/logoOpenJDK.png</image>
 			<pathValidation></pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
-			<website>https://openjdk.java.net</website>
+			<website>https://adoptopenjdk.net/</website>
 			<download>
 				<windows>
 					<version version="1.8.0" displayVersion="1.8.0u201">
-		                <path>http://moonshine-ide.com/downloads/ant/</path>
-		                <file>apache-ant-1.10.1-bin.zip</file>
+		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path>
+		                <file>OpenJDK8U-jdk_x64_windows_hotspot_8u202b08.zip</file>
 		            </version>
 				</windows>
 				<mac>
 					<version version="1.8.0" displayVersion="1.8.0u201">
-		                <path>http://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-		                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+		                <file>OpenJDK8U-jdk_x64_mac_hotspot_8u202b08.tar.gz</file> <!-- flexSDK.tar.gz -->
 		            </version>
 				</mac>
 			</download>

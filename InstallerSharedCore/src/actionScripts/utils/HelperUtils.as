@@ -82,5 +82,31 @@ package actionScripts.utils
 			
 			return null;
 		}
+		
+		public static function isNewUpdateVersion(currentVersion:String, updateVersion:String):Boolean
+		{
+			var _currentMajor:int = -1;
+			var _currentMinor:int = -1;
+			var _currentRevision:int = -1;
+			
+			var tmpArr:Array = currentVersion.split(".");
+			if (tmpArr.length == 3)
+			{
+				_currentMajor = parseInt(tmpArr[0]);
+				_currentMinor = parseInt(tmpArr[1]);
+				_currentRevision = parseInt(tmpArr[2]);
+			}
+			
+			var tmpSplit:Array = updateVersion.split(".");
+			var uv1:Number = Number(tmpSplit[0]);
+			var uv2:Number = Number(tmpSplit[1]);
+			var uv3:Number = Number(tmpSplit[2]);
+			
+			if (uv1 > _currentMajor) return true;
+			else if (uv1 >= _currentMajor && uv2 > _currentMinor) return true;
+			else if (uv1 >= _currentMajor && uv2 >= _currentMinor && uv3 > _currentRevision) return true;
+			
+			return false;
+		}
 	}
 }

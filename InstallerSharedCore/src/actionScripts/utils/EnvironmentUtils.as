@@ -2,6 +2,7 @@ package actionScripts.utils
 {
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.NativeProcessExitEvent;
@@ -11,9 +12,12 @@ package actionScripts.utils
 	
 	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
-
+	
+	[Event(name="ENV_READ_COMPLETED", type="flash.events.Event")]
 	public class EnvironmentUtils extends EventDispatcher
 	{
+		public static const ENV_READ_COMPLETED:String = "ENV_READ_COMPLETED";
+		
 		private var customProcess:NativeProcess;
 		private var customInfo:NativeProcessStartupInfo;
 		private var isErrorClose:Boolean;
@@ -86,6 +90,7 @@ package actionScripts.utils
 			else if (data != "")
 			{
 				Parser.parseEnvironmentFrom(data, (_environments = new EnvironmentVO()));
+				this.dispatchEvent(new Event(ENV_READ_COMPLETED));
 			}
 			
 			startShell(false);

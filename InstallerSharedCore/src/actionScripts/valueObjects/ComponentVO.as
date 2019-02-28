@@ -103,5 +103,15 @@ package actionScripts.valueObjects
 		{
 			return _installToPath;
 		}
+		
+		private var _oldInstalledVersion:String;
+		public function get oldInstalledVersion():String
+		{
+			return _oldInstalledVersion;
+		}
+		public function set oldInstalledVersion(value:String):void
+		{
+			_oldInstalledVersion = value;
+		}
 	}
 }

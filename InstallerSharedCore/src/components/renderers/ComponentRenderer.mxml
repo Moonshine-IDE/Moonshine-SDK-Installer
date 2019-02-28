@@ -86,6 +86,11 @@
 				 width="50"
 				 source="@Embed('/helperResources/images/icoTickLabel.png')"
 				 includeInLayout="{data.isAlreadyDownloaded}" visible="{data.isAlreadyDownloaded}"/>
+		<s:Image id="imgVersionNote"
+				 buttonMode="true"
+				 source="@Embed('/helperResources/images/icoNote.png')"
+				 includeInLayout="{data.oldInstalledVersion}" visible="{data.oldInstalledVersion}"
+				 toolTip="Version Mismatch"/>
 		<s:Image id="imgDownload"
 				 width="50" buttonMode="true"
 				 source="@Embed('/helperResources/images/icoDownloadLabel.png')"

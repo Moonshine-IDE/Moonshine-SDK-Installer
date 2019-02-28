@@ -32,14 +32,21 @@ package actionScripts.utils
 		
 		private static function sendUpdateNotificationToMoonshine():void
 		{
-			var scpt:File = File.applicationDirectory.resolvePath("macOScripts/SendToMoonshine.scpt");
 			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-			
-			npInfo.executable = File.documentsDirectory.resolvePath("/usr/bin/osascript");
-			
 			var arg:Vector.<String> = new Vector.<String>();
-			arg.push(scpt.nativePath);
-			arg.push("");
+			
+			// mac specific
+			if (HelperConstants.IS_MACOS)
+			{
+				var scpt:File = File.applicationDirectory.resolvePath("macOScripts/SendToMoonshine.scpt");
+				npInfo.executable = File.documentsDirectory.resolvePath("/usr/bin/osascript");
+				arg.push(scpt.nativePath);
+				arg.push("");
+			}
+			else
+			{
+				npInfo.executable = new File("C:/Program Files (x86)/Moonshine/Moonshine.exe");
+			}
 			
 			npInfo.arguments = arg;
 			var process:NativeProcess = new NativeProcess();

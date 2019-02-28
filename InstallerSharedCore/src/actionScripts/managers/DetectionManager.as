@@ -1,16 +1,47 @@
 package actionScripts.managers
 {
+	import flash.events.Event;
 	import flash.filesystem.File;
 	
 	import actionScripts.locator.HelperModel;
+	import actionScripts.utils.EnvironmentUtils;
+	import actionScripts.utils.HelperUtils;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
+	import actionScripts.valueObjects.HelperConstants;
 
 	public class DetectionManager
 	{
 		private var model:HelperModel = HelperModel.getInstance();
+		private var environmentUtil:EnvironmentUtils;
 		
 		public function detect():void
+		{
+			if (!HelperConstants.IS_MACOS) 
+			{
+				startDetectionProcess();
+				return;
+				
+				environmentUtil = new EnvironmentUtils();
+				environmentUtil.addEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted, false, 0, true);
+				environmentUtil.readValues();
+			}
+			else
+			{
+				startDetectionProcess();
+			}
+			
+			/*
+			 * @local
+			 */
+			function onEnvReadCompleted(event:Event):void
+			{
+				environmentUtil.removeEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted);
+				startDetectionProcess();
+			}
+		}
+		
+		private function startDetectionProcess():void
 		{
 			for (var i:int; i < model.components.length; i++)
 			{
@@ -58,12 +89,14 @@ package actionScripts.managers
 		private function stepB_checkDefaultInstallLocation(item:ComponentVO):void
 		{
 			var tmpSDKFolder:File = new File(item.installToPath); 
-			// named-sdk folder check
+			
+			// 1. named-sdk folder check
 			if (item.installToPath && tmpSDKFolder.exists)
 			{
 				// file-system check inside the named-sdk
 				if (item.pathValidation)
 				{
+					trace(tmpSDKFolder.resolvePath(item.pathValidation).nativePath);
 					if (tmpSDKFolder.resolvePath(item.pathValidation).exists)
 					{
 						item.isAlreadyDownloaded = true;
@@ -72,6 +105,37 @@ package actionScripts.managers
 				else
 				{
 					item.isAlreadyDownloaded = true;
+				}
+			}
+			
+			// 2. Windows-only env.variable check
+			if (environmentUtil && !item.isAlreadyDownloaded)
+			{
+				switch (item.type)
+				{
+					case ComponentTypes.TYPE_FLEX:
+					case ComponentTypes.TYPE_FLEXJS:
+					case ComponentTypes.TYPE_ROYALE:
+					case ComponentTypes.TYPE_FEATHERS:
+						if (environmentUtil.environments.FLEX_HOME && 
+							environmentUtil.environments.FLEX_HOME.type == item.type) 
+						{
+							if (HelperUtils.isNewUpdateVersion(environmentUtil.environments.FLEX_HOME.version, item.version))
+							{
+								item.oldInstalledVersion = environmentUtil.environments.FLEX_HOME.version;
+							}
+							item.isAlreadyDownloaded = true;
+						}
+						break;
+					case ComponentTypes.TYPE_ANT:
+						if (environmentUtil.environments.ANT_HOME) item.isAlreadyDownloaded = true;
+						break;
+					case ComponentTypes.TYPE_MAVEN:
+						if (environmentUtil.environments.MAVEN_HOME) item.isAlreadyDownloaded = true;
+						break;
+					case ComponentTypes.TYPE_OPENJAVA:
+						if (environmentUtil.environments.JAVA_HOME) item.isAlreadyDownloaded = true;
+						break;
 				}
 			}
 		}

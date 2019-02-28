@@ -45,7 +45,6 @@
 			private var model:HelperModel = HelperModel.getInstance();
 			private var startupHelper:StartupHelper = new StartupHelper();
 			private var detectionManager:DetectionManager = new DetectionManager();
-			private var environmentUtil:EnvironmentUtils = new EnvironmentUtils();
 			
 			//--------------------------------------------------------------------------
 			//
@@ -82,7 +81,6 @@
 			{
 				model.moonshineBridge = dependencyCheckUtil;
 				
-				//environmentUtil.readValues();
 				attachStartupHelperListeners(true);
 				startupHelper.setLocalPathConfig();
 				startupHelper.loadMoonshineConfig();
@@ -151,6 +149,7 @@
 			{
 				attachStartupHelperListeners(false);
 				onFilterTypeChanged(null);
+				
 				detectionManager.detect();
 			}
 			
