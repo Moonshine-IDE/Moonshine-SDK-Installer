@@ -16,7 +16,7 @@
 	<certSelfSignedPass><![CDATA[]]></certSelfSignedPass>
 	
 	<!-- USE FOLLOWING FIELDS ONLY TO BUILD SIGNED PACKAGES FOR WINDOWS & MACOS -->
-	<isSignedBuild>true</isSignedBuild> <!-- true|false --> <!-- Leave false if you're not sure or do not have requisite certificates -->
+	<isSignedBuild>false</isSignedBuild> <!-- true|false --> <!-- Leave false if you're not sure or do not have requisite certificates -->
 	<certSignedAIR><![CDATA[]]></certSignedAIR> <!-- Relative path to Adobe AIR certificate (.p12) distributed by signing authorities -->
 	<certSignedAIRPass><![CDATA[]]></certSignedAIRPass>
 	<certSignedWindowsBinary><![CDATA[]]></certSignedWindowsBinary> <!-- Relative path to Windows binary installer certificate (.p12) distributed by signer authorities -->

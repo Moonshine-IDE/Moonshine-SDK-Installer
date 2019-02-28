@@ -150,14 +150,16 @@
 	<!-- OS Check and decision on opening Task -->
 	<target name="checkOS">
 		<if>
+			<os family="windows"/>
+			<then>
+				<antcall target="disposeTempWindows"></antcall>
+			</then>
+		<elseif>
 			<os family="unix"/>
 			<then>
-				<property name="isOSX" value="true"/>
 				<antcall target="disposeTempUNIX"></antcall>
 			</then>
-			<else>
-				<property name="isOSX" value="false"/>
-			</else>
+		</elseif>
 		</if>
 	</target>
 
@@ -177,6 +179,67 @@
 	<!--
 	//==========================================================================
 	//
+	//  WINDOWS
+	//
+	//==========================================================================
+	-->
+	
+	<!-- Windows signed packaging initiator -->
+	<target name="signedSigningBuild" if="${Is.Signed.Build}">
+		<antcall target="CompileSWFWindowsSignedPackage"></antcall>
+	</target>
+
+	<!-- Windows packaging/signing Task -->
+	<target name="CompileSWFWindowsSignedPackage" depends="CompileSWF">
+		<echo>Signed Process Running</echo>
+		<java jar="${adt_path}" fork="true" failonerror="true">
+			<arg line="-package" />
+			<arg line="-storetype pkcs12" />
+			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
+	   		<arg line="-storepass '${certSelfSignedPassword}'" />
+			<arg line="-tsa 'http://timestamp.comodoca.com/rfc3161'" />
+	   		<arg line="-target bundle"/>
+	   		<arg line="-storetype pkcs12" />
+	   		<arg line="-keystore '${certSignedWindowsBinary}'" />
+	   		<arg line="-storepass '${certSignedWindowsBinaryPassword}'" />
+	   		<arg line="${desktopBinaryFilename}" />
+	   		<arg line="'${desktopApplicationDescriptor}'" />
+	   		<arg line="'${swfFilename}'" />
+			<arg line="installer"/>
+			<arg line="images"/>
+			<arg line="helperResources"/>
+	   		<!-- Add folders to be bundled in the AIR file here -->
+		</java>
+	 </target>
+	
+	<!-- Windows self-signed packaging initiator -->
+	<target name="normalSigningBuild" unless="${Is.Signed.Build}">
+		<antcall target="CompileSWFWindowsSelfSignedPackage"></antcall>
+	</target>
+
+	 <!-- Windows packaging/signing Task -->
+	<target name="CompileSWFWindowsSelfSignedPackage" depends="CompileSWF">
+		<echo>Self-signed Process Running</echo>
+		<java jar="${adt_path}" fork="true" failonerror="true">
+			<arg line="-package" />
+			<arg line="-storetype pkcs12" />
+			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
+	   		<arg line="-storepass '${certSelfSignedPassword}'" />
+			<arg line="-tsa 'http://timestamp.comodoca.com/rfc3161'" />
+	   		<arg line="-target bundle"/>
+	   		<arg line="${desktopBinaryFilename}" />
+	   		<arg line="'${desktopApplicationDescriptor}'" />
+	   		<arg line="'${swfFilename}'" />
+			<arg line="installer"/>
+			<arg line="images"/>
+			<arg line="helperResources"/>
+	   		<!-- Add folders to be bundled in the AIR file here -->
+		</java>
+	 </target>
+	
+	<!--
+	//==========================================================================
+	//
 	//  MACOS
 	//
 	//==========================================================================
@@ -184,7 +247,7 @@
 	
 	<!-- Compile .app to next use in .pkg building -->
 	<!--target name="compile app project" depends="compile dmg project"-->
-	<target name="compile app project" depends="CompileSWFOSX">
+	<target name="compile app project" depends="CompileSWF">
 		<java jar="${adt_path}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
@@ -346,9 +409,6 @@
 		<copy todir="${basedir}/helperResources" overwrite="true">
 			<fileset dir="${LibraryHelperSharedCore}/src/helperResources"/>
 		</copy>
-		<copy todir="${basedir}/macOScripts" overwrite="true">
-			<fileset dir="${applicationSourceDirectory}/macOScripts"/>
-		</copy>
 		
 		<!-- modify field values based upon isDevelopment tag -->
 		<if>
@@ -366,11 +426,23 @@
 				<property name="installerName" value="MoonshineSDKInstaller" />
 			</else>			
 		</if>
+		
+		<if>
+			<os family="unix"/>
+			<then>
+				<copy todir="${basedir}/macOScripts" overwrite="true">
+					<fileset dir="${applicationSourceDirectory}/macOScripts"/>
+				</copy>
+				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.app"/>
+				<copy file="entitlement.plist" todir="${debug_dir}" overwrite="true"/>
+			</then>
+			<else>
+				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.exe"/>
+			</else>
+		</if>
 
 		<!-- Check if the self-signed certificate exists -->
 		<copy file="${certSelfSigned}" todir="${debug_dir}" overwrite="true"/>
-		<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.app"/>
-		<copy file="entitlement.plist" todir="${debug_dir}" overwrite="true"/>
 		
 		<replaceregexp file="${desktopApplicationDescriptor}" match="filenameToBeReplacedByANT" replace="${executableName}" />
 		<replaceregexp file="${desktopApplicationDescriptor}" match="nameToBeReplacedByANT" replace="${applicationName} ${BuildVersion}" encoding="utf-8" />
@@ -384,7 +456,7 @@
 	</target>
 	
 	<!-- Compile SWF to build directory for desktop packaging -->
-	<target name="CompileSWFOSX" depends="createBuildInfoFile" if="${isOSX}">
+	<target name="CompileSWF" depends="createBuildInfoFile">
 		<mxmlc file="${desktopMainSource}" 
 			   output="${swfFilename}" 
 			   swf-version="41" 
@@ -396,7 +468,6 @@
 			   incremental="false"
 			   keep-generated-actionscript="false"
 			   allow-source-path-overlap="true">
-			<define name="CONFIG::OSX" value="true"/> 
 			<load-config filename="${FLEX_HOME}/frameworks/air-config.xml"/>
 			<source-path path-element="${applicationSourceDirectory}"/>
 			<source-path path-element="${apacheInstallerSourceDirectory}/common/src"/>
@@ -410,6 +481,19 @@
 			</compiler.library-path>
 			<library-path dir="${debug_dir}" includes="*.swc" append="true" />
 		</mxmlc>
+	</target>
+	
+	<!-- Deletes temporary files for Windows -->
+	<target name="disposeTempWindows" depends="normalSigningBuild,signedSigningBuild">
+		<if>
+			<equals arg1="${keepDebugFiles}" arg2="false"/>
+			<then>
+				<delete dir="${debug_dir}" />
+				<delete dir="installer"/>
+				<delete dir="images"/>
+				<delete dir="helperResources"/>
+			</then>
+		</if>
 	</target>
 	
 	<!-- Deletes temporary files for OSX -->
