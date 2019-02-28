@@ -463,6 +463,8 @@ variables are not required because the locations of these pieces are known.
 		
 		public function unzipMASH(fileToUnzip:File, unzipCompleteFunction:Function, unzipErrorFunction:Function = null):void
 		{
+			overlaying = true;
+			_flexTempDir = fileToUnzip.parent.parent;
 			unzip(fileToUnzip, unzipCompleteFunction, unzipErrorFunction);
 		}
 		

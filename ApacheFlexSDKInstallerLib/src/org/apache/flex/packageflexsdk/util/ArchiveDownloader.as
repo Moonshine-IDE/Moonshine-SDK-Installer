@@ -164,7 +164,7 @@ package org.apache.flex.packageflexsdk.util
 			versionSelected.isDownloaded = true;
 			
 			if (_archiveTempDir && _archiveTempDir.exists) _archiveTempDir.deleteDirectory(true);
-			//installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
+			installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
 		}
 		
 		protected function handleArchiveUnzipError(error:ErrorEvent = null):void
