@@ -210,6 +210,7 @@
 			<arg line="helperResources"/>
 	   		<!-- Add folders to be bundled in the AIR file here -->
 		</java>
+		<antcall target="zipCaptiveBundle"></antcall>
 	 </target>
 	
 	<!-- Windows self-signed packaging initiator -->
@@ -235,7 +236,12 @@
 			<arg line="helperResources"/>
 	   		<!-- Add folders to be bundled in the AIR file here -->
 		</java>
+		<antcall target="zipCaptiveBundle"></antcall>
 	 </target>
+	
+	<target name="zipCaptiveBundle">
+		<zip destfile="${desktopBinaryFilename}.zip" basedir="${desktopBinaryFilename}"/>
+	</target>
 	
 	<!--
 	//==========================================================================
@@ -437,7 +443,7 @@
 				<copy file="entitlement.plist" todir="${debug_dir}" overwrite="true"/>
 			</then>
 			<else>
-				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.exe"/>
+				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}_64bit"/>
 			</else>
 		</if>
 
