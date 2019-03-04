@@ -195,9 +195,6 @@
 			
 			private function onInstallationFinished(event:GenericEvent):void
 			{
-				itemDownloading.isDownloaded = true;
-				itemDownloading.isDownloading = false;
-				
 				// sometime distributed zip/tar creates an additional
 				// folder to the target directory which became complicated
 				// to determine a proper path to the sdk internally
@@ -228,7 +225,10 @@
 				}
 				function flushDownloadQueue():void
 				{
+					itemDownloading.isDownloaded = true;
+					itemDownloading.isDownloading = false;
 					MoonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+					
 					flush();
 				}
 			}
