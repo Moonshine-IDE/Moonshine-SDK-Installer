@@ -465,7 +465,7 @@
 	<target name="CompileSWF" depends="createBuildInfoFile">
 		<mxmlc file="${desktopMainSource}" 
 			   output="${swfFilename}" 
-			   swf-version="43" 
+			   swf-version="41" 
 			   configname="air" 
 			   fork="true" 
 			   optimize="true" 
