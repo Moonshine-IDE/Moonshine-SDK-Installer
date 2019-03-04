@@ -136,7 +136,7 @@
 			<title>OpenJDK</title>
 			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
 			<image>/helperResources/images/logoOpenJDK.png</image>
-			<pathValidation></pathValidation>
+			<pathValidation>bin/javac</pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
 			<download>

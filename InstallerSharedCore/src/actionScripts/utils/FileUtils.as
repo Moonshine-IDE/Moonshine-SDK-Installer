@@ -209,6 +209,75 @@ package actionScripts.utils
 		}
 		
 		/**
+		 * Move files asynchronously
+		 * @required
+		 * source: File (folder-destination)
+		 * target: File (folder-destination)
+		 * successHandler: Function
+		 * errorHandler: Function (attr:- 1. String)
+		 */
+		public static function moveFolderToDestinationFolderAsync(source:File, target:File, successHandler:Function=null, errorHandler:Function=null):void
+		{
+			// probable termination
+			if (!source.isDirectory || !target.isDirectory) return;
+			
+			var tmpRelativeSplit:Array;
+			var sourceFiles:Array = source.getDirectoryListing();
+			keepMoving();
+			
+			/*
+			* @local
+			*/
+			function keepMoving():void
+			{
+				if (sourceFiles.length != 0)
+				{
+					tmpRelativeSplit = target.getRelativePath(sourceFiles[0]).split("/");
+					if (tmpRelativeSplit.length > 1) tmpRelativeSplit.shift();
+					
+					sourceFiles[0].moveToAsync(target.resolvePath(tmpRelativeSplit.join("/")), true);
+					manageListeners(sourceFiles[0] as File, true);
+					sourceFiles.shift();
+				}
+				else
+				{
+					/*try
+					{
+						source.deleteFile();
+					}
+					catch (e:Error)
+					{
+						source.deleteFileAsync();
+					}*/
+					if (successHandler != null) successHandler();
+				}
+			}
+			function fileMoveCompleteHandler(event:Event):void
+			{
+				manageListeners(event.target as File, false);
+				keepMoving();
+			}
+			function onIOErrorMove(event:IOErrorEvent):void
+			{
+				manageListeners(event.target as File, false);
+				if (errorHandler != null) errorHandler(event.text);
+			}
+			function manageListeners(origin:File, attach:Boolean):void
+			{
+				if (attach)
+				{
+					origin.addEventListener(Event.COMPLETE, fileMoveCompleteHandler);
+					origin.addEventListener(IOErrorEvent.IO_ERROR, onIOErrorMove);
+				}
+				else
+				{
+					origin.removeEventListener(Event.COMPLETE, fileMoveCompleteHandler);
+					origin.removeEventListener(IOErrorEvent.IO_ERROR, onIOErrorMove);
+				}
+			}
+		}
+		
+		/**
 		 * Determines if given path is abolute or relative
 		 * @required
 		 * (path)value: String

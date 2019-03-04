@@ -22,6 +22,19 @@ package actionScripts.utils
 			return null;
 		}
 		
+		public static function getComponentByType(type:String):ComponentVO
+		{
+			for each (var item:ComponentVO in model.components)
+			{
+				if (item.type == type)
+				{
+					return item;
+				}
+			}
+			
+			return null;
+		}
+		
 		public static function runAppStoreHelper():void
 		{
 			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();

@@ -118,6 +118,23 @@ package actionScripts.utils
 			}
 		}
 		
+		public static function getFeathersObjectForApacheInstaller():Object
+		{
+			var feathers:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_FEATHERS);
+			var shortNameSplit:Array = feathers.downloadURL.split("/").pop().split(".");
+			shortNameSplit.pop();
+			var shortName:String = shortNameSplit.join(".");
+			var fileName:String = feathers.downloadURL.split("/").pop();
+			var label:String = feathers.title + feathers.version;
+			var path:String = feathers.downloadURL.substring(0, feathers.downloadURL.indexOf(fileName));
+			
+			return {
+				shortName: shortName, fileName: fileName, label: label, version: feathers.version,
+					path: path, overlay: false, prefix: "feathers-sdk-", legacy: false, nocache: false,
+					needsAIR: true, needsFlash: true, devBuild: false, icon: feathers.imagePath
+			};
+		}
+		
 		private static function getInstallDirectoryPath(type:String, version:String, airVersion:String=null):String
 		{
 			switch (type)

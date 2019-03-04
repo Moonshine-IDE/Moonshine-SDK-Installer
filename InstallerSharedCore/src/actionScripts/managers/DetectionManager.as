@@ -88,7 +88,8 @@ package actionScripts.managers
 		
 		private function stepB_checkDefaultInstallLocation(item:ComponentVO):void
 		{
-			var tmpSDKFolder:File = new File(item.installToPath); 
+			var tmpSDKFolder:File = new File(item.installToPath);
+			var pathValidationFileName:String;
 			
 			// 1. named-sdk folder check
 			if (item.installToPath && tmpSDKFolder.exists)
@@ -96,8 +97,16 @@ package actionScripts.managers
 				// file-system check inside the named-sdk
 				if (item.pathValidation)
 				{
-					trace(tmpSDKFolder.resolvePath(item.pathValidation).nativePath);
-					if (tmpSDKFolder.resolvePath(item.pathValidation).exists)
+					if (item.type == ComponentTypes.TYPE_OPENJAVA) 
+					{
+						pathValidationFileName = HelperConstants.IS_MACOS ? item.pathValidation : item.pathValidation +".exe";
+					}
+					else
+					{
+						pathValidationFileName = item.pathValidation;
+					}
+					
+					if (tmpSDKFolder.resolvePath(pathValidationFileName).exists)
 					{
 						item.isAlreadyDownloaded = true;
 					}

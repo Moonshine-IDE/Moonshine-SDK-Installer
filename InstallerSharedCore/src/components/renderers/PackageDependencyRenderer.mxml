@@ -24,7 +24,7 @@
 						busyIndicator = new BusyIndicator();
 						busyIndicator.verticalCenter = 0;
 						busyIndicator.right = 10;
-						busyIndicator.width = 50;
+						busyIndicator.width = 46;
 						addElementAt(busyIndicator, 1);
 					}
 					else if (!data.isDownloading && busyIndicator)
