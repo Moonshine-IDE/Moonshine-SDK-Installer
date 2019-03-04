@@ -19,9 +19,6 @@ package actionScripts.managers
 		{
 			if (!HelperConstants.IS_MACOS) 
 			{
-				startDetectionProcess();
-				return;
-				
 				environmentUtil = new EnvironmentUtils();
 				environmentUtil.addEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted, false, 0, true);
 				environmentUtil.readValues();
