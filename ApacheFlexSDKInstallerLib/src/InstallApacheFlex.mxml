@@ -461,13 +461,6 @@ variables are not required because the locations of these pieces are known.
 			download(url, handlerFunction, errorFunction, nocache);
 		}
 		
-		public function unzipMASH(fileToUnzip:File, unzipCompleteFunction:Function, unzipErrorFunction:Function = null):void
-		{
-			overlaying = true;
-			_flexTempDir = fileToUnzip.parent.parent;
-			unzip(fileToUnzip, unzipCompleteFunction, unzipErrorFunction);
-		}
-		
 		public function untarMASH(source:File, destination:File, unTarCompleteFunction:Function, unTarErrorFunction:Function):void
 		{
 			untar(source, destination, unTarCompleteFunction, unTarErrorFunction);
@@ -1122,7 +1115,7 @@ variables are not required because the locations of these pieces are known.
 							
 							// @devsena
 							// MASH
-							if (ver == moonshineFlexVersion) _flexVersionSelected = FLEX_VERSIONS[FLEX_VERSIONS.length - 1];
+							if (productPrefix == "apache-flex-sdk-" && ver == moonshineFlexVersion) _flexVersionSelected = FLEX_VERSIONS[FLEX_VERSIONS.length - 1];
 							if (productPrefix == "apache-flex-flexjs-" && ver == moonshineFlexJSVersion) _flexJSVersionSelected = _flexVersionSelected;
 						}
 					}
@@ -1942,6 +1935,25 @@ variables are not required because the locations of these pieces are known.
 			InstallApacheFlexSkin(skin).textIcon.source = item.icon;
 		}
 		
+		// @devsena
+		// MASH
+		public function startInstallationFeathers(item:Object):void
+		{
+			updateFlexVersionStrings(item);
+			updatePaths();
+			updateWindowTitle();
+			
+			usingXML = true;
+			_flexVersionSelected = item;
+			
+			reset();
+			setXMLVariables();
+			resetInstallStepsActivity();
+			addOptionalComponentsToInstallSteps();
+			updatePaths();
+			install();
+		}
+		
 		protected function browseForSDK(event:MouseEvent):void
 		{
 			var file:File = new File();
@@ -2109,6 +2121,18 @@ variables are not required because the locations of these pieces are known.
 			
 			log(_viewResourceConstants.STEP_VERIFY_FLEX_SDK);
 			
+			// @devsena
+			// MASH
+			// For some unknown reason downloaded Feathers
+			// stucks to MD5 check by the API
+			if (flexVersionSelected.prefix == "feathers-sdk-")
+			{
+				updateActivityStep(_viewResourceConstants.STEP_VERIFY_FLEX_SDK, StepItem.COMPLETE);
+				updateActivityStep(_viewResourceConstants.STEP_UNZIP_FLEX_SDK, StepItem.ACTIVE);
+				unzip(_apacheFlexSDKCompressedFile, handleApacheFlexSDKZipFileUnzipComplete, handleApacheFlexSDKZipFileUnzipError);
+				return;
+			}
+			
 			_md5CompareUtil.addEventListener(ProgressEvent.PROGRESS, md5VerificationProgressHandler);
 			_md5CompareUtil.verifyMD5(_apacheFlexSDKCompressedFile, APACHE_FLEX_BIN_DISTRO_PATH + APACHE_FLEX_BIN_DISTRO_FILE, uncompressApacheFlexSDK);
 		}
@@ -2192,7 +2216,18 @@ variables are not required because the locations of these pieces are known.
 			{
 				if (usingXML)
 				{
-					runInstallerScript();
+					// @devsena
+					// MASH
+					// swfobject download error fix from github.com
+					if (flexVersionSelected.prefix == "apache-flex-sdk-") fixSwfObjectGitPathWindows();
+					
+					// original
+					//runInstallerScript();
+					
+					// @devsena
+					// MASH
+					if (flexVersionSelected.prefix == "apache-flex-sdk-") runInstallerScript();
+					else if (flexVersionSelected.prefix == "feathers-sdk-") runInstallerScriptFeathers();
 				}
 				else
 				{
@@ -2227,6 +2262,26 @@ variables are not required because the locations of these pieces are known.
 					}
 				}
 			}
+		}
+		
+		// @devsena
+		// MASH
+		protected function fixSwfObjectGitPathWindows():void
+		{
+			var file:File = _flexHomeDir.resolvePath("installer.xml");
+			
+			var fs:FileStream = new FileStream();
+			fs.open(file, FileMode.READ);
+			var loadedString:String = fs.readUTFBytes(fs.bytesAvailable);
+			fs.close();
+			
+			loadedString = loadedString.replace("https://github.com", "https://moonshine-ide.com");
+			loadedString = loadedString.replace("swfobject/swfobject/archive", "downloads/swfobject/swfobject/archive");
+			
+			fs = new FileStream();
+			fs.open(file, FileMode.WRITE);
+			fs.writeUTFBytes(loadedString);
+			fs.close();
 		}
 		
 		protected function handleApacheFlexSDKZipFileUnzipError(error:ErrorEvent = null):void
@@ -2317,6 +2372,108 @@ variables are not required because the locations of these pieces are known.
 				context["flash.sdk.url.path"] = tmpFlashPlayerVersion.path;
 				context["flash.sdk.url.file"] = tmpFlashPlayerVersion.file;
 			}
+			
+			if (file.exists && !ant.processXMLFile(file, context, true))
+			{
+				ant.addEventListener(Event.COMPLETE, completeHandler);
+				ant.addEventListener(ProgressEvent.PROGRESS, progressEventHandler);
+			}
+			else
+			{
+				completeHandler(null);
+			}
+		}
+		
+		protected function runInstallerScriptFeathers():void
+		{
+			// @devsena
+			// MASH
+			// check all the tmpFlashPlayerVersion and tmpAIRversion usage below
+			var tmpAIRversion:Object = airVersion ? airVersion.selectedItem : airVersionSelected;
+			var tmpFlashPlayerVersion:Object = flashPlayerVersion ? flashPlayerVersion.selectedItem : flashPlayerVersionSelected;
+			
+			ant = new Ant();
+			ant.output = output;
+			
+			var file:File;
+			if (installOverride != "")
+			{
+				file = new File(installOverride);
+			}
+			else if (overlaying)
+			{
+				var directory:File = _flexTempDir.resolvePath(APACHE_FLEX_BIN_DISTRO_FILE_SHORT);
+				if (_os.isWindows())
+				{
+					file = _flexTempDir.resolvePath("installer.xml");
+				}
+				else
+				{
+					file = directory.resolvePath("installer.xml");
+				}
+			}
+			else
+			{
+				file = _flexHomeDir.resolvePath("installer.xml");
+			}
+			addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+			var context:Object = {installer: true};
+			if (usingDownloadCache)
+			{
+				context["usingDownloadCache"] = usingDownloadCache;
+				context["downloadCacheFolder"] = downloadCacheFolder;
+			}
+			if (configOverride != "")
+			{
+				context["xml.properties"] = configOverride;
+			}
+			if (resourceManager.localeChain.length > 1)
+			{
+				context["bundle"] = resourceManager.localeChain[0];
+			}
+			for (var p:String in licensePropertyMap)
+			{
+				if (InstallerComponentVO(licensePropertyMap[p]).selected)
+				{
+					context[p] = true;
+				}
+			}
+			for (p in additionalProps)
+			{
+				context[p] = additionalProps[p];
+			}
+			
+			// @devsena
+			// MASH
+			context["air.sdk.version"] = AIR_VERSION;
+			if (tmpAIRversion.versionID)
+			{
+				context["air.sdk.versionID"] = tmpAIRversion.versionID;
+			}
+			context["air.sdk.url.path"] = tmpAIRversion.path;
+			context["air.sdk.url.file"] = tmpAIRversion.file;
+			context["flash.sdk.version"] = FLASH_PLAYER_VERSION;
+			if (tmpFlashPlayerVersion.versionID)
+			{
+				context["flash.sdk.versionID"] = tmpFlashPlayerVersion.versionID;
+			}
+			if (debugMode)
+			{
+				context["verbose"] = true;
+			}
+			if (tmpFlashPlayerVersion.path)
+			{
+				context["flash.sdk.url.path"] = tmpFlashPlayerVersion.path;
+				context["flash.sdk.url.file"] = tmpFlashPlayerVersion.file;
+			}
+			
+			// feathers specific
+			context["air.donot.ask"] = true;
+			context["flash.donot.ask"] = true;
+			context["fontswf.donot.ask"] = true;
+			context["do.air.install"] = true;
+			context["do.flash.install"] = true;
+			context["do.fontswf.install"] = true;
 			
 			if (file.exists && !ant.processXMLFile(file, context, true))
 			{
@@ -2695,7 +2852,7 @@ variables are not required because the locations of these pieces are known.
 			
 			try
 			{
-				log(StringUtil.substitute(_viewResourceConstants.INFO_DOWNLOADING_FILE_FROM, [SWF_OBJECT_FILE, SWF_OBJECT_URL]));
+				log("SANTANU: " + StringUtil.substitute(_viewResourceConstants.INFO_DOWNLOADING_FILE_FROM, [SWF_OBJECT_FILE, SWF_OBJECT_URL]));
 				copyOrDownload(SWF_OBJECT_URL + SWF_OBJECT_FILE, handlSWFObjectDownload, null, handleSWFObjectDownloadError);
 			}
 			catch (e:Error)
@@ -3683,6 +3840,13 @@ variables are not required because the locations of these pieces are known.
 		{
 			ByteArray(v.data).clear();
 			System.gc();
+		}
+		
+		public function unzipMASH(fileToUnzip:File, unzipCompleteFunction:Function, unzipErrorFunction:Function = null):void
+		{
+			overlaying = true;
+			_flexTempDir = fileToUnzip.parent.parent;
+			unzip(fileToUnzip, unzipCompleteFunction, unzipErrorFunction);
 		}
 		
 		private function unzip(fileToUnzip:File, unzipCompleteFunction:Function, unzipErrorFunction:Function = null):void
