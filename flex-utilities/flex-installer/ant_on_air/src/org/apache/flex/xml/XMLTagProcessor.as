@@ -69,14 +69,19 @@ package org.apache.flex.xml
             var n:int = xmlList.length();
             for (var i:int = 0; i < n; i++)
             {
-                var kind:String = xmlList[i].nodeKind();
-                if (kind == "text")
-                    ITextTagHandler(parentTag).setText(xmlList[i].toString());
-                else
-                {
-                    var tagHandler:ITagHandler = processXMLTag(xmlList[i]);
-                    parentTag.addChild(tagHandler);
-                }
+				// @devsena
+				// MASH
+				if (xmlList[i].toXMLString() != "")
+				{
+	                var kind:String = xmlList[i].nodeKind();
+	                if (kind == "text")
+	                    ITextTagHandler(parentTag).setText(xmlList[i].toString());
+	                else
+	                {
+	                    var tagHandler:ITagHandler = processXMLTag(xmlList[i]);
+	                    parentTag.addChild(tagHandler);
+	                }
+				}
             }
         }
         
