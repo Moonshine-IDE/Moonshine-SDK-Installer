@@ -204,7 +204,8 @@
 				var files:Array = installedPath.getDirectoryListing();
 				if (files.length == 1)
 				{
-					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError);
+					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,
+						itemDownloading.type == ComponentTypes.TYPE_OPENJAVA ? "Contents/Home" : null);
 				}
 				else
 				{

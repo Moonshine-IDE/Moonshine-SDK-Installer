@@ -138,7 +138,7 @@ package org.apache.flex.packageflexsdk.util
 		{
 			if (NativeProcess.isSupported)
 			{
-				installerApacheFlexInstance.untarMASH(_archiveFile, homeDir.parent, handleArchiveUntarComplete, handleArchiveUntarError);
+				installerApacheFlexInstance.untarMASH(_archiveFile, homeDir, handleArchiveUntarComplete, handleArchiveUntarError);
 			}
 			else
 			{

@@ -216,14 +216,35 @@ package actionScripts.utils
 		 * successHandler: Function
 		 * errorHandler: Function (attr:- 1. String)
 		 */
-		public static function moveFolderToDestinationFolderAsync(source:File, target:File, successHandler:Function=null, errorHandler:Function=null):void
+		public static function moveFolderToDestinationFolderAsync(source:File, target:File, successHandler:Function=null, errorHandler:Function=null, moveFromSpecificPath:String=null):void
 		{
 			// probable termination
 			if (!source.isDirectory || !target.isDirectory) return;
 			
 			var tmpRelativeSplit:Array;
-			var sourceFiles:Array = source.getDirectoryListing();
-			keepMoving();
+			var tmpRelativePath:String;
+			var isMoveSpecificPathFound:Boolean;
+			var isSpecificPathMoved:Boolean;
+			var sourceFiles:Array;
+			
+			if (moveFromSpecificPath)
+			{
+				var movePath:File = source.resolvePath(moveFromSpecificPath);
+				if (movePath.exists)
+				{
+					sourceFiles = movePath.getDirectoryListing();
+					keepMoving();
+				}
+				else if (errorHandler != null)
+				{
+					errorHandler("Move from specific path/directory does not exists");
+				}
+			}
+			else if (!moveFromSpecificPath)
+			{
+				sourceFiles = source.getDirectoryListing();
+				keepMoving();
+			}
 			
 			/*
 			* @local
@@ -234,21 +255,24 @@ package actionScripts.utils
 				{
 					tmpRelativeSplit = target.getRelativePath(sourceFiles[0]).split("/");
 					if (tmpRelativeSplit.length > 1) tmpRelativeSplit.shift();
+					tmpRelativePath = tmpRelativeSplit.join("/");
 					
-					sourceFiles[0].moveToAsync(target.resolvePath(tmpRelativeSplit.join("/")), true);
+					if (moveFromSpecificPath) tmpRelativePath = tmpRelativePath.replace(moveFromSpecificPath +"/", "")
+					
+					sourceFiles[0].moveToAsync(target.resolvePath(tmpRelativePath), true);
 					manageListeners(sourceFiles[0] as File, true);
 					sourceFiles.shift();
 				}
 				else
 				{
-					/*try
+					try
 					{
 						source.deleteFile();
 					}
 					catch (e:Error)
 					{
-						source.deleteFileAsync();
-					}*/
+						try { source.deleteFileAsync(); } catch (e2:Error){}
+					}
 					if (successHandler != null) successHandler();
 				}
 			}
