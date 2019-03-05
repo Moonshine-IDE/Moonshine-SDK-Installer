@@ -2123,18 +2123,22 @@ variables are not required because the locations of these pieces are known.
 			
 			// @devsena
 			// MASH
-			// For some unknown reason downloaded Feathers
-			// stucks to MD5 check by the API
+			// Apache hosts their own md5 signature files
+			// on their domain which is mentioned in _md5CompareUtil
+			// class, since the server doesn't hold anything related to
+			// Feathers md5 signature, we host the md5 signature file
+			// on Moonshine website (at this moment we don't know if
+			// Feathers has any .md5 hosted somewhere or not)
+			// https://github.com/prominic/Moonshine-SDK-Installer/issues/1
+			var customDomain:String;
 			if (flexVersionSelected.prefix == "feathers-sdk-")
 			{
-				updateActivityStep(_viewResourceConstants.STEP_VERIFY_FLEX_SDK, StepItem.COMPLETE);
-				updateActivityStep(_viewResourceConstants.STEP_UNZIP_FLEX_SDK, StepItem.ACTIVE);
-				unzip(_apacheFlexSDKCompressedFile, handleApacheFlexSDKZipFileUnzipComplete, handleApacheFlexSDKZipFileUnzipError);
-				return;
+				APACHE_FLEX_BIN_DISTRO_PATH = APACHE_FLEX_BIN_DISTRO_PATH.replace("http://github.com/", "");
+				customDomain = "http://moonshine-ide.com/downloads/feather/"
 			}
 			
 			_md5CompareUtil.addEventListener(ProgressEvent.PROGRESS, md5VerificationProgressHandler);
-			_md5CompareUtil.verifyMD5(_apacheFlexSDKCompressedFile, APACHE_FLEX_BIN_DISTRO_PATH + APACHE_FLEX_BIN_DISTRO_FILE, uncompressApacheFlexSDK);
+			_md5CompareUtil.verifyMD5(_apacheFlexSDKCompressedFile, APACHE_FLEX_BIN_DISTRO_PATH + APACHE_FLEX_BIN_DISTRO_FILE, uncompressApacheFlexSDK, customDomain);
 		}
 		
 		protected function md5VerificationProgressHandler(event:ProgressEvent):void

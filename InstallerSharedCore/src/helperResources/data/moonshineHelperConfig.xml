@@ -202,7 +202,7 @@
 			<title>Feathers</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoFeathers.png</image>
-			<pathValidation></pathValidation>
+			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<download>

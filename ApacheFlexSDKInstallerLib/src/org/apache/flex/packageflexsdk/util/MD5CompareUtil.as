@@ -20,6 +20,8 @@
 package org.apache.flex.packageflexsdk.util
 {
 
+import com.adobe.utils.StringUtil;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
@@ -31,7 +33,6 @@ import flash.filesystem.FileStream;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
-import flash.utils.ByteArray;
 
 import org.apache.flex.crypto.MD5Stream;
 import org.apache.flex.utilities.common.Constants;
@@ -227,8 +228,17 @@ public class MD5CompareUtil extends EventDispatcher
 	//----------------------------------
 	
 	public function verifyMD5(localSDKZipFile:File, remoteSDKZipPath:String, 
-							  onVerificationComplete:Function):void
+							  onVerificationComplete:Function, customDomain:String=null):void
 	{
+		// @devsena
+		// MASH
+		if (customDomain && StringUtil.trim(customDomain).length == 0)
+		{
+			_fileIsVerified = false;
+			onVerificationComplete();
+			return;
+		}
+		
 		_file = localSDKZipFile;
 		
 		_callback = onVerificationComplete;
@@ -241,7 +251,7 @@ public class MD5CompareUtil extends EventDispatcher
 			remoteSDKZipPath.substr(0, Constants.FILE_PREFIX.length) != Constants.FILE_PREFIX &&
 			remoteSDKZipPath.search("http") != 0)
 		{
-			_urlLoader.load(new URLRequest(MD5_DOMAIN + remoteSDKZipPath + MD5_POSTFIX));
+			_urlLoader.load(new URLRequest((customDomain || MD5_DOMAIN) + remoteSDKZipPath + MD5_POSTFIX));
 		}
 		else
 		{
