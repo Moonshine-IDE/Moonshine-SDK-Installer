@@ -11,6 +11,7 @@
     <classEntry path="actionScripts.utils.HelperUtils"/>
     <classEntry path="actionScripts.interfaces.IHelperMoonshineBridge"/>
     <classEntry path="actionScripts.utils.EnvironmentUtils"/>
+    <classEntry path="actionScripts.managers.GitSVNDetector"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
