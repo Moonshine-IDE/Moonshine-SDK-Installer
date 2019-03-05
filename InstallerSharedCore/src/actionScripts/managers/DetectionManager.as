@@ -14,6 +14,7 @@ package actionScripts.managers
 	{
 		private var model:HelperModel = HelperModel.getInstance();
 		private var environmentUtil:EnvironmentUtils;
+		private var gitSvnDetector:GitSVNDetector = GitSVNDetector.getInstance();
 		
 		public function detect():void
 		{
@@ -143,6 +144,28 @@ package actionScripts.managers
 						if (environmentUtil.environments.JAVA_HOME) item.isAlreadyDownloaded = true;
 						break;
 				}
+			}
+			
+			// 3. even more
+			if (!item.isAlreadyDownloaded)
+			{
+				switch (item.type)
+				{
+					case ComponentTypes.TYPE_GIT:
+						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
+						break;
+				}
+			}
+		}
+		
+		private function onXCodePathDetection(value:String):void
+		{
+			if (value)
+			{
+				var component:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
+				if (component) component.isAlreadyDownloaded = true;
+				component = HelperUtils.getComponentByType(ComponentTypes.TYPE_SVN);
+				if (component) component.isAlreadyDownloaded = true;
 			}
 		}
 	}

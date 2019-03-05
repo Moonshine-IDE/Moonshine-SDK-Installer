@@ -10,6 +10,7 @@
 			
 			import actionScripts.events.HelperEvent;
 			import actionScripts.locator.HelperModel;
+			import actionScripts.managers.GitSVNDetector;
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.MoonshineNotifier;
@@ -133,36 +134,44 @@
 				else
 				{
 					isDownloadInProgress = false;
+					progressBar.visible = false;
 				}
 			}
 			
 			private function startSingleInstallation(item:ComponentVO):void
 			{
 				itemDownloading = item;
-				if (item.type == ComponentTypes.TYPE_FLEX)
+				switch (item.type)
 				{
-					item.isDownloading = true;
-					INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-					INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
-					INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
-					INSTALLER_APACHE_FLEX.startInstallation();
-				}
-				else if (item.type == ComponentTypes.TYPE_FEATHERS)
-				{
-					var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();
-					
-					item.isDownloading = true;
-					INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-					INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
-					INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
-					INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
-				}
-				else
-				{
-					archiveDownloader = new ArchiveDownloader(item);
-					archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
-					archiveDownloader.viewResourceConstants = viewResourceConstants;
-					archiveDownloader.startInstallation();
+					case ComponentTypes.TYPE_FLEX:
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
+						INSTALLER_APACHE_FLEX.startInstallation();
+						break;
+					case ComponentTypes.TYPE_FEATHERS:
+						var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
+						INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
+						break;
+					case ComponentTypes.TYPE_GIT:
+					case ComponentTypes.TYPE_SVN:
+						if (HelperConstants.IS_MACOS) 
+						{
+							progressBar.visible = lblLastMessage.visible = false;
+							GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
+						}
+						break;
+					default:
+						archiveDownloader = new ArchiveDownloader(item);
+						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
+						archiveDownloader.viewResourceConstants = viewResourceConstants;
+						archiveDownloader.startInstallation();
+						break;
 				}
 			}
 			
@@ -249,6 +258,38 @@
 			private function onShowLog(event:MouseEvent):void
 			{
 				INSTALLER_APACHE_FLEX.showConsole(event);
+			}
+			
+			private function onGitSVNInstallMacOS(value:String, type:String):void
+			{
+				var gitComponent:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
+				var svnComponent:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_SVN);
+				
+				if (type == HelperConstants.START)
+				{
+					// continue for other download in queue
+					// while external installer opened 
+					// by macos
+					gitComponent.isSelectedToDownload = true;
+					svnComponent.isSelectedToDownload = true;
+					flush();
+					return;
+				}
+				else if (type == HelperConstants.ERROR && value)
+				{
+					// TODO: show error somewhere
+					gitComponent.isAlreadyDownloaded = false;
+					svnComponent.isAlreadyDownloaded = false;
+				}
+				else if (type == HelperConstants.SUCCESS)
+				{
+					gitComponent.isAlreadyDownloaded = svnComponent.isAlreadyDownloaded = true;
+					gitComponent.isSelectedToDownload = svnComponent.isSelectedToDownload = false;
+					MoonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+				}
+				
+				itemDownloading.isDownloading = false;
+				flush();
 			}
 			
 		]]>
