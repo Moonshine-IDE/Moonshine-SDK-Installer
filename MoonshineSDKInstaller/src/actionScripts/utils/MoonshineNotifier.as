@@ -9,7 +9,7 @@ package actionScripts.utils
 
 	public class MoonshineNotifier
 	{
-		private static const UPDATE_XML_STRING:String = '<root><item id="$id"/></root>';
+		private static const UPDATE_XML_STRING:String = '<root><item id="$id" type="$id"><path>$path</path></item></root>';
 		
 		public static function notifyMoonshineWithUpdate(item:ComponentVO):void
 		{
@@ -22,7 +22,9 @@ package actionScripts.utils
 				moonshineStorage = moonshineStorage.resolvePath("MoonshineHelperNewUpdate.xml");
 				
 				// save the recent update information
-				var updateXML:XML = new XML(UPDATE_XML_STRING.replace("$id", item.id));
+				var xmlString:String = UPDATE_XML_STRING.replace(/(\$id)/g, item.id);
+				xmlString = xmlString.replace("$path", item.installToPath);
+				var updateXML:XML = new XML(xmlString);
 				FileUtils.writeToFile(moonshineStorage, updateXML);
 				
 				// send update notification to Moonshine

@@ -142,14 +142,14 @@
 			<download>
 				<windows>
 					<version version="1.8.0" displayVersion="1.8.0u201">
-		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path>
-		                <file>OpenJDK8U-jdk_x64_windows_hotspot_8u202b08.zip</file>
+		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08_openj9-0.12.1/</path>
+		                <file>OpenJDK8U-jdk_x64_windows_openj9_8u202b08_openj9-0.12.1.zip</file>
 		            </version>
 				</windows>
 				<mac>
 					<version version="1.8.0" displayVersion="1.8.0u201">
-		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-		                <file>OpenJDK8U-jdk_x64_mac_hotspot_8u202b08.tar.gz</file> <!-- flexSDK.tar.gz -->
+		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08_openj9-0.12.1/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+		                <file>OpenJDK8U-jdk_x64_mac_openj9_8u202b08_openj9-0.12.1.tar.gz</file> <!-- flexSDK.tar.gz -->
 		            </version>
 				</mac>
 			</download>
@@ -229,9 +229,9 @@
 			<website>https://feathersui.com</website>
 			<download>
 				<windows>
-					<version version="4.0.0" displayVersion="4.0.0">
-		            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
-	              		<file>feathers-sdk-4.0.0-bin.zip</file>
+					<version version="1.9.7" displayVersion="1.9.7">
+		            	<path>http://moonshine-ide.com/downloads/sliksvn/</path>
+	              		<file>SlikSvn-1.9.7.zip</file>
 	            	</version>
 	 			</windows>
 				<mac>
@@ -251,9 +251,9 @@
 			<website>https://feathersui.com</website>
 			<download>
 				<windows>
-					<version version="4.0.0" displayVersion="4.0.0">
-		            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
-	              		<file>feathers-sdk-4.0.0-bin.zip</file>
+					<version version="2.20.1" displayVersion="2.20.1">
+		            	<path>http://moonshine-ide.com/downloads/git/</path>
+	              		<file>Git-2.20.1.zip</file>
 	            	</version>
 	 			</windows>
 				<mac>
