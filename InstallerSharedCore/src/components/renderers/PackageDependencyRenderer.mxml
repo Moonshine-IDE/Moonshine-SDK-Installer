@@ -119,7 +119,7 @@
 				 width="50"
 				 source="@Embed('/helperResources/images/icoQueuedNoLabel.png')"
 				 includeInLayout="false" visible="false"
-				 toolTip="Queued"/>
+				 toolTip="In Queue"/>
 		<s:Spacer width="50"
 				  includeInLayout="{data.isDownloading}" visible="{data.isDownloading}"/>
 		<s:Image source="@Embed('/helperResources/images/icoConfigureNoLabel.png')"

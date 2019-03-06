@@ -4,6 +4,8 @@ package actionScripts.utils
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.filesystem.File;
 	
+	import spark.components.Alert;
+	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -37,6 +39,13 @@ package actionScripts.utils
 		
 		public static function runAppStoreHelper():void
 		{
+			//temp
+			if (!HelperConstants.IS_MACOS)
+			{
+				Alert.show("Moonshine SDK Installer 64-Bit opening process waiting to integrate.", "Wait!");
+				return;
+			}
+			
 			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			npInfo.executable = HelperConstants.IS_MACOS ? 
 				File.documentsDirectory.resolvePath("/bin/bash") :
