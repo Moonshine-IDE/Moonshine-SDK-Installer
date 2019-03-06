@@ -214,7 +214,7 @@
 				if (files.length == 1)
 				{
 					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,
-						itemDownloading.type == ComponentTypes.TYPE_OPENJAVA ? "Contents/Home" : null);
+						(itemDownloading.type == ComponentTypes.TYPE_OPENJAVA && HelperConstants.IS_MACOS) ? "Contents/Home" : null);
 				}
 				else
 				{
