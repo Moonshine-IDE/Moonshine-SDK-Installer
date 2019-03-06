@@ -123,6 +123,7 @@ package actionScripts.utils
 			var feathers:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_FEATHERS);
 			var shortNameSplit:Array = feathers.downloadURL.split("/").pop().split(".");
 			shortNameSplit.pop();
+			if (HelperConstants.IS_MACOS) shortNameSplit.pop(); // this will to remove .tar
 			var shortName:String = shortNameSplit.join(".");
 			var fileName:String = feathers.downloadURL.split("/").pop();
 			var label:String = feathers.title + feathers.version;

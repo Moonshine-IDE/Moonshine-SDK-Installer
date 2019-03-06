@@ -1390,12 +1390,12 @@ variables are not required because the locations of these pieces are known.
 				}
 			}
 			trace(APACHE_FLEX_BIN_INSTALLER_URL);
-			if (installerAppPath.substr(0, Constants.URL_PREFIX.length) != Constants.URL_PREFIX)
+			if (installerAppPath && installerAppPath.substr(0, Constants.URL_PREFIX.length) != Constants.URL_PREFIX)
 			{
 				installerAppPath = useMirrorPath(_mirrorURLUtil.mirrorURL) + installerAppPath;
 			}
 			
-			main();
+			//main();
 		}
 		
 		protected function main():void
@@ -2190,7 +2190,6 @@ variables are not required because the locations of these pieces are known.
 			}
 			
 			updateActivityStep(_viewResourceConstants.STEP_UNZIP_FLEX_SDK, StepItem.ACTIVE);
-			
 			try
 			{
 				log(_viewResourceConstants.INFO_UNZIPPING + _apacheFlexSDKCompressedFile.nativePath);
@@ -2252,7 +2251,13 @@ variables are not required because the locations of these pieces are known.
 				}
 				if (usingXML)
 				{
-					runInstallerScript();
+					// original
+					//runInstallerScript();
+					
+					// @devsena
+					// MASH
+					if (flexVersionSelected.prefix == "apache-flex-sdk-") runInstallerScript();
+					else if (flexVersionSelected.prefix == "feathers-sdk-") runInstallerScriptFeathers();
 				}
 				else
 				{
@@ -2856,7 +2861,6 @@ variables are not required because the locations of these pieces are known.
 			
 			try
 			{
-				log("SANTANU: " + StringUtil.substitute(_viewResourceConstants.INFO_DOWNLOADING_FILE_FROM, [SWF_OBJECT_FILE, SWF_OBJECT_URL]));
 				copyOrDownload(SWF_OBJECT_URL + SWF_OBJECT_FILE, handlSWFObjectDownload, null, handleSWFObjectDownloadError);
 			}
 			catch (e:Error)
@@ -4099,7 +4103,7 @@ variables are not required because the locations of these pieces are known.
 		{
 			removeEventListener(Event.CLOSING, closeApplication);
 			
-			// @santanu
+			// @devsena
 			// just send a notification to owner
 			cleanup(true);
 			dispatchEvent(new GenericEvent(GenericEvent.INSTALL_CANCEL));
