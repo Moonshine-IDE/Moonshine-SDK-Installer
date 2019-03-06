@@ -285,6 +285,7 @@
 				{
 					gitComponent.isAlreadyDownloaded = svnComponent.isAlreadyDownloaded = true;
 					gitComponent.isSelectedToDownload = svnComponent.isSelectedToDownload = false;
+					gitComponent.installToPath = svnComponent.installToPath = value;
 					MoonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
 				}
 				

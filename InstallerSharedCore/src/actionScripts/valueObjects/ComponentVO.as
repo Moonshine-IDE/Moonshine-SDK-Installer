@@ -44,6 +44,16 @@ package actionScripts.valueObjects
 			return _hasError;
 		}
 		
+		private var _hasWarning:String;
+		public function set hasWarning(value:String):void
+		{
+			_hasWarning = value;
+		}
+		public function get hasWarning():String
+		{
+			return _hasWarning;
+		}
+		
 		private var _isAlreadyDownloaded:Boolean;
 		public function set isAlreadyDownloaded(value:Boolean):void
 		{

@@ -62,6 +62,22 @@ package actionScripts.utils
 						to.MAVEN_HOME = tmpPath;
 					}
 				}
+				else if (line.indexOf("GIT_HOME") != -1)
+				{
+					tmpPath = new File(line.split("=")[1]);
+					if (tmpPath.exists)
+					{
+						to.GIT_HOME = tmpPath;
+					}
+				}
+				else if (line.indexOf("SVN_HOME") != -1)
+				{
+					tmpPath = new File(line.split("=")[1]);
+					if (tmpPath.exists)
+					{
+						to.SVN_HOME = tmpPath;
+					}
+				}
 			}
 		}
 		
