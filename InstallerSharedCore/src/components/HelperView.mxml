@@ -18,7 +18,6 @@
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.DetectionManager;
 			import actionScripts.managers.StartupHelper;
-			import actionScripts.utils.EnvironmentUtils;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
@@ -80,6 +79,7 @@
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
 				model.moonshineBridge = dependencyCheckUtil;
+				detectionManager.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
 				
 				attachStartupHelperListeners(true);
 				startupHelper.setLocalPathConfig();
@@ -179,6 +179,11 @@
 			private function onFilterChange(event:Event):void
 			{
 				filterSearch(cbFilter.selected);
+			}
+			
+			private function onComponentDetected(event:HelperEvent):void
+			{
+				dispatchEvent(event);
 			}
 			
 		]]>

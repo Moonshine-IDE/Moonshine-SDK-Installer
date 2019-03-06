@@ -15,5 +15,10 @@ package actionScripts.events
 			this.value = value;
 			super(type, _bubble, _cancelable);
 		}
+		
+		public override function clone():Event
+		{
+			return new HelperEvent(type, value, bubbles, cancelable);
+		}
 	}
 }

@@ -1,8 +1,10 @@
 package actionScripts.managers
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.filesystem.File;
 	
+	import actionScripts.events.HelperEvent;
 	import actionScripts.locator.HelperModel;
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.utils.HelperUtils;
@@ -10,7 +12,7 @@ package actionScripts.managers
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
-	public class DetectionManager
+	public class DetectionManager extends EventDispatcher
 	{
 		private var model:HelperModel = HelperModel.getInstance();
 		private var environmentUtil:EnvironmentUtils;
@@ -81,6 +83,10 @@ package actionScripts.managers
 			if (!item.isAlreadyDownloaded)
 			{
 				stepB_checkDefaultInstallLocation(item);
+			}
+			else
+			{
+				notifyMoonshineOnDetection(item);
 			}
 		}
 		
@@ -156,17 +162,34 @@ package actionScripts.managers
 						break;
 				}
 			}
+			
+			if (item.isAlreadyDownloaded) notifyMoonshineOnDetection(item);
 		}
 		
 		private function onXCodePathDetection(value:String):void
 		{
+			var component:ComponentVO;
 			if (value)
 			{
-				var component:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
-				if (component) component.isAlreadyDownloaded = true;
+				component = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
+				if (component) updateComponent();
 				component = HelperUtils.getComponentByType(ComponentTypes.TYPE_SVN);
-				if (component) component.isAlreadyDownloaded = true;
+				if (component) updateComponent();
 			}
+			
+			/*
+			 * @local
+			 */
+			function updateComponent():void
+			{
+				component.isAlreadyDownloaded = true;
+				notifyMoonshineOnDetection(component);
+			}
+		}
+		
+		private function notifyMoonshineOnDetection(value:ComponentVO):void
+		{
+			this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, value));
 		}
 	}
 }
