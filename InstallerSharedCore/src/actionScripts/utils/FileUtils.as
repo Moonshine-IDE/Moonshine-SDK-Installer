@@ -267,11 +267,11 @@ package actionScripts.utils
 				{
 					try
 					{
-						source.deleteFile();
+						source.deleteDirectory(true);
 					}
 					catch (e:Error)
 					{
-						try { source.deleteFileAsync(); } catch (e2:Error){}
+						try { source.deleteDirectoryAsync(true); } catch (e2:Error){}
 					}
 					if (successHandler != null) successHandler();
 				}

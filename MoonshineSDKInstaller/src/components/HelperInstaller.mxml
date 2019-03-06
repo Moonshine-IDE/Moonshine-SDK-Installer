@@ -164,8 +164,8 @@
 						{
 							progressBar.visible = lblLastMessage.visible = false;
 							GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
+							return;
 						}
-						break;
 					default:
 						archiveDownloader = new ArchiveDownloader(item);
 						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
