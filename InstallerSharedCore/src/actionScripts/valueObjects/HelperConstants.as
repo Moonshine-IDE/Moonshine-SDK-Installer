@@ -13,6 +13,7 @@ package actionScripts.valueObjects
 		public static const ERROR:String = "error";
 		public static const WARNING:String = "warning";
 		public static const START:String = "start";
+		public static const MOONSHINE_NOTIFIER_FILE_NAME:String = "MoonshineHelperNewUpdate.xml";
 		
 		public static var IS_MACOS:Boolean;
 		public static var IS_RUNNING_IN_MOON:Boolean;

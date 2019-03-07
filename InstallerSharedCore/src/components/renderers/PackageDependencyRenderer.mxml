@@ -112,7 +112,8 @@
 				 toolTip="Version Mismatch"/>
 		<s:Image source="@Embed('/helperResources/images/icoNoteNoLabel.png')"
 				 includeInLayout="{data.hasWarning}" visible="{data.hasWarning}"
-				 toolTip="{data.hasWarning}"/>
+				 toolTip="{data.hasWarning}"
+				 width="50"/>
 		<s:Image id="imgDownload"
 				 width="50" buttonMode="true"
 				 source="@Embed('/helperResources/images/icoDownloadNoLabel.png')"

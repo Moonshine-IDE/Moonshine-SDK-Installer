@@ -19,7 +19,7 @@ package actionScripts.utils
 			
 			if (moonshineStorage.exists)
 			{
-				moonshineStorage = moonshineStorage.resolvePath("MoonshineHelperNewUpdate.xml");
+				moonshineStorage = moonshineStorage.resolvePath(HelperConstants.MOONSHINE_NOTIFIER_FILE_NAME);
 				
 				// save the recent update information
 				var xmlString:String = UPDATE_XML_STRING.replace(/(\$id)/g, item.id);
@@ -28,7 +28,8 @@ package actionScripts.utils
 				FileUtils.writeToFile(moonshineStorage, updateXML);
 				
 				// send update notification to Moonshine
-				sendUpdateNotificationToMoonshine();
+				// mac specific
+				if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
 			}
 		}
 		
@@ -37,18 +38,10 @@ package actionScripts.utils
 			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			var arg:Vector.<String> = new Vector.<String>();
 			
-			// mac specific
-			if (HelperConstants.IS_MACOS)
-			{
-				var scpt:File = File.applicationDirectory.resolvePath("macOScripts/SendToMoonshine.scpt");
-				npInfo.executable = File.documentsDirectory.resolvePath("/usr/bin/osascript");
-				arg.push(scpt.nativePath);
-				arg.push("");
-			}
-			else
-			{
-				npInfo.executable = new File("C:/Program Files (x86)/Moonshine/Moonshine.exe");
-			}
+			var scpt:File = File.applicationDirectory.resolvePath("macOScripts/SendToMoonshine.scpt");
+			npInfo.executable = File.documentsDirectory.resolvePath("/usr/bin/osascript");
+			arg.push(scpt.nativePath);
+			arg.push("");
 			
 			npInfo.arguments = arg;
 			var process:NativeProcess = new NativeProcess();

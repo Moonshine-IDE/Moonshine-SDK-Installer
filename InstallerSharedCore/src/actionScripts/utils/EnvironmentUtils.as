@@ -90,10 +90,7 @@ package actionScripts.utils
 			else if (data != "")
 			{
 				Parser.parseEnvironmentFrom(data, (_environments = new EnvironmentVO()));
-				this.dispatchEvent(new Event(ENV_READ_COMPLETED));
 			}
-			
-			startShell(false);
 		}
 		
 		private function shellError(e:ProgressEvent):void 
@@ -121,7 +118,6 @@ package actionScripts.utils
 				}
 				
 				isErrorClose = true;
-				startShell(false);
 			}
 		}
 		
@@ -129,10 +125,8 @@ package actionScripts.utils
 		{
 			if (customProcess) 
 			{
-				if (!isErrorClose) 
-				{
-					
-				}
+				startShell(false);
+				this.dispatchEvent(new Event(ENV_READ_COMPLETED));
 			}
 		}
 	}
