@@ -5,13 +5,13 @@ package actionScripts.utils
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.events.IOErrorEvent;
+	import flash.events.NativeProcessExitEvent;
 	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
 	import mx.controls.Alert;
 	
-	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
@@ -71,6 +71,7 @@ package actionScripts.utils
 		private function findMoonshineProcessWindows():void
 		{
 			var batFile:File = File.applicationDirectory.resolvePath("shellScripts/DetectMoonshineWinProcess.bat");
+			Alert.show("batchfile found: "+ batFile.exists.toString());
 			var customInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			customInfo.executable = new File("c:\\Windows\\System32\\cmd.exe");
 			customInfo.arguments = Vector.<String>(["/c", batFile.nativePath]);
@@ -83,6 +84,7 @@ package actionScripts.utils
 		{
 			var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
 			var data:String = output.readUTFBytes(output.bytesAvailable);
+			Alert.show(data, "shelldata");
 			
 			var searchString:String = "executablepath=";
 			var pathIndex:int = data.toLowerCase().indexOf(searchString);
@@ -92,7 +94,7 @@ package actionScripts.utils
 				sendUpdateNotificationToMoonshine(data);
 			}
 			
-			startShell(false);
+			//startShell(false);
 		}
 		
 		private function shellError(event:ProgressEvent):void
@@ -101,7 +103,15 @@ package actionScripts.utils
 			{
 				var output:IDataInput = customProcess.standardError;
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
-				
+				Alert.show(data, "shellerror");
+				//startShell(false);
+			}
+		}
+		
+		private function shellExit(e:NativeProcessExitEvent):void 
+		{
+			if (customProcess) 
+			{
 				startShell(false);
 			}
 		}
@@ -114,6 +124,7 @@ package actionScripts.utils
 				customProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, shellData);
 				customProcess.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR, shellError);
 				customProcess.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, shellError);
+				customProcess.addEventListener(NativeProcessExitEvent.EXIT, shellExit);
 			}
 			else
 			{
@@ -123,6 +134,7 @@ package actionScripts.utils
 				customProcess.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA, shellData);
 				customProcess.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR, shellError);
 				customProcess.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, shellError);
+				customProcess.removeEventListener(NativeProcessExitEvent.EXIT, shellExit);
 				customProcess = null;
 			}
 		}
