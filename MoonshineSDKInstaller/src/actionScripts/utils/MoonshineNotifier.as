@@ -10,8 +10,6 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
-	import mx.controls.Alert;
-	
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
@@ -35,13 +33,12 @@ package actionScripts.utils
 				var xmlString:String = UPDATE_XML_STRING.replace(/(\$id)/g, item.id);
 				xmlString = xmlString.replace("$path", item.installToPath);
 				var updateXML:XML = new XML(xmlString);
-				Alert.show(updateXML.toXMLString(), "current update info");
 				FileUtils.writeToFile(moonshineStorage, updateXML);
 				
 				// send update notification to Moonshine
 				// mac specific
 				if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
-				else findMoonshineProcessWindows();
+				//else findMoonshineProcessWindows();
 			}
 		}
 		
@@ -60,7 +57,6 @@ package actionScripts.utils
 			}
 			else if (moonshineBinPath)
 			{
-				Alert.show(moonshineBinPath, "found moonshine at");
 				npInfo.executable = new File(moonshineBinPath);
 			}
 			
@@ -71,7 +67,7 @@ package actionScripts.utils
 		private function findMoonshineProcessWindows():void
 		{
 			var batFile:File = File.applicationDirectory.resolvePath("shellScripts/DetectMoonshineWinProcess.bat");
-			Alert.show("batchfile found: "+ batFile.exists.toString());
+			
 			var customInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			customInfo.executable = new File("c:\\Windows\\System32\\cmd.exe");
 			customInfo.arguments = Vector.<String>(["/c", batFile.nativePath]);
@@ -84,7 +80,6 @@ package actionScripts.utils
 		{
 			var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
 			var data:String = output.readUTFBytes(output.bytesAvailable);
-			Alert.show(data, "shelldata");
 			
 			var searchString:String = "executablepath=";
 			var pathIndex:int = data.toLowerCase().indexOf(searchString);
@@ -93,8 +88,6 @@ package actionScripts.utils
 				data = StringUtil.trim(data.substr(pathIndex + searchString.length, data.indexOf("\r", pathIndex)));
 				sendUpdateNotificationToMoonshine(data);
 			}
-			
-			//startShell(false);
 		}
 		
 		private function shellError(event:ProgressEvent):void
@@ -103,8 +96,6 @@ package actionScripts.utils
 			{
 				var output:IDataInput = customProcess.standardError;
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
-				Alert.show(data, "shellerror");
-				//startShell(false);
 			}
 		}
 		
