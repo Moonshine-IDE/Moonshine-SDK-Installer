@@ -9,6 +9,8 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
+	import mx.controls.Alert;
+	
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -33,6 +35,7 @@ package actionScripts.utils
 				var xmlString:String = UPDATE_XML_STRING.replace(/(\$id)/g, item.id);
 				xmlString = xmlString.replace("$path", item.installToPath);
 				var updateXML:XML = new XML(xmlString);
+				Alert.show(updateXML.toXMLString(), "current update info");
 				FileUtils.writeToFile(moonshineStorage, updateXML);
 				
 				// send update notification to Moonshine
@@ -57,6 +60,7 @@ package actionScripts.utils
 			}
 			else if (moonshineBinPath)
 			{
+				Alert.show(moonshineBinPath, "found moonshine at");
 				npInfo.executable = new File(moonshineBinPath);
 			}
 			
