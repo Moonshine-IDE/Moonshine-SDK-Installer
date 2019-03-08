@@ -51,13 +51,14 @@
 			//
 			//--------------------------------------------------------------------------
 			
-			public function updateComponentStatusAsDownloaded(id:String):void
+			public function updateComponentStatusAsDownloaded(id:String, path:String=null):void
 			{
 				for each (var item:ComponentVO in model.components)
 				{
 					if (item.id == id)
 					{
 						item.isAlreadyDownloaded = true;
+						if (path) item.installToPath = path;
 						this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, item));
 						break;
 					}

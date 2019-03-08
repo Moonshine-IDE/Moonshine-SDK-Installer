@@ -19,28 +19,30 @@ package actionScripts.utils
 		{
 			var lines:Array = values.split("\r\n");
 			var tmpPath:File;
+			var splitLine:Array;
 			for each (var line:String in lines)
 			{
-				if (line.indexOf("JAVA_HOME") != -1)
+				splitLine = line.split("=");
+				if (splitLine[0] == "JAVA_HOME")
 				{
-					tmpPath = new File(line.split("=")[1]);
+					tmpPath = new File(splitLine[1]);
 					// validate the path against JDK
 					if (tmpPath.exists && tmpPath.resolvePath("bin/javac.exe").exists)
 					{
 						to.JAVA_HOME = tmpPath;
 					}
 				}
-				else if (line.indexOf("ANT_HOME") != -1)
+				else if (splitLine[0] == "ANT_HOME")
 				{
-					tmpPath = new File(line.split("=")[1]);
+					tmpPath = new File(splitLine[1]);
 					if (tmpPath.exists)
 					{
 						to.ANT_HOME = tmpPath;
 					}
 				}
-				else if (line.indexOf("FLEX_HOME") != -1)
+				else if (splitLine[0] == "FLEX_HOME")
 				{
-					tmpPath = new File(line.split("=")[1]);
+					tmpPath = new File(splitLine[1]);
 					// validate if Flex SDK path
 					if (tmpPath.exists)
 					{
@@ -54,25 +56,25 @@ package actionScripts.utils
 						}
 					}
 				}
-				else if (line.indexOf("MAVEN_HOME") != -1)
+				else if (splitLine[0] == "MAVEN_HOME")
 				{
-					tmpPath = new File(line.split("=")[1]);
+					tmpPath = new File(splitLine[1]);
 					if (tmpPath.exists)
 					{
 						to.MAVEN_HOME = tmpPath;
 					}
 				}
-				else if (line.indexOf("GIT_HOME") != -1)
+				else if (splitLine[0] == "GIT_HOME")
 				{
-					tmpPath = new File(line.split("=")[1]);
+					tmpPath = new File(splitLine[1]);
 					if (tmpPath.exists)
 					{
 						to.GIT_HOME = tmpPath;
 					}
 				}
-				else if (line.indexOf("SVN_HOME") != -1)
+				else if (splitLine[0] == "SVN_HOME")
 				{
-					tmpPath = new File(line.split("=")[1]);
+					tmpPath = new File(splitLine[1]);
 					if (tmpPath.exists)
 					{
 						to.SVN_HOME = tmpPath;
@@ -87,6 +89,17 @@ package actionScripts.utils
 			
 			// store AIR version
 			HelperConstants.CONFIG_AIR_VERSION = xmlData.air.@version.toString();
+			
+			// store 64-bit windows url
+			if (!HelperConstants.IS_MACOS)
+			{
+				var pathSplit:Array = File.applicationStorageDirectory.nativePath.split(File.separator);
+				pathSplit.pop();
+				pathSplit.pop();
+				
+				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = pathSplit.join(File.separator) + File.separator +"net.prominic.MoonshineAppStoreHelper"+ File.separator +"64Bit";
+				HelperConstants.WINDOWS_64BIT_DOWNLOAD_URL = String(xmlData.windows64BitUrl);
+			}
 			
 			// parse packages
 			model.components = new ArrayCollection();
@@ -157,23 +170,23 @@ package actionScripts.utils
 			switch (type)
 			{
 				case ComponentTypes.TYPE_FLEX:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Flex_SDK/Flex_"+ version +"_AIR_"+ airVersion;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Flex_SDK"+ File.separator +"Flex_"+ version +"_AIR_"+ airVersion;
 				case ComponentTypes.TYPE_FLEXJS:
 					return null;
 				case ComponentTypes.TYPE_ROYALE:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Royale_SDK/apache-royale-"+ version +"-bin-js";
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Royale_SDK"+ File.separator +"apache-royale-"+ version +"-bin-js";
 				case ComponentTypes.TYPE_FEATHERS:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Flex_SDK/feathers-sdk-"+ version +"-bin";
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Flex_SDK"+ File.separator +"feathers-sdk-"+ version +"-bin";
 				case ComponentTypes.TYPE_ANT:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Ant/apache-ant-"+ version;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Ant"+ File.separator +"apache-ant-"+ version;
 				case ComponentTypes.TYPE_MAVEN:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Maven/apache-maven-"+ version;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Maven"+ File.separator +"apache-maven-"+ version;
 				case ComponentTypes.TYPE_OPENJAVA:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Java/openjdk-"+ version;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Java"+ File.separator +"openjdk-"+ version;
 				case ComponentTypes.TYPE_GIT:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/Git/git-"+ version;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Git"+ File.separator +"git-"+ version;
 				case ComponentTypes.TYPE_SVN:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath +"/SVN/slik-svn-"+ version;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"SVN"+ File.separator +"slik-svn-"+ version;
 				default:
 					throw new Error("Unknown Component Type");
 			}

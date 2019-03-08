@@ -39,17 +39,27 @@ package actionScripts.utils
 		
 		public static function runAppStoreHelper():void
 		{
-			//temp
+			var executableFile:File;
+			
+			// on Windows we'll need to run 'if'
+			// downloaded 64-bit binary, if not downloaded
+			// we shall proceed to download it first
 			if (!HelperConstants.IS_MACOS)
 			{
-				Alert.show("Moonshine SDK Installer 64-Bit opening process waiting to integrate.", "Wait!");
+				Alert.show("In Progress..");
+				executableFile = (new File(HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY)).resolvePath("Moonshine SDK Installer.exe");
+				/*if (!executableFile.exists)
+				{
+					//initiate64BitDownloadProcess();
+					return;
+				}*/
 				return;
 			}
 			
 			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			npInfo.executable = HelperConstants.IS_MACOS ? 
-				File.documentsDirectory.resolvePath("/bin/bash") :
-				new File("C:/Program Files (x86)/MoonshineAppStoreHelper/MoonshineAppStoreHelper.exe");
+				File.documentsDirectory.resolvePath("/bin/bash") : 
+				executableFile;
 			
 			// probable termination
 			if (!npInfo.executable.exists) return;
@@ -58,9 +68,9 @@ package actionScripts.utils
 			
 			if (HelperConstants.IS_MACOS)
 			{
-				var shFile:File = File.applicationDirectory.resolvePath("shellScripts/SendToASH.sh");
+				executableFile = File.applicationDirectory.resolvePath("shellScripts/SendToASH.sh");
 				var pattern:RegExp = new RegExp( /( )/g );
-				var shPath:String = shFile.nativePath.replace(pattern, "\\ ");
+				var shPath:String = executableFile.nativePath.replace(pattern, "\\ ");
 				
 				arg.push("-c");
 				arg.push(shPath);

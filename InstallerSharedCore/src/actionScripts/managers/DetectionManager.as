@@ -77,6 +77,12 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_OPENJAVA:
 						item.isAlreadyDownloaded = model.moonshineBridge.isJavaPresent();
 						break;
+					case ComponentTypes.TYPE_GIT:
+						item.isAlreadyDownloaded = model.moonshineBridge.isGitPresent();
+						break;
+					case ComponentTypes.TYPE_SVN:
+						item.isAlreadyDownloaded = model.moonshineBridge.isSVNPresent();
+						break;
 				}
 			}
 			

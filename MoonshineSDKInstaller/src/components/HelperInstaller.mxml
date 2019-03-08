@@ -244,6 +244,8 @@
 				{
 					itemDownloading.isDownloaded = true;
 					itemDownloading.isDownloading = false;
+					
+					if (!HelperConstants.IS_MACOS) onGitSVNInstallWindows(itemDownloading);
 					moonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
 					
 					flush();
@@ -298,6 +300,16 @@
 				
 				itemDownloading.isDownloading = false;
 				flush();
+			}
+			
+			private function onGitSVNInstallWindows(item:ComponentVO):void
+			{
+				// git and svn requires binary path
+				// to the sdk folder on Windows
+				if (item.type == ComponentTypes.TYPE_GIT || item.type == ComponentTypes.TYPE_SVN)
+				{
+					item.installToPath += File.separator + item.pathValidation;
+				}
 			}
 			
 		]]>

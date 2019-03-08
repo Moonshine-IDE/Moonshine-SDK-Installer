@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
+	<windows64BitUrl>http://moonshine-ide.com/downloads/msdki/windows/MoonshineSDKInstaller_64bit.zip</windows64BitUrl>
 	<air version="30.0"/>
 	<packages>
 		<item integrated="true">
@@ -224,7 +225,7 @@
 			<title>Subversion</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoSVN.png</image>
-			<pathValidation></pathValidation>
+			<pathValidation>bin\svn.exe</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<download>
@@ -235,9 +236,9 @@
 	            	</version>
 	 			</windows>
 				<mac>
-					<version version="4.0.0" displayVersion="4.0.0">
-	                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
-	              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
+					<version version="0.0.0" displayVersion="0.0.0">
+	                	<path></path>
+	              		<file></file>
 	             </version>
 				</mac>
 			</download>
@@ -246,7 +247,7 @@
 			<title>Git</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoGit.png</image>
-			<pathValidation></pathValidation>
+			<pathValidation>bin\git.exe</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<download>
@@ -257,9 +258,9 @@
 	            	</version>
 	 			</windows>
 				<mac>
-					<version version="4.0.0" displayVersion="4.0.0">
-	                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
-	              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
+					<version version="0.0.0" displayVersion="0.0.0">
+	                	<path></path>
+	              		<file></file>
 	             </version>
 				</mac>
 			</download>
