@@ -208,6 +208,7 @@
 			<arg line="installer"/>
 			<arg line="images"/>
 			<arg line="helperResources"/>
+			<arg line="shellScripts"/>
 	   		<!-- Add folders to be bundled in the AIR file here -->
 		</java>
 		<antcall target="zipCaptiveBundle"></antcall>
@@ -234,6 +235,7 @@
 			<arg line="installer"/>
 			<arg line="images"/>
 			<arg line="helperResources"/>
+			<arg line="shellScripts"/>
 	   		<!-- Add folders to be bundled in the AIR file here -->
 		</java>
 		<antcall target="zipCaptiveBundle"></antcall>
@@ -267,7 +269,7 @@
 			<arg line="installer"/>
 			<arg line="images"/>
 			<arg line="helperResources"/>
-			<arg line="macOScripts"/>
+			<arg line="shellScripts"/>
 			<!-- Add folders to be bundled in the AIR file here -->
 		</java>
 	</target>
@@ -415,6 +417,9 @@
 		<copy todir="${basedir}/helperResources" overwrite="true">
 			<fileset dir="${LibraryHelperSharedCore}/src/helperResources"/>
 		</copy>
+		<copy todir="${basedir}/shellScripts" overwrite="true">
+			<fileset dir="${applicationSourceDirectory}/shellScripts"/>
+		</copy>
 		
 		<!-- modify field values based upon isDevelopment tag -->
 		<if>
@@ -436,9 +441,6 @@
 		<if>
 			<os family="unix"/>
 			<then>
-				<copy todir="${basedir}/macOScripts" overwrite="true">
-					<fileset dir="${applicationSourceDirectory}/macOScripts"/>
-				</copy>
 				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.app"/>
 				<copy file="entitlement.plist" todir="${debug_dir}" overwrite="true"/>
 			</then>
@@ -498,6 +500,7 @@
 				<delete dir="installer"/>
 				<delete dir="images"/>
 				<delete dir="helperResources"/>
+				<delete dir="shellScripts"/>
 			</then>
 		</if>
 	</target>
@@ -511,7 +514,7 @@
 				<delete dir="installer"/>
 				<delete dir="images"/>
 				<delete dir="helperResources"/>
-				<delete dir="macOScripts"/>
+				<delete dir="shellScripts"/>
 			</then>
 		</if>
 	</target>

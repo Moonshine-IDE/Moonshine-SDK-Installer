@@ -46,6 +46,13 @@
 			private var isDownloadInProgress:Boolean;
 			private var itemDownloading:ComponentVO;
 			
+			private var _moonshineNotifier:MoonshineNotifier;
+			private function get moonshineNotifier():MoonshineNotifier
+			{
+				if (!_moonshineNotifier) _moonshineNotifier = new MoonshineNotifier();
+				return _moonshineNotifier;
+			}
+			
 			//--------------------------------------------------------------------------
 			//
 			//  PRIVATE API
@@ -237,7 +244,7 @@
 				{
 					itemDownloading.isDownloaded = true;
 					itemDownloading.isDownloading = false;
-					MoonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+					moonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
 					
 					flush();
 				}
@@ -286,7 +293,7 @@
 					gitComponent.isAlreadyDownloaded = svnComponent.isAlreadyDownloaded = true;
 					gitComponent.isSelectedToDownload = svnComponent.isSelectedToDownload = false;
 					gitComponent.installToPath = svnComponent.installToPath = value;
-					MoonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+					moonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
 				}
 				
 				itemDownloading.isDownloading = false;

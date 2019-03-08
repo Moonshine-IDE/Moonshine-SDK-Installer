@@ -58,7 +58,7 @@ package actionScripts.utils
 			
 			if (HelperConstants.IS_MACOS)
 			{
-				var shFile:File = File.applicationDirectory.resolvePath("macOScripts/SendToASH.sh");
+				var shFile:File = File.applicationDirectory.resolvePath("shellScripts/SendToASH.sh");
 				var pattern:RegExp = new RegExp( /( )/g );
 				var shPath:String = shFile.nativePath.replace(pattern, "\\ ");
 				
