@@ -201,3 +201,12 @@ s|Label.linkTextHover {
 {
 	borderVisible: true;
 }
+
+.greyButton
+{
+	skinClass: ClassReference("assets.skins.GreyButtonSkin");
+	fontFamily: 'DejaVuSans';
+	paddingLeft: 20px;
+	paddingRight: 20px;
+	fontSize: 14;
+}

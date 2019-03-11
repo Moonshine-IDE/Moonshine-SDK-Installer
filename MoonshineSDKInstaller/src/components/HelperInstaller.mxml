@@ -333,7 +333,9 @@
 				  label="INSTALL EVERYTHING NOW!"
 				  click="requestAllInstallation()"
 				  horizontalCenter="0" verticalCenter="0"
-				  enabled="{HelperConstants.IS_INSTALLER_READY}"/>
+				  enabled="{HelperConstants.IS_INSTALLER_READY}"
+				  icon="@Embed('/assets/images/icoDownloadSmall.png')"
+				  styleName="greyButton"/>
 		<s:Label id="lblInstalling" 
 				 text="Installing packages.."
 				 horizontalCenter="0" verticalCenter="0" 
