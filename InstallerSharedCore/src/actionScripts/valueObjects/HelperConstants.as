@@ -17,6 +17,7 @@ package actionScripts.valueObjects
 		
 		public static var IS_MACOS:Boolean;
 		public static var IS_RUNNING_IN_MOON:Boolean;
+		public static var IS_INSTALLER_READY:Boolean;
 		public static var DEFAULT_INSTALLATION_PATH:File;
 		public static var CONFIG_AIR_VERSION:String;
 		public static var WINDOWS_64BIT_DOWNLOAD_URL:String;

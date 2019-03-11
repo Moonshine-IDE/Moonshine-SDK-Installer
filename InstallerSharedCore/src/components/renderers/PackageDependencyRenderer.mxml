@@ -8,7 +8,7 @@
 			import spark.components.BusyIndicator;
 			
 			import actionScripts.events.HelperEvent;
-			import actionScripts.utils.HelperUtils;
+			import actionScripts.locator.HelperModel;
 			import actionScripts.valueObjects.HelperConstants;
 			
 			private var busyIndicator:BusyIndicator;
@@ -42,7 +42,7 @@
 			{
 				if (HelperConstants.IS_RUNNING_IN_MOON)
 				{
-					HelperUtils.runAppStoreHelper();
+					HelperModel.getInstance().moonshineBridge.runOrDownloadSDKInstaller();
 				}
 				else
 				{
@@ -106,7 +106,6 @@
 				 includeInLayout="false" visible="false"
 				 toolTip="Installed"/>
 		<s:Image id="imgVersionNote"
-				 buttonMode="true"
 				 source="@Embed('/helperResources/images/icoNoteNoLabel.png')"
 				 includeInLayout="{data.oldInstalledVersion}" visible="{data.oldInstalledVersion}"
 				 toolTip="Version Mismatch"/>
@@ -118,7 +117,9 @@
 				 width="50" buttonMode="true"
 				 source="@Embed('/helperResources/images/icoDownloadNoLabel.png')"
 				 includeInLayout="false" visible="false"
-				 click="onDownloadRequest(event)" toolTip="Download"/>
+				 click="onDownloadRequest(event)" toolTip="Download"
+				 alpha="{imgDownload.enabled ? 1 : .8}"
+				 enabled="{HelperConstants.IS_RUNNING_IN_MOON || (!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; HelperConstants.IS_INSTALLER_READY)}"/>
 		<s:Image id="imgQueued" 
 				 width="50"
 				 source="@Embed('/helperResources/images/icoQueuedNoLabel.png')"

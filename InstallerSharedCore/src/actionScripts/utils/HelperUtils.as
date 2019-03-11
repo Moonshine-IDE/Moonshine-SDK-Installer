@@ -1,14 +1,9 @@
 package actionScripts.utils
 {
-	import flash.desktop.NativeProcess;
-	import flash.desktop.NativeProcessStartupInfo;
 	import flash.filesystem.File;
-	
-	import spark.components.Alert;
 	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
-	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
 
 	public class HelperUtils
@@ -35,50 +30,6 @@ package actionScripts.utils
 			}
 			
 			return null;
-		}
-		
-		public static function runAppStoreHelper():void
-		{
-			var executableFile:File;
-			
-			// on Windows we'll need to run 'if'
-			// downloaded 64-bit binary, if not downloaded
-			// we shall proceed to download it first
-			if (!HelperConstants.IS_MACOS)
-			{
-				Alert.show("In Progress..");
-				executableFile = (new File(HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY)).resolvePath("Moonshine SDK Installer.exe");
-				/*if (!executableFile.exists)
-				{
-					//initiate64BitDownloadProcess();
-					return;
-				}*/
-				return;
-			}
-			
-			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-			npInfo.executable = HelperConstants.IS_MACOS ? 
-				File.documentsDirectory.resolvePath("/bin/bash") : 
-				executableFile;
-			
-			// probable termination
-			if (!npInfo.executable.exists) return;
-			
-			var arg:Vector.<String> = new Vector.<String>();
-			
-			if (HelperConstants.IS_MACOS)
-			{
-				executableFile = File.applicationDirectory.resolvePath("shellScripts/SendToASH.sh");
-				var pattern:RegExp = new RegExp( /( )/g );
-				var shPath:String = executableFile.nativePath.replace(pattern, "\\ ");
-				
-				arg.push("-c");
-				arg.push(shPath);
-			}
-			
-			npInfo.arguments = arg;
-			var process:NativeProcess = new NativeProcess();
-			process.start(npInfo);
 		}
 		
 		public static function isSDKFolder(path:File):HelperSDKVO

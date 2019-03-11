@@ -12,5 +12,6 @@ package actionScripts.interfaces
 		function isMavenPresent():Boolean;
 		function isSVNPresent():Boolean;
 		function isGitPresent():Boolean;
+		function runOrDownloadSDKInstaller():void;
 	}
 }

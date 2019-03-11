@@ -192,6 +192,7 @@
 			{
 				INSTALLER_APACHE_FLEX.removeEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady);
 				viewResourceConstants = INSTALLER_APACHE_FLEX.viewResourceConstants;
+				HelperConstants.IS_INSTALLER_READY = true;
 				// TODO: next ui settlements
 			}
 			
@@ -200,7 +201,8 @@
 				if (itemDownloading)
 				{
 					itemDownloading.isDownloading = false;
-					itemDownloading.hasError = true;
+					itemDownloading.hasError = event.value ? event.value as String : null;
+					flush();
 				}
 			}
 			
@@ -330,7 +332,8 @@
 		<s:Button id="btnInstallAll" 
 				  label="INSTALL EVERYTHING NOW!"
 				  click="requestAllInstallation()"
-				  horizontalCenter="0" verticalCenter="0"/>
+				  horizontalCenter="0" verticalCenter="0"
+				  enabled="{HelperConstants.IS_INSTALLER_READY}"/>
 		<s:Label id="lblInstalling" 
 				 text="Installing packages.."
 				 horizontalCenter="0" verticalCenter="0" 

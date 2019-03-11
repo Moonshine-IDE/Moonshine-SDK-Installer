@@ -34,12 +34,12 @@ package actionScripts.valueObjects
 			return _isDownloaded;
 		}
 		
-		private var _hasError:Boolean;
-		public function set hasError(value:Boolean):void
+		private var _hasError:String;
+		public function set hasError(value:String):void
 		{
 			_hasError = value;
 		}
-		public function get hasError():Boolean
+		public function get hasError():String
 		{
 			return _hasError;
 		}

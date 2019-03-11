@@ -3377,7 +3377,7 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 		
-		protected function cleanup(isAbort:Boolean = false, abortInfo:String = ""):void
+		protected function cleanup(isAbort:Boolean = false, abortInfo:String = null):void
 		{
 			if (cleanedUp)
 			{
@@ -3415,7 +3415,7 @@ variables are not required because the locations of these pieces are known.
 				}
 				// @devsena
 				// MASH
-				dispatchEvent(new GenericEvent(GenericEvent.INSTALL_ABORTED));
+				dispatchEvent(new GenericEvent(GenericEvent.INSTALL_ABORTED, abortInfo));
 			}
 			else if (!wasAborted)
 			{

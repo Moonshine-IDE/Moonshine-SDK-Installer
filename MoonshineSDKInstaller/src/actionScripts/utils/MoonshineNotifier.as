@@ -38,7 +38,7 @@ package actionScripts.utils
 				// send update notification to Moonshine
 				// mac specific
 				if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
-				//else findMoonshineProcessWindows();
+				else findMoonshineProcessWindows();
 			}
 		}
 		
@@ -66,6 +66,8 @@ package actionScripts.utils
 		
 		private function findMoonshineProcessWindows():void
 		{
+			startShell(false);
+			
 			var batFile:File = File.applicationDirectory.resolvePath("shellScripts/DetectMoonshineWinProcess.bat");
 			
 			var customInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
