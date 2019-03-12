@@ -26,6 +26,18 @@
 	<property name="keepDebugFiles" value="${APP_PROPERTIES.keepDebugFiles}" />
 	<property name="deploy_dir" value="DEPLOY"/>
 	<property name="debug_dir" value="bin-debug"/>
+	
+	<!-- Determining the run at local system or cloud -->
+	<property name="localOrCloud" value="${svn.revision}"/>
+	<if>
+		<equals arg1="${localOrCloud}" arg2="&#36;&#123;svn.revision}"/>
+		<then>
+			<property name="HELPER_IS_DESKTOP" value="HELPER_IS_DESKTOP"/>
+		</then>
+		<else>
+			<property name="HELPER_IS_DESKTOP" value="${HELPER_IS_DESKTOP}"/>
+		</else>
+	</if>
 
 	<if>
 		<!-- This expected value means its not running on Bamboo -->
