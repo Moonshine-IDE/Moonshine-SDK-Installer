@@ -96,6 +96,11 @@
 			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>flex</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>http://flex.apache.org</website>
+			<license>
+				<url>https://www.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-installer-config.xml</url>
+				<title></title>
+				<description></description>
+			</license>
 			<download>
 				<windows>
 					<version version="4.16.1" displayVersion="4.16.1">
@@ -118,6 +123,11 @@
 			<pathValidation>royale-asjs/royale-sdk-description.xml</pathValidation>
 			<sdkType>royale</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://royale.apache.org</website>
+			<license>
+				<url>https://www.apache.org/licenses/</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of Apache Royale starting with Royale 0.9.4</description>
+			</license>
 			<download>
 				<windows>
 					<version version="0.9.4" displayVersion="0.9.4">
@@ -140,6 +150,11 @@
 			<pathValidation>bin/javac</pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
+			<license>
+				<url>https://www.apache.org/licenses/</url>
+				<title></title>
+				<description></description>
+			</license>
 			<download>
 				<windows>
 					<version version="1.8.0" displayVersion="1.8.0u201">
@@ -162,6 +177,11 @@
 			<pathValidation>bin/ant</pathValidation>
 			<sdkType>ant</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://ant.apache.org</website>
+			<license>
+				<url>https://www.apache.org/licenses/</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of Apache Ant starting with Ant 1.10.1</description>
+			</license>
 			<download>
 				<windows>
 					<version version="1.10.1" displayVersion="1.10.1">
@@ -184,6 +204,11 @@
 			<pathValidation>bin/mvn</pathValidation>
 			<sdkType>maven</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://maven.apache.org</website>
+			<license>
+				<url>https://www.apache.org/licenses/</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of Apache Maven</description>
+			</license>
 			<download>
 				<windows>
 					<version version="3.6.0" displayVersion="3.6.0">
@@ -206,6 +231,11 @@
 			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
+			<license>
+				<url>https://github.com/BowlerHatLLC/feathers-sdk/blob/master/LICENSE</url>
+				<title>Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of Feathers SDK</description>
+			</license>
 			<download>
 				<windows>
 					<version version="4.0.0" displayVersion="4.0.0">
@@ -228,6 +258,11 @@
 			<pathValidation>bin\svn.exe</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
+			<license>
+				<url>https://sliksvn.com/support/license-applies-sliksvn-client/</url>
+				<title>Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of SlikSVN</description>
+			</license>
 			<download>
 				<windows>
 					<version version="1.9.7" displayVersion="1.9.7">
@@ -250,6 +285,11 @@
 			<pathValidation>bin\git.exe</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
+			<license>
+				<url>https://github.com/git-for-windows/build-extra/blob/master/ReleaseNotes.md#licenses</url>
+				<title>GNU General Public License version 2</title>
+				<description>Git is licensed under the GNU General Public License version 2.</description>
+			</license>
 			<download>
 				<windows>
 					<version version="2.20.1" displayVersion="2.20.1">

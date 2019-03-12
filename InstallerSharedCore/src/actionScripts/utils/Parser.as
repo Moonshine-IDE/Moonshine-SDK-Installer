@@ -118,6 +118,9 @@ package actionScripts.utils
 				tmpComponent.downloadURL = comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 				tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
 				tmpComponent.website = String(comp.website);
+				tmpComponent.licenseUrl = String(comp.license.url);
+				tmpComponent.licenseTitle = String(comp.license.title);
+				tmpComponent.licenseSmallDescription = String(comp.license.description);
 				
 				model.components.addItem(tmpComponent);
 			}

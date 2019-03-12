@@ -2,7 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="false" height="100">
+				autoDrawBackground="false" height="100" width="100%">
 	<fx:Script>
 		<![CDATA[
 			import flash.net.navigateToURL;
@@ -67,6 +67,11 @@
 				if (data.website) navigateToURL(new URLRequest(data.website), "_blank");
 			}
 			
+			protected function onLicenseClick(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest(data.licenseUrl), "_blank");
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -76,11 +81,18 @@
 				 width="136"
 				 buttonMode="true" click="onLogoClicked(event)"/>
 		<s:VGroup width="100%">
-			<s:Label text="{data.title}" width="100%"
-					 styleName="uiTextRendererLabel"/>
+			<s:HGroup width="100%" verticalAlign="middle" gap="10">
+				<s:Label text="{data.title}"
+						 styleName="uiTextRendererLabel"/>
+				<s:Label text="Version {data.version}" width="100%"
+						 styleName="uiTextRendererDescription"/>
+			</s:HGroup>
 			<s:Label text="{data.description}" width="100%"
-					 maxDisplayedLines="2"
+					 maxDisplayedLines="2" paddingTop="10"
 					 styleName="uiTextRendererDescription"/>
+			<s:Label text="License Agreement"
+					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0000ff"
+					 buttonMode="true" click="onLicenseClick(event)"/>
 		</s:VGroup>
 		<s:Image id="imgDownloaded"
 				 width="50"
@@ -94,6 +106,10 @@
 		<s:Image source="@Embed('/helperResources/images/icoNote.png')"
 				 includeInLayout="{data.hasWarning}" visible="{data.hasWarning}"
 				 toolTip="{data.hasWarning}"
+				 width="50"/>
+		<s:Image source="@Embed('/helperResources/images/icoErrorNoLabel.png')"
+				 includeInLayout="{data.hasError}" visible="{data.hasError}"
+				 toolTip="{data.hasError}"
 				 width="50"/>
 		<s:Image id="imgDownload"
 				 width="50" buttonMode="true"

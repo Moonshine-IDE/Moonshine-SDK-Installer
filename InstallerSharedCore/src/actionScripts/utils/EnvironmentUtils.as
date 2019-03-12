@@ -21,12 +21,15 @@ package actionScripts.utils
 		private var customProcess:NativeProcess;
 		private var customInfo:NativeProcessStartupInfo;
 		private var isErrorClose:Boolean;
+		private var environmentData:String;
 		
 		private var _environments:EnvironmentVO;
 		public function get environments():EnvironmentVO
 		{
 			return _environments;
 		}
+		
+		public function EnvironmentUtils() {}
 		
 		public function readValues():void
 		{
@@ -36,6 +39,11 @@ package actionScripts.utils
 			// for Windows only
 			if (!HelperConstants.IS_MACOS)
 			{
+				// it's possible that data returns in
+				// multiple standard_output_data
+				// we need a container to hold the breakups
+				environmentData = "";
+				
 				customInfo = new NativeProcessStartupInfo();
 				customInfo.executable = new File("c:\\Windows\\System32\\cmd.exe");
 				
@@ -89,7 +97,7 @@ package actionScripts.utils
 			}
 			else if (data != "")
 			{
-				Parser.parseEnvironmentFrom(data, (_environments = new EnvironmentVO()));
+				environmentData += data + "\r\n";
 			}
 		}
 		
@@ -126,6 +134,15 @@ package actionScripts.utils
 			if (customProcess) 
 			{
 				startShell(false);
+				
+				// parse
+				if (environmentData != "")
+				{
+					_environments = new EnvironmentVO();
+					Parser.parseEnvironmentFrom(environmentData, _environments);
+				}
+				
+				// pass completion
 				this.dispatchEvent(new Event(ENV_READ_COMPLETED));
 			}
 		}

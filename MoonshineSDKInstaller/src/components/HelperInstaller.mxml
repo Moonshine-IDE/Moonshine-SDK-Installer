@@ -6,7 +6,9 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			
 			import actionScripts.events.HelperEvent;
 			import actionScripts.locator.HelperModel;
@@ -74,6 +76,15 @@
 			}
 			
 			private function requestAllInstallation():void
+			{
+				var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView , true));
+				licenses.width = this.width * .8;
+				licenses.height = this.height * .7;
+				licenses.addEventListener(CloseEvent.CLOSE, onLicenseAgreementClose, false, 0, true);
+				PopUpManager.centerPopUp(licenses);
+			}
+			
+			private function proceedAllInstallation():void
 			{
 				// generate list of downloads
 				for each (var item:ComponentVO in model.components)
@@ -246,9 +257,10 @@
 				{
 					itemDownloading.isDownloaded = true;
 					itemDownloading.isDownloading = false;
+					itemDownloading.isAlreadyDownloaded = true;
 					
 					if (!HelperConstants.IS_MACOS) onGitSVNInstallWindows(itemDownloading);
-					moonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+					moonshineNotifier.notifyMoonshineWithUpdate();
 					
 					flush();
 				}
@@ -297,7 +309,7 @@
 					gitComponent.isAlreadyDownloaded = svnComponent.isAlreadyDownloaded = true;
 					gitComponent.isSelectedToDownload = svnComponent.isSelectedToDownload = false;
 					gitComponent.installToPath = svnComponent.installToPath = value;
-					moonshineNotifier.notifyMoonshineWithUpdate(itemDownloading);
+					moonshineNotifier.notifyMoonshineWithUpdate();
 				}
 				
 				itemDownloading.isDownloading = false;
@@ -312,6 +324,12 @@
 				{
 					item.installToPath += File.separator + item.pathValidation;
 				}
+			}
+			
+			private function onLicenseAgreementClose(event:CloseEvent):void
+			{
+				event.target.removeEventListener(CloseEvent.CLOSE, onLicenseAgreementClose);
+				if ((event.target as AllLicenseView).isLicensesAccepted) proceedAllInstallation();
 			}
 			
 		]]>

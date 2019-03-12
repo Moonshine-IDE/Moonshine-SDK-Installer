@@ -14,13 +14,14 @@ package actionScripts.managers
 
 	public class DetectionManager extends EventDispatcher
 	{
+		public var environmentUtil:EnvironmentUtils;
+		
 		private var model:HelperModel = HelperModel.getInstance();
-		private var environmentUtil:EnvironmentUtils;
 		private var gitSvnDetector:GitSVNDetector = GitSVNDetector.getInstance();
 		
 		public function detect():void
 		{
-			if (!HelperConstants.IS_MACOS) 
+			if (!HelperConstants.IS_MACOS && !environmentUtil)
 			{
 				environmentUtil = new EnvironmentUtils();
 				environmentUtil.addEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted, false, 0, true);

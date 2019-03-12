@@ -18,6 +18,7 @@
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.DetectionManager;
 			import actionScripts.managers.StartupHelper;
+			import actionScripts.utils.EnvironmentUtils;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
@@ -31,6 +32,7 @@
 			//--------------------------------------------------------------------------
 			
 			public var dependencyCheckUtil:IHelperMoonshineBridge;
+			public var environmentUtil:EnvironmentUtils;
 			public var isRunningInsideMoonshine:Boolean;
 			
 			//--------------------------------------------------------------------------
@@ -151,6 +153,7 @@
 				attachStartupHelperListeners(false);
 				onFilterTypeChanged(null);
 				
+				detectionManager.environmentUtil = environmentUtil;
 				detectionManager.detect();
 			}
 			

@@ -10,16 +10,16 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
+	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
 	public class MoonshineNotifier
 	{
-		private static const UPDATE_XML_STRING:String = '<root><item id="$id" type="$id"><path>$path</path></item></root>';
-		
 		private var customProcess:NativeProcess;
+		private var model:HelperModel = HelperModel.getInstance();
 		
-		public function notifyMoonshineWithUpdate(item:ComponentVO):void
+		public function notifyMoonshineWithUpdate():void
 		{
 			var moonshineStorage:File = HelperConstants.IS_MACOS ? 
 				File.userDirectory.resolvePath("Library/Containers/com.moonshine-ide/Data/Library/Application Support/com.moonshine-ide/Local Store") :
@@ -30,16 +30,37 @@ package actionScripts.utils
 				moonshineStorage = moonshineStorage.resolvePath(HelperConstants.MOONSHINE_NOTIFIER_FILE_NAME);
 				
 				// save the recent update information
-				var xmlString:String = UPDATE_XML_STRING.replace(/(\$id)/g, item.id);
-				xmlString = xmlString.replace("$path", item.installToPath);
-				var updateXML:XML = new XML(xmlString);
-				FileUtils.writeToFile(moonshineStorage, updateXML);
+				var updateXML:XML = toXML();
+				FileUtils.writeToFile(moonshineStorage, '<?xml version="1.0" encoding="utf-8"?>\n'+ updateXML);
 				
 				// send update notification to Moonshine
 				// mac specific
 				if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
 				else findMoonshineProcessWindows();
 			}
+		}
+		
+		private function toXML():XML
+		{
+			var root:XML = <root></root>;
+			var items:XML = <items></items>;
+			var itemXml:XML;
+			
+			for each (var item:ComponentVO in model.components)
+			{
+				if (item.isAlreadyDownloaded)
+				{
+					itemXml = <item></item>;
+					itemXml.@id = item.id;
+					itemXml.@type = item.id;
+					itemXml.appendChild(<path/>);
+					itemXml.children()[0].appendChild(item.installToPath);
+					items.appendChild(itemXml);
+				}
+			}
+			
+			root.appendChild(items);
+			return root;
 		}
 		
 		private function sendUpdateNotificationToMoonshine(moonshineBinPath:String=null):void

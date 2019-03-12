@@ -10,5 +10,7 @@ package actionScripts.valueObjects
 		public var MAVEN_HOME:File;
 		public var GIT_HOME:File;
 		public var SVN_HOME:File;
+		
+		public function EnvironmentVO() {}
 	}
 }

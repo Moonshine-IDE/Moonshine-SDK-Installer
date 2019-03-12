@@ -9,6 +9,9 @@ package actionScripts.valueObjects
 		public var type:String;
 		public var version:String;
 		public var website:String;
+		public var licenseUrl:String;
+		public var licenseTitle:String;
+		public var licenseSmallDescription:String;
 		
 		public function ComponentVO()
 		{
