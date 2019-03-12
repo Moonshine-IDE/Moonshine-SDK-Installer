@@ -86,7 +86,6 @@ package org.apache.flex.packageflexsdk.util
 			catch (e:Error)
 			{
 				versionSelected.isDownloading = false;
-				versionSelected.hasError = true;
 				installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_OPTIONAL_INSTALL_APACHE_ANT) + e.toString());
 			}
 		}
@@ -101,7 +100,6 @@ package org.apache.flex.packageflexsdk.util
 			{
 				installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_OPTIONAL_INSTALL_APACHE_ANT) + e.toString());
 				versionSelected.isDownloading = false;
-				versionSelected.hasError = true;
 			}
 			
 			unzipArchive();
@@ -124,7 +122,6 @@ package org.apache.flex.packageflexsdk.util
 			{
 				installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT) + e.toString());
 				versionSelected.isDownloading = false;
-				versionSelected.hasError = true;
 			}
 		}
 		
@@ -149,7 +146,6 @@ package org.apache.flex.packageflexsdk.util
 		protected function handleArchiveDownloadError(error:* = null):void
 		{
 			versionSelected.isDownloading = false;
-			versionSelected.hasError = true;
 			
 			installerApacheFlexInstance.logMASH(getByNamedMessage(viewResourceConstants.ERROR_UNABLE_TO_DOWNLOAD_APACHE_ANT));
 			installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.ERROR_UNABLE_TO_DOWNLOAD_APACHE_ANT));
@@ -157,11 +153,11 @@ package org.apache.flex.packageflexsdk.util
 		
 		protected function handleArchiveUnzipComplete(event:Event):void
 		{
-			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_FINISHED_UNZIPPING + _archiveFile.nativePath);
-			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_INSTALLATION_COMPLETE);
-			
 			versionSelected.isDownloading = false;
 			versionSelected.isDownloaded = true;
+			
+			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_FINISHED_UNZIPPING + _archiveFile.nativePath);
+			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_INSTALLATION_COMPLETE);
 			
 			if (_archiveTempDir && _archiveTempDir.exists) _archiveTempDir.deleteDirectory(true);
 			installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
@@ -170,8 +166,8 @@ package org.apache.flex.packageflexsdk.util
 		protected function handleArchiveUnzipError(error:ErrorEvent = null):void
 		{
 			installerApacheFlexInstance.updateActivityStepMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT), StepItem.ERROR);
+			installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT));
 			versionSelected.isDownloading = false;
-			versionSelected.hasError = true;
 		}
 		
 		protected function handleArchiveUntarError(error:ProgressEvent = null):void
@@ -179,17 +175,16 @@ package org.apache.flex.packageflexsdk.util
 			installerApacheFlexInstance.updateActivityStepMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT), StepItem.ERROR);
 			installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT));
 			versionSelected.isDownloading = false;
-			versionSelected.hasError = true;
 		}
 		
 		protected function handleArchiveUntarComplete(event:Event):void
 		{
+			versionSelected.isDownloaded = true;
+			versionSelected.isDownloading = false;
+			
 			installerApacheFlexInstance.updateActivityStepMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT), StepItem.COMPLETE);
 			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_FINISHED_UNTARING + _archiveFile.nativePath);
 			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_INSTALLATION_COMPLETE);
-			
-			versionSelected.isDownloaded = true;
-			versionSelected.isDownloading = false;
 			
 			if (_archiveTempDir && _archiveTempDir.exists) _archiveTempDir.deleteDirectory(true);
 			installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));

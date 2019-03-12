@@ -159,6 +159,7 @@
 			private function startSingleInstallation(item:ComponentVO):void
 			{
 				itemDownloading = item;
+				itemDownloading.hasError = null;
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_FLEX:
@@ -212,6 +213,7 @@
 				if (itemDownloading)
 				{
 					itemDownloading.isDownloading = false;
+					itemDownloading.isSelectedToDownload = false;
 					itemDownloading.hasError = event.value ? event.value as String : null;
 					flush();
 				}
