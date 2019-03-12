@@ -18,7 +18,7 @@
 	<!-- Unchanging the following value will make script build 'locally'. 
 		 Updating this by command-line injection will act script to build at Bamboo.
 		 Expected value for command-line injection are 'true' or 'false' -->
-	<property name="HELPER_IS_DESKTOP" value="${HELPER_IS_DESKTOP}"/>
+	<property name="HELPER_IS_DESKTOP" value="HELPER_IS_DESKTOP"/>
 	
 	<!-- Compilers and Flex SDK configuration -->
 	<xmlproperty file="ApplicationProperties.xml" keeproot="false" semanticattributes="true" prefix="APP_PROPERTIES"/>
@@ -49,8 +49,8 @@
 		<else>
 			<echo>Reading properties from Bamboo Variables</echo>
 			<property name="IsDesktopBuild" value="${HELPER_IS_DESKTOP}"/>
-			<property name="IsDevelopmentBuild" value="${HELPER_IS_DEVELOPMENT_VERSION}"/>
-			<property name="BuildVersion" value="${HELPER_VERSION}"/>
+			<property name="IsDevelopmentBuild" value="${IS_DEVELOPMENT_VERSION}"/>
+			<property name="BuildVersion" value="${BUILD_VERSION}"/>
 			<property name="Is.Signed.Build" value="${IS_SIGNED_BUILD}"/>
 			<property name="certSignedAIR" value="${CERT_WIN_AIR}" />
 			<property name="certSignedAIRPassword" value="${CERT_WIN_AIR_PASS}" />
