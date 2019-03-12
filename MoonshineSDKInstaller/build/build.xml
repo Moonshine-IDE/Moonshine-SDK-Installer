@@ -49,8 +49,8 @@
 		<else>
 			<echo>Reading properties from Bamboo Variables</echo>
 			<property name="IsDesktopBuild" value="${HELPER_IS_DESKTOP}"/>
-			<property name="IsDevelopmentBuild" value="${IS_DEVELOPMENT_VERSION}"/>
-			<property name="BuildVersion" value="${BUILD_VERSION}"/>
+			<property name="IsDevelopmentBuild" value="${HELPER_IS_DEVELOPMENT_VERSION}"/>
+			<property name="BuildVersion" value="${HELPER_VERSION}"/>
 			<property name="Is.Signed.Build" value="${IS_SIGNED_BUILD}"/>
 			<property name="certSignedAIR" value="${CERT_WIN_AIR}" />
 			<property name="certSignedAIRPassword" value="${CERT_WIN_AIR_PASS}" />
