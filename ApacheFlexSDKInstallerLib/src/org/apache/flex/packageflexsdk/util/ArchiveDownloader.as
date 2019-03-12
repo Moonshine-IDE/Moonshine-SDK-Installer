@@ -165,6 +165,7 @@ package org.apache.flex.packageflexsdk.util
 		
 		protected function handleArchiveUnzipError(error:ErrorEvent = null):void
 		{
+			installerApacheFlexInstance.logMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT));
 			installerApacheFlexInstance.updateActivityStepMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT), StepItem.ERROR);
 			installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT));
 			versionSelected.isDownloading = false;
@@ -172,6 +173,7 @@ package org.apache.flex.packageflexsdk.util
 		
 		protected function handleArchiveUntarError(error:ProgressEvent = null):void
 		{
+			installerApacheFlexInstance.logMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT));
 			installerApacheFlexInstance.updateActivityStepMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT), StepItem.ERROR);
 			installerApacheFlexInstance.abortInstallationMASH(getByNamedMessage(viewResourceConstants.STEP_UNZIP_APACHE_ANT));
 			versionSelected.isDownloading = false;
