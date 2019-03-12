@@ -259,6 +259,7 @@
 				{
 					itemDownloading.isDownloaded = true;
 					itemDownloading.isDownloading = false;
+					itemDownloading.isSelectedToDownload = false;
 					itemDownloading.isAlreadyDownloaded = true;
 					
 					if (!HelperConstants.IS_MACOS) onGitSVNInstallWindows(itemDownloading);
