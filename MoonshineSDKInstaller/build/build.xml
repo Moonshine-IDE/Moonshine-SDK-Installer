@@ -15,6 +15,11 @@
 	//==========================================================================
 	-->
 	
+	<!-- Unchanging the following value will make script build 'locally'. 
+		 Updating this by command-line injection will act script to build at Bamboo.
+		 Expected value for command-line injection are 'true' or 'false' -->
+	<property name="HELPER_IS_DESKTOP" value="${HELPER_IS_DESKTOP}"/>
+	
 	<!-- Compilers and Flex SDK configuration -->
 	<xmlproperty file="ApplicationProperties.xml" keeproot="false" semanticattributes="true" prefix="APP_PROPERTIES"/>
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="ant-contrib-0.6.jar"/>
@@ -22,18 +27,6 @@
 	<property name="deploy_dir" value="DEPLOY"/>
 	<property name="debug_dir" value="bin-debug"/>
 	
-	<!-- Determining the run at local system or cloud -->
-	<property name="localOrCloud" value="${svn.revision}"/>
-	<if>
-		<equals arg1="${localOrCloud}" arg2="&#36;&#123;svn.revision}"/>
-		<then>
-			<property name="HELPER_IS_DESKTOP" value="HELPER_IS_DESKTOP"/>
-		</then>
-		<else>
-			<property name="HELPER_IS_DESKTOP" value="${HELPER_IS_DESKTOP}"/>
-		</else>
-	</if>
-
 	<if>
 		<!-- This expected value means its not running on Bamboo -->
 		<equals arg1="${HELPER_IS_DESKTOP}" arg2="HELPER_IS_DESKTOP"/>
