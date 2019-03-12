@@ -111,12 +111,10 @@
 				 toolTip="Version Mismatch"/>
 		<s:Image source="@Embed('/helperResources/images/icoNoteNoLabel.png')"
 				 includeInLayout="{data.hasWarning}" visible="{data.hasWarning}"
-				 toolTip="{data.hasWarning}"
-				 width="50"/>
+				 toolTip="{data.hasWarning}"/>
 		<s:Image source="@Embed('/helperResources/images/icoErrorNoLabel.png')"
 				 includeInLayout="{data.hasError}" visible="{data.hasError}"
-				 toolTip="{data.hasError}"
-				 width="50"/>
+				 toolTip="{data.hasError}"/>
 		<s:Image id="imgDownload"
 				 width="50" buttonMode="true"
 				 source="@Embed('/helperResources/images/icoDownloadNoLabel.png')"
