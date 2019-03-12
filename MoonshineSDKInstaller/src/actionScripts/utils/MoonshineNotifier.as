@@ -10,6 +10,8 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
+	import mx.controls.Alert;
+	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -31,7 +33,7 @@ package actionScripts.utils
 				
 				// save the recent update information
 				var updateXML:XML = toXML();
-				FileUtils.writeToFile(moonshineStorage, '<?xml version="1.0" encoding="utf-8"?>\n'+ updateXML);
+				FileUtils.writeToFile(moonshineStorage, '<?xml version="1.0" encoding="utf-8"?>\n'+ updateXML.toXMLString());
 				
 				// send update notification to Moonshine
 				// mac specific
@@ -45,6 +47,7 @@ package actionScripts.utils
 			var root:XML = <root></root>;
 			var items:XML = <items></items>;
 			var itemXml:XML;
+			var pathXML:XML;
 			
 			for each (var item:ComponentVO in model.components)
 			{
@@ -53,13 +56,15 @@ package actionScripts.utils
 					itemXml = <item></item>;
 					itemXml.@id = item.id;
 					itemXml.@type = item.id;
-					itemXml.appendChild(<path/>);
-					itemXml.children()[0].appendChild(item.installToPath);
+					pathXML = <path></path>;
+					pathXML.appendChild(item.installToPath);
+					itemXml.appendChild(pathXML);
 					items.appendChild(itemXml);
 				}
 			}
 			
 			root.appendChild(items);
+			Alert.show(root.toXMLString());
 			return root;
 		}
 		
