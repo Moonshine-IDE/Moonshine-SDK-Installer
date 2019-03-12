@@ -2219,18 +2219,20 @@ variables are not required because the locations of these pieces are known.
 			{
 				if (usingXML)
 				{
-					// @devsena
-					// MASH
-					// swfobject download error fix from github.com
-					if (flexVersionSelected.prefix == "apache-flex-sdk-") fixSwfObjectGitPathWindows();
-					
 					// original
 					//runInstallerScript();
 					
 					// @devsena
 					// MASH
-					if (flexVersionSelected.prefix == "apache-flex-sdk-") runInstallerScript();
-					else if (flexVersionSelected.prefix == "feathers-sdk-") runInstallerScriptFeathers();
+					// swfobject download error fix from github.com
+					if (flexVersionSelected.prefix == "apache-flex-sdk-") 
+					{
+						fixSwfObjectGitPathWindows();
+					}
+					else if (flexVersionSelected.prefix == "feathers-sdk-") 
+					{
+						runInstallerScriptFeathers();
+					}
 				}
 				else
 				{
@@ -2275,22 +2277,38 @@ variables are not required because the locations of these pieces are known.
 		
 		// @devsena
 		// MASH
-		protected function fixSwfObjectGitPathWindows():void
+		protected function fixSwfObjectGitPathWindows(callback:Boolean=false):void
 		{
 			var file:File = _flexHomeDir.resolvePath("installer.xml");
-			
-			var fs:FileStream = new FileStream();
-			fs.open(file, FileMode.READ);
-			var loadedString:String = fs.readUTFBytes(fs.bytesAvailable);
-			fs.close();
-			
-			loadedString = loadedString.replace("https://github.com", "https://moonshine-ide.com");
-			loadedString = loadedString.replace("swfobject/swfobject/archive", "downloads/swfobject/swfobject/archive");
-			
-			fs = new FileStream();
-			fs.open(file, FileMode.WRITE);
-			fs.writeUTFBytes(loadedString);
-			fs.close();
+			if (file.exists) 
+			{
+				removeEventListener(Event.ENTER_FRAME, checkInstallerFileExist);
+				
+				logMASH("Running script by: "+ file.nativePath);
+				var fs:FileStream = new FileStream();
+				fs.open(file, FileMode.READ);
+				var loadedString:String = fs.readUTFBytes(fs.bytesAvailable);
+				fs.close();
+				
+				loadedString = loadedString.replace("https://github.com", "https://moonshine-ide.com");
+				loadedString = loadedString.replace("swfobject/swfobject/archive", "downloads/swfobject/swfobject/archive");
+				
+				fs = new FileStream();
+				fs.open(file, FileMode.WRITE);
+				fs.writeUTFBytes(loadedString);
+				fs.close();
+				
+				runInstallerScript();
+			}
+			else if (!callback)
+			{
+				addEventListener(Event.ENTER_FRAME, checkInstallerFileExist);
+			}
+		}
+		
+		private function checkInstallerFileExist(event:Event):void
+		{
+			fixSwfObjectGitPathWindows(true);
 		}
 		
 		protected function handleApacheFlexSDKZipFileUnzipError(error:ErrorEvent = null):void
