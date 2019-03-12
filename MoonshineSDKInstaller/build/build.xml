@@ -15,11 +15,6 @@
 	//==========================================================================
 	-->
 	
-	<!-- Unchanging the following value will make script build 'locally'. 
-		 Updating this by command-line injection will act script to build at Bamboo.
-		 Expected value for command-line injection are 'true' or 'false' -->
-	<property name="HELPER_IS_DESKTOP" value="HELPER_IS_DESKTOP"/>
-	
 	<!-- Compilers and Flex SDK configuration -->
 	<xmlproperty file="ApplicationProperties.xml" keeproot="false" semanticattributes="true" prefix="APP_PROPERTIES"/>
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="ant-contrib-0.6.jar"/>
