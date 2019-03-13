@@ -22,5 +22,7 @@ package actionScripts.valueObjects
 		public static var CONFIG_AIR_VERSION:String;
 		public static var WINDOWS_64BIT_DOWNLOAD_URL:String;
 		public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
+		public static var INSTALLER_UPDATE_CHECK_URL:String;
+		public static var IS_DETECTION_IN_PROCESS:Boolean;
 	}
 }

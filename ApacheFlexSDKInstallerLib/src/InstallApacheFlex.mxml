@@ -3399,6 +3399,9 @@ variables are not required because the locations of these pieces are known.
 		{
 			if (cleanedUp)
 			{
+				// @devsena
+				// MASH
+				if (isAbort) dispatchEvent(new GenericEvent(GenericEvent.INSTALL_ABORTED, abortInfo));
 				return;
 			}
 			

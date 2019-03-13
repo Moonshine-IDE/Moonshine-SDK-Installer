@@ -40,14 +40,7 @@
 			
 			protected function onDownloadRequest(event:MouseEvent):void
 			{
-				if (HelperConstants.IS_RUNNING_IN_MOON)
-				{
-					HelperModel.getInstance().moonshineBridge.runOrDownloadSDKInstaller();
-				}
-				else
-				{
-					this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, data, true));
-				}
+				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, data, true));
 			}
 			
 			protected function onOpenMoonshineSettings(event:MouseEvent):void

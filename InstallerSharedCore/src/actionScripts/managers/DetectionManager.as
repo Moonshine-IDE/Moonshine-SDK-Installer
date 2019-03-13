@@ -2,7 +2,8 @@ package actionScripts.managers
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.filesystem.File;
+	import flash.utils.clearTimeout;
+	import flash.utils.setTimeout;
 	
 	import actionScripts.events.HelperEvent;
 	import actionScripts.locator.HelperModel;
@@ -21,6 +22,7 @@ package actionScripts.managers
 		
 		public function detect():void
 		{
+			HelperConstants.IS_DETECTION_IN_PROCESS = true;
 			if (!HelperConstants.IS_MACOS && !environmentUtil)
 			{
 				environmentUtil = new EnvironmentUtils();
@@ -48,6 +50,11 @@ package actionScripts.managers
 			{
 				stepA_checkMoonshineInternal(model.components[i]);
 			}
+			
+			var timeoutValue:uint = setTimeout(function():void{
+				HelperConstants.IS_DETECTION_IN_PROCESS = false;
+				clearTimeout(timeoutValue);
+			}, 3000);
 		}
 		
 		private function stepA_checkMoonshineInternal(item:ComponentVO):void
@@ -99,34 +106,9 @@ package actionScripts.managers
 		
 		private function stepB_checkDefaultInstallLocation(item:ComponentVO):void
 		{
-			var tmpSDKFolder:File = new File(item.installToPath);
-			var pathValidationFileName:String;
-			
 			// 1. named-sdk folder check
-			if (item.installToPath && tmpSDKFolder.exists)
-			{
-				// file-system check inside the named-sdk
-				if (item.pathValidation)
-				{
-					if (item.type == ComponentTypes.TYPE_OPENJAVA) 
-					{
-						pathValidationFileName = HelperConstants.IS_MACOS ? item.pathValidation : item.pathValidation +".exe";
-					}
-					else
-					{
-						pathValidationFileName = item.pathValidation;
-					}
-					
-					if (tmpSDKFolder.resolvePath(pathValidationFileName).exists)
-					{
-						item.isAlreadyDownloaded = true;
-					}
-				}
-				else
-				{
-					item.isAlreadyDownloaded = true;
-				}
-			}
+			if (HelperUtils.isValidSDKDirectoryBy(item.type, item.installToPath, item.pathValidation))
+				item.isAlreadyDownloaded = true;
 			
 			// 2. Windows-only env.variable check
 			if (environmentUtil && !item.isAlreadyDownloaded)

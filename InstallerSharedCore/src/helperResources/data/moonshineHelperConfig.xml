@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
 	<windows64BitUrl>http://moonshine-ide.com/downloads/msdki/windows/MoonshineSDKInstaller_64bit.zip</windows64BitUrl>
+	<installerUpdateCheckUrl>http://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update.xml</installerUpdateCheckUrl>
 	<air version="30.0"/>
 	<packages>
 		<item integrated="true">

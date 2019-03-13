@@ -34,6 +34,25 @@ package actionScripts.utils
 		public static const DATA_FORMAT_BYTEARRAY:String = "dataAsByteArray";
 		public static const IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
 		
+		private static var pathCheckingFile:File;
+		
+		/**
+		 * Creating new File instance everytime
+		 * to detect if exists could be expensive
+		 */
+		public static function isPathExists(value:String):Boolean
+		{
+			if (!pathCheckingFile) pathCheckingFile = new File();
+			try {
+				pathCheckingFile.nativePath = value;
+			} catch (e:Error)
+			{
+				return false;
+			}
+			
+			return pathCheckingFile.exists;
+		}
+		
 		/**
 		 * Validate if a given file is
 		 * text file or binary
@@ -53,9 +72,9 @@ package actionScripts.utils
 		{
 			var fs:FileStream = new FileStream();
 			fs.open(destination, FileMode.WRITE);
-			if (data is ByteArray) fs.writeBytes(data as ByteArray);
+			if (data is XML) fs.writeUTFBytes((data as XML).toXMLString());
 			else if (data is String) fs.writeUTFBytes(data as String);
-			else if (data is XML) fs.writeUTFBytes((data as XML).toXMLString());
+			else if (data is ByteArray) fs.writeBytes(data as ByteArray);
 			else 
 			{
 				trace("Error::Unknown data type on write.");

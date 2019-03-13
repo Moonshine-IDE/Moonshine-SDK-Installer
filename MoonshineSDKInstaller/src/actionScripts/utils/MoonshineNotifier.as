@@ -31,7 +31,7 @@ package actionScripts.utils
 				
 				// save the recent update information
 				var updateXML:XML = toXML();
-				FileUtils.writeToFile(moonshineStorage, '<?xml version="1.0" encoding="utf-8"?>\n'+ updateXML.toXMLString());
+				FileUtils.writeToFile(moonshineStorage, updateXML);
 				
 				// send update notification to Moonshine
 				// mac specific
@@ -42,24 +42,43 @@ package actionScripts.utils
 		
 		private function toXML():XML
 		{
-			var root:XML = <root></root>;
-			var items:XML = <items></items>;
-			var itemXml:XML;
-			var pathXML:XML;
+			var root:XML = new XML(<root/>);
+			var items:XML = new XML(<items/>);
+			
+			// TEST CODE FOR JOEL
+			// SHOULD DELETE ---
+			var testXML:XML = new XML(<root/>);
 			
 			for each (var item:ComponentVO in model.components)
 			{
 				if (item.isAlreadyDownloaded)
 				{
-					itemXml = <item></item>;
+					var itemXml:XML = new XML(<item/>);
 					itemXml.@id = item.id;
 					itemXml.@type = item.id;
-					pathXML = <path></path>;
+					
+					var pathXML:XML = new XML(<path/>);
 					pathXML.appendChild(item.installToPath);
+					
+					var validationXML:XML = new XML(<pathValidation/>);
+					if (item.pathValidation) validationXML.appendChild(item.pathValidation);
+					
 					itemXml.appendChild(pathXML);
+					itemXml.appendChild(validationXML);
 					items.appendChild(itemXml);
 				}
+				
+				// TEST CODE FOR JOEL
+				// SHOULD DELETE ---
+				var tmpItemXml:XML = new XML(<item/>);
+				tmpItemXml.@type = item.id;
+				tmpItemXml.@isAlreadyDownloaded = item.isAlreadyDownloaded ? 'true' : 'false';
+				testXML.appendChild(tmpItemXml);
 			}
+			
+			// TEST CODE FOR JOEL
+			// SHOULD DELETE ---
+			FileUtils.writeToFile(File.applicationStorageDirectory.resolvePath("DataForJoelTest.xml"), testXML);
 			
 			root.appendChild(items);
 			return root;

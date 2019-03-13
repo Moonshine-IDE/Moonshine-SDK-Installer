@@ -2,8 +2,12 @@ package actionScripts.utils
 {
 	import flash.filesystem.File;
 	
+	import mx.utils.StringUtil;
+	
 	import actionScripts.locator.HelperModel;
+	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
+	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
 
 	public class HelperUtils
@@ -88,6 +92,37 @@ package actionScripts.utils
 			if (uv1 > _currentMajor) return true;
 			else if (uv1 >= _currentMajor && uv2 > _currentMinor) return true;
 			else if (uv1 >= _currentMajor && uv2 >= _currentMinor && uv3 > _currentRevision) return true;
+			
+			return false;
+		}
+		
+		public static function isValidSDKDirectoryBy(type:String, originPath:String, validationPath:String=null):Boolean
+		{
+			var pathValidationFileName:String;
+			if (FileUtils.isPathExists(originPath))
+			{
+				// file-system check inside the named-sdk
+				if (validationPath && StringUtil.trim(validationPath).length != 0)
+				{
+					if (type == ComponentTypes.TYPE_OPENJAVA) 
+					{
+						pathValidationFileName = HelperConstants.IS_MACOS ? validationPath : validationPath +".exe";
+					}
+					else
+					{
+						pathValidationFileName = validationPath;
+					}
+					
+					if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+					{
+						return true;
+					}
+				}
+				else
+				{
+					return true;
+				}
+			}
 			
 			return false;
 		}

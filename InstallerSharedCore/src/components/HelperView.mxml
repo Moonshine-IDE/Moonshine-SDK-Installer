@@ -47,6 +47,7 @@
 			private var startupHelper:StartupHelper = new StartupHelper();
 			private var detectionManager:DetectionManager = new DetectionManager();
 			
+			
 			//--------------------------------------------------------------------------
 			//
 			//  PUBLIC API
@@ -65,6 +66,11 @@
 						break;
 					}
 				}
+			}
+			
+			public function checkForUpdate():void
+			{
+				if (model.components && !HelperConstants.IS_DETECTION_IN_PROCESS) detectionManager.detect();
 			}
 			
 			//--------------------------------------------------------------------------
