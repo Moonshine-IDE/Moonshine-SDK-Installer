@@ -7,6 +7,7 @@ package actionScripts.events
 		public static const DOWNLOAD_COMPONENT:String = "DOWNLOAD_COMPONENT";
 		public static const OPEN_MOON_SETTINGS:String = "OPEN_MOON_SETTINGS";
 		public static const COMPONENT_DOWNLOADED:String = "COMPONENT_DOWNLOADED";
+		public static const OPEN_COMPONENT_LICENSE:String = "OPEN_COMPONENT_LICENSE";
 		
 		public var value:Object;
 		

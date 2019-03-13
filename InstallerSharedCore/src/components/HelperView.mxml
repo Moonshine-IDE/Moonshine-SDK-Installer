@@ -7,6 +7,7 @@
 		[Event(name="DOWNLOAD_COMPONENT", type="actionScripts.events.HelperEvent")]
 		[Event(name="OPEN_MOON_SETTINGS", type="actionScripts.events.HelperEvent")]
 		[Event(name="COMPONENT_DOWNLOADED", type="actionScripts.events.HelperEvent")]
+		[Event(name="OPEN_COMPONENT_LICENSE", type="actionScripts.events.HelperEvent")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[

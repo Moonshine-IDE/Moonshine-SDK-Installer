@@ -8,7 +8,6 @@
 			import spark.components.BusyIndicator;
 			
 			import actionScripts.events.HelperEvent;
-			import actionScripts.locator.HelperModel;
 			import actionScripts.valueObjects.HelperConstants;
 			
 			private var busyIndicator:BusyIndicator;

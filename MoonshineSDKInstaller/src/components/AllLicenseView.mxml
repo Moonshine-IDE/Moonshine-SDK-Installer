@@ -10,6 +10,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.CloseEvent;
+			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			
 			import actionScripts.locator.HelperModel;
@@ -23,7 +24,11 @@
 			
 			import renderers.TourDeTreeItemRenderer;
 			
+			[Bindable] public var singleLicenseItem:ComponentVO;
+			[Bindable] public var showAsNonInstallView:Boolean;
+			
 			public var isLicensesAccepted:Boolean;
+			public var confirmHandler:Function;
 			
 			[Bindable] private var copyrightComponentsDataProvider:ArrayCollection = new ArrayCollection();
 			[Bindable] private var currentLicenseLabel:String;
@@ -35,8 +40,32 @@
 			{
 				if (model.components.length == 0) return;
 				
-				if (copyrightComponentsDataProvider.length > 0) return;
-				
+				// load between single or multiple
+				if (singleLicenseItem) loadSingleLicenseItem();
+				else loadAllLicenseItems();
+			}
+			
+			private function loadSingleLicenseItem():void
+			{
+				if (singleLicenseItem.type == ComponentTypes.TYPE_FLEX)
+				{
+					loadAllLicenseItems();
+				}
+				else
+				{
+					addMoreLicenses(singleLicenseItem.type);
+					hgButtons.removeElement(biCopyrights);
+					installComponentsList.callLater(function():void
+					{
+						installComponentsList.expandItem(copyrightComponentsDataProvider[0], true);
+						installComponentsList.selectedItem = copyrightComponentsDataProvider[0].children[0];
+						installComponentsList.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+					});
+				}
+			}
+			
+			private function loadAllLicenseItems():void
+			{
 				// we need to parse different license items
 				// from apache website
 				var flexItem:ComponentVO;
@@ -89,12 +118,11 @@
 						getLocalizedString(comp, "message"), getLocalizedString(comp, "license"),
 						getLocalizedString(comp, "licenseURL"),
 						comp.@id.toString(), comp.@required.toString() == "true");
-					//licensePropertyMap[comp.@property.toString()] = vo;
 					tmpChildrens.addItem(vo);
 				}
 				
 				copyrightComponentsDataProvider.addItem({label:"Apache Flex®", children:tmpChildrens});
-				addMoreLicenses();
+				if (!singleLicenseItem) addMoreLicenses();
 			}
 			
 			private function handleCopyrightXMLError(event:Event):void
@@ -131,13 +159,14 @@
 				return "";
 			}
 			
-			private function addMoreLicenses():void
+			private function addMoreLicenses(byType:String=""):void
 			{
 				var tmpChildrens:ArrayCollection;
 				var installComponent:InstallerComponentVO;
 				for each (var item:ComponentVO in model.components)
 				{
-					if (item.type != ComponentTypes.TYPE_FLEX)
+					if ((item.type != ComponentTypes.TYPE_FLEX) && 
+						(byType == "" || byType == item.type))
 					{
 						tmpChildrens = new ArrayCollection();
 						installComponent = new InstallerComponentVO(item.installToPath.split(File.separator).pop(),
@@ -145,6 +174,8 @@
 							item.licenseUrl, "", true);
 						tmpChildrens.addItem(installComponent);
 						copyrightComponentsDataProvider.addItem({label:item.title, children:tmpChildrens});
+						
+						if (byType != "") break;
 					}
 				}
 			}
@@ -182,7 +213,7 @@
 			protected function onAcceptLicenses(event:MouseEvent):void
 			{
 				isLicensesAccepted = true;
-				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				confirmHandler(singleLicenseItem ? singleLicenseItem : null);
 				onWindowClose(null);
 			}
 			
@@ -229,9 +260,10 @@
 	<s:controlBarContent>
 		<s:HGroup id="hgButtons" 
 				  width="100%" horizontalAlign="center" verticalAlign="middle">
-			<s:Button label="I ACCEPT THE LICENSE AGREEMENTS AND INSTALL ALL"
+			<s:Button label="I ACCEPT THE LICENSE AGREEMENTS AND INSTALL{singleLicenseItem ? '' : ' ALL'}"
 					  skinClass="assets.skins.DarkButtonSkin"
-					  click="onAcceptLicenses(event)"/>
+					  click="onAcceptLicenses(event)"
+					  includeInLayout="{!showAsNonInstallView}" visible="{!showAsNonInstallView}"/>
 			<s:BusyIndicator id="biCopyrights"/>
 		</s:HGroup>
 	</s:controlBarContent>

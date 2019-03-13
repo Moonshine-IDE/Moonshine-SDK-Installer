@@ -10,7 +10,7 @@
 			import spark.components.BusyIndicator;
 			
 			import actionScripts.events.HelperEvent;
-			import actionScripts.locator.HelperModel;
+			import actionScripts.valueObjects.ComponentTypes;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
@@ -62,7 +62,8 @@
 			
 			protected function onLicenseClick(event:MouseEvent):void
 			{
-				navigateToURL(new URLRequest(data.licenseUrl), "_blank");
+				if (data.type == ComponentTypes.TYPE_FLEX) this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, data, true));
+				else navigateToURL(new URLRequest(data.licenseUrl), "_blank");
 			}
 			
 		]]>
