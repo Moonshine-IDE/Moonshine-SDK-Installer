@@ -10,8 +10,6 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
-	import mx.controls.Alert;
-	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -64,7 +62,6 @@ package actionScripts.utils
 			}
 			
 			root.appendChild(items);
-			Alert.show(root.toXMLString());
 			return root;
 		}
 		
