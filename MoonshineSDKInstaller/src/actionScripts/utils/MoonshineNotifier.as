@@ -45,11 +45,7 @@ package actionScripts.utils
 			var root:XML = new XML(<root/>);
 			var items:XML = new XML(<items/>);
 			
-			// TEST CODE FOR JOEL
-			// SHOULD DELETE ---
-			var testXML:XML = new XML(<root/>);
-			
-			for each (var item:ComponentVO in model.components)
+			for each (var item:ComponentVO in model.components.source)
 			{
 				if (item.isAlreadyDownloaded)
 				{
@@ -67,18 +63,7 @@ package actionScripts.utils
 					itemXml.appendChild(validationXML);
 					items.appendChild(itemXml);
 				}
-				
-				// TEST CODE FOR JOEL
-				// SHOULD DELETE ---
-				var tmpItemXml:XML = new XML(<item/>);
-				tmpItemXml.@type = item.id;
-				tmpItemXml.@isAlreadyDownloaded = item.isAlreadyDownloaded ? 'true' : 'false';
-				testXML.appendChild(tmpItemXml);
 			}
-			
-			// TEST CODE FOR JOEL
-			// SHOULD DELETE ---
-			FileUtils.writeToFile(File.applicationStorageDirectory.resolvePath("DataForJoelTest.xml"), testXML);
 			
 			root.appendChild(items);
 			return root;
