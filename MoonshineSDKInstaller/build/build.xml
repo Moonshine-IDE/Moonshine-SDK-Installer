@@ -211,9 +211,6 @@
 	   		<arg line="-storepass '${certSelfSignedPassword}'" />
 			<arg line="-tsa 'http://timestamp.comodoca.com/rfc3161'" />
 	   		<arg line="-target bundle"/>
-	   		<!--arg line="-storetype pkcs12" />
-	   		<arg line="-keystore '${certSignedWindowsBinary}'" />
-	   		<arg line="-storepass '${certSignedWindowsBinaryPassword}'" /-->
 	   		<arg line="${desktopBinaryFilename}" />
 	   		<arg line="'${desktopApplicationDescriptor}'" />
 	   		<arg line="'${swfFilename}'" />
