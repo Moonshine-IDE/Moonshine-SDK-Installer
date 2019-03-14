@@ -81,7 +81,7 @@
 					 maxDisplayedLines="2" paddingTop="10"
 					 styleName="uiTextRendererDescription"/>
 			<s:Label text="License Agreement"
-					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0000ff"
+					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
 					 buttonMode="true" click="onLicenseClick(event)"/>
 		</s:VGroup>
 		<s:HGroup width="100%" verticalAlign="middle" horizontalAlign="right">

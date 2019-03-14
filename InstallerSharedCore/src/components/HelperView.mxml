@@ -17,6 +17,7 @@
 			import actionScripts.events.HelperEvent;
 			import actionScripts.interfaces.IHelperMoonshineBridge;
 			import actionScripts.locator.HelperModel;
+			import actionScripts.managers.CookieManager;
 			import actionScripts.managers.DetectionManager;
 			import actionScripts.managers.StartupHelper;
 			import actionScripts.utils.EnvironmentUtils;
@@ -91,6 +92,8 @@
 				model.moonshineBridge = dependencyCheckUtil;
 				detectionManager.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
 				
+				CookieManager.getInstance().loadLocalStorage();
+				
 				attachStartupHelperListeners(true);
 				startupHelper.setLocalPathConfig();
 				startupHelper.loadMoonshineConfig();
@@ -129,8 +132,8 @@
 				
 				if (rgType.selectedValue == "feature")
 				{
-					model.packages.filterFunction = filterPackages;
-					model.packages.refresh();
+					/*model.packages.filterFunction = filterPackages;
+					model.packages.refresh();*/
 				}
 				else
 				{
@@ -207,7 +210,8 @@
 			  verticalAlign="middle">
 		<s:CheckBox id="cbFilter" 
 					label="Only show features that need setup"
-					change="onFilterChange(event)"/>
+					change="onFilterChange(event)"
+					enabled="{rgType.selectedValue == 'software'}"/>
 		<s:Spacer width="100%"/>
 		<s:RadioButton groupName="rgType" value="feature" label="By Feature"
 					   selected="true"/>

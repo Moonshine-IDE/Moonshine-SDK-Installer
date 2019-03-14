@@ -14,6 +14,8 @@ package actionScripts.valueObjects
 		public static const WARNING:String = "warning";
 		public static const START:String = "start";
 		public static const MOONSHINE_NOTIFIER_FILE_NAME:String = "MoonshineHelperNewUpdate.xml";
+		public static const INSTALLER_COOKIE:String = "moonshine-installer-local";
+		public static const DEFAULT_SDK_FOLDER_NAME:String = "MoonshineSDKs";
 		
 		public static var IS_MACOS:Boolean;
 		public static var IS_RUNNING_IN_MOON:Boolean;
@@ -24,5 +26,8 @@ package actionScripts.valueObjects
 		public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 		public static var INSTALLER_UPDATE_CHECK_URL:String;
 		public static var IS_DETECTION_IN_PROCESS:Boolean;
+		public static var CUSTOM_PATH_SDK_WINDOWS:String;
+		public static var IS_CUSTOM_WINDOWS_PATH:Boolean;
+		public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Boolean;
 	}
 }

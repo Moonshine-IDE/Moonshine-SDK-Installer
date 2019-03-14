@@ -128,5 +128,23 @@ package actionScripts.utils
 			
 			return false;
 		}
+		
+		public static function updatePathWithCustomWindows(path:String):void
+		{
+			// probable termination
+			if (path == HelperConstants.CUSTOM_PATH_SDK_WINDOWS) return;
+			
+			// update default directory location
+			HelperConstants.IS_CUSTOM_WINDOWS_PATH = true;
+			HelperConstants.CUSTOM_PATH_SDK_WINDOWS = path;
+			HelperConstants.DEFAULT_INSTALLATION_PATH = new File(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
+			
+			// update target location for each components
+			for each (var item:ComponentVO in model.components.source)
+			{
+				item.installToPath = HelperConstants.CUSTOM_PATH_SDK_WINDOWS +  
+					item.installToPath.substring(item.installToPath.indexOf(HelperConstants.DEFAULT_SDK_FOLDER_NAME) + HelperConstants.DEFAULT_SDK_FOLDER_NAME.length);
+			}
+		}
 	}
 }

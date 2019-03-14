@@ -2,7 +2,8 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="onComplete(event)" xmlns:components="components.*" xmlns:controls="ws.tink.spark.controls.*"
+		 creationComplete="onComplete(event)"
+		 xmlns:components="components.*" xmlns:controls="ws.tink.spark.controls.*"
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
@@ -11,6 +12,7 @@
 			
 			import actionScripts.events.HelperEvent;
 			import actionScripts.locator.HelperModel;
+			import actionScripts.managers.CookieManager;
 			import actionScripts.managers.GitSVNDetector;
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
@@ -40,11 +42,13 @@
 			//
 			//--------------------------------------------------------------------------
 			
+			[Bindable] private var sdkPathMessage:String;
+			[Bindable] private var isDownloadInProgress:Boolean;
+			
 			private var model:HelperModel = HelperModel.getInstance();
 			private var packageLists:Array = [];
 			private var archiveDownloader:ArchiveDownloader;
 			private var viewResourceConstants:ViewResourceConstants;
-			private var isDownloadInProgress:Boolean;
 			private var itemDownloading:ComponentVO;
 			
 			private var _moonshineNotifier:MoonshineNotifier;
@@ -90,6 +94,9 @@
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_FINISH, onInstallationFinished, false, 0, true);
 				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
 				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
+				
+				sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS : 
+					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath
 			}
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
@@ -122,6 +129,12 @@
 			
 			private function prepareBeforeDownloads():void
 			{
+				// save custom path as necessary
+				if (!HelperConstants.IS_MACOS && HelperConstants.CUSTOM_PATH_SDK_WINDOWS)
+				{
+					CookieManager.getInstance().setWindowsCustomPath(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
+				}
+				
 				// create root directory
 				if (!HelperConstants.DEFAULT_INSTALLATION_PATH.exists) HelperConstants.DEFAULT_INSTALLATION_PATH.createDirectory();
 				
@@ -172,6 +185,7 @@
 				{
 					isDownloadInProgress = false;
 					progressBar.visible = false;
+					HelperConstants.IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH = false;
 				}
 			}
 			
@@ -351,6 +365,28 @@
 				}
 			}
 			
+			protected function onWindowsCustomPathRequest(event:MouseEvent):void
+			{
+				var customPath:File = new File();
+				customPath.addEventListener(Event.SELECT, onSelectHandler);
+				customPath.addEventListener(Event.CANCEL, onCancelHandler);
+				customPath.browseForDirectory("Select SDK Location");
+				
+				/*
+				*@local
+				*/
+				function onSelectHandler(event:Event):void
+				{
+					HelperUtils.updatePathWithCustomWindows(sdkPathMessage = (event.target as File).resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME).nativePath);
+					onCancelHandler(event);
+				}
+				function onCancelHandler(event:Event):void
+				{
+					event.target.removeEventListener(Event.SELECT, onSelectHandler);
+					event.target.removeEventListener(Event.CANCEL, onCancelHandler);
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -387,15 +423,31 @@
 							   DOWNLOAD_COMPONENT="onDownloadAComponentRequested(event)"
 							   OPEN_COMPONENT_LICENSE="onOpenAComponentLicenseRequested(event)"
 							   isRunningInsideMoonshine="false" paddingBottom="10"/>
-		<controls:ProgressBar id="progressBar"
-							  width="60%" height="10"
-							  horizontalCenter="0" verticalCenter="0"
-							  visible="false"/>
-		<s:Label id="lblLastMessage"
-				 textAlign="center"
-				 width="70%" maxDisplayedLines="5"
-				 horizontalCenter="0" verticalCenter="0"
-				 visible="false"/>
+		<s:VGroup width="100%"
+				  verticalAlign="middle" horizontalAlign="center"
+				  includeInLayout="{isDownloadInProgress}" visible="{isDownloadInProgress}">
+			<controls:ProgressBar id="progressBar"
+								  width="60%" height="10"
+								  horizontalCenter="0" verticalCenter="0"
+								  visible="false"/>
+			<s:Label id="lblLastMessage"
+					 textAlign="center"
+					 width="70%" maxDisplayedLines="5"
+					 horizontalCenter="0" verticalCenter="0"
+					 visible="false"/>
+		</s:VGroup>
+		<s:HGroup width="100%" height="28"
+				  horizontalAlign="center" verticalAlign="middle"
+				  includeInLayout="{!isDownloadInProgress}" visible="{!isDownloadInProgress}">
+			<s:Label text="Default SDK Location: {sdkPathMessage}"
+					 maxDisplayedLines="2"
+					 styleName="uiTextRendererDescription"/>
+			<s:Label text="Change"
+					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
+					 buttonMode="true" click="onWindowsCustomPathRequest(event)"
+					 includeInLayout="{HelperConstants.IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH}"
+					 visible="{HelperConstants.IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH}"/>
+		</s:HGroup>
 	</s:VGroup>
 	
 	<s:Group width="100%" height="70">

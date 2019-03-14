@@ -159,7 +159,15 @@ package org.apache.flex.packageflexsdk.util
 			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_FINISHED_UNZIPPING + _archiveFile.nativePath);
 			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_INSTALLATION_COMPLETE);
 			
-			if (_archiveTempDir && _archiveTempDir.exists) _archiveTempDir.deleteDirectory(true);
+			if (_archiveTempDir && _archiveTempDir.exists) 
+			{
+				try{
+					_archiveTempDir.deleteDirectory(true);
+				} catch (e:Error)
+				{
+					_archiveTempDir.deleteDirectoryAsync(true);
+				}
+			}
 			installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
 		}
 		
@@ -188,7 +196,15 @@ package org.apache.flex.packageflexsdk.util
 			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_FINISHED_UNTARING + _archiveFile.nativePath);
 			installerApacheFlexInstance.logMASH(viewResourceConstants.INFO_INSTALLATION_COMPLETE);
 			
-			if (_archiveTempDir && _archiveTempDir.exists) _archiveTempDir.deleteDirectory(true);
+			if (_archiveTempDir && _archiveTempDir.exists) 
+			{
+				try{
+					_archiveTempDir.deleteDirectory(true);
+				} catch (e:Error)
+				{
+					_archiveTempDir.deleteDirectoryAsync(true);
+				}
+			}
 			installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
 		}
 		
