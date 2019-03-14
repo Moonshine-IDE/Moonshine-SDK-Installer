@@ -16,16 +16,18 @@ package actionScripts.utils
 		
 		public static function getComponentById(id:String):ComponentVO
 		{
-			for (var i:int; i < model.components.length; i++)
+			// go by source as collection can be in filtered state
+			for (var i:int; i < model.components.source.length; i++)
 			{
-				if (model.components[i].id == id) return model.components[i];
+				if (model.components.source[i].id == id) return model.components.source[i];
 			}
 			return null;
 		}
 		
 		public static function getComponentByType(type:String):ComponentVO
 		{
-			for each (var item:ComponentVO in model.components)
+			// go by source as collection can be in filtered state
+			for each (var item:ComponentVO in model.components.source)
 			{
 				if (item.type == type)
 				{

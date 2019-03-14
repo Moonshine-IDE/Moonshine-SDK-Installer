@@ -2,7 +2,7 @@
 <config>
 	<windows64BitUrl>http://moonshine-ide.com/downloads/msdki/windows/MoonshineSDKInstaller_64bit.zip</windows64BitUrl>
 	<installerUpdateCheckUrl>http://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update.xml</installerUpdateCheckUrl>
-	<air version="30.0"/>
+	<air version="32.0"/>
 	<packages>
 		<item integrated="true">
 			<title>Project Management</title>

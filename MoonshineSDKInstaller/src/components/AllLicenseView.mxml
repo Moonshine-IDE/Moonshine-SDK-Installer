@@ -69,7 +69,7 @@
 				// we need to parse different license items
 				// from apache website
 				var flexItem:ComponentVO;
-				for each (var item:ComponentVO in model.components)
+				for each (var item:ComponentVO in model.components.source)
 				{
 					if (item.type == ComponentTypes.TYPE_FLEX)
 					{
@@ -163,7 +163,7 @@
 			{
 				var tmpChildrens:ArrayCollection;
 				var installComponent:InstallerComponentVO;
-				for each (var item:ComponentVO in model.components)
+				for each (var item:ComponentVO in model.components.source)
 				{
 					if ((item.type != ComponentTypes.TYPE_FLEX) && 
 						(byType == "" || byType == item.type))

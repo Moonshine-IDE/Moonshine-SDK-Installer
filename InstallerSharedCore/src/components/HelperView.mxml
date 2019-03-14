@@ -57,7 +57,7 @@
 			
 			public function updateComponentStatusAsDownloaded(id:String, path:String=null):void
 			{
-				for each (var item:ComponentVO in model.components)
+				for each (var item:ComponentVO in model.components.source)
 				{
 					if (item.id == id)
 					{

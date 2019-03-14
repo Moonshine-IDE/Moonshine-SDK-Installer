@@ -46,9 +46,10 @@ package actionScripts.managers
 		
 		private function startDetectionProcess():void
 		{
-			for (var i:int; i < model.components.length; i++)
+			// go by source as collection can be in filtered state
+			for (var i:int; i < model.components.source.length; i++)
 			{
-				stepA_checkMoonshineInternal(model.components[i]);
+				stepA_checkMoonshineInternal(model.components.source[i]);
 			}
 			
 			var timeoutValue:uint = setTimeout(function():void{

@@ -106,7 +106,7 @@
 			private function proceedAllInstallation():void
 			{
 				// generate list of downloads
-				for each (var item:ComponentVO in model.components)
+				for each (var item:ComponentVO in model.components.source)
 				{
 					if (!item.isAlreadyDownloaded)
 					{
@@ -129,7 +129,7 @@
 				var sdkFolderName:String;
 				
 				// generate sub-folders
-				for each (var item:ComponentVO in model.components)
+				for each (var item:ComponentVO in model.components.source)
 				{
 					switch (item.type)
 					{

@@ -27,7 +27,7 @@ package actionScripts.managers
 			else
 			{
 				// Windows download directory
-				HelperConstants.DEFAULT_INSTALLATION_PATH = File.userDirectory.resolvePath("MoonshineSDKs");
+				HelperConstants.DEFAULT_INSTALLATION_PATH = File.documentsDirectory.resolvePath("MoonshineSDKs");
 			}
 		}
 		
