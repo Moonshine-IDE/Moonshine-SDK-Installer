@@ -207,10 +207,13 @@
 		<java jar="${adt_path}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
-			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
-	   		<arg line="-storepass '${certSelfSignedPassword}'" />
+			<arg line="-keystore '${certSelfSigned}'" />
+			<arg line="-storepass '${certSelfSignedPassword}'" />
 			<arg line="-tsa 'http://timestamp.comodoca.com/rfc3161'" />
 	   		<arg line="-target bundle"/>
+			<arg line="-storetype pkcs12" />
+	   		<arg line="-keystore '${certSignedWindowsBinary}'" />
+	   		<arg line="-storepass '${certSignedWindowsBinaryPassword}'" />
 	   		<arg line="${desktopBinaryFilename}" />
 	   		<arg line="'${desktopApplicationDescriptor}'" />
 	   		<arg line="'${swfFilename}'" />
@@ -234,8 +237,8 @@
 		<java jar="${adt_path}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
-			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
-	   		<arg line="-storepass '${certSelfSignedPassword}'" />
+			<arg line="-keystore '${certSelfSigned}'" />
+			<arg line="-storepass '${certSelfSignedPassword}'" />
 			<arg line="-tsa 'http://timestamp.comodoca.com/rfc3161'" />
 	   		<arg line="-target bundle"/>
 	   		<arg line="${desktopBinaryFilename}" />
@@ -455,20 +458,20 @@
 			</then>
 			<else>
 				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}_64bit"/>
+				<if>
+					<equals arg1="${Is.Signed.Build}" arg2="true"/>
+					<then>
+						<copy file="${certSignedWindowsBinary}" todir="${debug_dir}" overwrite="true"/>
+						 <script language="javascript">
+						  	arr = project.getProperty('certSignedWindowsBinary').split('/');
+						  	project.setProperty('certSignedWindowsBinary', project.getProperty('debug_dir') + '/' + arr[arr.length - 1]);
+						 </script>
+					</then>
+				</if>
 			</else>
 		</if>
 
-		<!-- Check if the self-signed certificate exists -->
-		<available file="${certSelfSigned}" property="certSelfSigned.exists" />
-		<if>
-			<equals arg1="${certSelfSigned.exists}" arg2="true"/>
-			<then>
-				<copy file="${certSelfSigned}" todir="${debug_dir}" overwrite="true"/>
-			</then>
-			<else>
-				<antcall target="createCertificate"></antcall>
-			</else>
-		</if>
+		<copy file="${certSelfSigned}" todir="${debug_dir}" overwrite="true"/>
 		
 		<replaceregexp file="${desktopApplicationDescriptor}" match="filenameToBeReplacedByANT" replace="${executableName}" />
 		<replaceregexp file="${desktopApplicationDescriptor}" match="nameToBeReplacedByANT" replace="${applicationName} ${BuildVersion}" encoding="utf-8" />
