@@ -37,6 +37,11 @@
 			public var environmentUtil:EnvironmentUtils;
 			public var isRunningInsideMoonshine:Boolean;
 			
+			public function get isConfigurationLoaded():Boolean
+			{
+				return (model.components != null);
+			}
+			
 			//--------------------------------------------------------------------------
 			//
 			//  PRIVATE VARIABLES
