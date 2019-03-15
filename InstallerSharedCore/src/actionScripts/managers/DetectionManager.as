@@ -127,17 +127,30 @@ package actionScripts.managers
 							{
 								item.oldInstalledVersion = environmentUtil.environments.FLEX_HOME.version;
 							}
+							item.installToPath = environmentUtil.environments.FLEX_HOME.path.nativePath;
 							item.isAlreadyDownloaded = true;
 						}
 						break;
 					case ComponentTypes.TYPE_ANT:
-						if (environmentUtil.environments.ANT_HOME) item.isAlreadyDownloaded = true;
+						if (environmentUtil.environments.ANT_HOME) 
+						{
+							item.installToPath = environmentUtil.environments.ANT_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
 						break;
 					case ComponentTypes.TYPE_MAVEN:
-						if (environmentUtil.environments.MAVEN_HOME) item.isAlreadyDownloaded = true;
+						if (environmentUtil.environments.MAVEN_HOME) 
+						{
+							item.installToPath = environmentUtil.environments.MAVEN_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
-						if (environmentUtil.environments.JAVA_HOME) item.isAlreadyDownloaded = true;
+						if (environmentUtil.environments.JAVA_HOME) 
+						{
+							item.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
 						break;
 				}
 			}

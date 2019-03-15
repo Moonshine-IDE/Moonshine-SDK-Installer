@@ -72,7 +72,11 @@
 			
 			public function checkForUpdate():void
 			{
-				if (model.components && !HelperConstants.IS_DETECTION_IN_PROCESS) detectionManager.detect();
+				if (model.components && !HelperConstants.IS_DETECTION_IN_PROCESS) 
+				{
+					detectionManager.environmentUtil = environmentUtil;
+					detectionManager.detect();
+				}
 			}
 			
 			//--------------------------------------------------------------------------
