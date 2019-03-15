@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" 
-		  xmlns:mx="library://ns.adobe.com/flex/mx" width="500" height="200">
+<!--
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2016 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%">
 	<fx:Metadata>
 		[Event( name="UPDATEYES" )]
 		[Event( name="UPDATENO" )]
@@ -20,27 +42,47 @@
 			[Bindable] public var downlaoding			: Boolean;
 			[Bindable] public var updater				: NativeApplicationUpdater;
 			
+			[Embed('/assets/images/imgInstall.png')]
+			[Bindable] private var imgInstall:Class;
+			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
 	
-	<s:layout>
-		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
-	</s:layout>
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="#000000" alpha=".3"/>
+		</s:fill>    		
+	</s:Rect>
 	
-	<s:Image source="@Embed('/assets/images/imgInstall.png')"/>
-	<s:VGroup>
-		<s:Label text="Updates:"/>
-		<s:Label text="New version ({updater.updateVersion}) is available."/>
-		<s:Label text="Do you want to download it and install?"/>
-		<mx:ProgressBar id="prgBar" source="{updater}" label="{(downlaoding)?'Downloading %3%':''}" alpha="{(downlaoding)?1:.3}" />
-		<s:HGroup width="100%">
-			<s:Button label="YES" 
-					  click="dispatchEvent(new Event('UPDATEYES')); downlaoding=true; btnCancel.percentWidth=40" enabled="{!downlaoding}"
-					  width="30%"/>
-			<s:Button id="btnCancel" 
-					  label="{(!downlaoding)?'NO':'CANCEL'}"
-					  click="(downlaoding)?dispatchEvent(new Event('UPDATECANCEL')):dispatchEvent(new Event('UPDATENO'))"
-					  width="30%"/>
+	<s:BorderContainer id="bodyContainer" 
+					   width="80%" height="80%"
+					   verticalCenter="0" horizontalCenter="0"
+					   borderVisible="false" backgroundColor="#e1e1e1">
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle"/>
+		</s:layout>
+		<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+			<s:Image source="{imgInstall}"/>
+			<s:VGroup>
+				<s:Label text="Updates:"
+						 styleName="dashboardLabel"/>
+				<s:Label text="New version ({updater.updateVersion}) is available."
+						 styleName="dashboardLabel"/>
+				<s:Label text="Do you want to download it and install?"
+						 styleName="dashboardLabel"/>
+				<mx:ProgressBar id="prgBar" source="{updater}" label="{(downlaoding)?'Downloading %3%':''}" alpha="{(downlaoding)?1:.3}" />
+				<s:HGroup width="100%">
+					<s:Button label="YES" 
+							  click="dispatchEvent(new Event('UPDATEYES'))" enabled="{!downlaoding}"
+							  width="60" emphasized="true"/>
+					<s:Button label="{(!downlaoding)?'NO':'CANCEL'}"
+							  click="(downlaoding)?dispatchEvent(new Event('UPDATECANCEL')):dispatchEvent(new Event('UPDATENO'))"
+							  width="60"/>
+				</s:HGroup>
+			</s:VGroup>
 		</s:HGroup>
-	</s:VGroup>
-</s:Window>
+	</s:BorderContainer>
+</s:Group>

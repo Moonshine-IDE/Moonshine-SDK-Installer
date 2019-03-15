@@ -10,12 +10,11 @@
 			import mx.events.FlexEvent;
 			
 			import actionScripts.ui.menu.MenuManager;
+			import actionScripts.valueObjects.HelperConstants;
 			
 			import components.AboutDialog;
-			import components.UpdaterView;
 			
 			//private var installerView:MoonshineAppStoreHelperLibMain;
-			private var updaterView:UpdaterView;
 			private var aboutView:AboutDialog;
 			private var menuManager:MenuManager;
 			private var appVersion:String;
@@ -31,8 +30,8 @@
 			private function onAppAddedToStage(event:Event):void
 			{
 				var win : NativeWindow = stage.nativeWindow;
-				win.x = (Capabilities.screenResolutionX - win.width) / 2;
-				win.y = (Capabilities.screenResolutionY - win.height) / 2;
+				win.x = (Screen.mainScreen.visibleBounds.width - win.width)/2;
+				win.y = (Screen.mainScreen.visibleBounds.height - win.height)/2;
 				
 				menuManager = new MenuManager();
 				menuManager.addEventListener("EVENT_ABOUT", onAboutWindow, false, 0, true);
@@ -41,22 +40,7 @@
 			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
-				//updater.initialize();
-			}
-			
-			private function onUpdateFound():void
-			{
-				updaterView = new UpdaterView;
-				updaterView.updater = updater;
-				updaterView.downlaoding = downlaoding;
-				updaterView.resizable = updaterView.maximizable = false;
-				updaterView.alwaysInFront = true;
-				updaterView.addEventListener("UPDATEYES", btnYes_clickHandler);
-				updaterView.addEventListener("UPDATENO", btnNo_clickHandler);
-				updaterView.addEventListener("UPDATECANCEL", btnCancel_clickHandler);
-				updaterView.open();
-				
-				updaterView.move((Screen.mainScreen.bounds.width - updaterView.width)/2, (Screen.mainScreen.bounds.height - updaterView.height)/2);
+				if (HelperConstants.IS_MACOS) updater.initialize();
 			}
 			
 			private function onAboutWindow(event:Event):void
@@ -87,7 +71,6 @@
 			protected function onApplicationClosing(event:Event):void
 			{
 				if (aboutView) aboutView.close();
-				if (updaterView && !updaterView.closed) updaterView.close();
 			}
 			
 		]]>
@@ -95,7 +78,7 @@
 	<fx:Script source="actionScripts/utils/AutoUpdater.as"/>
 	<fx:Style source="/assets/styles/InstallApacheFlexStyle.css"/>
 	<fx:Declarations>
-		<nativeApplicationUpdater:NativeApplicationUpdater id="updater" updateURL="https://moonshine-ide.com/downloads/MoonshineAppStoreHelperConfig.xml"
+		<nativeApplicationUpdater:NativeApplicationUpdater id="updater" updateURL="http://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update.xml"
 														   initialized="updater_initializedHandler(event)"
 														   updateStatus="updater_updateStatusHandler(event)"
 														   error="updater_errorHandler(event)"
@@ -103,9 +86,10 @@
 														   updateError="updater_errorHandler(event)"/>
 	</fx:Declarations>
 	
-	<s:layout>
-		<s:VerticalLayout/>
-	</s:layout>
-	<!--<components:Main width="100%" height="100%"/>-->
 	<components:HelperInstaller width="100%" height="100%"/>
+	
+	<components:UpdaterView width="100%" height="100%"
+							includeInLayout="{isUpdater}" visible="{isUpdater}"
+							updater="{updater}" downlaoding="{downlaoding}"
+							UPDATEYES="btnYes_clickHandler(event)" UPDATENO="btnNo_clickHandler(event)" UPDATECANCEL="btnCancel_clickHandler(event)"/>
 </s:WindowedApplication>

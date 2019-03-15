@@ -1,7 +1,5 @@
 package actionScripts.extSources.nativeApplicationUpdater
 {
-	import actionScripts.extSources.nativeApplicationUpdater.utils.HdiutilHelper;
-	
 	import flash.desktop.NativeApplication;
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
@@ -21,6 +19,8 @@ package actionScripts.extSources.nativeApplicationUpdater
 	import flash.utils.setTimeout;
 	
 	import mx.controls.Alert;
+	
+	import actionScripts.extSources.nativeApplicationUpdater.utils.HdiutilHelper;
 	
 	import air.update.events.DownloadErrorEvent;
 	import air.update.events.StatusUpdateErrorEvent;
@@ -110,6 +110,12 @@ package actionScripts.extSources.nativeApplicationUpdater
 		
 		protected var _currentState:String = UNINITIALIZED;
 		
+		protected var _currentMajor:int = -1;
+		
+		protected var _currentMinor:int = -1;
+		
+		protected var _currentRevision:int = -1;
+		
 		protected var updateDescriptorLoader:URLLoader;
 		
 		protected var os:String = Capabilities.os.toLowerCase();
@@ -128,39 +134,39 @@ package actionScripts.extSources.nativeApplicationUpdater
 		{
 			/*if (currentState == UNINITIALIZED)
 			{*/
-				hideAlert = _hideAlert;
-				currentState = INITIALIZING;
-				
-				var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
-				var xmlns:Namespace = new Namespace(applicationDescriptor.namespace());
-				
-				if (xmlns.uri == "http://ns.adobe.com/air/application/2.1")
-					currentVersion = applicationDescriptor.xmlns::version;
+			hideAlert = _hideAlert;
+			currentState = INITIALIZING;
+			
+			var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
+			var xmlns:Namespace = new Namespace(applicationDescriptor.namespace());
+			
+			if (xmlns.uri == "http://ns.adobe.com/air/application/2.1")
+				currentVersion = applicationDescriptor.xmlns::version;
+			else
+				currentVersion = applicationDescriptor.xmlns::versionNumber;
+			
+			if (os.indexOf("win") > -1)
+			{
+				installerType = "exe";
+			}
+			else if (os.indexOf("mac") > -1)
+			{
+				installerType = "pkg";
+			}
+			else if (os.indexOf("linux") > -1)
+			{
+				if ((new File("/usr/bin/dpkg")).exists)
+					installerType = "deb";
 				else
-					currentVersion = applicationDescriptor.xmlns::versionNumber;
-				
-				if (os.indexOf("win") > -1)
-				{
-					installerType = "exe";
-				}
-				else if (os.indexOf("mac") > -1)
-				{
-					installerType = "dmg";
-				}
-				else if (os.indexOf("linux") > -1)
-				{
-					if ((new File("/usr/bin/dpkg")).exists)
-						installerType = "deb";
-					else
-						installerType = "rpm";
-				}
-				else
-				{
-					dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, "Not supported os type!", UpdaterErrorCodes.ERROR_9000));
-				}
-				
-				currentState = READY;
-				dispatchEvent(new UpdateEvent(UpdateEvent.INITIALIZED));
+					installerType = "rpm";
+			}
+			else
+			{
+				dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, "Not supported os type!", UpdaterErrorCodes.ERROR_9000));
+			}
+			
+			currentState = READY;
+			dispatchEvent(new UpdateEvent(UpdateEvent.INITIALIZED));
 			//}
 		}
 		
@@ -243,22 +249,9 @@ package actionScripts.extSources.nativeApplicationUpdater
 			
 			updateDescriptor = new XML(updateDescriptorLoader.data);
 			
-			if (updateDescriptor.namespace() == UPDATE_XMLNS_1_0)
-			{
-				updateVersion = updateDescriptor.UPDATE_XMLNS_1_0::version;
-				updateDescription = updateDescriptor.UPDATE_XMLNS_1_0::description;
-				updatePackageURL = updateDescriptor.UPDATE_XMLNS_1_0::urls.UPDATE_XMLNS_1_1::[installerType];
-			}
-			else
-			{
-				var typeXml:XMLList = updateDescriptor.UPDATE_XMLNS_1_1::[installerType];
-				if (typeXml.length() > 0)
-				{
-					updateVersion = typeXml.UPDATE_XMLNS_1_1::version;
-					updateDescription = typeXml.UPDATE_XMLNS_1_1::description;
-					updatePackageURL = typeXml.UPDATE_XMLNS_1_1::url;
-				}
-			}
+			updateVersion = String(updateDescriptor[installerType].version);
+			updatePackageURL = String(updateDescriptor[installerType].url);
+			updateDescription = String(updateDescriptor[installerType].description);
 			
 			if (!updateVersion || !updatePackageURL)
 			{
@@ -267,7 +260,7 @@ package actionScripts.extSources.nativeApplicationUpdater
 				return;
 			}
 			
-			currentState = AVAILABLE;			
+			currentState = AVAILABLE;
 			dispatchEvent(new StatusUpdateEvent(
 				StatusUpdateEvent.UPDATE_STATUS, false, true, 
 				isNewerVersionFunction.call(this, currentVersion, updateVersion), updateVersion)); // TODO: handle last event param with details (description)
@@ -382,22 +375,24 @@ package actionScripts.extSources.nativeApplicationUpdater
 		{
 			if (currentState == DOWNLOADED)
 			{
+				installFromFile(downloadedFile);
+				/*return;
+				
 				if (os.indexOf("win") > -1)
 				{
-					installFromFile(downloadedFile);
+				installFromFile(downloadedFile);
 				}
 				else if (os.indexOf("mac") > -1)
 				{
-					installFromFile(downloadedFile);
-					/*var hdiutilHelper:HdiutilHelper = new HdiutilHelper(downloadedFile);
-					hdiutilHelper.addEventListener(Event.COMPLETE, hdiutilHelper_completeHandler);
-					hdiutilHelper.addEventListener(ErrorEvent.ERROR, hdiutilHelper_errorHandler);
-					hdiutilHelper.attach();*/
+				var hdiutilHelper:HdiutilHelper = new HdiutilHelper(downloadedFile);
+				hdiutilHelper.addEventListener(Event.COMPLETE, hdiutilHelper_completeHandler);
+				hdiutilHelper.addEventListener(ErrorEvent.ERROR, hdiutilHelper_errorHandler);
+				hdiutilHelper.attach();
 				}
 				else if (os.indexOf("linux") > -1)
 				{
-					installFromFile(downloadedFile);
-				}
+				installFromFile(downloadedFile);
+				}*/
 			}
 		}
 		
@@ -408,7 +403,7 @@ package actionScripts.extSources.nativeApplicationUpdater
 			hdiutilHelper.removeEventListener(ErrorEvent.ERROR, hdiutilHelper_errorHandler);
 			
 			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, 
-				"Error attaching dmg file!", UpdaterErrorCodes.ERROR_9008));
+				"Error attaching pkg file!", UpdaterErrorCodes.ERROR_9008));
 		}
 		
 		private function hdiutilHelper_completeHandler(event:Event):void
@@ -447,7 +442,7 @@ package actionScripts.extSources.nativeApplicationUpdater
 			{
 				currentState = INSTALLING;
 				
-				if ((os.indexOf("linux") > -1) || (os.indexOf("mac") > -1))
+				if (os.indexOf("win") == -1)
 				{
 					updateFile.openWithDefaultApplication();
 				}
@@ -485,6 +480,15 @@ package actionScripts.extSources.nativeApplicationUpdater
 		protected function set currentVersion(value:String):void
 		{
 			_currentVersion = value;
+			
+			// split the value to three
+			var tmpArr:Array = value.split(".");
+			if (tmpArr.length == 3)
+			{
+				_currentMajor = parseInt(tmpArr[0]);
+				_currentMinor = parseInt(tmpArr[1]);
+				_currentRevision = parseInt(tmpArr[2]);
+			}
 		}
 		
 		[Bindable]
@@ -535,13 +539,25 @@ package actionScripts.extSources.nativeApplicationUpdater
 		public function get isNewerVersionFunction():Function
 		{
 			if (_isNewerVersionFunction != null)
+			{
 				return _isNewerVersionFunction;
+			}
 			else
-				return function(currentVersion:String, updateVersion:String):Boolean { 
-					var cvNumber : Number = Number( currentVersion.split(".").join("") );
-					var uvNumber : Number = Number( updateVersion.split(".").join("") );
-					return cvNumber < uvNumber;
+			{
+				return function(currentVersion:String, updateVersion:String):Boolean 
+				{ 
+					var tmpSplit:Array = updateVersion.split(".");
+					var uv1:Number = Number(tmpSplit[0]);
+					var uv2:Number = Number(tmpSplit[1]);
+					var uv3:Number = Number(tmpSplit[2]);
+					
+					if (uv1 > _currentMajor) return true;
+					else if (uv1 >= _currentMajor && uv2 > _currentMinor) return true;
+					else if (uv1 >= _currentMajor && uv2 >= _currentMinor && uv3 > _currentRevision) return true;
+					
+					return false;
 				};
+			}
 		}
 		
 		public function set isNewerVersionFunction(value:Function):void
