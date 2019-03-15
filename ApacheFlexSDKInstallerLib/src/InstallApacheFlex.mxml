@@ -2219,6 +2219,7 @@ variables are not required because the locations of these pieces are known.
 			{
 				if (usingXML)
 				{
+					log("Preparing build script run");
 					// original
 					//runInstallerScript();
 					
@@ -2227,15 +2228,18 @@ variables are not required because the locations of these pieces are known.
 					// swfobject download error fix from github.com
 					if (flexVersionSelected.prefix == "apache-flex-sdk-") 
 					{
+						log("Preparing script for Apache Flex SDK");
 						fixSwfObjectGitPathWindows();
 					}
 					else if (flexVersionSelected.prefix == "feathers-sdk-") 
 					{
+						log("Preparing script for Feathers SDK");
 						runInstallerScriptFeathers();
 					}
 				}
 				else
 				{
+					log("Preparing to download AIR Runtime kit");
 					downloadAIRRuntimeKitForWindows();
 				}
 			}
@@ -2283,8 +2287,8 @@ variables are not required because the locations of these pieces are known.
 			if (file.exists) 
 			{
 				removeEventListener(Event.ENTER_FRAME, checkInstallerFileExist);
+				logMASH("Found script file: "+ file.nativePath);
 				
-				logMASH("Running script by: "+ file.nativePath);
 				var fs:FileStream = new FileStream();
 				fs.open(file, FileMode.READ);
 				var loadedString:String = fs.readUTFBytes(fs.bytesAvailable);
@@ -2298,10 +2302,12 @@ variables are not required because the locations of these pieces are known.
 				fs.writeUTFBytes(loadedString);
 				fs.close();
 				
+				logMASH("Running script by: "+ file.nativePath);
 				runInstallerScript();
 			}
 			else if (!callback)
 			{
+				logMASH("Looking for: "+ file.nativePath);
 				addEventListener(Event.ENTER_FRAME, checkInstallerFileExist);
 			}
 		}
