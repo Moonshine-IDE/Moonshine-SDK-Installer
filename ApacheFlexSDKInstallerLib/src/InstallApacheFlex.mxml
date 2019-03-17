@@ -1943,6 +1943,7 @@ variables are not required because the locations of these pieces are known.
 			updatePaths();
 			updateWindowTitle();
 			
+			overlaying = false;
 			usingXML = true;
 			_flexVersionSelected = item;
 			
