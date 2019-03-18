@@ -14,9 +14,11 @@ package actionScripts.utils
 	import actionScripts.valueObjects.HelperConstants;
 	
 	[Event(name="ENV_READ_COMPLETED", type="flash.events.Event")]
+	[Event(name="ENV_READ_ERROR", type="flash.events.Event")]
 	public class EnvironmentUtils extends EventDispatcher
 	{
 		public static const ENV_READ_COMPLETED:String = "ENV_READ_COMPLETED";
+		public static const ENV_READ_ERROR:String = "ENV_READ_ERROR";
 		
 		private var customProcess:NativeProcess;
 		private var customInfo:NativeProcessStartupInfo;
@@ -126,6 +128,8 @@ package actionScripts.utils
 				}
 				
 				isErrorClose = true;
+				startShell(false);
+				this.dispatchEvent(new Event(ENV_READ_ERROR));
 			}
 		}
 		
