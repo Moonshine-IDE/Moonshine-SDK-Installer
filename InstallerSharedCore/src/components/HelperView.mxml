@@ -172,15 +172,15 @@
 				attachStartupHelperListeners(false);
 				onFilterTypeChanged(null);
 				
-				// auto-filter to the package items in SDK Installer view
+				detectionManager.environmentUtil = environmentUtil;
+				detectionManager.detect();
+				
+				// pre-filter-out pre-installed items on SDK Installer view
 				if (!isRunningInsideMoonshine)
 				{
 					model.packages.filterFunction = filterPackages;
 					model.packages.refresh();
 				}
-				
-				detectionManager.environmentUtil = environmentUtil;
-				detectionManager.detect();
 			}
 			
 			private function onConfigError(event:HelperEvent):void
