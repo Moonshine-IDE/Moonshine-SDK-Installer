@@ -220,7 +220,7 @@
 		<s:CheckBox id="cbFilter" 
 					label="Only show features that need setup"
 					change="onFilterChange(event)"
-					enabled="{rgType.selectedValue == 'software'}"/>
+					visible="{rgType.selectedValue == 'software'}"/>
 		<s:Spacer width="100%"/>
 		<s:RadioButton groupName="rgType" value="feature" label="By Feature"
 					   selected="true"/>
