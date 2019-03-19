@@ -1,6 +1,7 @@
 package actionScripts.utils
 {
 	import flash.filesystem.File;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
@@ -86,6 +87,8 @@ package actionScripts.utils
 		public static function parseHelperConfig(xmlData:XML):void
 		{
 			var model:HelperModel = HelperModel.getInstance();
+			var descriptionCalculator:Dictionary = new Dictionary();
+			var staticRequiredText:String = "Required for: ";
 			
 			// store AIR version
 			HelperConstants.CONFIG_AIR_VERSION = xmlData.air.@version.toString();
@@ -110,7 +113,7 @@ package actionScripts.utils
 				tmpComponent = new ComponentVO();
 				tmpComponent.id = String(comp.@id);
 				tmpComponent.title = String(comp.title);
-				tmpComponent.description = String(comp.description);
+				tmpComponent.description = staticRequiredText;
 				tmpComponent.imagePath = String(comp.image);
 				tmpComponent.type = String(comp.sdkType);
 				tmpComponent.pathValidation = String(comp.pathValidation);
@@ -143,7 +146,9 @@ package actionScripts.utils
 					tmpPackage.dependencyTypes = new ArrayList();
 					for each (var id:String in dependencyIDs)
 					{
-						tmpPackage.dependencyTypes.addItem(HelperUtils.getComponentById(id));
+						tmpComponent = HelperUtils.getComponentById(id);
+						tmpComponent.description += ((tmpComponent.description == staticRequiredText) ? tmpPackage.title : ", "+ tmpPackage.title);
+						tmpPackage.dependencyTypes.addItem(tmpComponent);
 					}
 				}
 				

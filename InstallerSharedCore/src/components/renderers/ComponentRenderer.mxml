@@ -74,17 +74,17 @@
 		<s:Image source="{data.imagePath}"
 				 width="136"
 				 buttonMode="true" click="onLogoClicked(event)"/>
-		<s:VGroup autoLayout="true">
+		<s:VGroup width="100%">
 			<s:Label text="{data.title}" width="100%"
 					 styleName="uiTextRendererLabel"/>
 			<s:Label text="{data.description}" width="100%"
-					 maxDisplayedLines="2" paddingTop="10"
+					 maxDisplayedLines="3" paddingTop="10"
 					 styleName="uiTextRendererDescription"/>
 			<s:Label text="License Agreement"
 					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
 					 buttonMode="true" click="onLicenseClick(event)"/>
 		</s:VGroup>
-		<s:HGroup width="100%" verticalAlign="middle" horizontalAlign="right">
+		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
 			<s:Image id="imgDownloaded"
 					 width="50"
 					 source="@Embed('/helperResources/images/icoTickLabel.png')"
