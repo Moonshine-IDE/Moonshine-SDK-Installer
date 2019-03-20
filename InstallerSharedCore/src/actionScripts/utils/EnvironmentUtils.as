@@ -150,10 +150,16 @@ package actionScripts.utils
 				if (environmentData != "")
 				{
 					_environments = new EnvironmentVO();
-					Parser.parseEnvironmentFrom(environmentData, _environments);
+					try
+					{
+						Parser.parseEnvironmentFrom(environmentData, _environments);
+					} catch (e:Error)
+					{
+						environmentData += "\nParsing error:: "+ e.getStackTrace();
+					}
 				}
 				// pass completion
-				this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED));
+				this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED, environmentData));
 			}
 		}
 	}
