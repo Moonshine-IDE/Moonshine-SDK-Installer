@@ -27,9 +27,19 @@ package actionScripts.managers
 			else
 			{
 				// Windows download directory
-				HelperConstants.DEFAULT_INSTALLATION_PATH = HelperConstants.CUSTOM_PATH_SDK_WINDOWS ? 
-					new File(HelperConstants.CUSTOM_PATH_SDK_WINDOWS) : 
-					File.documentsDirectory.resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME);
+				if (HelperConstants.CUSTOM_PATH_SDK_WINDOWS)
+				{
+					HelperConstants.DEFAULT_INSTALLATION_PATH = new File(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
+				}
+				else
+				{
+					// not sure about how network sharing case will return
+					// thus a generic check let's be in place
+					var tmpRootDirectories:Array = File.getRootDirectories();
+					HelperConstants.DEFAULT_INSTALLATION_PATH = (tmpRootDirectories.length > 0) ? 
+						tmpRootDirectories[0].resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME) : 
+						File.userDirectory.resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME);
+				}
 				
 				// determine if choosing custom sdk path is allow-able
 				if ((!HelperConstants.CUSTOM_PATH_SDK_WINDOWS && !HelperConstants.DEFAULT_INSTALLATION_PATH.exists) || 
