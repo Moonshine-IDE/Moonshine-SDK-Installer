@@ -76,12 +76,12 @@ package actionScripts.utils
 			else
 			{
 				if (!customProcess) return;
-				if (customProcess.running) customProcess.exit();
 				customProcess.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, shellData);
 				customProcess.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA, shellData);
 				customProcess.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR, shellError);
 				customProcess.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, shellError);
 				customProcess.removeEventListener(NativeProcessExitEvent.EXIT, shellExit);
+				if (customProcess.running) customProcess.exit();
 				customProcess = null;
 			}
 		}
@@ -141,17 +141,19 @@ package actionScripts.utils
 				startShell(false);
 				
 				// parse
-				if (!errorCloseData && environmentData != "")
+				if (errorCloseData)
+				{
+					this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
+					return;
+				}
+				
+				if (environmentData != "")
 				{
 					_environments = new EnvironmentVO();
 					Parser.parseEnvironmentFrom(environmentData, _environments);
-					// pass completion
-					this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED));
 				}
-				else if (errorCloseData)
-				{
-					this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
-				}
+				// pass completion
+				this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED));
 			}
 		}
 	}
