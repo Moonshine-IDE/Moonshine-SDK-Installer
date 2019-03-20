@@ -37,7 +37,7 @@ package actionScripts.managers
 			/*
 			 * @local
 			 */
-			function onEnvReadCompleted(event:Event):void
+			function onEnvReadCompleted(event:HelperEvent):void
 			{
 				environmentUtil.removeEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted);
 				startDetectionProcess();

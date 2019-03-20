@@ -10,11 +10,12 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
+	import actionScripts.events.HelperEvent;
 	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
-	[Event(name="ENV_READ_COMPLETED", type="flash.events.Event")]
-	[Event(name="ENV_READ_ERROR", type="flash.events.Event")]
+	[Event(name="ENV_READ_COMPLETED", type="actionScripts.events.HelperEvent")]
+	[Event(name="ENV_READ_ERROR", type="actionScripts.events.HelperEvent")]
 	public class EnvironmentUtils extends EventDispatcher
 	{
 		public static const ENV_READ_COMPLETED:String = "ENV_READ_COMPLETED";
@@ -22,7 +23,7 @@ package actionScripts.utils
 		
 		private var customProcess:NativeProcess;
 		private var customInfo:NativeProcessStartupInfo;
-		private var isErrorClose:Boolean;
+		private var errorCloseData:String;
 		private var environmentData:String;
 		
 		private var _environments:EnvironmentVO;
@@ -95,7 +96,7 @@ package actionScripts.utils
 			match = data.match(/fatal: .*/);
 			if (match)
 			{
-				isErrorClose = true;
+				errorCloseData = data;
 			}
 			else if (data != "")
 			{
@@ -127,9 +128,9 @@ package actionScripts.utils
 					
 				}
 				
-				isErrorClose = true;
+				errorCloseData = data;
 				startShell(false);
-				this.dispatchEvent(new Event(ENV_READ_ERROR));
+				this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
 			}
 		}
 		
@@ -140,14 +141,17 @@ package actionScripts.utils
 				startShell(false);
 				
 				// parse
-				if (environmentData != "")
+				if (!errorCloseData && environmentData != "")
 				{
 					_environments = new EnvironmentVO();
 					Parser.parseEnvironmentFrom(environmentData, _environments);
+					// pass completion
+					this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED));
 				}
-				
-				// pass completion
-				this.dispatchEvent(new Event(ENV_READ_COMPLETED));
+				else if (errorCloseData)
+				{
+					this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
+				}
 			}
 		}
 	}
