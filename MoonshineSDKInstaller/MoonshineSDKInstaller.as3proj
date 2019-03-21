@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <output>
+    <movie version="32"/>
+    <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
+    <movie disabled="False"/>
+    <movie fps="24"/>
+    <movie height="100"/>
+    <movie background="#000000"/>
+    <movie width="100"/>
+    <movie platform="null"/>
+    <movie input=""/>
+  </output>
+  &lt;!-- Other classes to be compiled into your SWF --&gt;
+  <jsOutput>
+    <option path=""/>
+  </jsOutput>
+  <classpaths>
+    <class path="src"/>
+    <class path="../InstallerSharedCore/src"/>
+  </classpaths>
+  <moonshineResourcePaths>
+    <class path="../InstallerSharedCore/src/helperResources"/>
+  </moonshineResourcePaths>
+  <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
+  <build>
+    <option customSDK=""/>
+    <option antBuildPath=""/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option loadConfig=""/>
+    <option additional="-locale en_US"/>
+    <option showDeprecationWarnings="True"/>
+    <option useNetwork="True"/>
+    <option linkReport=""/>
+    <option useResourceBundleMetadata="True"/>
+    <option allowSourcePathOverlap="False"/>
+    <option warnings="True"/>
+    <option accessible="True"/>
+    <option benchmark="False"/>
+    <option verboseStackTraces="False"/>
+    <option compilerConstants=""/>
+    <option strict="True"/>
+    <option optimize="True"/>
+    <option showActionScriptWarnings="True"/>
+    <option staticLinkRSL="False"/>
+    <option es="False"/>
+    <option showBindingWarnings="True"/>
+    <option locale=""/>
+  </build>
+  <mavenBuild>
+    <option settingsFilePath=""/>
+    <option mavenBuildPath=""/>
+    <option commandLine=""/>
+    <actions>
+      <action action="install" actionName="Build"/>
+      <action action="clean package" actionName="Clean and package"/>
+      <action action="clean" actionName="Clean"/>
+      <action action="clean install" actionName="Clean and Build"/>
+      <action action="war:exploded" actionName="Exploded"/>
+    </actions>
+  </mavenBuild>
+  <includeLibraries></includeLibraries>
+  <libraryPaths></libraryPaths>
+  <externalLibraryPaths>
+    <element path="libs/ApacheFlexSDKInstallerLib.swc"/>
+  </externalLibraryPaths>
+  <rslPaths></rslPaths>
+  <intrinsics></intrinsics>
+  <library></library>
+  <compileTargets>
+    <compile path="src/MoonshineSDKInstaller.mxml"/>
+  </compileTargets>
+  <hiddenPaths></hiddenPaths>
+  <preBuildCommand>null</preBuildCommand>
+  <postBuildCommand alwaysRun="False">null</postBuildCommand>
+  <trustSVNCertificate>False</trustSVNCertificate>
+  <options>
+    <option testMovie="AIR"/>
+    <option showHiddenPaths="False"/>
+    <option isExportedToExistingSource="False"/>
+    <option visualEditorExportPath=""/>
+    <option testMovieCommand=""/>
+    <option defaultBuildTargets=""/>
+    <option isPrimeFacesVisualEditor="False"/>
+  </options>
+  <moonshineRunCustomization>
+    <option launchMethod="Simulator"/>
+    <option targetPlatform="1"/>
+    <option deviceSimulator="null"/>
+    <option customUrlToLaunch=""/>
+    <option projectType="1"/>
+    <option urlToLaunch=""/>
+    <deviceSimulator>null</deviceSimulator>
+    <certAndroid>null</certAndroid>
+    <certIos>null</certIos>
+    <certIosProvisioning>null</certIosProvisioning>
+  </moonshineRunCustomization>
+</project>
