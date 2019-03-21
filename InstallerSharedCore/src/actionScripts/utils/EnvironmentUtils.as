@@ -77,18 +77,6 @@ package actionScripts.utils
 				var output:IDataInput = customProcess.standardError;
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
 
-				var syntaxMatch:Array = data.match(/(.*?)\((\d*)\): col: (\d*) error: (.*).*/);
-				if (syntaxMatch)
-				{
-
-				}
-
-				var generalMatch:Array = data.match(/(.*?): error: (.*).*/);
-				if (!syntaxMatch && generalMatch)
-				{
-
-				}
-				
 				errorCloseData = data;
 				stopShell();
 				this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
