@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
   <output>
-    <movie version="32"/>
-    <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
     <movie disabled="False"/>
+    <movie platform="null"/>
+    <movie version="32"/>
+    <movie width="100"/>
     <movie fps="24"/>
     <movie height="100"/>
     <movie background="#000000"/>
-    <movie width="100"/>
-    <movie platform="null"/>
+    <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
     <movie input=""/>
   </output>
   &lt;!-- Other classes to be compiled into your SWF --&gt;
@@ -24,39 +24,39 @@
   </moonshineResourcePaths>
   <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
   <build>
-    <option customSDK=""/>
-    <option antBuildPath=""/>
-    <option showUnusedTypeSelectorWarnings="True"/>
-    <option loadConfig=""/>
-    <option additional="-locale en_US"/>
-    <option showDeprecationWarnings="True"/>
-    <option useNetwork="True"/>
-    <option linkReport=""/>
-    <option useResourceBundleMetadata="True"/>
-    <option allowSourcePathOverlap="False"/>
-    <option warnings="True"/>
-    <option accessible="True"/>
-    <option benchmark="False"/>
-    <option verboseStackTraces="False"/>
-    <option compilerConstants=""/>
     <option strict="True"/>
-    <option optimize="True"/>
-    <option showActionScriptWarnings="True"/>
-    <option staticLinkRSL="False"/>
+    <option accessible="True"/>
+    <option useNetwork="True"/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option useResourceBundleMetadata="True"/>
+    <option benchmark="False"/>
+    <option additional=""/>
     <option es="False"/>
-    <option showBindingWarnings="True"/>
+    <option verboseStackTraces="False"/>
+    <option antBuildPath=""/>
+    <option loadConfig=""/>
+    <option linkReport=""/>
+    <option warnings="True"/>
+    <option staticLinkRSL="False"/>
     <option locale=""/>
+    <option showActionScriptWarnings="True"/>
+    <option customSDK=""/>
+    <option allowSourcePathOverlap="False"/>
+    <option showBindingWarnings="True"/>
+    <option optimize="True"/>
+    <option showDeprecationWarnings="True"/>
+    <option compilerConstants=""/>
   </build>
   <mavenBuild>
-    <option settingsFilePath=""/>
     <option mavenBuildPath=""/>
+    <option settingsFilePath=""/>
     <option commandLine=""/>
     <actions>
-      <action action="install" actionName="Build"/>
-      <action action="clean package" actionName="Clean and package"/>
-      <action action="clean" actionName="Clean"/>
-      <action action="clean install" actionName="Clean and Build"/>
-      <action action="war:exploded" actionName="Exploded"/>
+      <action actionName="Build" action="install"/>
+      <action actionName="Clean and package" action="clean package"/>
+      <action actionName="Clean" action="clean"/>
+      <action actionName="Clean and Build" action="clean install"/>
+      <action actionName="Exploded" action="war:exploded"/>
     </actions>
   </mavenBuild>
   <includeLibraries></includeLibraries>
@@ -75,21 +75,21 @@
   <postBuildCommand alwaysRun="False">null</postBuildCommand>
   <trustSVNCertificate>False</trustSVNCertificate>
   <options>
-    <option testMovie="AIR"/>
-    <option showHiddenPaths="False"/>
-    <option isExportedToExistingSource="False"/>
     <option visualEditorExportPath=""/>
-    <option testMovieCommand=""/>
-    <option defaultBuildTargets=""/>
     <option isPrimeFacesVisualEditor="False"/>
+    <option testMovie="AIR"/>
+    <option testMovieCommand=""/>
+    <option showHiddenPaths="False"/>
+    <option defaultBuildTargets=""/>
+    <option isExportedToExistingSource="False"/>
   </options>
   <moonshineRunCustomization>
-    <option launchMethod="Simulator"/>
     <option targetPlatform="1"/>
-    <option deviceSimulator="null"/>
     <option customUrlToLaunch=""/>
+    <option deviceSimulator="null"/>
     <option projectType="1"/>
     <option urlToLaunch=""/>
+    <option launchMethod="Simulator"/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>
