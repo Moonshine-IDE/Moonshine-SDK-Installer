@@ -90,7 +90,8 @@
 					 styleName="uiTextRendererDescription"/>
 			<s:Label text="License Agreement"
 					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
-					 buttonMode="true" click="onLicenseClick(event)"/>
+					 buttonMode="true" click="onLicenseClick(event)"
+					 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON}" visible="{!HelperConstants.IS_RUNNING_IN_MOON}"/>
 		</s:VGroup>
 		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
 			<s:Image id="imgDownloaded"
