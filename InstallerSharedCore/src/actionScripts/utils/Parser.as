@@ -88,7 +88,6 @@ package actionScripts.utils
 		{
 			var model:HelperModel = HelperModel.getInstance();
 			var descriptionCalculator:Dictionary = new Dictionary();
-			var licensesTexts:Dictionary = new Dictionary();
 			var staticRequiredText:String = "Required for: ";
 			
 			// store AIR version
@@ -104,12 +103,6 @@ package actionScripts.utils
 				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = pathSplit.join(File.separator) + File.separator +"net.prominic.MoonshineAppStoreHelper"+ File.separator +"64Bit";
 				HelperConstants.WINDOWS_64BIT_DOWNLOAD_URL = String(xmlData.windows64BitUrl);
 				HelperConstants.INSTALLER_UPDATE_CHECK_URL = String(xmlData.installerUpdateCheckUrl);
-			}
-			
-			// parse license texts
-			for each (var license:XML in xmlData.licenseDescriptions.description)
-			{
-				licensesTexts[String(license.@id)] = String(license);
 			}
 			
 			// parse packages
@@ -136,13 +129,13 @@ package actionScripts.utils
 				{
 					tmpComponent.licenseUrl = String(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].url);
 					tmpComponent.licenseTitle = String(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].title);
-					tmpComponent.licenseSmallDescription = getDescriptionBy(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].description, licensesTexts);
+					setDescriptionBy(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].description, tmpComponent);
 				}
 				else
 				{
 					tmpComponent.licenseUrl = String(comp.license.url);
 					tmpComponent.licenseTitle = String(comp.license.title);
-					tmpComponent.licenseSmallDescription = getDescriptionBy(comp.license.description, licensesTexts);
+					setDescriptionBy(comp.license.description, tmpComponent);
 				}
 				
 				model.components.addItem(tmpComponent);
@@ -224,15 +217,19 @@ package actionScripts.utils
 			return null;
 		}
 		
-		private static function getDescriptionBy(node:XMLList, descriptionList:Dictionary):String
+		private static function setDescriptionBy(node:XMLList, to:ComponentVO):void
 		{
-			if (node.hasOwnProperty("@id"))
+			if (node.hasOwnProperty("@licenseFile"))
 			{
-				if (descriptionList[String(node.@id)] != undefined) return descriptionList[String(node.@id)];
-				else return "";
+				if (FileUtils.isPathExists(File.applicationDirectory.nativePath + "/helperResources/data/"+ String(node.@licenseFile)))
+				{
+					to.licenseSmallDescription = FileUtils.readFromFile(File.applicationDirectory.resolvePath("helperResources/data/"+ String(node.@licenseFile))) as String;
+				}
 			}
-			
-			return String(node);
+			else
+			{
+				to.licenseSmallDescription = String(node);
+			}
 		}
 	}
 }
