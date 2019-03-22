@@ -62,8 +62,16 @@
 			
 			protected function onLicenseClick(event:MouseEvent):void
 			{
-				if (data.type == ComponentTypes.TYPE_FLEX) this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, data, true));
-				else navigateToURL(new URLRequest(data.licenseUrl), "_blank");
+				if (data.type == ComponentTypes.TYPE_FLEX ||
+					data.type == ComponentTypes.TYPE_SVN || 
+					(HelperConstants.IS_MACOS && data.type == ComponentTypes.TYPE_GIT)) 
+				{
+					this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, data, true));
+				}
+				else 
+				{
+					navigateToURL(new URLRequest(data.licenseUrl), "_blank");
+				}
 			}
 			
 		]]>
