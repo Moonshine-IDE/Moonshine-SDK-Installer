@@ -204,7 +204,6 @@
 				var selectedItem:InstallerComponentVO = InstallerComponentVO(event.target.selectedItem);
 				optionalInstallsTxtArea.text = selectedItem.message;
 				
-				licenseLinkBtn.includeInLayout = true;
 				currentLicenseLabel = selectedItem.licenseName;
 				currentLicenseURL = selectedItem.licenseURL;
 			}
@@ -233,7 +232,7 @@
 		horizontalAlign="center"
 		paddingRight="10" paddingLeft="10">
 		<mx:Tree id="installComponentsList"
-				 width="50%" height="100%"
+				 width="40%" height="100%"
 				 itemRenderer="renderers.TourDeTreeItemRenderer"
 				 dataProvider="{copyrightComponentsDataProvider}" labelField="label"
 				 color="0xEEEEEE"
@@ -248,7 +247,7 @@
 				 iconFunction="{getIconForFile}"
 				 borderStyle="none"
 				 change="handleOptionalInstallsChange(event)"/>
-		<s:VGroup width="50%"
+		<s:VGroup width="60%"
 				  height="100%"
 				  horizontalAlign="center"
 				  gap="5" paddingTop="10" paddingBottom="10">
@@ -257,13 +256,13 @@
 						fontSize="12"
 						width="100%"
 						height="100%"
-						verticalScrollPolicy="off"
 						editable="false"/>
 			<s:Button id="licenseLinkBtn"
 					  label="View License"
 					  skinClass="assets.skins.LightButtonSkin"
 					  click="handleLicenceBtnClick(event)"
-					  includeInLayout="false"/>
+					  includeInLayout="{currentLicenseURL &amp;&amp; currentLicenseURL != ''}"
+					  visible="{currentLicenseURL &amp;&amp; currentLicenseURL != ''}"/>
 		</s:VGroup>
 	</s:HGroup>
 	<s:controlBarContent>

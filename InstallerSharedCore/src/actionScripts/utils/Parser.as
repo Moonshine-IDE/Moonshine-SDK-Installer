@@ -88,6 +88,7 @@ package actionScripts.utils
 		{
 			var model:HelperModel = HelperModel.getInstance();
 			var descriptionCalculator:Dictionary = new Dictionary();
+			var licensesTexts:Dictionary = new Dictionary();
 			var staticRequiredText:String = "Required for: ";
 			
 			// store AIR version
@@ -103,6 +104,12 @@ package actionScripts.utils
 				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = pathSplit.join(File.separator) + File.separator +"net.prominic.MoonshineAppStoreHelper"+ File.separator +"64Bit";
 				HelperConstants.WINDOWS_64BIT_DOWNLOAD_URL = String(xmlData.windows64BitUrl);
 				HelperConstants.INSTALLER_UPDATE_CHECK_URL = String(xmlData.installerUpdateCheckUrl);
+			}
+			
+			// parse license texts
+			for each (var license:XML in xmlData.licenseDescriptions.description)
+			{
+				licensesTexts[String(license.@id)] = String(license);
 			}
 			
 			// parse packages
@@ -122,9 +129,21 @@ package actionScripts.utils
 				tmpComponent.downloadURL = comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 				tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
 				tmpComponent.website = String(comp.website);
-				tmpComponent.licenseUrl = String(comp.license.url);
-				tmpComponent.licenseTitle = String(comp.license.title);
-				tmpComponent.licenseSmallDescription = String(comp.license.description);
+				
+				// parse license
+				// can contain platform specific or global values
+				if (comp.license.hasOwnProperty('windows'))
+				{
+					tmpComponent.licenseUrl = String(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].url);
+					tmpComponent.licenseTitle = String(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].title);
+					tmpComponent.licenseSmallDescription = getDescriptionBy(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].description, licensesTexts);
+				}
+				else
+				{
+					tmpComponent.licenseUrl = String(comp.license.url);
+					tmpComponent.licenseTitle = String(comp.license.title);
+					tmpComponent.licenseSmallDescription = getDescriptionBy(comp.license.description, licensesTexts);
+				}
 				
 				model.components.addItem(tmpComponent);
 			}
@@ -193,14 +212,27 @@ package actionScripts.utils
 				case ComponentTypes.TYPE_OPENJAVA:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Java"+ File.separator +"openjdk-"+ version;
 				case ComponentTypes.TYPE_GIT:
+					if (HelperConstants.IS_MACOS) return "Command Line Tools";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Git"+ File.separator +"git-"+ version;
 				case ComponentTypes.TYPE_SVN:
+					if (HelperConstants.IS_MACOS) return "Command Line Tools";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"SVN"+ File.separator +"slik-svn-"+ version;
 				default:
 					throw new Error("Unknown Component Type");
 			}
 			
 			return null;
+		}
+		
+		private static function getDescriptionBy(node:XMLList, descriptionList:Dictionary):String
+		{
+			if (node.hasOwnProperty("@id"))
+			{
+				if (descriptionList[String(node.@id)] != undefined) return descriptionList[String(node.@id)];
+				else return "";
+			}
+			
+			return String(node);
 		}
 	}
 }

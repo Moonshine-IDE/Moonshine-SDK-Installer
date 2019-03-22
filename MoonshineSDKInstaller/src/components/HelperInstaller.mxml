@@ -102,8 +102,8 @@
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
 			{
 				var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView , true));
-				licenses.width = this.width * .8;
-				licenses.height = this.height * .6;
+				licenses.width = this.width * .9;
+				licenses.height = this.height * .8;
 				licenses.confirmHandler = completion;
 				licenses.singleLicenseItem = singleViewItem;
 				licenses.showAsNonInstallView = showAsNonInstallView;
