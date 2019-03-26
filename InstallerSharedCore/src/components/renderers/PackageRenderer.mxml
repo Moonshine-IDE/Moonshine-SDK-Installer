@@ -12,7 +12,9 @@
 				if (value) 
 				{
 					super.data = value;
-					if (data.dependencyTypes && (data.dependencyTypes.length > 2))
+					if (data.hasOwnProperty('dependencyTypes') && 
+						data.dependencyTypes && 
+						(data.dependencyTypes.length > 2))
 					{
 						this.height = 40 * data.dependencyTypes.length;
 					}

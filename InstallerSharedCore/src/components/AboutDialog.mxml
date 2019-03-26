@@ -27,7 +27,7 @@ limitations under the License.
 			[Bindable] public var installerVersion:String;
 			[Bindable] public var revisionVersion:String = "0000";
 			
-			[Bindable] private var copyrightNotes:String = "Copyright 2016 Prominic.NET, Inc. All rights reserved under the Apache license. No warranty of merchantability or fitness of any kind. Use this software at your own risk.";
+			[Bindable] private var copyrightNotes:String = "Copyright 2019 Prominic.NET, Inc. All rights reserved under the Apache license. No warranty of merchantability or fitness of any kind. Use this software at your own risk.";
 			
 			// revision version
 			private function onCreationCompletes():void
@@ -61,7 +61,7 @@ limitations under the License.
 		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" gap="12"/>
 	</s:layout>
 	
-	<s:Label text="Moonshine App Store Helper"
+	<s:Label text="Moonshine SDK Installer"
 			 fontWeight="bold"/>
 	<s:Label text="Version {installerVersion} ({revisionVersion})"/>
 	<s:Label textAlign="center" width="90%" maxDisplayedLines="6"

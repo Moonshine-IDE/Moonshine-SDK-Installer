@@ -15,7 +15,7 @@ package actionScripts.ui.menu
 	public class MenuManager extends EventDispatcher
 	{
 		protected var windowMenus:Vector.<MenuItem> = new Vector.<MenuItem>();
-		protected var macMenu:MenuItem = new MenuItem("Moonshine App Store Helper");
+		protected var macMenu:MenuItem = new MenuItem("Moonshine SDK Installer");
 		
 		private var eventToMenuMapping:Dictionary = new Dictionary();
 		private var lookup:Object = {};
@@ -24,7 +24,7 @@ package actionScripts.ui.menu
 		{
 			windowMenus.splice(0, 0, macMenu);
 			macMenu.items = new Vector.<MenuItem>();
-			macMenu.items.push(new MenuItem("About Moonshine App Store Helper", null, "EVENT_ABOUT", "a", [Keyboard.COMMAND], "a", [Keyboard.ALTERNATE]));
+			macMenu.items.push(new MenuItem("About Moonshine SDK Installer", null, "EVENT_ABOUT", "a", [Keyboard.COMMAND], "a", [Keyboard.ALTERNATE]));
 			
 			windowMenus[0].items.push(new MenuItem(null));
 			windowMenus[0].items.push(new MenuItem("Quit", null, "MENU_QUIT_EVENT", "q", [Keyboard.COMMAND], "f4", [Keyboard.ALTERNATE]));

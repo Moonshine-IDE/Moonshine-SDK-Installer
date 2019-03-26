@@ -101,6 +101,8 @@
 			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
+				if (!HelperConstants.IS_RUNNING_IN_MOON) rgType.selectedIndex = 1;
+				
 				model.moonshineBridge = dependencyCheckUtil;
 				detectionManager.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
 				
