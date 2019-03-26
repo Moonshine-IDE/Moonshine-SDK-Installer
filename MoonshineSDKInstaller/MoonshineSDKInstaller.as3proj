@@ -3,7 +3,7 @@
   <output>
     <movie disabled="False"/>
     <movie platform="null"/>
-    <movie version="32"/>
+    <movie version="30"/>
     <movie width="100"/>
     <movie fps="24"/>
     <movie height="100"/>
@@ -13,7 +13,7 @@
   </output>
   &lt;!-- Other classes to be compiled into your SWF --&gt;
   <jsOutput>
-    <option path=""/>
+    <option path="G:\DevareaLocal\Prominic\Prominic_Git\git\Moonshine-SDK-Installer\MoonshineSDKInstaller"/>
   </jsOutput>
   <classpaths>
     <class path="src"/>
@@ -21,34 +21,37 @@
   </classpaths>
   <moonshineResourcePaths>
     <class path="../InstallerSharedCore/src/helperResources"/>
+    <class path="src/installer"/>
+    <class path="src/assets/images"/>
+    <class path="src/shellScripts"/>
   </moonshineResourcePaths>
   <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
   <build>
+    <option es="False"/>
+    <option verboseStackTraces="False"/>
+    <option allowSourcePathOverlap="False"/>
+    <option loadConfig=""/>
+    <option linkReport=""/>
+    <option additional="-locale en_US -allow-source-path-overlap=true -swf-version 41 +configname=air"/>
+    <option staticLinkRSL="False"/>
+    <option showActionScriptWarnings="True"/>
+    <option antBuildPath=""/>
+    <option useResourceBundleMetadata="True"/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option optimize="True"/>
+    <option showDeprecationWarnings="True"/>
+    <option customSDK=""/>
+    <option showBindingWarnings="True"/>
     <option strict="True"/>
     <option accessible="True"/>
     <option useNetwork="True"/>
-    <option showUnusedTypeSelectorWarnings="True"/>
-    <option useResourceBundleMetadata="True"/>
-    <option benchmark="False"/>
-    <option additional=""/>
-    <option es="False"/>
-    <option verboseStackTraces="False"/>
-    <option antBuildPath=""/>
-    <option loadConfig=""/>
-    <option linkReport=""/>
-    <option warnings="True"/>
-    <option staticLinkRSL="False"/>
     <option locale=""/>
-    <option showActionScriptWarnings="True"/>
-    <option customSDK=""/>
-    <option allowSourcePathOverlap="False"/>
-    <option showBindingWarnings="True"/>
-    <option optimize="True"/>
-    <option showDeprecationWarnings="True"/>
     <option compilerConstants=""/>
+    <option benchmark="False"/>
+    <option warnings="True"/>
   </build>
   <mavenBuild>
-    <option mavenBuildPath=""/>
+    <option mavenBuildPath="G:\DevareaLocal\Prominic\Prominic_Git\git\Moonshine-SDK-Installer\MoonshineSDKInstaller"/>
     <option settingsFilePath=""/>
     <option commandLine=""/>
     <actions>
@@ -60,10 +63,12 @@
     </actions>
   </mavenBuild>
   <includeLibraries></includeLibraries>
-  <libraryPaths></libraryPaths>
-  <externalLibraryPaths>
+  <libraryPaths>
+    <element path="../ApacheFlexSDKInstallerLib/libs/as3commons-zip-1.0.0-alpha.1.swc"/>
+    <element path="../ApacheFlexSDKInstallerLib/libs/as3httpclient.swc"/>
     <element path="libs/ApacheFlexSDKInstallerLib.swc"/>
-  </externalLibraryPaths>
+  </libraryPaths>
+  <externalLibraryPaths></externalLibraryPaths>
   <rslPaths></rslPaths>
   <intrinsics></intrinsics>
   <library></library>
@@ -76,19 +81,19 @@
   <trustSVNCertificate>False</trustSVNCertificate>
   <options>
     <option visualEditorExportPath=""/>
-    <option isPrimeFacesVisualEditor="False"/>
+    <option defaultBuildTargets=""/>
     <option testMovie="AIR"/>
     <option testMovieCommand=""/>
     <option showHiddenPaths="False"/>
-    <option defaultBuildTargets=""/>
+    <option isPrimeFacesVisualEditor="False"/>
     <option isExportedToExistingSource="False"/>
   </options>
   <moonshineRunCustomization>
-    <option targetPlatform="1"/>
-    <option customUrlToLaunch=""/>
-    <option deviceSimulator="null"/>
     <option projectType="1"/>
     <option urlToLaunch=""/>
+    <option customUrlToLaunch=""/>
+    <option deviceSimulator="null"/>
+    <option targetPlatform="1"/>
     <option launchMethod="Simulator"/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
