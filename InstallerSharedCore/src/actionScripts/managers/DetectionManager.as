@@ -1,6 +1,5 @@
 package actionScripts.managers
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
@@ -19,6 +18,21 @@ package actionScripts.managers
 		
 		private var model:HelperModel = HelperModel.getInstance();
 		private var gitSvnDetector:GitSVNDetector = GitSVNDetector.getInstance();
+		
+		private var _itemTestCount:int;
+		private function get itemTestCount():int
+		{
+			return _itemTestCount;
+		}
+		private function set itemTestCount(value:int):void
+		{
+			_itemTestCount = value;
+			if (_itemTestCount == model.components.source.length)
+			{
+				_itemTestCount = 0;
+				this.dispatchEvent(new HelperEvent(HelperEvent.ALL_COMPONENTS_TESTED));
+			}
+		}
 		
 		public function detect():void
 		{
@@ -166,7 +180,10 @@ package actionScripts.managers
 				}
 			}
 			
-			if (item.isAlreadyDownloaded) notifyMoonshineOnDetection(item);
+			/*if (item.isAlreadyDownloaded) notifyMoonshineOnDetection(item);
+			else notifyMoonshineOnDetection(item, false);*/
+			
+			notifyMoonshineOnDetection(item, item.isAlreadyDownloaded);
 		}
 		
 		private function onXCodePathDetection(value:String):void
@@ -190,9 +207,18 @@ package actionScripts.managers
 			}
 		}
 		
-		private function notifyMoonshineOnDetection(value:ComponentVO):void
+		private function notifyMoonshineOnDetection(value:ComponentVO, isDownloaded:Boolean=true):void
 		{
-			this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, value));
+			if (isDownloaded) 
+			{
+				this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, value));
+			}
+			else 
+			{
+				this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_NOT_DOWNLOADED, value));
+			}
+			
+			itemTestCount = itemTestCount + 1;
 		}
 	}
 }
