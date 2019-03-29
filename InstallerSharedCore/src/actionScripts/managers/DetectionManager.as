@@ -75,21 +75,26 @@ package actionScripts.managers
 		private function stepA_checkMoonshineInternal(item:ComponentVO):void
 		{
 			var isPresent:Boolean;
+			var sdkReference:Object;
 			if (model.moonshineBridge)
 			{
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_FLEX:
-						item.isAlreadyDownloaded = model.moonshineBridge.isFlexSDKAvailable();
+						sdkReference = model.moonshineBridge.isFlexSDKAvailable();
+						item.isAlreadyDownloaded = (sdkReference != null);
 						break;
 					case ComponentTypes.TYPE_FLEXJS:
-						item.isAlreadyDownloaded = model.moonshineBridge.isFlexJSSDKAvailable();
+						sdkReference = model.moonshineBridge.isFlexJSSDKAvailable();
+						item.isAlreadyDownloaded = (sdkReference != null);
 						break;
 					case ComponentTypes.TYPE_ROYALE:
-						item.isAlreadyDownloaded = model.moonshineBridge.isRoyaleSDKAvailable();
+						sdkReference = model.moonshineBridge.isRoyaleSDKAvailable();
+						item.isAlreadyDownloaded = (sdkReference != null);
 						break;
 					case ComponentTypes.TYPE_FEATHERS:
-						item.isAlreadyDownloaded = model.moonshineBridge.isFeathersSDKAvailable();
+						sdkReference = model.moonshineBridge.isFeathersSDKAvailable();
+						item.isAlreadyDownloaded = (sdkReference != null);
 						break;
 					case ComponentTypes.TYPE_ANT:
 						item.isAlreadyDownloaded = model.moonshineBridge.isAntPresent();
@@ -137,10 +142,7 @@ package actionScripts.managers
 						if (environmentUtil.environments.FLEX_HOME && 
 							environmentUtil.environments.FLEX_HOME.type == item.type) 
 						{
-							if (HelperUtils.isNewUpdateVersion(environmentUtil.environments.FLEX_HOME.version, item.version))
-							{
-								item.oldInstalledVersion = environmentUtil.environments.FLEX_HOME.version;
-							}
+							checkUpdateVersion(environmentUtil.environments.FLEX_HOME.version, item);
 							item.installToPath = environmentUtil.environments.FLEX_HOME.path.nativePath;
 							item.isAlreadyDownloaded = true;
 						}
@@ -184,6 +186,14 @@ package actionScripts.managers
 			else notifyMoonshineOnDetection(item, false);*/
 			
 			notifyMoonshineOnDetection(item, item.isAlreadyDownloaded);
+		}
+		
+		private function checkUpdateVersion(againstVersion:String, item:ComponentVO):void
+		{
+			if (HelperUtils.isNewUpdateVersion(againstVersion, item.version))
+			{
+				item.oldInstalledVersion = againstVersion;
+			}
 		}
 		
 		private function onXCodePathDetection(value:String):void
