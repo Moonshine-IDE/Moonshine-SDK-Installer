@@ -75,26 +75,21 @@ package actionScripts.managers
 		private function stepA_checkMoonshineInternal(item:ComponentVO):void
 		{
 			var isPresent:Boolean;
-			var sdkReference:Object;
 			if (model.moonshineBridge)
 			{
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_FLEX:
-						sdkReference = model.moonshineBridge.isFlexSDKAvailable();
-						item.isAlreadyDownloaded = (sdkReference != null);
+						item.isAlreadyDownloaded = (model.moonshineBridge.isFlexSDKAvailable() != null);
 						break;
 					case ComponentTypes.TYPE_FLEXJS:
-						sdkReference = model.moonshineBridge.isFlexJSSDKAvailable();
-						item.isAlreadyDownloaded = (sdkReference != null);
+						item.isAlreadyDownloaded = (model.moonshineBridge.isFlexJSSDKAvailable() != null);
 						break;
 					case ComponentTypes.TYPE_ROYALE:
-						sdkReference = model.moonshineBridge.isRoyaleSDKAvailable();
-						item.isAlreadyDownloaded = (sdkReference != null);
+						item.isAlreadyDownloaded = (model.moonshineBridge.isRoyaleSDKAvailable() != null);
 						break;
 					case ComponentTypes.TYPE_FEATHERS:
-						sdkReference = model.moonshineBridge.isFeathersSDKAvailable();
-						item.isAlreadyDownloaded = (sdkReference != null);
+						item.isAlreadyDownloaded = (model.moonshineBridge.isFeathersSDKAvailable() != null);
 						break;
 					case ComponentTypes.TYPE_ANT:
 						item.isAlreadyDownloaded = model.moonshineBridge.isAntPresent();
