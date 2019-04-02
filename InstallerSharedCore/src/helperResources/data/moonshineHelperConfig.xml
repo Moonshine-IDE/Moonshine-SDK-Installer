@@ -97,6 +97,7 @@
 			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>flex</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>http://flex.apache.org</website>
+			<diskMBusage>1010</diskMBusage>
 			<license>
 				<url>http://www.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-installer-config.xml</url>
 				<title></title>
@@ -124,6 +125,7 @@
 			<pathValidation>royale-asjs/royale-sdk-description.xml</pathValidation>
 			<sdkType>royale</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://royale.apache.org</website>
+			<diskMBusage>161</diskMBusage>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 				<title>The Apache License Version 2.0</title>
@@ -151,6 +153,7 @@
 			<pathValidation>bin/javac</pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
+			<diskMBusage>182</diskMBusage>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 				<title>The Apache License Version 2.0</title>
@@ -178,6 +181,7 @@
 			<pathValidation>bin/ant</pathValidation>
 			<sdkType>ant</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://ant.apache.org</website>
+			<diskMBusage>37</diskMBusage>
 			<license>
 				<url>https://ant.apache.org/license.html</url>
 				<title>The Apache License Version 2.0</title>
@@ -205,6 +209,7 @@
 			<pathValidation>bin/mvn</pathValidation>
 			<sdkType>maven</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://maven.apache.org</website>
+			<diskMBusage>10</diskMBusage>
 			<license>
 				<url>http://maven.apache.org/components/ref/3.0/license.html</url>
 				<title>The Apache License Version 2.0</title>
@@ -232,6 +237,7 @@
 			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
+			<diskMBusage>991</diskMBusage>
 			<license>
 				<url>https://github.com/BowlerHatLLC/feathers-sdk/blob/master/LICENSE</url>
 				<title>Apache License Version 2.0</title>
@@ -259,6 +265,7 @@
 			<pathValidation>bin\svn.exe</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
+			<diskMBusage>10</diskMBusage>
 			<license>
 				<windows>
 					<url>https://github.com/prominic/Moonshine-SDK-Installer/files/2990404/Slik-Subversion-License.pdf</url>
@@ -293,6 +300,7 @@
 			<pathValidation>bin\git.exe</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
+			<diskMBusage>592</diskMBusage>
 			<license>
 				<windows>
 					<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
