@@ -12,6 +12,7 @@ package actionScripts.valueObjects
 		public var licenseUrl:String;
 		public var licenseTitle:String;
 		public var licenseSmallDescription:String;
+		public var sizeInMb:int;
 		
 		public function ComponentVO()
 		{

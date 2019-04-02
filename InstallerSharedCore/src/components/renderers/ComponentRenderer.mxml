@@ -74,6 +74,16 @@
 				}
 			}
 			
+			private function getSizeFix(value:int):String
+			{
+				if (value.toString().length > 3)
+				{
+					return ((value / 1000).toFixed(2) +" GB");
+				}
+				
+				return (value +" MB");
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -83,8 +93,13 @@
 				 width="136"
 				 buttonMode="true" click="onLogoClicked(event)"/>
 		<s:VGroup width="100%">
-			<s:Label text="{data.title}" width="100%"
-					 styleName="uiTextRendererLabel"/>
+			<s:HGroup width="100%"
+					  verticalAlign="middle">
+				<s:Label text="{data.title}"
+						 styleName="uiTextRendererLabel"/>
+				<s:Label text="({getSizeFix(data.sizeInMb)})"
+						 styleName="uiTextRendererDescription" paddingLeft="6"/>
+			</s:HGroup>
 			<s:Label text="{data.description}" width="100%"
 					 maxDisplayedLines="3" paddingTop="10"
 					 styleName="uiTextRendererDescription"/>
