@@ -10,6 +10,7 @@
 			import spark.components.BusyIndicator;
 			
 			import actionScripts.events.HelperEvent;
+			import actionScripts.utils.HelperUtils;
 			import actionScripts.valueObjects.ComponentTypes;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
@@ -74,16 +75,6 @@
 				}
 			}
 			
-			private function getSizeFix(value:int):String
-			{
-				if (value.toString().length > 3)
-				{
-					return ((value / 1000).toFixed(2) +" GB");
-				}
-				
-				return (value +" MB");
-			}
-			
 		]]>
 	</fx:Script>
 	
@@ -97,7 +88,7 @@
 					  verticalAlign="middle">
 				<s:Label text="{data.title}"
 						 styleName="uiTextRendererLabel"/>
-				<s:Label text="({getSizeFix(data.sizeInMb)})"
+				<s:Label text="({HelperUtils.getSizeFix(data.sizeInMb)})"
 						 styleName="uiTextRendererDescription" paddingLeft="6"/>
 			</s:HGroup>
 			<s:Label text="{data.description}" width="100%"

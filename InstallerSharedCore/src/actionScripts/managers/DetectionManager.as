@@ -30,7 +30,7 @@ package actionScripts.managers
 			if (_itemTestCount == model.components.source.length)
 			{
 				_itemTestCount = 0;
-				this.dispatchEvent(new HelperEvent(HelperEvent.ALL_COMPONENTS_TESTED));
+				this.dispatchEvent(new HelperEvent(HelperEvent.ALL_COMPONENTS_TESTED, null));
 			}
 		}
 		

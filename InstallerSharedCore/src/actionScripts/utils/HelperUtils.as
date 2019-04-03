@@ -146,5 +146,29 @@ package actionScripts.utils
 					item.installToPath.substring(item.installToPath.indexOf(HelperConstants.DEFAULT_SDK_FOLDER_NAME) + HelperConstants.DEFAULT_SDK_FOLDER_NAME.length);
 			}
 		}
+		
+		public static function getTotalDiskSizePendingItems():String
+		{
+			var totalMbs:int;
+			for each (var item:ComponentVO in model.components)
+			{
+				if (!item.isAlreadyDownloaded)
+				{
+					totalMbs += item.sizeInMb;
+				}
+			}
+			
+			return getSizeFix(totalMbs);
+		}
+		
+		public static function getSizeFix(value:int):String
+		{
+			if (value.toString().length > 3)
+			{
+				return ((value / 1000).toFixed(2) +" GB");
+			}
+			
+			return (value +" MB");
+		}
 	}
 }

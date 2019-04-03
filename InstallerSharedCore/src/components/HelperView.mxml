@@ -8,6 +8,7 @@
 		[Event(name="OPEN_MOON_SETTINGS", type="actionScripts.events.HelperEvent")]
 		[Event(name="COMPONENT_DOWNLOADED", type="actionScripts.events.HelperEvent")]
 		[Event(name="OPEN_COMPONENT_LICENSE", type="actionScripts.events.HelperEvent")]
+		[Event(name="ALL_COMPONENTS_TESTED", type="actionScripts.events.HelperEvent")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
@@ -102,6 +103,7 @@
 					itemsManager.dependencyCheckUtil = dependencyCheckUtil;
 					itemsManager.environmentUtil = environmentUtil;
 					itemsManager.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
+					itemsManager.addEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected, false, 0, true);
 					itemsManager.addEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
 					itemsManager.loadItemsAndDetect();
 				}
@@ -193,6 +195,12 @@
 			
 			private function onComponentDetected(event:HelperEvent):void
 			{
+				dispatchEvent(event);
+			}
+			
+			private function onAllComponentsDetected(event:HelperEvent):void
+			{
+				itemsManager.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected);
 				dispatchEvent(event);
 			}
 			

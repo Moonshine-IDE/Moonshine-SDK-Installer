@@ -44,6 +44,7 @@
 			
 			[Bindable] private var sdkPathMessage:String;
 			[Bindable] private var isDownloadInProgress:Boolean;
+			[Bindable] private var allInstallButtonLabel:String = "INSTALL EVERYTHING NOW!";
 			
 			private var model:HelperModel = HelperModel.getInstance();
 			private var packageLists:Array = [];
@@ -84,6 +85,8 @@
 			
 			private function onComplete(event:FlexEvent):void
 			{
+				btnInstallAll.label = allInstallButtonLabel;
+				
 				// initiate the original installer source
 				INSTALLER_APACHE_FLEX = new InstallApacheFlex();
 				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
@@ -317,6 +320,27 @@
 				openLicenseView(singleInstallConfirmHandler, (event.value as ComponentVO), true);
 			}
 			
+			private function onAllComponentsFinishDetection(event:HelperEvent):void
+			{
+				view.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection);
+				
+				// determine disk-usage for total pending
+				updateAllInstallButtonLabel();
+				
+				view.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onEachComponentDownloaded, false, 0, true);
+			}
+			
+			private function onEachComponentDownloaded(event:HelperEvent):void
+			{
+				// update total pending size after each downloads
+				updateAllInstallButtonLabel();
+			}
+			
+			private function updateAllInstallButtonLabel():void
+			{
+				btnInstallAll.label = allInstallButtonLabel +" ("+ HelperUtils.getTotalDiskSizePendingItems() +")";
+			}
+			
 			private function onShowLog(event:MouseEvent):void
 			{
 				INSTALLER_APACHE_FLEX.showConsole(event);
@@ -403,7 +427,6 @@
 	
 	<s:Group width="100%" height="60">
 		<s:Button id="btnInstallAll" 
-				  label="INSTALL EVERYTHING NOW!"
 				  click="openLicenseView(allInstallConfirmHandler)"
 				  horizontalCenter="0" verticalCenter="0"
 				  enabled="{HelperConstants.IS_INSTALLER_READY}"
@@ -422,6 +445,7 @@
 							   width="100%" height="100%"
 							   DOWNLOAD_COMPONENT="onDownloadAComponentRequested(event)"
 							   OPEN_COMPONENT_LICENSE="onOpenAComponentLicenseRequested(event)"
+							   ALL_COMPONENTS_TESTED="onAllComponentsFinishDetection(event)"
 							   isRunningInsideMoonshine="false" paddingBottom="10"/>
 		<s:VGroup width="100%"
 				  verticalAlign="middle" horizontalAlign="center"

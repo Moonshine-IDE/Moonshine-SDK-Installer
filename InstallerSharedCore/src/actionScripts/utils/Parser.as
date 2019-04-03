@@ -122,7 +122,7 @@ package actionScripts.utils
 				tmpComponent.downloadURL = comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 				tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
 				tmpComponent.website = String(comp.website);
-				tmpComponent.sizeInMb = int(comp.diskMBusage);
+				tmpComponent.sizeInMb = int(comp.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
 				
 				// parse license
 				// can contain platform specific or global values
