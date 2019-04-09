@@ -100,7 +100,7 @@ package actionScripts.utils
 				pathSplit.pop();
 				pathSplit.pop();
 				
-				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = pathSplit.join(File.separator) + File.separator +"net.prominic.MoonshineAppStoreHelper"+ File.separator +"64Bit";
+				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = pathSplit.join(File.separator) + File.separator +"net.prominic.MoonshineSDKInstaller"+ File.separator +"64Bit";
 				HelperConstants.WINDOWS_64BIT_DOWNLOAD_URL = String(xmlData.windows64BitUrl);
 				HelperConstants.INSTALLER_UPDATE_CHECK_URL = String(xmlData.installerUpdateCheckUrl);
 			}
