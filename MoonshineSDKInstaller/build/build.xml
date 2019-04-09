@@ -437,13 +437,13 @@
 		<if>
 			<equals arg1="${IsDevelopmentBuild}" arg2="true"/>
 			<then>
-				<property name="applicationID" value="net.prominic.MoonshineAppStoreHelper-dev"/>
+				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller-dev"/>
 				<property name="applicationName" value="Moonshine SDK Installer Development"/>
 				<property name="executableName" value="Moonshine SDK Installer Development" />
 				<property name="installerName" value="MoonshineSDKInstallerDevelopment" />
 			</then>
 			<else>
-				<property name="applicationID" value="net.prominic.MoonshineAppStoreHelper"/>
+				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller"/>
 				<property name="applicationName" value="Moonshine SDK Installer"/>
 				<property name="executableName" value="Moonshine SDK Installer" />
 				<property name="installerName" value="MoonshineSDKInstaller" />
