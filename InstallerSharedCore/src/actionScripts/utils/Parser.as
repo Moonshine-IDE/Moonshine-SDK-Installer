@@ -81,6 +81,14 @@ package actionScripts.utils
 						to.SVN_HOME = tmpPath;
 					}
 				}
+				else if (splitLine[0] == "PLAYERGLOBAL_HOME")
+				{
+					tmpPath = new File(splitLine[1]);
+					if (tmpPath.exists)
+					{
+						to.PLAYERGLOBAL_HOME = tmpPath;
+					}
+				}
 			}
 		}
 		
