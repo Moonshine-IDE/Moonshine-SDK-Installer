@@ -54,6 +54,7 @@ package actionScripts.managers
 			function onEnvReadCompleted(event:HelperEvent):void
 			{
 				environmentUtil.removeEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted);
+
 				startDetectionProcess();
 			}
 		}
@@ -70,13 +71,15 @@ package actionScripts.managers
 				HelperConstants.IS_DETECTION_IN_PROCESS = false;
 				clearTimeout(timeoutValue);
 			}, 3000);
+
 		}
 		
 		private function stepA_checkMoonshineInternal(item:ComponentVO):void
 		{
-			var isPresent:Boolean;
 			if (model.moonshineBridge)
 			{
+				model.moonshineBridge.playerglobalExists = environmentUtil.environments.PLAYERGLOBAL_HOME != null;
+
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_FLEX:

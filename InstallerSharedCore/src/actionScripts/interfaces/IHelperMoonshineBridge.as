@@ -13,5 +13,8 @@ package actionScripts.interfaces
 		function isSVNPresent():Boolean;
 		function isGitPresent():Boolean;
 		function runOrDownloadSDKInstaller():void;
+
+		function get playerglobalExists():Boolean;
+		function set playerglobalExists(value:Boolean):void;
 	}
 }
