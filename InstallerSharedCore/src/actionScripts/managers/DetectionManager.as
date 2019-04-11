@@ -78,7 +78,7 @@ package actionScripts.managers
 		{
 			if (model.moonshineBridge)
 			{
-				model.moonshineBridge.playerglobalExists = environmentUtil.environments.PLAYERGLOBAL_HOME != null;
+				model.moonshineBridge.playerglobalExists = environmentUtil && environmentUtil.environments.PLAYERGLOBAL_HOME != null;
 
 				switch (item.type)
 				{
