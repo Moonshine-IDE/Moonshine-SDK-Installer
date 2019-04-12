@@ -67,6 +67,9 @@ package actionScripts.managers
 				stepA_checkMoonshineInternal(model.components.source[i]);
 			}
 			
+			// check non-listed items if any
+			checkPlayerGlobalHomePresence();
+			
 			var timeoutValue:uint = setTimeout(function():void{
 				HelperConstants.IS_DETECTION_IN_PROCESS = false;
 				clearTimeout(timeoutValue);
@@ -78,8 +81,6 @@ package actionScripts.managers
 		{
 			if (model.moonshineBridge)
 			{
-				model.moonshineBridge.playerglobalExists = environmentUtil && environmentUtil.environments.PLAYERGLOBAL_HOME != null;
-
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_FLEX:
@@ -191,6 +192,14 @@ package actionScripts.managers
 			if (HelperUtils.isNewUpdateVersion(againstVersion, item.version))
 			{
 				item.oldInstalledVersion = againstVersion;
+			}
+		}
+		
+		private function checkPlayerGlobalHomePresence():void
+		{
+			if (model.moonshineBridge && environmentUtil)
+			{
+				model.moonshineBridge.playerglobalExists = environmentUtil.environments.PLAYERGLOBAL_HOME != null;
 			}
 		}
 		
