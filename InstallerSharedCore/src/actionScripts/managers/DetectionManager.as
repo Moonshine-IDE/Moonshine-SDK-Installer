@@ -176,6 +176,7 @@ package actionScripts.managers
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_GIT:
+					case ComponentTypes.TYPE_SVN:
 						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
 						break;
 				}
@@ -220,6 +221,7 @@ package actionScripts.managers
 			function updateComponent():void
 			{
 				component.isAlreadyDownloaded = true;
+				component.hasWarning = "Feature available. Click on Configure to allow";
 				notifyMoonshineOnDetection(component);
 			}
 		}
