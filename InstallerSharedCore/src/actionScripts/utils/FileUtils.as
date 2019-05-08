@@ -34,6 +34,8 @@ package actionScripts.utils
 		public static const DATA_FORMAT_BYTEARRAY:String = "dataAsByteArray";
 		public static const IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
 		
+		public static var lastAccessedLocation:String = File.desktopDirectory.nativePath;
+		
 		private static var pathCheckingFile:File;
 		
 		/**
