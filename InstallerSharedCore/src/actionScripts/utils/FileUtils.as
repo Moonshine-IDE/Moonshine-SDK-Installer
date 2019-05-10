@@ -34,8 +34,6 @@ package actionScripts.utils
 		public static const DATA_FORMAT_BYTEARRAY:String = "dataAsByteArray";
 		public static const IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
 		
-		public static var lastAccessedLocation:String = File.desktopDirectory.nativePath;
-		
 		private static var pathCheckingFile:File;
 		
 		/**
@@ -53,6 +51,23 @@ package actionScripts.utils
 			}
 			
 			return pathCheckingFile.exists;
+		}
+		
+		/**
+		 * Creating new File instance everytime
+		 * to detect if path is directory or file
+		 */
+		public static function isPathDirectory(value:String):Boolean
+		{
+			if (!pathCheckingFile) pathCheckingFile = new File();
+			try {
+				pathCheckingFile.nativePath = value;
+			} catch (e:Error)
+			{
+				return false;
+			}
+			
+			return pathCheckingFile.isDirectory;
 		}
 		
 		/**
