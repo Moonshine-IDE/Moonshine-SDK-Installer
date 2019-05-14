@@ -280,7 +280,7 @@
 			<title>Subversion</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoSVN.png</image>
-			<pathValidation>bin\svn.exe</pathValidation>
+			<pathValidation>bin/svn</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<diskMBusage>
@@ -318,7 +318,7 @@
 			<title>Git</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoGit.png</image>
-			<pathValidation>bin\git.exe</pathValidation>
+			<pathValidation>bin/git</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<diskMBusage>

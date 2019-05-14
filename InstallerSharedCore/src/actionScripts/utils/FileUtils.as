@@ -390,6 +390,19 @@ package actionScripts.utils
 			return convertToFile(path);
 		}
 		
+		/**
+		 * Replace all the backslash to front-slashes
+		 * in a given path value
+		 */
+		public static function normalizePath(path:String):String
+		{
+			if (path.indexOf("\\") != -1)
+			{
+				path = path.replace(/\\/g, "/");
+			}
+			return path;
+		}
+		
 		private static function convertToFile(path:String):File
 		{
 			try

@@ -106,7 +106,9 @@ package actionScripts.utils
 				// file-system check inside the named-sdk
 				if (validationPath && StringUtil.trim(validationPath).length != 0)
 				{
-					if (type == ComponentTypes.TYPE_OPENJAVA) 
+					if (type == ComponentTypes.TYPE_OPENJAVA || 
+						type == ComponentTypes.TYPE_SVN || 
+						type == ComponentTypes.TYPE_GIT) 
 					{
 						pathValidationFileName = HelperConstants.IS_MACOS ? validationPath : validationPath +".exe";
 					}
@@ -116,6 +118,41 @@ package actionScripts.utils
 					}
 					
 					if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+					{
+						return true;
+					}
+				}
+				else
+				{
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		public static function isValidExecutableBy(type:String, originPath:String, validationPath:String=null):Boolean
+		{
+			var pathValidationFileName:String;
+			if (FileUtils.isPathExists(originPath))
+			{
+				// file-system check inside the named-sdk
+				if (validationPath && StringUtil.trim(validationPath).length != 0)
+				{
+					if (type == ComponentTypes.TYPE_OPENJAVA || 
+						type == ComponentTypes.TYPE_SVN || 
+						type == ComponentTypes.TYPE_GIT) 
+					{
+						pathValidationFileName = HelperConstants.IS_MACOS ? validationPath : validationPath +".exe";
+					}
+					else
+					{
+						pathValidationFileName = validationPath;
+					}
+					
+					originPath = FileUtils.normalizePath(originPath);
+					pathValidationFileName = FileUtils.normalizePath(pathValidationFileName);
+					if (originPath.indexOf(pathValidationFileName) != -1)
 					{
 						return true;
 					}
