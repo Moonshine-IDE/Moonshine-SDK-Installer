@@ -245,6 +245,37 @@
 				</mac>
 			</download>
 		</item>
+		<item id="gradle">
+			<title>Gradle</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoGradle.png</image>
+			<pathValidation>bin/gradle</pathValidation>
+			<sdkType>gradle</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://gradle.org</website>
+			<diskMBusage>
+				<windows>83</windows>
+				<mac>10</mac>
+			</diskMBusage>
+			<license>
+				<url>https://gradle.com/legal/gradle-enterprise-software-agreement/</url>
+				<title>Gradle Enterprise Software Agreement</title>
+				<description>Effective starting: Apr 10, 2019 This Gradle Enterprise Agreement (the "Agreement") is between you and Gradle Inc., a Delaware corporation with its principal place of business at 325 9th Street, San Francisco, CA 94103("Gradle").</description>
+			</license>
+			<download>
+				<windows>
+					<version version="5.4.1" displayVersion="5.4.1">
+		                <path>http://services.gradle.org/distributions/</path>
+		                <file>gradle-5.4.1-bin.zip</file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="5.4.1" displayVersion="5.4.1">
+		                <path>http://services.gradle.org/distributions/</path>
+		                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
+		            </version>
+				</mac>
+			</download>
+		</item>
 		<item id="feathers">
 			<title>Feathers</title>
 			<description><![CDATA[]]></description>

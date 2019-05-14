@@ -211,6 +211,8 @@ package actionScripts.utils
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Ant"+ File.separator +"apache-ant-"+ version;
 				case ComponentTypes.TYPE_MAVEN:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Maven"+ File.separator +"apache-maven-"+ version;
+				case ComponentTypes.TYPE_GRADLE:
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Gradle"+ File.separator +"gradle-"+ version +"-bin";
 				case ComponentTypes.TYPE_OPENJAVA:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Java"+ File.separator +"openjdk-"+ version;
 				case ComponentTypes.TYPE_GIT:
