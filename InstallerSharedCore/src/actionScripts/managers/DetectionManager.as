@@ -101,6 +101,9 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_MAVEN:
 						item.isAlreadyDownloaded = model.moonshineBridge.isMavenPresent();
 						break;
+					case ComponentTypes.TYPE_GRADLE:
+						item.isAlreadyDownloaded = model.moonshineBridge.isGradlePresent();
+						break;
 					case ComponentTypes.TYPE_OPENJAVA:
 						item.isAlreadyDownloaded = model.moonshineBridge.isJavaPresent();
 						break;
@@ -157,6 +160,13 @@ package actionScripts.managers
 						if (environmentUtil.environments.MAVEN_HOME) 
 						{
 							item.installToPath = environmentUtil.environments.MAVEN_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
+						break;
+					case ComponentTypes.TYPE_GRADLE:
+						if (environmentUtil.environments.GRADLE_HOME) 
+						{
+							item.installToPath = environmentUtil.environments.GRADLE_HOME.nativePath;
 							item.isAlreadyDownloaded = true;
 						}
 						break;

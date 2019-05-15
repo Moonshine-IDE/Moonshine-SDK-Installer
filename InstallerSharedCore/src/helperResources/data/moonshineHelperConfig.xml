@@ -83,6 +83,12 @@
 			<componentDependencyIDs>git</componentDependencyIDs>
 		</item>
 		<item integrated="false">
+			<title>Gradle Integration</title>
+			<description><![CDATA[Enable builds and editor enhancements for Gradle projects]]></description>
+			<image></image>
+			<componentDependencyIDs>gradle</componentDependencyIDs>
+		</item>
+		<item integrated="false">
 			<title>PrimeFaces Project Preview</title>
 			<description><![CDATA[Preview PrimeFaces interfaces in browser using lightweight Payara server]]></description>
 			<image></image>
@@ -253,13 +259,13 @@
 			<sdkType>gradle</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://gradle.org</website>
 			<diskMBusage>
-				<windows>83</windows>
-				<mac>10</mac>
+				<windows>95</windows>
+				<mac>95</mac>
 			</diskMBusage>
 			<license>
-				<url>https://gradle.com/legal/gradle-enterprise-software-agreement/</url>
-				<title>Gradle Enterprise Software Agreement</title>
-				<description>Effective starting: Apr 10, 2019 This Gradle Enterprise Agreement (the "Agreement") is between you and Gradle Inc., a Delaware corporation with its principal place of business at 325 9th Street, San Francisco, CA 94103("Gradle").</description>
+				<url>https://github.com/gradle/gradle/blob/master/LICENSE</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of Gradle</description>
 			</license>
 			<download>
 				<windows>

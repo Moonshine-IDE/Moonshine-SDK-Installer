@@ -65,6 +65,14 @@ package actionScripts.utils
 						to.MAVEN_HOME = tmpPath;
 					}
 				}
+				else if (splitLine[0] == "GRADLE_HOME")
+				{
+					tmpPath = new File(splitLine[1]);
+					if (tmpPath.exists)
+					{
+						to.GRADLE_HOME = tmpPath;
+					}
+				}
 				else if (splitLine[0] == "GIT_HOME")
 				{
 					tmpPath = new File(splitLine[1]);
