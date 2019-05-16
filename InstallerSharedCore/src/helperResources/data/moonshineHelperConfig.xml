@@ -71,6 +71,12 @@
 			<componentDependencyIDs>ant,openjava</componentDependencyIDs>
 		</item>
 		<item integrated="false">
+			<title>Apache Maven Integration</title>
+			<description><![CDATA[Build projects with Apache Maven]]></description>
+			<image></image>
+			<componentDependencyIDs>maven</componentDependencyIDs>
+		</item>
+		<item integrated="false">
 			<title>Subversion Integration</title>
 			<description><![CDATA[Import and update Subversion projects]]></description>
 			<image></image>
