@@ -168,7 +168,10 @@
 			<title>OpenJDK</title>
 			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
 			<image>/helperResources/images/logoOpenJDK.png</image>
-			<pathValidation>bin/javac</pathValidation>
+			<pathValidation>
+				<windows>bin/javac.exe</windows>
+				<mac>bin/javac</mac>
+			</pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
 			<diskMBusage>
@@ -199,7 +202,10 @@
 			<title>Apache Ant</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoAnt.png</image>
-			<pathValidation>bin/ant</pathValidation>
+			<pathValidation>
+				<windows>bin/ant.cmd</windows>
+				<mac>bin/ant</mac>
+			</pathValidation>
 			<sdkType>ant</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://ant.apache.org</website>
 			<diskMBusage>
@@ -230,7 +236,10 @@
 			<title>Apache Maven</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoMaven.png</image>
-			<pathValidation>bin/mvn</pathValidation>
+			<pathValidation>
+				<windows>bin/mvn.cmd</windows>
+				<mac>bin/mvn</mac>
+			</pathValidation>
 			<sdkType>maven</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://maven.apache.org</website>
 			<diskMBusage>
@@ -261,7 +270,10 @@
 			<title>Gradle</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoGradle.png</image>
-			<pathValidation>bin/gradle</pathValidation>
+			<pathValidation>
+				<windows>bin/gradle.bat</windows>
+				<mac>bin/gradle</mac>
+			</pathValidation>
 			<sdkType>gradle</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://gradle.org</website>
 			<diskMBusage>
@@ -323,7 +335,10 @@
 			<title>Subversion</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoSVN.png</image>
-			<pathValidation>bin/svn</pathValidation>
+			<pathValidation>
+				<windows>bin/svn.exe</windows>
+				<mac>bin/svn</mac>
+			</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<diskMBusage>
@@ -361,7 +376,10 @@
 			<title>Git</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoGit.png</image>
-			<pathValidation>bin/git</pathValidation>
+			<pathValidation>
+				<windows>bin/git.exe</windows>
+				<mac>bin/git</mac>
+			</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
 			<diskMBusage>

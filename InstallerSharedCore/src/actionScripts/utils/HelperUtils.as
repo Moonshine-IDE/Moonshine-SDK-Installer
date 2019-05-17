@@ -5,7 +5,6 @@ package actionScripts.utils
 	import mx.utils.StringUtil;
 	
 	import actionScripts.locator.HelperModel;
-	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
@@ -100,24 +99,12 @@ package actionScripts.utils
 		
 		public static function isValidSDKDirectoryBy(type:String, originPath:String, validationPath:String=null):Boolean
 		{
-			var pathValidationFileName:String;
 			if (FileUtils.isPathExists(originPath))
 			{
 				// file-system check inside the named-sdk
 				if (validationPath && StringUtil.trim(validationPath).length != 0)
 				{
-					if (type == ComponentTypes.TYPE_OPENJAVA || 
-						type == ComponentTypes.TYPE_SVN || 
-						type == ComponentTypes.TYPE_GIT) 
-					{
-						pathValidationFileName = HelperConstants.IS_MACOS ? validationPath : validationPath +".exe";
-					}
-					else
-					{
-						pathValidationFileName = validationPath;
-					}
-					
-					if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+					if (FileUtils.isPathExists(originPath + File.separator + validationPath))
 					{
 						return true;
 					}
@@ -139,19 +126,8 @@ package actionScripts.utils
 				// file-system check inside the named-sdk
 				if (validationPath && StringUtil.trim(validationPath).length != 0)
 				{
-					if (type == ComponentTypes.TYPE_OPENJAVA || 
-						type == ComponentTypes.TYPE_SVN || 
-						type == ComponentTypes.TYPE_GIT) 
-					{
-						pathValidationFileName = HelperConstants.IS_MACOS ? validationPath : validationPath +".exe";
-					}
-					else
-					{
-						pathValidationFileName = validationPath;
-					}
-					
 					originPath = FileUtils.normalizePath(originPath);
-					pathValidationFileName = FileUtils.normalizePath(pathValidationFileName);
+					pathValidationFileName = FileUtils.normalizePath(validationPath);
 					if (originPath.indexOf(pathValidationFileName) != -1)
 					{
 						return true;

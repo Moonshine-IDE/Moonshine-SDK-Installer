@@ -132,13 +132,23 @@ package actionScripts.utils
 				tmpComponent.description = staticRequiredText;
 				tmpComponent.imagePath = String(comp.image);
 				tmpComponent.type = String(comp.sdkType);
-				tmpComponent.pathValidation = String(comp.pathValidation);
 				tmpComponent.isSelectionChangeAllowed = true;
 				tmpComponent.version = String(comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
 				tmpComponent.downloadURL = comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 				tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
 				tmpComponent.website = String(comp.website);
 				tmpComponent.sizeInMb = int(comp.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+				
+				// parse validation-path
+				// con contain platform specific or global values
+				if (comp.pathValidation.hasOwnProperty('windows'))
+				{
+					tmpComponent.pathValidation = String(comp.pathValidation[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+				}
+				else
+				{
+					tmpComponent.pathValidation = String(comp.pathValidation);
+				}
 				
 				// parse license
 				// can contain platform specific or global values
