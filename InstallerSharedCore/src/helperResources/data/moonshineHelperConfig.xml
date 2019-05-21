@@ -95,6 +95,12 @@
 			<componentDependencyIDs>gradle</componentDependencyIDs>
 		</item>
 		<item integrated="false">
+			<title>Grails Integration</title>
+			<description><![CDATA[Enable builds and editor enhancements for Grails projects]]></description>
+			<image></image>
+			<componentDependencyIDs>grails</componentDependencyIDs>
+		</item>
+		<item integrated="false">
 			<title>PrimeFaces Project Preview</title>
 			<description><![CDATA[Preview PrimeFaces interfaces in browser using lightweight Payara server]]></description>
 			<image></image>
@@ -296,6 +302,40 @@
 					<version version="5.4.1" displayVersion="5.4.1">
 		                <path>http://services.gradle.org/distributions/</path>
 		                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
+		            </version>
+				</mac>
+			</download>
+		</item>
+		<item id="grails">
+			<title>Grails</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoGrails.png</image>
+			<pathValidation>
+				<windows>bin/grails.bat</windows>
+				<mac>bin/grails</mac>
+			</pathValidation>
+			<sdkType>grails</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://grails.org</website>
+			<diskMBusage>
+				<windows>104</windows>
+				<mac>104</mac>
+			</diskMBusage>
+			<license>
+				<url>https://github.com/grails/grails-core/blob/master/LICENSE</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of Grails</description>
+			</license>
+			<download>
+				<windows>
+					<version version="3.3.10" displayVersion="3.3.10">
+		                <path>http://github.com/grails/grails-core/releases/download/v3.3.10/</path>
+		                <file>grails-3.3.10.zip</file>
+		            </version>
+				</windows>
+				<mac>
+					<version version="3.3.10" displayVersion="3.3.10">
+		                <path>http://github.com/grails/grails-core/releases/download/v3.3.10/</path>
+		                <file>grails-3.3.10.zip</file> <!-- flexSDK.tar.gz -->
 		            </version>
 				</mac>
 			</download>

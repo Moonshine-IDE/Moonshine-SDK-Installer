@@ -104,6 +104,9 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_GRADLE:
 						item.isAlreadyDownloaded = model.moonshineBridge.isGradlePresent();
 						break;
+					case ComponentTypes.TYPE_GRAILS:
+						item.isAlreadyDownloaded = model.moonshineBridge.isGrailsPresent();
+						break;
 					case ComponentTypes.TYPE_OPENJAVA:
 						item.isAlreadyDownloaded = model.moonshineBridge.isJavaPresent();
 						break;
@@ -167,6 +170,13 @@ package actionScripts.managers
 						if (environmentUtil.environments.GRADLE_HOME) 
 						{
 							item.installToPath = environmentUtil.environments.GRADLE_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
+						break;
+					case ComponentTypes.TYPE_GRAILS:
+						if (environmentUtil.environments.GRAILS_HOME) 
+						{
+							item.installToPath = environmentUtil.environments.GRAILS_HOME.nativePath;
 							item.isAlreadyDownloaded = true;
 						}
 						break;

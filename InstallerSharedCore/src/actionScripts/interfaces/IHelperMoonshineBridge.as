@@ -11,6 +11,7 @@ package actionScripts.interfaces
 		function isAntPresent():Boolean;
 		function isMavenPresent():Boolean;
 		function isGradlePresent():Boolean;
+		function isGrailsPresent():Boolean;
 		function isSVNPresent():Boolean;
 		function isGitPresent():Boolean;
 		function runOrDownloadSDKInstaller():void;

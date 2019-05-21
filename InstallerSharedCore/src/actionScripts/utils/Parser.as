@@ -73,6 +73,14 @@ package actionScripts.utils
 						to.GRADLE_HOME = tmpPath;
 					}
 				}
+				else if (splitLine[0] == "GRAILS_HOME")
+				{
+					tmpPath = new File(splitLine[1]);
+					if (tmpPath.exists)
+					{
+						to.GRAILS_HOME = tmpPath;
+					}
+				}
 				else if (splitLine[0] == "GIT_HOME")
 				{
 					tmpPath = new File(splitLine[1]);
@@ -231,6 +239,8 @@ package actionScripts.utils
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Maven"+ File.separator +"apache-maven-"+ version;
 				case ComponentTypes.TYPE_GRADLE:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Gradle"+ File.separator +"gradle-"+ version +"-bin";
+				case ComponentTypes.TYPE_GRAILS:
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Grails"+ File.separator +"grails-"+ version;
 				case ComponentTypes.TYPE_OPENJAVA:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Java"+ File.separator +"openjdk-"+ version;
 				case ComponentTypes.TYPE_GIT:
