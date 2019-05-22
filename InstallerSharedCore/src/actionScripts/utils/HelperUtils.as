@@ -25,6 +25,11 @@ package actionScripts.utils
 		
 		public static function getComponentByType(type:String):ComponentVO
 		{
+			if (!model.components)
+			{
+				return null;
+			}
+
 			// go by source as collection can be in filtered state
 			for each (var item:ComponentVO in model.components.source)
 			{
