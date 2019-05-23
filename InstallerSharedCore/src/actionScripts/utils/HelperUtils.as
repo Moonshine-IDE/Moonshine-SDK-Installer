@@ -15,6 +15,8 @@ package actionScripts.utils
 		
 		public static function getComponentById(id:String):ComponentVO
 		{
+			if (!model.components) return null;
+			
 			// go by source as collection can be in filtered state
 			for (var i:int; i < model.components.source.length; i++)
 			{
@@ -25,10 +27,7 @@ package actionScripts.utils
 		
 		public static function getComponentByType(type:String):ComponentVO
 		{
-			if (!model.components)
-			{
-				return null;
-			}
+			if (!model.components) return null;
 
 			// go by source as collection can be in filtered state
 			for each (var item:ComponentVO in model.components.source)
