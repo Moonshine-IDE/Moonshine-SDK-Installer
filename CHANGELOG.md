@@ -10,6 +10,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 * Gradle download
 * Grails download
 
+## Moonshine SDK Installer [3.1.0]
+
+### Added
+
+* Information on disk space usage added
+
 ### Changed
 
-### Fixed
+* SDK detection logic updated
