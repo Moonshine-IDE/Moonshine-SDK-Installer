@@ -8,7 +8,7 @@
 	<!-- FLEX SDK INFORMATION -->
 	<winSDKPath><![CDATA[]]></winSDKPath> <!-- Leave blank if FLEX_HOME setup as environment variable -->
 	<winSDKPath64><![CDATA[]]></winSDKPath64> <!-- Leave blank if FLEX_HOME setup as environment variable -->
-	<unixSDKPath><![CDATA[/Users/santanu/Downloads/MoonshineSDKs/Flex_SDK/Flex_4.16.1_AIR_30.0]]></unixSDKPath> <!-- Leave blank if FLEX_HOME setup as environment variable -->
+	<unixSDKPath><![CDATA[]]></unixSDKPath> <!-- Leave blank if FLEX_HOME setup as environment variable -->
 
 	<!-- USE FOLLOWING PROPERTIES SELF-SIGN PACKAGES FOR WINDOWS & MACOS -->
 	<certSelfSignedNameOnly><![CDATA[]]></certSelfSignedNameOnly>
