@@ -90,7 +90,6 @@
 			
 			protected function onInitialized(event:FlexEvent):void
 			{
-				HelperConstants.IS_MACOS = !NativeApplication.supportsSystemTrayIcon;
 				HelperConstants.IS_RUNNING_IN_MOON = isRunningInsideMoonshine;
 			}
 			
