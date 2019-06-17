@@ -1,5 +1,6 @@
 package actionScripts.valueObjects
 {
+	import flash.desktop.NativeApplication;
 	import flash.filesystem.File;
 
 	[Bindable] public class HelperConstants
@@ -17,7 +18,7 @@ package actionScripts.valueObjects
 		public static const INSTALLER_COOKIE:String = "moonshine-installer-local";
 		public static const DEFAULT_SDK_FOLDER_NAME:String = "MoonshineSDKs";
 		
-		public static var IS_MACOS:Boolean;
+		public static var IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
 		public static var IS_RUNNING_IN_MOON:Boolean;
 		public static var IS_INSTALLER_READY:Boolean;
 		public static var DEFAULT_INSTALLATION_PATH:File;
@@ -29,5 +30,11 @@ package actionScripts.valueObjects
 		public static var CUSTOM_PATH_SDK_WINDOWS:String;
 		public static var IS_CUSTOM_WINDOWS_PATH:Boolean;
 		public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Boolean;
+		
+		public static function get HELPER_STORAGE():File
+		{
+			if (IS_MACOS) return File.userDirectory.resolvePath("Library/Application Support/net.prominic.MoonshineSDKInstaller/Local Store");
+			return File.userDirectory.resolvePath("AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store");
+		}
 	}
 }

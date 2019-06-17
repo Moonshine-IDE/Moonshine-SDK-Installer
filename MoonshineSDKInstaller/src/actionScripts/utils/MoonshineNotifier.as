@@ -21,23 +21,16 @@ package actionScripts.utils
 		
 		public function notifyMoonshineWithUpdate():void
 		{
-			var moonshineStorage:File = HelperConstants.IS_MACOS ? 
-				File.userDirectory.resolvePath("Library/Containers/com.moonshine-ide/Data/Library/Application Support/com.moonshine-ide/Local Store") :
-				File.userDirectory.resolvePath("AppData/Roaming/com.moonshine-ide/Local Store");
+			var applicationStorage:File = HelperConstants.HELPER_STORAGE.resolvePath(HelperConstants.MOONSHINE_NOTIFIER_FILE_NAME);
 			
-			if (moonshineStorage.exists)
-			{
-				moonshineStorage = moonshineStorage.resolvePath(HelperConstants.MOONSHINE_NOTIFIER_FILE_NAME);
-				
-				// save the recent update information
-				var updateXML:XML = toXML();
-				FileUtils.writeToFile(moonshineStorage, updateXML);
-				
-				// send update notification to Moonshine
-				// mac specific
-				if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
-				else findMoonshineProcessWindows();
-			}
+			// save the recent update information
+			var updateXML:XML = toXML();
+			FileUtils.writeToFile(applicationStorage, updateXML);
+			
+			// send update notification to Moonshine
+			// mac specific
+			if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
+			else findMoonshineProcessWindows();
 		}
 		
 		private function toXML():XML
