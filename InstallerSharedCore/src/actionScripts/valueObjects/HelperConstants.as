@@ -40,8 +40,12 @@ package actionScripts.valueObjects
 				// on sandbox File.userDirectory returns an strage path, i.e.
 				// /Users/$user/Library/Containers/com.moonshine-ide/Data
 				// thus, we need to determine more practical path out of it
-				HelperConstants.DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
-				return HelperConstants.DEFAULT_INSTALLATION_PATH;
+				if (!DEFAULT_INSTALLATION_PATH)
+				{
+					DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
+				}
+				
+				return DEFAULT_INSTALLATION_PATH;
 			}
 			
 			return File.userDirectory.resolvePath("AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store");

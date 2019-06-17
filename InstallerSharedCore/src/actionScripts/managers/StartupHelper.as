@@ -21,7 +21,10 @@ package actionScripts.managers
 			if (HelperConstants.IS_MACOS)
 			{
 				// for macOS ~/Downloads directory
-				HelperConstants.DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
+				if (!HelperConstants.DEFAULT_INSTALLATION_PATH)
+				{
+					HelperConstants.DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
+				}
 			}
 			else
 			{
