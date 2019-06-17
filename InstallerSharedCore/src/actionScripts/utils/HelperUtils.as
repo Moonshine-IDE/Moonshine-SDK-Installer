@@ -101,6 +101,13 @@ package actionScripts.utils
 			return false;
 		}
 		
+		public static function getMacOSDownloadsDirectory():File
+		{
+			var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
+			if (tmpUserFolderSplit[1] == "Users") tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
+			return (new File("/" + tmpUserFolderSplit.join("/") +"/Downloads/"+ HelperConstants.DEFAULT_SDK_FOLDER_NAME));
+		}
+		
 		public static function isValidSDKDirectoryBy(type:String, originPath:String, validationPath:String=null):Boolean
 		{
 			if (FileUtils.isPathExists(originPath))

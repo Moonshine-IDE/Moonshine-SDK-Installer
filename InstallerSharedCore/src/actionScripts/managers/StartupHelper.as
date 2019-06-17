@@ -5,6 +5,7 @@ package actionScripts.managers
 	
 	import actionScripts.events.HelperEvent;
 	import actionScripts.utils.FileUtils;
+	import actionScripts.utils.HelperUtils;
 	import actionScripts.utils.Parser;
 	import actionScripts.valueObjects.HelperConstants;
 
@@ -17,12 +18,10 @@ package actionScripts.managers
 		
 		public function setLocalPathConfig():void
 		{
-			var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
 			if (HelperConstants.IS_MACOS)
 			{
 				// for macOS ~/Downloads directory
-				if (tmpUserFolderSplit[1] == "Users") tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
-				HelperConstants.DEFAULT_INSTALLATION_PATH = new File("/" + tmpUserFolderSplit.join("/") +"/Downloads/"+ HelperConstants.DEFAULT_SDK_FOLDER_NAME);
+				HelperConstants.DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
 			}
 			else
 			{
