@@ -2,7 +2,9 @@ package actionScripts.valueObjects
 {
 	import flash.desktop.NativeApplication;
 	import flash.filesystem.File;
-
+	
+	import actionScripts.utils.HelperUtils;
+	
 	[Bindable] public class HelperConstants
 	{
 		[Embed(source="/helperResources/images/bg_listDivider.png")]
@@ -14,7 +16,7 @@ package actionScripts.valueObjects
 		public static const ERROR:String = "error";
 		public static const WARNING:String = "warning";
 		public static const START:String = "start";
-		public static const MOONSHINE_NOTIFIER_FILE_NAME:String = "MoonshineHelperNewUpdate.xml";
+		public static const MOONSHINE_NOTIFIER_FILE_NAME:String = ".MoonshineHelperNewUpdate.xml";
 		public static const INSTALLER_COOKIE:String = "moonshine-installer-local";
 		public static const DEFAULT_SDK_FOLDER_NAME:String = "MoonshineSDKs";
 		
@@ -33,7 +35,19 @@ package actionScripts.valueObjects
 		
 		public static function get HELPER_STORAGE():File
 		{
-			if (IS_MACOS) return File.userDirectory.resolvePath("Library/Application Support/net.prominic.MoonshineSDKInstaller/Local Store");
+			if (IS_MACOS) 
+			{
+				// on sandbox File.userDirectory returns an strage path, i.e.
+				// /Users/$user/Library/Containers/com.moonshine-ide/Data
+				// thus, we need to determine more practical path out of it
+				if (!DEFAULT_INSTALLATION_PATH)
+				{
+					DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
+				}
+				
+				return DEFAULT_INSTALLATION_PATH;
+			}
+			
 			return File.userDirectory.resolvePath("AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store");
 		}
 	}
