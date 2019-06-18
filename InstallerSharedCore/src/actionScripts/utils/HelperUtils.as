@@ -103,9 +103,14 @@ package actionScripts.utils
 		
 		public static function getMacOSDownloadsDirectory():File
 		{
-			var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
-			if (tmpUserFolderSplit[1] == "Users") tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
-			return (new File("/" + tmpUserFolderSplit.join("/") +"/Downloads/"+ HelperConstants.DEFAULT_SDK_FOLDER_NAME));
+			if (!HelperConstants.DEFAULT_INSTALLATION_PATH)
+			{
+				var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
+				if (tmpUserFolderSplit[1] == "Users") tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
+				HelperConstants.DEFAULT_INSTALLATION_PATH = new File("/" + tmpUserFolderSplit.join("/") +"/Downloads/"+ HelperConstants.DEFAULT_SDK_FOLDER_NAME);
+			}
+			
+			return HelperConstants.DEFAULT_INSTALLATION_PATH;
 		}
 		
 		public static function isValidSDKDirectoryBy(type:String, originPath:String, validationPath:String=null):Boolean
