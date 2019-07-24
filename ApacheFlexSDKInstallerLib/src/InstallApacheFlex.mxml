@@ -3516,7 +3516,7 @@ variables are not required because the locations of these pieces are known.
 			cleanup(true, reason);
 			if (_viewResourceConstants)
 			{
-				firstStepGroup.title = secondStepGroup.title = thirdStepGroup.title = _viewResourceConstants.INFO_ABORT_INSTALLATION;
+				//firstStepGroup.title = secondStepGroup.title = thirdStepGroup.title = _viewResourceConstants.INFO_ABORT_INSTALLATION;
 			}
 		}
 		

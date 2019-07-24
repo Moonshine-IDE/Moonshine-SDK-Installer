@@ -25,28 +25,14 @@
  */
 package org.apache.flex.packageflexsdk.util
 {
-    import com.adobe.net.URI;
-
-    import flash.events.ErrorEvent;
-
-    import flash.events.Event;
-    import flash.events.HTTPStatusEvent;
     import flash.events.IOErrorEvent;
     import flash.events.SecurityErrorEvent;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
-    import flash.utils.ByteArray;
-
-    import org.httpclient.HttpClient;
-    import org.httpclient.events.HttpDataListener;
-    import org.httpclient.events.HttpRequestEvent;
-    import org.httpclient.events.HttpResponseEvent;
-    import org.httpclient.events.HttpStatusEvent;
 
     public class ApacheURLLoader extends URLLoader
     {
-
-        private var httpsData:ByteArray = new ByteArray();
+        //private var httpsData:ByteArray = new ByteArray();
 
         public function ApacheURLLoader(request:URLRequest = null)
         {
@@ -55,7 +41,9 @@ package org.apache.flex.packageflexsdk.util
 
         override public function load(request:URLRequest):void
         {
-            if (request.url.indexOf("https://") != 0 || (request.url.charAt(0) == "/"))
+			super.load(request);
+			
+            /*if (request.url.indexOf("https://") != 0)
             {
                 super.load(request);
             }
@@ -108,7 +96,7 @@ package org.apache.flex.packageflexsdk.util
 
                 this.httpsData = new ByteArray();
                 httpsClient.get(new URI(request.url), httpsClientListener);
-            }
+            }*/
 
         }
 
@@ -123,5 +111,4 @@ package org.apache.flex.packageflexsdk.util
         }
 
     }
-
 }
