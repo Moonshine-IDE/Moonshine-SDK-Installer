@@ -153,19 +153,19 @@
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 				<title>The Apache License Version 2.0</title>
-				<description>The Apache License Version 2.0 applies to all releases of Apache Royale starting with Royale 0.9.4</description>
+				<description>The Apache License Version 2.0 applies to all releases of Apache Royale starting with Royale 0.9.6</description>
 			</license>
 			<download>
 				<windows>
-					<version version="0.9.4" displayVersion="0.9.4">
+					<version version="0.9.6" displayVersion="0.9.6">
 		                <path>http://moonshine-ide.com/downloads/royale/</path>
-		                <file>apache-royale-0.9.4-bin-js.zip</file>
+		                <file>apache-royale-0.9.6-bin-js.zip</file>
 		            </version>
 				</windows>
 				<mac>
-					<version version="0.9.4" displayVersion="0.9.4">
+					<version version="0.9.6" displayVersion="0.9.6">
 		                <path>http://moonshine-ide.com/downloads/royale/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-		                <file>apache-royale-0.9.4-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+		                <file>apache-royale-0.9.6-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 		            </version>
 				</mac>
 			</download>
