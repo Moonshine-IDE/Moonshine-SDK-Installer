@@ -7,6 +7,9 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
+			import flash.utils.clearTimeout;
+			import flash.utils.setTimeout;
+			
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
@@ -99,7 +102,7 @@
 				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
 				
 				sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS : 
-					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath
+					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;
 			}
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
@@ -262,6 +265,23 @@
 			
 			private function onInstallationFinished(event:GenericEvent):void
 			{
+				// TEMPORARY PATCH-FIX
+				// https://github.com/prominic/Moonshine-SDK-Installer/issues/17
+				// should be removed when Apache introduced their own fix
+				if (itemDownloading.type == ComponentTypes.TYPE_ROYALE)
+				{
+					var timeoutValue:uint = setTimeout(function():void
+					{
+						clearTimeout(timeoutValue);
+						var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
+						if (fileToPatch.exists)
+						{
+							var fileToPatchWith:File = File.applicationDirectory.resolvePath("images/royale-config.xml");
+							FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
+						}
+					}, 1000);
+				}
+				
 				// sometime distributed zip/tar creates an additional
 				// folder to the target directory which became complicated
 				// to determine a proper path to the sdk internally

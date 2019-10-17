@@ -391,6 +391,21 @@ package actionScripts.utils
 		}
 		
 		/**
+		 * Copying source to destination
+		 */
+		public static function copyFile(from:File, to:File, overwrite:Boolean=false):void
+		{
+			try
+			{
+				from.copyTo(to, overwrite);
+			}
+			catch (e:Error)
+			{
+				from.copyToAsync(to, overwrite);
+			}
+		}
+		
+		/**
 		 * Replace all the backslash to front-slashes
 		 * in a given path value
 		 */
