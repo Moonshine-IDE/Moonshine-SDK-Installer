@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 
 * Apache Roayle SDK updated to download v0.9.6
+* Apply a patch fix for the broken royale-config.xml. More information can be found in the this [discussion](http://apache-royale-development.20373.n8.nabble.com/Broken-royale-config-in-JS-only-build-of-released-Apache-Royale-SDK-0-9-6-td12515.html) on the Royale development mailing list.
 
 ## Moonshine SDK Installer [3.3.0]
 
