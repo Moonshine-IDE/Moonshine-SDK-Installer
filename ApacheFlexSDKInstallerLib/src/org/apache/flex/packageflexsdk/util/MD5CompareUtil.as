@@ -268,6 +268,10 @@ public class MD5CompareUtil extends EventDispatcher
 		_urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, urlLoaderResultHandler);
 	}
 	
+	public function setVerified(value:Boolean):void
+	{
+		_fileIsVerified = _validMD5 = value;
+	}
 }
 }
 

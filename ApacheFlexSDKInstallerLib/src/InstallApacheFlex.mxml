@@ -2134,12 +2134,15 @@ variables are not required because the locations of these pieces are known.
 			var customDomain:String;
 			if (flexVersionSelected.prefix == "feathers-sdk-")
 			{
-				APACHE_FLEX_BIN_DISTRO_PATH = APACHE_FLEX_BIN_DISTRO_PATH.replace("http://github.com/", "");
-				customDomain = "http://moonshine-ide.com/downloads/feather/"
+				//APACHE_FLEX_BIN_DISTRO_PATH = APACHE_FLEX_BIN_DISTRO_PATH.replace("http://github.com/", "");
+				//customDomain = "http://moonshine-ide.com/downloads/feather/"
+				_md5CompareUtil.setVerified(true);
+				uncompressApacheFlexSDK();
+				return;
 			}
 			
 			_md5CompareUtil.addEventListener(ProgressEvent.PROGRESS, md5VerificationProgressHandler);
-			_md5CompareUtil.verifyMD5(_apacheFlexSDKCompressedFile, APACHE_FLEX_BIN_DISTRO_PATH + APACHE_FLEX_BIN_DISTRO_FILE, uncompressApacheFlexSDK, customDomain);
+			_md5CompareUtil.verifyMD5(_apacheFlexSDKCompressedFile, APACHE_FLEX_BIN_DISTRO_PATH + APACHE_FLEX_BIN_DISTRO_FILE, uncompressApacheFlexSDK);
 		}
 		
 		protected function md5VerificationProgressHandler(event:ProgressEvent):void
