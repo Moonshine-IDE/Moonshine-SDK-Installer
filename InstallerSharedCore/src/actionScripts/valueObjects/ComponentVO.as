@@ -1,5 +1,7 @@
 package actionScripts.valueObjects
 {
+	import mx.collections.ArrayList;
+
 	[Bindable] public class ComponentVO
 	{
 		public var id:String;
@@ -13,6 +15,7 @@ package actionScripts.valueObjects
 		public var licenseTitle:String;
 		public var licenseSmallDescription:String;
 		public var sizeInMb:int;
+		public var downloadVariants:ArrayList;
 		
 		public function ComponentVO()
 		{
@@ -126,6 +129,22 @@ package actionScripts.valueObjects
 		public function set oldInstalledVersion(value:String):void
 		{
 			_oldInstalledVersion = value;
+		}
+		
+		private var _selectedVariantIndex:int;
+		public function get selectedVariantIndex():int
+		{
+			return _selectedVariantIndex;
+		}
+		public function set selectedVariantIndex(value:int):void
+		{
+			_selectedVariantIndex = value;
+		}
+		
+		public function get variantCount():uint
+		{
+			if (downloadVariants) return downloadVariants.length;
+			return 1;
 		}
 	}
 }

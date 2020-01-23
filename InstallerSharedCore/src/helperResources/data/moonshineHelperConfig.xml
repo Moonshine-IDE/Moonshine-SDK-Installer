@@ -114,28 +114,31 @@
 			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>flex</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>http://flex.apache.org</website>
-			<diskMBusage>
-				<windows>1010</windows>
-				<mac>983</mac>			
-			</diskMBusage>
 			<license>
 				<url>http://www.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-installer-config.xml</url>
 				<title></title>
 				<description></description>
 			</license>
 			<download>
-				<windows>
-					<version version="4.16.1" displayVersion="4.16.1">
-		                <path></path>
-		                <file></file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="4.16.1" displayVersion="4.16.1">
-		                <path></path>
-		                <file></file>
-		            </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>1010</windows>
+						<mac>983</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="4.16.1" displayVersion="4.16.1">
+			                <path></path>
+			                <file></file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="4.16.1" displayVersion="4.16.1">
+			                <path></path>
+			                <file></file>
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="royale">
@@ -145,28 +148,50 @@
 			<pathValidation>royale-asjs/royale-sdk-description.xml</pathValidation>
 			<sdkType>royale</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://royale.apache.org</website>
-			<diskMBusage>
-				<windows>161</windows>
-				<mac>179</mac>
-			</diskMBusage>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 				<title>The Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of Apache Royale starting with Royale 0.9.6</description>
 			</license>
 			<download>
-				<windows>
-					<version version="0.9.6" displayVersion="0.9.6">
-		                <path>http://moonshine-ide.com/downloads/royale/</path>
-		                <file>apache-royale-0.9.6-bin-js.zip</file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="0.9.6" displayVersion="0.9.6">
-		                <path>http://moonshine-ide.com/downloads/royale/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-		                <file>apache-royale-0.9.6-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
-		            </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>161</windows>
+						<mac>179</mac>
+					</diskMBusage>
+					<windows>
+						<version version="0.9.6" displayVersion="0.9.6">
+			                <path>http://moonshine-ide.com/downloads/royale/</path>
+			                <file>apache-royale-0.9.6-bin-js.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="0.9.6" displayVersion="0.9.6">
+			                <path>http://moonshine-ide.com/downloads/royale/</path>
+			                <file>apache-royale-0.9.6-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
+				<variant isSelected="true">
+					<title>Nightly</title>
+					<diskMBusage>
+						<windows>161</windows>
+						<mac>179</mac>
+					</diskMBusage>
+					<windows>
+						<version version="0.9.7" displayVersion="0.9.7">
+			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
+			                <file>apache-royale-0.9.7-bin-js.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="0.9.7" displayVersion="0.9.7">
+			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
+			                <file>apache-royale-0.9.7-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="openjava">
@@ -179,28 +204,31 @@
 			</pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
-			<diskMBusage>
-				<windows>182</windows>
-				<mac>194</mac>			
-			</diskMBusage>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 				<title>The Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of OpenJDK</description>
 			</license>
 			<download>
-				<windows>
-					<version version="1.8.0" displayVersion="1.8.0u201">
-		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path>
-		                <file>OpenJDK8U-jdk_x64_windows_hotspot_8u202b08.zip</file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="1.8.0" displayVersion="1.8.0u201">
-		                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-		                <file>OpenJDK8U-jdk_x64_mac_hotspot_8u202b08.tar.gz</file> <!-- flexSDK.tar.gz -->
-		            </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>182</windows>
+						<mac>194</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="1.8.0" displayVersion="1.8.0u201">
+			                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path>
+			                <file>OpenJDK8U-jdk_x64_windows_hotspot_8u202b08.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="1.8.0" displayVersion="1.8.0u201">
+			                <path>http://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+			                <file>OpenJDK8U-jdk_x64_mac_hotspot_8u202b08.tar.gz</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="ant">
@@ -213,28 +241,31 @@
 			</pathValidation>
 			<sdkType>ant</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://ant.apache.org</website>
-			<diskMBusage>
-				<windows>37</windows>
-				<mac>40</mac>			
-			</diskMBusage>
 			<license>
 				<url>https://ant.apache.org/license.html</url>
 				<title>The Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of Apache Ant starting with Ant 1.10.1</description>
 			</license>
 			<download>
-				<windows>
-					<version version="1.10.1" displayVersion="1.10.1">
-		                <path>http://moonshine-ide.com/downloads/ant/</path>
-		                <file>apache-ant-1.10.1-bin.zip</file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="1.10.1" displayVersion="1.10.1">
-		                <path>http://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-		                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
-		            </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>37</windows>
+						<mac>40</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="1.10.1" displayVersion="1.10.1">
+			                <path>http://moonshine-ide.com/downloads/ant/</path>
+			                <file>apache-ant-1.10.1-bin.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="1.10.1" displayVersion="1.10.1">
+			                <path>http://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+			                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="maven">
@@ -247,28 +278,31 @@
 			</pathValidation>
 			<sdkType>maven</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://maven.apache.org</website>
-			<diskMBusage>
-				<windows>10</windows>
-				<mac>10</mac>			
-			</diskMBusage>
 			<license>
 				<url>http://maven.apache.org/components/ref/3.0/license.html</url>
 				<title>The Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of Apache Maven</description>
 			</license>
 			<download>
-				<windows>
-					<version version="3.6.0" displayVersion="3.6.0">
-		                <path>http://moonshine-ide.com/downloads/maven/</path>
-		                <file>apache-maven-3.6.0-bin.zip</file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="3.6.0" displayVersion="3.6.0">
-		                <path>http://moonshine-ide.com/downloads/maven/</path>
-		                <file>apache-maven-3.6.0-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
-		            </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>10</windows>
+						<mac>10</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="3.6.0" displayVersion="3.6.0">
+			                <path>http://moonshine-ide.com/downloads/maven/</path>
+			                <file>apache-maven-3.6.0-bin.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="3.6.0" displayVersion="3.6.0">
+			                <path>http://moonshine-ide.com/downloads/maven/</path>
+			                <file>apache-maven-3.6.0-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="gradle">
@@ -281,28 +315,31 @@
 			</pathValidation>
 			<sdkType>gradle</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://gradle.org</website>
-			<diskMBusage>
-				<windows>95</windows>
-				<mac>95</mac>
-			</diskMBusage>
 			<license>
 				<url>https://github.com/gradle/gradle/blob/master/LICENSE</url>
 				<title>The Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of Gradle</description>
 			</license>
 			<download>
-				<windows>
-					<version version="5.4.1" displayVersion="5.4.1">
-		                <path>http://services.gradle.org/distributions/</path>
-		                <file>gradle-5.4.1-bin.zip</file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="5.4.1" displayVersion="5.4.1">
-		                <path>http://services.gradle.org/distributions/</path>
-		                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
-		            </version>
-				</mac>
+				<variant>
+				<diskMBusage>
+					<windows>95</windows>
+					<mac>95</mac>
+				</diskMBusage>
+					<title>Stable</title>
+					<windows>
+						<version version="5.4.1" displayVersion="5.4.1">
+			                <path>http://services.gradle.org/distributions/</path>
+			                <file>gradle-5.4.1-bin.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="5.4.1" displayVersion="5.4.1">
+			                <path>http://services.gradle.org/distributions/</path>
+			                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="grails">
@@ -315,28 +352,31 @@
 			</pathValidation>
 			<sdkType>grails</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://grails.org</website>
-			<diskMBusage>
-				<windows>104</windows>
-				<mac>104</mac>
-			</diskMBusage>
 			<license>
 				<url>https://github.com/grails/grails-core/blob/master/LICENSE</url>
 				<title>The Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of Grails</description>
 			</license>
 			<download>
-				<windows>
-					<version version="3.3.10" displayVersion="3.3.10">
-		                <path>http://github.com/grails/grails-core/releases/download/v3.3.10/</path>
-		                <file>grails-3.3.10.zip</file>
-		            </version>
-				</windows>
-				<mac>
-					<version version="3.3.10" displayVersion="3.3.10">
-		                <path>http://github.com/grails/grails-core/releases/download/v3.3.10/</path>
-		                <file>grails-3.3.10.zip</file> <!-- flexSDK.tar.gz -->
-		            </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>104</windows>
+						<mac>104</mac>
+					</diskMBusage>
+					<windows>
+						<version version="3.3.10" displayVersion="3.3.10">
+			                <path>http://github.com/grails/grails-core/releases/download/v3.3.10/</path>
+			                <file>grails-3.3.10.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="3.3.10" displayVersion="3.3.10">
+			                <path>http://github.com/grails/grails-core/releases/download/v3.3.10/</path>
+			                <file>grails-3.3.10.zip</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="feathers">
@@ -346,28 +386,31 @@
 			<pathValidation>flex-sdk-description.xml</pathValidation>
 			<sdkType>feathers</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
-			<diskMBusage>
-				<windows>991</windows>
-				<mac>925</mac>			
-			</diskMBusage>
 			<license>
 				<url>https://github.com/BowlerHatLLC/feathers-sdk/blob/master/LICENSE</url>
 				<title>Apache License Version 2.0</title>
 				<description>The Apache License Version 2.0 applies to all releases of Feathers SDK</description>
 			</license>
 			<download>
-				<windows>
-					<version version="4.0.0" displayVersion="4.0.0">
-		            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
-	              		<file>feathers-sdk-4.0.0-bin.zip</file>
-	            	</version>
-	 			</windows>
-				<mac>
-					<version version="4.0.0" displayVersion="4.0.0">
-	                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
-	              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
-	             </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>991</windows>
+						<mac>925</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="4.0.0" displayVersion="4.0.0">
+			            	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+		              		<file>feathers-sdk-4.0.0-bin.zip</file>
+		            	</version>
+		 			</windows>
+					<mac>
+						<version version="4.0.0" displayVersion="4.0.0">
+		                	<path>http://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
+		              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
+		             </version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="svn">
@@ -380,10 +423,6 @@
 			</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
-			<diskMBusage>
-				<windows>10</windows>
-				<mac>279</mac>			
-			</diskMBusage>
 			<license>
 				<windows>
 					<url>https://github.com/prominic/Moonshine-SDK-Installer/files/2990404/Slik-Subversion-License.pdf</url>
@@ -397,18 +436,25 @@
 				</mac>
 			</license>
 			<download>
-				<windows>
-					<version version="1.9.7" displayVersion="1.9.7">
-		            	<path>http://moonshine-ide.com/downloads/sliksvn/</path>
-	              		<file>SlikSvn-1.9.7.zip</file>
-	            	</version>
-	 			</windows>
-				<mac>
-					<version version="0.0.0" displayVersion="0.0.0">
-	                	<path></path>
-	              		<file></file>
-	             </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>10</windows>
+						<mac>279</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="1.9.7" displayVersion="1.9.7">
+			            	<path>http://moonshine-ide.com/downloads/sliksvn/</path>
+		              		<file>SlikSvn-1.9.7.zip</file>
+		            	</version>
+		 			</windows>
+					<mac>
+						<version version="0.0.0" displayVersion="0.0.0">
+		                	<path></path>
+		              		<file></file>
+		             	</version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 		<item id="git">
@@ -421,10 +467,6 @@
 			</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
-			<diskMBusage>
-				<windows>592</windows>
-				<mac>279</mac>			
-			</diskMBusage>
 			<license>
 				<windows>
 					<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
@@ -438,18 +480,25 @@
 				</mac>
 			</license>
 			<download>
-				<windows>
-					<version version="2.20.1" displayVersion="2.20.1">
-		            	<path>http://moonshine-ide.com/downloads/git/</path>
-	              		<file>Git-2.20.1.zip</file>
-	            	</version>
-	 			</windows>
-				<mac>
-					<version version="0.0.0" displayVersion="0.0.0">
-	                	<path></path>
-	              		<file></file>
-	             </version>
-				</mac>
+				<variant>
+					<title>Stable</title>
+					<diskMBusage>
+						<windows>592</windows>
+						<mac>279</mac>			
+					</diskMBusage>
+					<windows>
+						<version version="2.20.1" displayVersion="2.20.1">
+			            	<path>http://moonshine-ide.com/downloads/git/</path>
+		              		<file>Git-2.20.1.zip</file>
+		            	</version>
+		 			</windows>
+					<mac>
+						<version version="0.0.0" displayVersion="0.0.0">
+		                	<path></path>
+		              		<file></file>
+		             	</version>
+					</mac>
+				</variant>
 			</download>
 		</item>
 	</components>

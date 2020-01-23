@@ -9,6 +9,7 @@ package actionScripts.utils
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
+	import actionScripts.valueObjects.ComponentVariantVO;
 	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
@@ -140,11 +141,47 @@ package actionScripts.utils
 				tmpComponent.imagePath = String(comp.image);
 				tmpComponent.type = String(comp.sdkType);
 				tmpComponent.isSelectionChangeAllowed = true;
-				tmpComponent.version = String(comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
-				tmpComponent.downloadURL = comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + comp.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
-				tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
 				tmpComponent.website = String(comp.website);
-				tmpComponent.sizeInMb = int(comp.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+				
+				// variants
+				var variantCount:int = XMLList(comp.download.variant).length();
+				if (variantCount == 1)
+				{
+					tmpComponent.version = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
+					tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() 
+						+ comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
+					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
+					tmpComponent.sizeInMb = int(comp.download.variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+				}
+				else
+				{
+					tmpComponent.downloadVariants = new ArrayList();
+					
+					var tmpVariant:ComponentVariantVO;
+					var preSelectedVariant:ComponentVariantVO;
+					for each (var variant:XML in comp.download.variant)
+					{
+						tmpVariant = new ComponentVariantVO();
+						tmpVariant.version = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
+						tmpVariant.title = String(variant.title) +" - "+ tmpVariant.version;
+						tmpVariant.downloadURL = variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
+						tmpVariant.sizeInMb = int(variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+						
+						tmpComponent.downloadVariants.addItem(tmpVariant);
+						if (variant.hasOwnProperty("@isSelected"))
+						{
+							preSelectedVariant = tmpVariant;
+						}
+					}
+					
+					if (!preSelectedVariant) preSelectedVariant = tmpComponent.downloadVariants[0];
+					
+					tmpComponent.selectedVariantIndex = tmpComponent.downloadVariants.getItemIndex(preSelectedVariant);
+					tmpComponent.version = preSelectedVariant.version;
+					tmpComponent.downloadURL = preSelectedVariant.downloadURL;
+					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
+					tmpComponent.sizeInMb = preSelectedVariant.sizeInMb;
+				}
 				
 				// parse validation-path
 				// con contain platform specific or global values
@@ -220,7 +257,7 @@ package actionScripts.utils
 			};
 		}
 		
-		private static function getInstallDirectoryPath(type:String, version:String, airVersion:String=null):String
+		public static function getInstallDirectoryPath(type:String, version:String, airVersion:String=null):String
 		{
 			switch (type)
 			{

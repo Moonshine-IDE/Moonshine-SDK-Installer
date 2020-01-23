@@ -8,11 +8,14 @@
 			import flash.net.navigateToURL;
 			
 			import spark.components.BusyIndicator;
+			import spark.events.IndexChangeEvent;
 			
 			import actionScripts.events.HelperEvent;
 			import actionScripts.utils.HelperUtils;
+			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentTypes;
 			import actionScripts.valueObjects.ComponentVO;
+			import actionScripts.valueObjects.ComponentVariantVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
 			private var busyIndicator:BusyIndicator;
@@ -75,6 +78,14 @@
 				}
 			}
 			
+			protected function onVariantChange(event:IndexChangeEvent):void
+			{
+				var tmpVariant:ComponentVariantVO = event.target.selectedItem as ComponentVariantVO;
+				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
+				data.selectedVariantIndex = event.newIndex;
+				data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -100,6 +111,10 @@
 					 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON}" visible="{!HelperConstants.IS_RUNNING_IN_MOON}"/>
 		</s:VGroup>
 		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
+			<s:DropDownList dataProvider="{data.downloadVariants}"
+							labelField="title" visible="{data.variantCount != 1}"
+							requireSelection="true" color="0x000" change="onVariantChange(event)"
+							selectedIndex="{data.selectedVariantIndex}"/>
 			<s:Image id="imgDownloaded"
 					 width="50"
 					 source="@Embed('/helperResources/images/icoTickLabel.png')"
