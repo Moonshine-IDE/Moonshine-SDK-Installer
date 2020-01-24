@@ -176,8 +176,8 @@
 				<variant isSelected="true">
 					<title>Nightly</title>
 					<diskMBusage>
-						<windows>161</windows>
-						<mac>179</mac>
+						<windows>144</windows>
+						<mac>159</mac>
 					</diskMBusage>
 					<windows>
 						<version version="0.9.7" displayVersion="0.9.7">

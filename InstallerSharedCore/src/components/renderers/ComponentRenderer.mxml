@@ -84,6 +84,10 @@
 				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
 				data.selectedVariantIndex = event.newIndex;
 				data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
+				data.sizeInMb = tmpVariant.sizeInMb;
+				
+				// do update All Install button label
+				this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, null, true));
 			}
 			
 		]]>
@@ -112,7 +116,9 @@
 		</s:VGroup>
 		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
 			<s:DropDownList dataProvider="{data.downloadVariants}"
-							labelField="title" visible="{data.variantCount != 1}"
+							labelField="title" 
+							visible="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}" 
+							includeInLayout="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}"
 							requireSelection="true" color="0x000" change="onVariantChange(event)"
 							selectedIndex="{data.selectedVariantIndex}"/>
 			<s:Image id="imgDownloaded"
