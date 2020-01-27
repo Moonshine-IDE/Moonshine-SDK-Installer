@@ -90,6 +90,15 @@ s|List
 	borderVisible: false;
 }
 
+s|DropDownList
+{
+	alternatingItemColors: #ffffff, #eeeeee;
+	rollOverColor: #f4f4f4;
+	selectionColor: #c165b8;
+	color: #333333;
+	borderVisible: false;
+}
+
 s|VScrollBar
 {
 	skin-class: ClassReference('assets.skins.SparkVScrollBarSkin');
