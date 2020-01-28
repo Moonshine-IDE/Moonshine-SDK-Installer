@@ -6,6 +6,7 @@ package actionScripts.utils
 	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
+	import actionScripts.valueObjects.ComponentVariantVO;
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
 
@@ -198,6 +199,14 @@ package actionScripts.utils
 			}
 			
 			return (value +" MB");
+		}
+		
+		public static function updateComponentByVariant(component:ComponentVO, variant:ComponentVariantVO):void
+		{
+			component.installToPath = Parser.getInstallDirectoryPath(component.type, variant.version, HelperConstants.CONFIG_AIR_VERSION);
+			component.version = variant.version;
+			component.downloadURL = variant.downloadURL;
+			component.sizeInMb = variant.sizeInMb;
 		}
 	}
 }

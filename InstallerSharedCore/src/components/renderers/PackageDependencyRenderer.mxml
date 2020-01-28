@@ -11,6 +11,7 @@
 			import actionScripts.events.HelperEvent;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
+			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.ComponentVariantVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
@@ -43,6 +44,12 @@
 			
 			protected function onDownloadRequest(event:MouseEvent):void
 			{
+				if (data.downloadVariants && data.downloadVariants.length > 1)
+				{
+					HelperUtils.updateComponentByVariant(data as ComponentVO,
+						data.downloadVariants.getItemAt(data.selectedVariantIndex) as ComponentVariantVO);
+				}
+
 				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, data, true));
 			}
 			
@@ -92,7 +99,7 @@
 				var tmpVariant:ComponentVariantVO = event.target.selectedItem as ComponentVariantVO;
 				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
 				data.selectedVariantIndex = event.newIndex;
-				data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
+				data.isDownloaded = data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
 				data.sizeInMb = tmpVariant.sizeInMb;
 				
 				// do update All Install button label
