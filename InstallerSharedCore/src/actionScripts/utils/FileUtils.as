@@ -432,7 +432,7 @@ package actionScripts.utils
 			function completeHandlerDeletion(event:Event):void
 			{
 				manageListeners(event.target as File, false);
-				if (successHandler) successHandler();
+				if (successHandler != null) successHandler();
 			}
 			function onIOErrorDeletion(event:IOErrorEvent):void
 			{
