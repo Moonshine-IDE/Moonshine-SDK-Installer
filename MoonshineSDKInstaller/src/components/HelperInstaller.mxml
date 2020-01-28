@@ -11,7 +11,10 @@
 			import flash.utils.setTimeout;
 			
 			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
 			import mx.managers.PopUpManager;
+			
+			import spark.components.Alert;
 			
 			import actionScripts.events.HelperEvent;
 			import actionScripts.locator.HelperModel;
@@ -198,6 +201,18 @@
 			
 			private function startSingleInstallation(item:ComponentVO):void
 			{
+				// remove existing folder before proceed
+				if (FileUtils.isPathExists(item.installToPath))
+				{
+					deleteExistingFolderBeforeDownload(item, function(item:ComponentVO):void
+															{
+																item.isAlreadyDownloaded = false;
+																progressBar.visible = true;
+																startSingleInstallation(item);
+															});
+					return;
+				}
+				
 				itemDownloading = item;
 				itemDownloading.hasError = null;
 				switch (item.type)
@@ -231,6 +246,28 @@
 						archiveDownloader.viewResourceConstants = viewResourceConstants;
 						archiveDownloader.startInstallation();
 						break;
+				}
+			}
+			
+			private function deleteExistingFolderBeforeDownload(item:ComponentVO, successFn:Function):void
+			{
+				lblLastMessage.text = "Attempting to remove existing \""+ item.title +"\" folder. This may take longer..";
+				progressBar.visible = false;
+				CursorManager.setBusyCursor();
+				FileUtils.deleteDirectoryAsync(new File(item.installToPath), onDeletionCompleted, onDeleteionError);
+				
+				/*
+				* @local
+				*/
+				function onDeletionCompleted():void
+				{
+					CursorManager.removeBusyCursor();
+					successFn(item);
+				}
+				function onDeleteionError(value:String):void
+				{
+					CursorManager.removeBusyCursor();
+					Alert.show(value, "Error!");
 				}
 			}
 			
