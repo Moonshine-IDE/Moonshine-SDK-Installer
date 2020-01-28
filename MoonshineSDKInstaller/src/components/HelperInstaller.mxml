@@ -471,6 +471,7 @@
 							   DOWNLOAD_COMPONENT="onDownloadAComponentRequested(event)"
 							   OPEN_COMPONENT_LICENSE="onOpenAComponentLicenseRequested(event)"
 							   ALL_COMPONENTS_TESTED="onAllComponentsFinishDetection(event)"
+							   DOWNLOAD_VARIANT_CHANGED="onEachComponentDownloaded(event)"
 							   isRunningInsideMoonshine="false" paddingBottom="10"/>
 		<s:VGroup width="100%"
 				  verticalAlign="middle" horizontalAlign="center"
