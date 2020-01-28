@@ -1,5 +1,6 @@
 package actionScripts.valueObjects
 {
+	[Bindable]
 	public class ComponentVariantVO
 	{
 		public static const TYPE_STABLE:String = "Stable";
@@ -15,5 +16,15 @@ package actionScripts.valueObjects
 		public var sizeInMb:int;
 		
 		public function ComponentVariantVO() {}
+		
+		private var _isReDownloadAvailable:Boolean;
+		public function get isReDownloadAvailable():Boolean
+		{
+			return _isReDownloadAvailable;
+		}
+		public function set isReDownloadAvailable(value:Boolean):void
+		{
+			_isReDownloadAvailable = value;
+		}
 	}
 }

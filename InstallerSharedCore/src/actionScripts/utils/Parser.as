@@ -172,6 +172,10 @@ package actionScripts.utils
 						{
 							preSelectedVariant = tmpVariant;
 						}
+						if (variant.hasOwnProperty("@isRedownload"))
+						{
+							tmpVariant.isReDownloadAvailable = (String(variant.@isRedownload) == "true") ? true : false;
+						}
 					}
 					
 					if (!preSelectedVariant) preSelectedVariant = tmpComponent.downloadVariants[0];

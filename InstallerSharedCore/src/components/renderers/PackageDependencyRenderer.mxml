@@ -75,6 +75,16 @@
 					imgDownloaded.includeInLayout = imgDownloaded.visible = data.isAlreadyDownloaded;
 					imgDownload.includeInLayout = imgDownload.visible= !data.isAlreadyDownloaded;
 				}
+				
+				if (data.downloadVariants && data.downloadVariants.getItemAt(data.selectedVariantIndex).isReDownloadAvailable && 
+					data.isAlreadyDownloaded && !data.isDownloading && !data.isSelectedToDownload)
+				{
+					imgReDownload.includeInLayout = imgReDownload.visible = true;
+				}
+				else
+				{
+					imgReDownload.includeInLayout = imgReDownload.visible = false;
+				}
 			}
 			
 			protected function onVariantChange(event:IndexChangeEvent):void
@@ -140,6 +150,13 @@
 				 source="@Embed('/helperResources/images/icoDownloadNoLabel.png')"
 				 includeInLayout="false" visible="false"
 				 click="onDownloadRequest(event)" toolTip="Download"
+				 alpha="{imgDownload.enabled ? 1 : .8}"
+				 enabled="{HelperConstants.IS_RUNNING_IN_MOON || (!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; HelperConstants.IS_INSTALLER_READY)}"/>
+		<s:Image id="imgReDownload"
+				 width="50" buttonMode="true"
+				 includeInLayout="false" visible="false"
+				 source="@Embed('/helperResources/images/icoReDownloadNoLabel.png')"
+				 click="onDownloadRequest(event)" toolTip="Re-Download"
 				 alpha="{imgDownload.enabled ? 1 : .8}"
 				 enabled="{HelperConstants.IS_RUNNING_IN_MOON || (!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; HelperConstants.IS_INSTALLER_READY)}"/>
 		<s:Image id="imgQueued" 

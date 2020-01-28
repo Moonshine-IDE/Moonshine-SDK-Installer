@@ -154,7 +154,7 @@
 				<description>The Apache License Version 2.0 applies to all releases of Apache Royale starting with Royale 0.9.6</description>
 			</license>
 			<download>
-				<variant>
+				<variant isSelected="true">
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
 						<windows>161</windows>
@@ -173,7 +173,7 @@
 			            </version>
 					</mac>
 				</variant>
-				<variant isSelected="true">
+				<variant isRedownload="true">
 					<title>Nightly</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
 						<windows>144</windows>

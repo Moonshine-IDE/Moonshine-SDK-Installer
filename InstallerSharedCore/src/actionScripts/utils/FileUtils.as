@@ -418,6 +418,42 @@ package actionScripts.utils
 			return path;
 		}
 		
+		/**
+		 * Delete a directory async
+		 */
+		public static function deleteDirectoryAsync(directory:File, successHandler:Function=null, errorHandler:Function=null):void
+		{
+			manageListeners(directory, true) 
+			directory.deleteDirectoryAsync(true);
+			
+			/*
+			 * @local
+			 */
+			function completeHandlerDeletion(event:Event):void
+			{
+				manageListeners(event.target as File, false);
+				if (successHandler) successHandler();
+			}
+			function onIOErrorDeletion(event:IOErrorEvent):void
+			{
+				manageListeners(event.target as File, false);
+				if (errorHandler != null) errorHandler(event.text);
+			}
+			function manageListeners(origin:File, attach:Boolean):void
+			{
+				if (attach)
+				{
+					origin.addEventListener(Event.COMPLETE, completeHandlerDeletion);
+					origin.addEventListener(IOErrorEvent.IO_ERROR, onIOErrorDeletion);
+				}
+				else
+				{
+					origin.removeEventListener(Event.COMPLETE, completeHandlerDeletion);
+					origin.removeEventListener(IOErrorEvent.IO_ERROR, onIOErrorDeletion);
+				}
+			}
+		}
+		
 		private static function convertToFile(path:String):File
 		{
 			try
