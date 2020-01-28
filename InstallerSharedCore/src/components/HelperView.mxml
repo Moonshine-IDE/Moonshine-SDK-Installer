@@ -9,6 +9,7 @@
 		[Event(name="COMPONENT_DOWNLOADED", type="actionScripts.events.HelperEvent")]
 		[Event(name="OPEN_COMPONENT_LICENSE", type="actionScripts.events.HelperEvent")]
 		[Event(name="ALL_COMPONENTS_TESTED", type="actionScripts.events.HelperEvent")]
+		[Event(name="DOWNLOAD_VARIANT_CHANGED", type="actionScripts.events.HelperEvent")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[

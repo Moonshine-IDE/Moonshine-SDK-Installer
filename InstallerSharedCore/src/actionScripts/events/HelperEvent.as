@@ -10,6 +10,7 @@ package actionScripts.events
 		public static const COMPONENT_NOT_DOWNLOADED:String = "COMPONENT_NOT_DOWNLOADED";
 		public static const OPEN_COMPONENT_LICENSE:String = "OPEN_COMPONENT_LICENSE";
 		public static const ALL_COMPONENTS_TESTED:String = "ALL_COMPONENTS_TESTED";
+		public static const DOWNLOAD_VARIANT_CHANGED:String = "DOWNLOAD_VARIANT_CHANGED";
 		
 		public var value:Object;
 		

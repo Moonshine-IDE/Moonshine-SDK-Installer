@@ -87,7 +87,7 @@
 				data.sizeInMb = tmpVariant.sizeInMb;
 				
 				// do update All Install button label
-				this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, null, true));
+				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED, null, true));
 			}
 			
 		]]>
@@ -115,8 +115,9 @@
 					 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON}" visible="{!HelperConstants.IS_RUNNING_IN_MOON}"/>
 		</s:VGroup>
 		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
-			<s:DropDownList dataProvider="{data.downloadVariants}"
-							labelField="title" 
+			<s:DropDownList id="ddlVariant" 
+							dataProvider="{data.downloadVariants}"
+							labelField="title" typicalItem="{ddlVariant.selectedItem}"
 							visible="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}" 
 							includeInLayout="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}"
 							requireSelection="true" color="0x000" change="onVariantChange(event)"

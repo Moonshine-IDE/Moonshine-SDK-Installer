@@ -86,7 +86,7 @@
 				data.sizeInMb = tmpVariant.sizeInMb;
 				
 				// do update All Install button label
-				this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_DOWNLOADED, null, true));
+				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED, null, true));
 			}
 			
 		]]>
@@ -101,22 +101,23 @@
 		</s:fill>
 	</s:Rect>
 	
-	<s:HGroup width="100%"
-			  verticalCenter="0"
-			  verticalAlign="middle"
+	<s:HGroup id="hgBody" 
+			  width="100%" verticalCenter="0"
+			  verticalAlign="middle" horizontalAlign="right"
 			  paddingRight="20">
-		<s:DropDownList id="ddlVariant" 
-						dataProvider="{data.downloadVariants}"
-						labelField="title" 
-						visible="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}" 
-						includeInLayout="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}"
-						requireSelection="true" color="0x000"
-						selectedIndex="{data.selectedVariantIndex}" change="onVariantChange(event)"/>
-		<s:Image source="@Embed('/helperResources/images/imgPackageHDivider.png')"
-				 height="38" fillMode="repeat" 
-				 visible="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}" 
-				 includeInLayout="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}"/>
-		<s:Label text="{data.title}" width="100%"
+		<s:HGroup verticalAlign="middle"
+				  visible="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}" 
+				  includeInLayout="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}">
+			<s:DropDownList id="ddlVariant" 
+							dataProvider="{data.downloadVariants}"
+							labelField="title" typicalItem="{ddlVariant.selectedItem}"
+							requireSelection="true" color="0x000"
+							selectedIndex="{data.selectedVariantIndex}" change="onVariantChange(event)"/>
+			<s:Image source="@Embed('/helperResources/images/imgPackageHDivider.png')"
+					 height="38" fillMode="repeat"/>
+		</s:HGroup>
+		<s:Label id="lblTitle" 
+				 text="{data.title}" width="100%"
 				 styleName="uiTextRendererLabelSub"
 				 textAlign="right" paddingRight="10"/>
 		<s:Image id="imgDownloaded"
