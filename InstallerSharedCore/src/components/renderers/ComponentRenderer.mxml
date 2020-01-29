@@ -11,6 +11,7 @@
 			import spark.events.IndexChangeEvent;
 			
 			import actionScripts.events.HelperEvent;
+			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentTypes;
@@ -95,6 +96,7 @@
 				data.selectedVariantIndex = event.newIndex;
 				data.isDownloaded = data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
 				data.sizeInMb = tmpVariant.sizeInMb;
+				data.createdOn = FileUtils.getCreationDateForPath(installToPath);
 				
 				// do update All Install button label
 				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED, null, true));
@@ -132,10 +134,20 @@
 			<s:Label text="{data.description}" width="100%"
 					 maxDisplayedLines="3" paddingTop="10"
 					 styleName="uiTextRendererDescription"/>
-			<s:Label text="License Agreement"
-					 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
-					 buttonMode="true" click="onLicenseClick(event)"
-					 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON}" visible="{!HelperConstants.IS_RUNNING_IN_MOON}"/>
+			<s:HGroup width="100%" verticalAlign="middle">
+				<s:Label text="License Agreement"
+						 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
+						 buttonMode="true" click="onLicenseClick(event)"
+						 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON}" visible="{!HelperConstants.IS_RUNNING_IN_MOON}"/>
+				<s:Label text="|" color="0x666666"
+						 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; data.isAlreadyDownloaded}" 
+						 visible="{!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; data.isAlreadyDownloaded}"/>
+				<s:Label text="Created On"
+						 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
+						 buttonMode="true" toolTip="{data.createdOn.toLocaleString()}"
+						 includeInLayout="{data.isAlreadyDownloaded &amp;&amp; data.createdOn}" 
+						 visible="{data.isAlreadyDownloaded &amp;&amp; data.createdOn}"/>
+			</s:HGroup>
 		</s:VGroup>
 		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
 			<s:DropDownList id="ddlVariant" 

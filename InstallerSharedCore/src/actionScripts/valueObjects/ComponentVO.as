@@ -1,6 +1,8 @@
 package actionScripts.valueObjects
 {
 	import mx.collections.ArrayList;
+	
+	import actionScripts.utils.FileUtils;
 
 	[Bindable] public class ComponentVO
 	{
@@ -65,6 +67,7 @@ package actionScripts.valueObjects
 		public function set isAlreadyDownloaded(value:Boolean):void
 		{
 			_isAlreadyDownloaded = value;
+			createdOn = FileUtils.getCreationDateForPath(installToPath);
 		}
 		public function get isAlreadyDownloaded():Boolean
 		{
@@ -145,6 +148,16 @@ package actionScripts.valueObjects
 		{
 			if (downloadVariants) return downloadVariants.length;
 			return 1;
+		}
+		
+		private var _createdOn:Date;
+		public function get createdOn():Date
+		{
+			return _createdOn;
+		}
+		public function set createdOn(value:Date):void
+		{
+			_createdOn = value;
 		}
 	}
 }

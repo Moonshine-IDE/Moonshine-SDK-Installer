@@ -54,6 +54,23 @@ package actionScripts.utils
 		}
 		
 		/**
+		 * Returns creation date
+		 */
+		public static function getCreationDateForPath(value:String):Date
+		{
+			if (!pathCheckingFile) pathCheckingFile = new File();
+			try {
+				pathCheckingFile.nativePath = value;
+			} catch (e:Error)
+			{
+				return null;
+			}
+			
+			if (pathCheckingFile.exists) return pathCheckingFile.creationDate;
+			return null;
+		}
+		
+		/**
 		 * Creating new File instance everytime
 		 * to detect if path is directory or file
 		 */
