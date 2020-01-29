@@ -251,6 +251,7 @@
 			
 			private function deleteExistingFolderBeforeDownload(item:ComponentVO, successFn:Function):void
 			{
+				lblLastMessage.setStyle("fontWeight", "bold");
 				lblLastMessage.text = "Attempting to remove existing \""+ item.title +"\" folder. This may take longer..";
 				progressBar.visible = false;
 				CursorManager.setBusyCursor();
@@ -262,11 +263,13 @@
 				function onDeletionCompleted():void
 				{
 					CursorManager.removeBusyCursor();
+					lblLastMessage.setStyle("fontWeight", "normal");
 					successFn(item);
 				}
 				function onDeleteionError(value:String):void
 				{
 					CursorManager.removeBusyCursor();
+					lblLastMessage.setStyle("fontWeight", "normal");
 					Alert.show(value, "Error!");
 				}
 			}
