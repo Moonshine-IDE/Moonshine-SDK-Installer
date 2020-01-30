@@ -329,13 +329,13 @@
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<windows>
 						<version version="5.4.1" displayVersion="5.4.1">
-			                <path>http://services.gradle.org/distributions/</path>
+			                <path>https://services.gradle.org/distributions/</path>
 			                <file>gradle-5.4.1-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
 						<version version="5.4.1" displayVersion="5.4.1">
-			                <path>http://services.gradle.org/distributions/</path>
+			                <path>https://services.gradle.org/distributions/</path>
 			                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
