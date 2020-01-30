@@ -169,7 +169,7 @@
 					 width="50"
 					 source="@Embed('/helperResources/images/icoTickLabel.png')"
 					 includeInLayout="{data.isAlreadyDownloaded}" visible="{data.isAlreadyDownloaded}"
-					 toolTip="{data.createdOn.toLocaleString()}"/>
+					 toolTip="{'Installed: '+ data.createdOn.toLocaleString()}"/>
 			<s:Image id="imgVersionNote"
 					 buttonMode="true"
 					 source="@Embed('/helperResources/images/icoNote.png')"

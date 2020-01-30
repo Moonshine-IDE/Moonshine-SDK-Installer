@@ -141,7 +141,7 @@
 				 width="50"
 				 source="@Embed('/helperResources/images/icoTickNoLabel.png')"
 				 includeInLayout="false" visible="false"
-				 toolTip="{data.createdOn.toLocaleString()}"/>
+				 toolTip="{'Installed: '+ data.createdOn.toLocaleString()}"/>
 		<s:Image id="imgVersionNote"
 				 source="@Embed('/helperResources/images/icoNoteNoLabel.png')"
 				 includeInLayout="{data.oldInstalledVersion}" visible="{data.oldInstalledVersion}"
