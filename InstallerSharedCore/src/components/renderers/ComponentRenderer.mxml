@@ -7,6 +7,8 @@
 		<![CDATA[
 			import flash.net.navigateToURL;
 			
+			import mx.formatters.DateFormatter;
+			
 			import spark.components.BusyIndicator;
 			import spark.events.IndexChangeEvent;
 			
@@ -113,6 +115,13 @@
 				{
 					imgReDownload.includeInLayout = imgReDownload.visible = false;
 				}
+				
+				if (data.createdOn)
+				{
+					var tmpFormatter:DateFormatter = new DateFormatter();
+					tmpFormatter.formatString = "MMM DD, YYYY";
+					lblCreatedOn.text = "Installed: "+ tmpFormatter.format(data.createdOn);
+				}
 			}
 			
 		]]>
@@ -142,9 +151,9 @@
 				<s:Label text="|" color="0x666666"
 						 includeInLayout="{!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; data.isAlreadyDownloaded}" 
 						 visible="{!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; data.isAlreadyDownloaded}"/>
-				<s:Label text="Created On"
-						 styleName="uiTextRendererDescription" textDecoration="underline" color="0x0099ff"
-						 buttonMode="true" toolTip="{data.createdOn.toLocaleString()}"
+				<s:Label id="lblCreatedOn" 
+						 styleName="uiTextRendererDescription" color="0x999999"
+						 toolTip="{data.createdOn.toLocaleString()}"
 						 includeInLayout="{data.isAlreadyDownloaded &amp;&amp; data.createdOn}" 
 						 visible="{data.isAlreadyDownloaded &amp;&amp; data.createdOn}"/>
 			</s:HGroup>
