@@ -153,7 +153,6 @@
 						 visible="{!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; data.isAlreadyDownloaded}"/>
 				<s:Label id="lblCreatedOn" 
 						 styleName="uiTextRendererDescription" color="0x999999"
-						 toolTip="{data.createdOn.toLocaleString()}"
 						 includeInLayout="{data.isAlreadyDownloaded &amp;&amp; data.createdOn}" 
 						 visible="{data.isAlreadyDownloaded &amp;&amp; data.createdOn}"/>
 			</s:HGroup>
@@ -169,7 +168,8 @@
 			<s:Image id="imgDownloaded"
 					 width="50"
 					 source="@Embed('/helperResources/images/icoTickLabel.png')"
-					 includeInLayout="{data.isAlreadyDownloaded}" visible="{data.isAlreadyDownloaded}"/>
+					 includeInLayout="{data.isAlreadyDownloaded}" visible="{data.isAlreadyDownloaded}"
+					 toolTip="{data.createdOn.toLocaleString()}"/>
 			<s:Image id="imgVersionNote"
 					 buttonMode="true"
 					 source="@Embed('/helperResources/images/icoNote.png')"
