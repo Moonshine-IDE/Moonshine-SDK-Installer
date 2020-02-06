@@ -289,6 +289,8 @@ package actionScripts.utils
 				case ComponentTypes.TYPE_SVN:
 					if (HelperConstants.IS_MACOS) return "Command Line Tools";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"SVN"+ File.separator +"slik-svn-"+ version;
+				case ComponentTypes.TYPE_NODEJS:
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"NodeJS"+ File.separator +"node-v"+ version;
 				default:
 					throw new Error("Unknown Component Type");
 			}

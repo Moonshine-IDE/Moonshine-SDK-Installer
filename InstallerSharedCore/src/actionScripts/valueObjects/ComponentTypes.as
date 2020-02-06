@@ -13,5 +13,6 @@ package actionScripts.valueObjects
 		public static const TYPE_GRADLE:String = "gradle";
 		public static const TYPE_GRAILS:String = "grails";
 		public static const TYPE_OPENJAVA:String = "openjava";
+		public static const TYPE_NODEJS:String = "nodejs";
 	}
 }
