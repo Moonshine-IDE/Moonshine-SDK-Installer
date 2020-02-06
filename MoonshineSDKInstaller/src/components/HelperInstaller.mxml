@@ -171,6 +171,9 @@
 						case ComponentTypes.TYPE_OPENJAVA:
 							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Java");
 							break;
+						case ComponentTypes.TYPE_NODEJS:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("NodeJs");
+							break;
 					}
 					
 					// create the sub-directory if not exists
