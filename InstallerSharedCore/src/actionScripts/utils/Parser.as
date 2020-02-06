@@ -106,6 +106,14 @@ package actionScripts.utils
 						to.PLAYERGLOBAL_HOME = tmpPath;
 					}
 				}
+				/*else if (splitLine[0] == "NODEJS_HOME")
+				{
+					tmpPath = new File(splitLine[1]);
+					if (tmpPath.exists)
+					{
+						to.NODEJS_HOME = tmpPath;
+					}
+				}*/
 			}
 		}
 		

@@ -6,6 +6,7 @@ package actionScripts.valueObjects
 	{
 		public var ANT_HOME:File;
 		public var JAVA_HOME:File;
+		public var NODEJS_HOME:File;
 		public var FLEX_HOME:HelperSDKVO;
 		public var MAVEN_HOME:File;
 		public var GRADLE_HOME:File;

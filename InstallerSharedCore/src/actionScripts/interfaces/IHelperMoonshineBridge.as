@@ -14,6 +14,7 @@ package actionScripts.interfaces
 		function isGrailsPresent():Boolean;
 		function isSVNPresent():Boolean;
 		function isGitPresent():Boolean;
+		function isNodeJsPresent():Boolean;
 		function runOrDownloadSDKInstaller():void;
 
 		function get playerglobalExists():Boolean;

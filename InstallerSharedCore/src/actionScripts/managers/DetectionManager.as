@@ -116,6 +116,9 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_SVN:
 						item.isAlreadyDownloaded = model.moonshineBridge.isSVNPresent();
 						break;
+					case ComponentTypes.TYPE_NODEJS:
+						item.isAlreadyDownloaded = model.moonshineBridge.isNodeJsPresent();
+						break;
 				}
 			}
 			
@@ -184,6 +187,13 @@ package actionScripts.managers
 						if (environmentUtil.environments.JAVA_HOME) 
 						{
 							item.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
+						break;
+					case ComponentTypes.TYPE_NODEJS:
+						if (environmentUtil.environments.NODEJS_HOME) 
+						{
+							item.installToPath = environmentUtil.environments.NODEJS_HOME.nativePath;
 							item.isAlreadyDownloaded = true;
 						}
 						break;
