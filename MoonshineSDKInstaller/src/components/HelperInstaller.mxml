@@ -320,7 +320,7 @@
 							var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
 							if (fileToPatch.exists)
 							{
-								var fileToPatchWith:File = File.applicationDirectory.resolvePath("assets/royale-config.xml");
+								var fileToPatchWith:File = File.applicationDirectory.resolvePath("images/royale-config.xml");
 								FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
 							}
 						}, 1000);
