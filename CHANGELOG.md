@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [3.5.1]
+
+### Fixed
+
+* Fixed issue where downloading Royale v0.9.6 failed to apply patch fix for the broken royale-config.xml. (More information on patch fix can be found in this [discussion](http://apache-royale-development.20373.n8.nabble.com/Broken-royale-config-in-JS-only-build-of-released-Apache-Royale-SDK-0-9-6-td12515.html) on the Royale development mailing list.)
+
 ## Moonshine SDK Installer [3.5.0]
 
 ### Added
