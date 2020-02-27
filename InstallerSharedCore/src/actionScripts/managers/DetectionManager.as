@@ -119,6 +119,9 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_NODEJS:
 						item.isAlreadyDownloaded = model.moonshineBridge.isNodeJsPresent();
 						break;
+					case ComponentTypes.TYPE_NOTES:
+						item.isAlreadyDownloaded = model.moonshineBridge.isNotesDominoPresent();
+						break;
 				}
 			}
 			

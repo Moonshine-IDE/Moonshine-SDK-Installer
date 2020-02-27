@@ -15,6 +15,7 @@ package actionScripts.interfaces
 		function isSVNPresent():Boolean;
 		function isGitPresent():Boolean;
 		function isNodeJsPresent():Boolean;
+		function isNotesDominoPresent():Boolean;
 		function runOrDownloadSDKInstaller():void;
 
 		function get playerglobalExists():Boolean;
