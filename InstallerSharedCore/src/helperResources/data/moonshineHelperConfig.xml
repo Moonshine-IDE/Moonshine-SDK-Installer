@@ -549,8 +549,8 @@
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoNotes.png</image>
 			<pathValidation>
-				<windows>notess.exe</windows>
-				<mac>IBM Notes.app</mac>
+				<windows>C:/Program Files (x86)/IBM/Notes/notes.exe</windows>
+				<mac>/Applications/IBM Notes.app</mac>
 			</pathValidation>
 			<sdkType>notes</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
