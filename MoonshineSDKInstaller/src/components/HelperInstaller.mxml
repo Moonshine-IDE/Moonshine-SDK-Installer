@@ -315,7 +315,7 @@
 				if (itemDownloading.type == ComponentTypes.TYPE_ROYALE)
 				{
 					var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.getItemAt(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
-					if (variantVO.title == ComponentVariantVO.TYPE_STABLE)
+					if (variantVO.title.indexOf(ComponentVariantVO.TYPE_STABLE) != -1)
 					{
 						var timeoutValue:uint = setTimeout(function():void
 						{
