@@ -107,7 +107,7 @@
 			private function setUI():void
 			{
 				if (data.downloadVariants && data.downloadVariants.getItemAt(data.selectedVariantIndex).isReDownloadAvailable && 
-					data.isAlreadyDownloaded && !data.isDownloading && !data.isSelectedToDownload)
+					data.isAlreadyDownloaded && !data.isDownloading && !data.isSelectedToDownload && data.isDownloadable)
 				{
 					imgReDownload.includeInLayout = imgReDownload.visible = true;
 				}
@@ -186,8 +186,10 @@
 			<s:Image id="imgDownload"
 					 width="50" buttonMode="true"
 					 source="@Embed('/helperResources/images/icoDownloadLabel.png')"
-					 includeInLayout="{!data.isAlreadyDownloaded &amp;&amp; !data.isDownloading &amp;&amp; !data.isDownloaded &amp;&amp; !data.isSelectedToDownload}" 
-					 visible="{!data.isAlreadyDownloaded &amp;&amp; !data.isDownloading &amp;&amp; !data.isDownloaded &amp;&amp; !data.isSelectedToDownload}"
+					 includeInLayout="{data.isDownloadable &amp;&amp; !data.isAlreadyDownloaded &amp;&amp; 
+					 !data.isDownloading &amp;&amp; !data.isDownloaded &amp;&amp; !data.isSelectedToDownload}" 
+					 visible="{data.isDownloadable &amp;&amp; !data.isAlreadyDownloaded &amp;&amp; !data.isDownloading 
+					 &amp;&amp; !data.isDownloaded &amp;&amp; !data.isSelectedToDownload}"
 					 alpha="{imgDownload.enabled ? 1 : .8}"
 					 enabled="{HelperConstants.IS_RUNNING_IN_MOON || (!HelperConstants.IS_RUNNING_IN_MOON &amp;&amp; HelperConstants.IS_INSTALLER_READY)}"
 					 click="onDownloadRequest(event)"/>

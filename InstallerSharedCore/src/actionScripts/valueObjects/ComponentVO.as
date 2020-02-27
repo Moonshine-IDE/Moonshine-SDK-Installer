@@ -23,6 +23,16 @@ package actionScripts.valueObjects
 		{
 		}
 		
+		private var _isDownloadable:Boolean = true;
+		public function get isDownloadable():Boolean
+		{
+			return _isDownloadable;
+		}
+		public function set isDownloadable(value:Boolean):void
+		{
+			_isDownloadable = value;
+		}
+		
 		private var _isDownloading:Boolean;
 		public function set isDownloading(value:Boolean):void
 		{

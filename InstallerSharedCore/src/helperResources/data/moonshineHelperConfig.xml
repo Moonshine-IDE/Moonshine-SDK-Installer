@@ -105,6 +105,12 @@
 			<image></image>
 			<componentDependencyIDs>openjava,maven</componentDependencyIDs>
 		</item>
+		<item integrated="false">
+			<title>Domino Support</title>
+			<description><![CDATA[Support for DXL Importer and Notes Client]]></description>
+			<image></image>
+			<componentDependencyIDs>notes</componentDependencyIDs>
+		</item>
 	</packages>
 	<components>
 		<item id="flex">
@@ -533,6 +539,50 @@
 						<version version="12.15.0" displayVersion="12.15.0">
 		                	<path>https://nodejs.org/dist/v12.15.0/</path>
 		              		<file>node-v12.15.0-darwin-x64.tar.gz</file>
+		             	</version>
+					</mac>
+				</variant>
+			</download>
+		</item>
+		<item id="notes" isDownloadable="false">
+			<title>IBM/HCL Notes</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoNotes.png</image>
+			<pathValidation>
+				<windows>notess.exe</windows>
+				<mac>IBM Notes.app</mac>
+			</pathValidation>
+			<sdkType>notes</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://feathersui.com</website>
+			<license>
+				<windows>
+					<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
+					<title>GNU General Public License version 2</title>
+					<description>Git is licensed under the GNU General Public License version 2.</description>
+				</windows>
+				<mac>
+					<url></url>
+					<title>MAC SDK AND XCODE AGREEMENT</title>
+					<description licenseFile="CommandLineToolsLicenseAgreement.txt"/>
+				</mac>
+			</license>
+			<download>
+				<variant>
+					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
+					<diskMBusage>
+						<windows>979</windows>
+						<mac>279</mac>	
+					</diskMBusage>
+					<windows>
+						<version version="11.0.0" displayVersion="11.0.0">
+			            	<path></path>
+		              		<file></file>
+		            	</version>
+		 			</windows>
+					<mac>
+						<version version="11.0.0" displayVersion="11.0.0">
+		                	<path></path>
+		              		<file></file>
 		             	</version>
 					</mac>
 				</variant>

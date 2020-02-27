@@ -80,11 +80,11 @@
 				else
 				{
 					imgDownloaded.includeInLayout = imgDownloaded.visible = data.isAlreadyDownloaded;
-					imgDownload.includeInLayout = imgDownload.visible= !data.isAlreadyDownloaded;
+					imgDownload.includeInLayout = imgDownload.visible = (data.isDownloadable && !data.isAlreadyDownloaded);
 				}
 				
 				if (data.downloadVariants && data.downloadVariants.getItemAt(data.selectedVariantIndex).isReDownloadAvailable && 
-					data.isAlreadyDownloaded && !data.isDownloading && !data.isSelectedToDownload)
+					data.isAlreadyDownloaded && !data.isDownloading && !data.isSelectedToDownload && data.isDownloadable)
 				{
 					imgReDownload.includeInLayout = imgReDownload.visible = true;
 				}

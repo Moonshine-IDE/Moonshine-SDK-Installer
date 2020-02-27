@@ -151,6 +151,13 @@ package actionScripts.utils
 				tmpComponent.isSelectionChangeAllowed = true;
 				tmpComponent.website = String(comp.website);
 				
+				// some items may requires to install manually
+				if (comp.hasOwnProperty("@isDownloadable"))
+				{
+					tmpComponent.isDownloadable = (String(comp.@isDownloadable) == "false") ? false : true;
+					tmpComponent.hasWarning = !tmpComponent.isDownloadable ? "This item may require to install manually." : null;
+				}
+				
 				// variants
 				var variantCount:int = XMLList(comp.download.variant).length();
 				if (variantCount == 1)
@@ -299,6 +306,8 @@ package actionScripts.utils
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"SVN"+ File.separator +"slik-svn-"+ version;
 				case ComponentTypes.TYPE_NODEJS:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"NodeJS"+ File.separator +"node-v"+ version;
+				case ComponentTypes.TYPE_NOTES:
+					return (HelperConstants.IS_MACOS ? "/Applications" : "C:/Program Files (x86)/IBM/Notes");
 				default:
 					throw new Error("Unknown Component Type");
 			}
