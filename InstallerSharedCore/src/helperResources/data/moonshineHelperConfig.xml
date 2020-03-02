@@ -550,7 +550,7 @@
 			<image>/helperResources/images/logoNotes.png</image>
 			<pathValidation>
 				<windows>notes.exe</windows>
-				<mac>IBM Notes.app</mac>
+				<mac>Contents/macOS/notes</mac>
 			</pathValidation>
 			<sdkType>notes</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>

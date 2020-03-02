@@ -29,13 +29,13 @@ package actionScripts.managers
 			_itemTestCount = value;
 			if (_itemTestCount == model.components.source.length)
 			{
-				_itemTestCount = 0;
 				this.dispatchEvent(new HelperEvent(HelperEvent.ALL_COMPONENTS_TESTED, null));
 			}
 		}
 		
 		public function detect():void
 		{
+			itemTestCount = 0;
 			HelperConstants.IS_DETECTION_IN_PROCESS = true;
 			if (!HelperConstants.IS_MACOS && !environmentUtil)
 			{
@@ -138,8 +138,7 @@ package actionScripts.managers
 		private function stepB_checkDefaultInstallLocation(item:ComponentVO):void
 		{
 			// 1. named-sdk folder check
-			if (HelperUtils.isValidSDKDirectoryBy(item.type, item.installToPath, item.pathValidation))
-				item.isAlreadyDownloaded = true;
+			item.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(item.type, item.installToPath, item.pathValidation);
 			
 			// 2. Windows-only env.variable check
 			if (environmentUtil && !item.isAlreadyDownloaded)
@@ -212,6 +211,16 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_SVN:
 						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
 						break;
+					case ComponentTypes.TYPE_NOTES:
+						if (HelperConstants.IS_MACOS)
+						{
+							
+						}
+						else
+						{
+							new NotesDominoDetector(notifyMoonshineOnDetection);
+						}
+						break;
 				}
 			}
 			
@@ -254,7 +263,7 @@ package actionScripts.managers
 			function updateComponent():void
 			{
 				component.isAlreadyDownloaded = true;
-				component.hasWarning = "Feature available. Click on Configure to allow";
+				component.hasWarning = "Feature available. Click on Configure(icon) to allow";
 				notifyMoonshineOnDetection(component);
 			}
 		}
