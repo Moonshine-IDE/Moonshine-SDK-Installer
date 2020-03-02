@@ -8,7 +8,7 @@ package actionScripts.managers
 	public class NotesDominoDetector
 	{
 		protected var installLocationsWindows:Array = ["C:\\Program Files (x86)\\IBM\\Notes", "C:\\Program Files (x86)\\HCL\\Notes"];
-		protected var installLocationMacOS:String = "/Applications/IBM Notes.app";
+		protected var installLocationsMacOS:Array = ["/Applications/IBM Notes.app", "/Applications/HCL Notes.app"];
 		
 		private var onCompletion:Function;
 		private var component:ComponentVO;
@@ -29,22 +29,16 @@ package actionScripts.managers
 		
 		protected function startBasicDetection():void
 		{
-			if (HelperConstants.IS_MACOS && HelperUtils.isValidSDKDirectoryBy(component.type, installLocationMacOS, component.pathValidation))
+			var installLocations:Array = HelperConstants.IS_MACOS ? installLocationsMacOS : installLocationsWindows;
+			
+			for (var i:int; i < installLocations.length; i++)
 			{
-				component.isAlreadyDownloaded = true;
-				component.installToPath = installLocationMacOS;
-				component.hasWarning = "Feature available. Click on Configure(icon) to allow";
-			}
-			else (!HelperConstants.IS_MACOS)
-			{
-				for (var i:int; i < installLocationsWindows.length; i++)
+				if (HelperUtils.isValidSDKDirectoryBy(component.type, installLocations[i], component.pathValidation))
 				{
-					if (HelperUtils.isValidSDKDirectoryBy(component.type, installLocationsWindows[i], component.pathValidation))
-					{
-						component.isAlreadyDownloaded = true;
-						component.installToPath = installLocationsWindows[i];
-						break;
-					}
+					component.isAlreadyDownloaded = true;
+					component.installToPath = installLocations[i];
+					if (HelperConstants.IS_MACOS) component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+					break;
 				}
 			}
 			

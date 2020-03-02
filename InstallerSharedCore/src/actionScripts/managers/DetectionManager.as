@@ -212,14 +212,7 @@ package actionScripts.managers
 						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
 						break;
 					case ComponentTypes.TYPE_NOTES:
-						if (HelperConstants.IS_MACOS)
-						{
-							
-						}
-						else
-						{
-							new NotesDominoDetector(notifyMoonshineOnDetection);
-						}
+						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
 				}
 			}
@@ -263,7 +256,7 @@ package actionScripts.managers
 			function updateComponent():void
 			{
 				component.isAlreadyDownloaded = true;
-				component.hasWarning = "Feature available. Click on Configure(icon) to allow";
+				component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
 				notifyMoonshineOnDetection(component);
 			}
 		}
