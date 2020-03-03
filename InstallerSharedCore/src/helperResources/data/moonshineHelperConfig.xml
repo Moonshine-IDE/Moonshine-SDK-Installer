@@ -107,7 +107,7 @@
 		</item>
 		<item integrated="false">
 			<title>Domino Support</title>
-			<description><![CDATA[Support for DXL Importer and Notes Client]]></description>
+			<description><![CDATA[Use Domino On Disk Projects and import Java agents]]></description>
 			<image></image>
 			<componentDependencyIDs>notes</componentDependencyIDs>
 		</item>
