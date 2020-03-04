@@ -2,7 +2,7 @@
 <config>
 	<flex version="4.16.1"/>
 	<flexJS version="0.8.0"/>
-	<air version="28.0"/>
+	<air version="32.0"/>
 	<Royale>
 		<windows>
 			<version version="0.9.4" displayVersion="0.9.4">
