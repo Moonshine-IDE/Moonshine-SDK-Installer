@@ -37,7 +37,7 @@ package actionScripts.managers
 				{
 					component.isAlreadyDownloaded = true;
 					component.installToPath = installLocations[i];
-					if (HelperConstants.IS_MACOS) component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+					component.hasWarning = null;
 					break;
 				}
 			}

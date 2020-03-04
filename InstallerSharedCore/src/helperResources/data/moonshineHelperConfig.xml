@@ -571,7 +571,7 @@
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
 						<windows>979</windows>
-						<mac>279</mac>	
+						<mac>1270</mac>	
 					</diskMBusage>
 					<windows>
 						<version version="11.0.0" displayVersion="11.0.0">

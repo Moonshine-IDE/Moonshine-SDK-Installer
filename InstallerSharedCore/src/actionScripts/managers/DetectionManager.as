@@ -120,6 +120,7 @@ package actionScripts.managers
 						item.isAlreadyDownloaded = model.moonshineBridge.isNodeJsPresent();
 						break;
 					case ComponentTypes.TYPE_NOTES:
+						item.hasWarning = null;
 						item.isAlreadyDownloaded = model.moonshineBridge.isNotesDominoPresent();
 						break;
 				}
