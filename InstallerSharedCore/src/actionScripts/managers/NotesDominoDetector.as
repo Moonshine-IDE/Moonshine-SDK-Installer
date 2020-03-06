@@ -8,7 +8,7 @@ package actionScripts.managers
 	public class NotesDominoDetector
 	{
 		protected var installLocationsWindows:Array = ["C:\\Program Files (x86)\\IBM\\Notes", "C:\\Program Files (x86)\\HCL\\Notes"];
-		protected var installLocationsMacOS:Array = ["/Users/santanu/Documents/Moonshine/Calculator.app", "/Applications/HCL Notes.app"];
+		protected var installLocationsMacOS:Array = ["/Users/santanu/Documents/Moonshine/Calculator.app", "/Applications/testID.id"];
 		
 		private var onCompletion:Function;
 		private var component:ComponentVO;
