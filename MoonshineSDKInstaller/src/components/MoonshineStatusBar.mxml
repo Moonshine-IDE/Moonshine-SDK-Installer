@@ -4,5 +4,5 @@
 	<s:Label id="lblBuilding"
 			 fontSize="10" paddingTop="3"
 			 horizontalCenter="0" verticalCenter="0"
-			 color="#333333" text="Copyright 2019 Prominic.NET, Inc. All rights reserved under the Apache license."/>
+			 color="#333333" text="Copyright 2020 Prominic.NET, Inc. All rights reserved under the Apache license."/>
 </s:Group>
