@@ -106,9 +106,7 @@ package actionScripts.utils
 		{
 			if (!HelperConstants.DEFAULT_INSTALLATION_PATH)
 			{
-				var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
-				if (tmpUserFolderSplit[1] == "Users") tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
-				HelperConstants.DEFAULT_INSTALLATION_PATH = new File("/" + tmpUserFolderSplit.join("/") +"/Downloads/"+ HelperConstants.DEFAULT_SDK_FOLDER_NAME);
+				HelperConstants.DEFAULT_INSTALLATION_PATH = FileUtils.getUserDownloadsDirectory().resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME);
 			}
 			
 			return HelperConstants.DEFAULT_INSTALLATION_PATH;

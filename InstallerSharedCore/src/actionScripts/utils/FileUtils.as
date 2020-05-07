@@ -471,6 +471,17 @@ package actionScripts.utils
 			}
 		}
 		
+		/**
+		 * Returns user's /Downloads directory
+		 * on macOS
+		 */
+		public static function getUserDownloadsDirectory():File
+		{
+			var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
+			if (tmpUserFolderSplit[1] == "Users") tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
+			return (new File("/" + tmpUserFolderSplit.join("/") +"/Downloads"));
+		}
+		
 		private static function convertToFile(path:String):File
 		{
 			try
