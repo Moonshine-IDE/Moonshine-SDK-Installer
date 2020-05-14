@@ -186,15 +186,15 @@
 						<mac>149</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.7" displayVersion="0.9.7">
+						<version version="0.9.8" displayVersion="0.9.8">
 			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
-			                <file>apache-royale-0.9.7-bin-js.zip</file>
+			                <file>apache-royale-0.9.8-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.7" displayVersion="0.9.7">
+						<version version="0.9.8" displayVersion="0.9.8">
 			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
-			                <file>apache-royale-0.9.7-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+			                <file>apache-royale-0.9.8-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
