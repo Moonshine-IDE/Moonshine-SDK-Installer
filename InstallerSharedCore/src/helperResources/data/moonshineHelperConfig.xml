@@ -167,15 +167,15 @@
 						<mac>179</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.6" displayVersion="0.9.6">
-			                <path>http://moonshine-ide.com/downloads/royale/</path>
-			                <file>apache-royale-0.9.6-bin-js.zip</file>
+						<version version="0.9.7" displayVersion="0.9.7">
+			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.7/binaries/</path>
+			                <file>apache-royale-0.9.7-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.6" displayVersion="0.9.6">
-			                <path>http://moonshine-ide.com/downloads/royale/</path>
-			                <file>apache-royale-0.9.6-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+						<version version="0.9.7" displayVersion="0.9.7">
+			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.7/binaries/</path>
+			                <file>apache-royale-0.9.7-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
