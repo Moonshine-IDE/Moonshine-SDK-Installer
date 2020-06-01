@@ -81,6 +81,7 @@ package actionScripts.utils
 			{
 				var scpt:File = File.applicationDirectory.resolvePath("shellScripts/SendToMoonshine.scpt");
 				npInfo.executable = File.documentsDirectory.resolvePath( "/bin/bash" );
+				arg.push('-c');
 				arg.push('/usr/bin/osascript "'+ scpt.nativePath +'" ""');
 				npInfo.arguments = arg;
 			}
