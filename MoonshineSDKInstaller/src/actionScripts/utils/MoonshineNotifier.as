@@ -80,9 +80,8 @@ package actionScripts.utils
 			if (HelperConstants.IS_MACOS)
 			{
 				var scpt:File = File.applicationDirectory.resolvePath("shellScripts/SendToMoonshine.scpt");
-				npInfo.executable = File.documentsDirectory.resolvePath("/usr/bin/osascript");
-				arg.push(scpt.nativePath);
-				arg.push("");
+				npInfo.executable = File.documentsDirectory.resolvePath( "/bin/bash" );
+				arg.push('/usr/bin/osascript "'+ scpt.nativePath +'" ""');
 				npInfo.arguments = arg;
 			}
 			else if (moonshineBinPath)
