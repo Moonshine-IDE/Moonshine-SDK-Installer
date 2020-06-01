@@ -10,6 +10,8 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
+	import spark.components.Alert;
+	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -25,12 +27,20 @@ package actionScripts.utils
 			
 			// save the recent update information
 			var updateXML:XML = toXML();
-			FileUtils.writeToFile(applicationStorage, updateXML);
-			
+			FileUtils.writeToFileAsync(applicationStorage, updateXML, onNotifierFileWriteCompletes, onNotifierFileWriteError);
+		}
+		
+		private function onNotifierFileWriteCompletes():void
+		{
 			// send update notification to Moonshine
 			// mac specific
 			if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
 			else findMoonshineProcessWindows();
+		}
+		
+		private function onNotifierFileWriteError(value:String):void
+		{
+			Alert.show("Error notifying Moonshine-IDE.\n"+ value, "Error!");
 		}
 		
 		private function toXML():XML
