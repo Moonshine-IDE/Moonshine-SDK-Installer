@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [3.6.0]
+
+### Added
+
+* Added [NodeJS](https://nodejs.org/en/) installation.
+* Apache Royale update to version 0.9.7 and nightly build 0.9.8.
+
 ## Moonshine SDK Installer [3.5.1]
 
 ### Fixed
