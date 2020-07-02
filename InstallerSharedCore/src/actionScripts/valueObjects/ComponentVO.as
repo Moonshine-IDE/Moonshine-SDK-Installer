@@ -11,7 +11,6 @@ package actionScripts.valueObjects
 		public var description:String;
 		public var imagePath:String;
 		public var type:String;
-		public var version:String;
 		public var website:String;
 		public var licenseUrl:String;
 		public var licenseTitle:String;
@@ -21,6 +20,16 @@ package actionScripts.valueObjects
 		
 		public function ComponentVO()
 		{
+		}
+		
+		private var _version:String;
+		public function get version():String
+		{
+			return _version;
+		}
+		public function set version(value:String):void
+		{
+			_version = value;
 		}
 		
 		private var _isDownloadable:Boolean = true;
