@@ -482,6 +482,21 @@ package actionScripts.utils
 			return (new File("/" + tmpUserFolderSplit.join("/") +"/Downloads"));
 		}
 		
+		/**
+		 * Returns a given file name without
+		 * its extension
+		 */
+		public static function getFileNameWithoutExtension(file:File):String
+		{
+			var extensionIndex:int = file.name.lastIndexOf(file.extension);
+			if (extensionIndex > -1)
+			{
+				return file.name.substring(0, extensionIndex - 1);
+			}
+			
+			return file.name;
+		}
+		
 		private static function convertToFile(path:String):File
 		{
 			try
