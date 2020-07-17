@@ -150,6 +150,9 @@
 	</condition>
 	<echo>Is.Keychain.Certificate.Defined: ${Is.Keychain.Certificate.Defined}</echo>
 	
+	<tstamp>
+		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
+	</tstamp>
 	
 	<!--
 	//==========================================================================
@@ -203,7 +206,7 @@
 
 	<!-- Windows packaging/signing Task -->
 	<target name="CompileSWFWindowsSignedPackage" depends="CompileSWF">
-		<echo>Signed Process Running</echo>
+		<echo># Signed Process Running - Preparing Bundle</echo>
 		<java jar="${adt_path}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
@@ -211,10 +214,7 @@
 			<arg line="-storepass '${certSelfSignedPassword}'" />
 			<arg line="-tsa 'http://timestamp.entrust.net/TSS/RFC3161sha2TS'" />
 	   		<arg line="-target bundle"/>
-			<arg line="-storetype pkcs12" />
-	   		<arg line="-keystore '${certSignedWindowsBinary}'" />
-	   		<arg line="-storepass '${certSignedWindowsBinaryPassword}'" />
-	   		<arg line="${desktopBinaryFilename}" />
+	   		<arg line="${windowsBundleFilename}" />
 	   		<arg line="'${desktopApplicationDescriptor}'" />
 	   		<arg line="'${swfFilename}'" />
 			<arg line="installer"/>
@@ -223,7 +223,33 @@
 			<arg line="shellScripts"/>
 	   		<!-- Add folders to be bundled in the AIR file here -->
 		</java>
-		<antcall target="zipCaptiveBundle"></antcall>
+		<echo># Signed Process Running - Signing Executable</echo>
+		<exec executable="signtool" failonerror="true">
+			<arg value="sign"/>
+			<arg value="/f"/>
+			<arg value="${debug_dir}/${certSelfSigned}"/>
+			<arg value="/p"/>
+			<arg value="${certSelfSignedPassword}"/>
+			<arg value="${windowsBundleFilename}/${installerName}.exe"/>
+		</exec>
+		<echo># Signed Process Running - Praparing Installer</echo>
+		<exec executable="makensis" failonerror="true">
+			<arg value="/DVERSION=${BuildVersion}"/>
+			<arg value="/DINSTALLERNAME=${installerName}"/>
+			<arg value="/DAPPID=${applicationID}"/>
+			<arg value="/DTIMESTAMP=${timestamp.time}"/>
+			<arg value="nsis-build.nsi"/>
+		</exec>
+		<echo># Signed Process Running - Signing Installer</echo>
+		<exec executable="signtool" failonerror="true">
+			<arg value="sign"/>
+			<arg value="/f"/>
+			<arg value="${certSignedWindowsBinary}"/>
+			<arg value="/p"/>
+			<arg value="${certSignedWindowsBinaryPassword}"/>
+			<arg value="${deploy_dir}/${installerName}-${BuildVersion}.exe"/>
+		</exec>
+		<!--antcall target="zipCaptiveBundle"></antcall-->
 	 </target>
 	
 	<!-- Windows self-signed packaging initiator -->
@@ -241,7 +267,7 @@
 			<arg line="-storepass '${certSelfSignedPassword}'" />
 			<arg line="-tsa 'http://timestamp.entrust.net/TSS/RFC3161sha2TS'" />
 	   		<arg line="-target bundle"/>
-	   		<arg line="${desktopBinaryFilename}" />
+	   		<arg line="${windowsBundleFilename}" />
 	   		<arg line="'${desktopApplicationDescriptor}'" />
 	   		<arg line="'${swfFilename}'" />
 			<arg line="installer"/>
@@ -439,13 +465,13 @@
 			<then>
 				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller-dev"/>
 				<property name="applicationName" value="Moonshine SDK Installer Development"/>
-				<property name="executableName" value="Moonshine SDK Installer Development" />
+				<property name="executableName" value="MoonshineSDKInstallerDevelopment" />
 				<property name="installerName" value="MoonshineSDKInstallerDevelopment" />
 			</then>
 			<else>
 				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller"/>
 				<property name="applicationName" value="Moonshine SDK Installer"/>
-				<property name="executableName" value="Moonshine SDK Installer" />
+				<property name="executableName" value="MoonshineSDKInstaller" />
 				<property name="installerName" value="MoonshineSDKInstaller" />
 			</else>			
 		</if>
@@ -457,7 +483,8 @@
 				<copy file="entitlement.plist" todir="${debug_dir}" overwrite="true"/>
 			</then>
 			<else>
-				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}_64bit"/>
+				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.exe"/>
+				<property name="windowsBundleFilename" value="${deploy_dir}/${installerName}EXE" />
 				<if>
 					<equals arg1="${Is.Signed.Build}" arg2="true"/>
 					<then>
@@ -486,6 +513,7 @@
 	
 	<!-- Compile SWF to build directory for desktop packaging -->
 	<target name="CompileSWF" depends="createBuildInfoFile">
+		<echo>${swfFilename}</echo>
 		<mxmlc file="${desktopMainSource}" 
 			   output="${swfFilename}" 
 			   swf-version="41" 
@@ -517,6 +545,7 @@
 		<if>
 			<equals arg1="${keepDebugFiles}" arg2="false"/>
 			<then>
+				<delete dir="${deploy_dir}/MoonshineSDKInstallerEXE" />
 				<delete dir="${debug_dir}" />
 				<delete dir="installer"/>
 				<delete dir="images"/>
