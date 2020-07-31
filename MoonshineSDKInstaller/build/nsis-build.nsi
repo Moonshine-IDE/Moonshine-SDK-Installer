@@ -7,6 +7,7 @@
 
 	!include "MUI2.nsh"
 	!include "FileFunc.nsh"
+	!include "WinMessages.nsh"
 
 ;--------------------------------
 ;General
@@ -23,17 +24,63 @@
 
 	;Request application privileges for Windows Vista and higher
 	RequestExecutionLevel admin
+
+;--------------------------------
+;Start of running process check
+
+!define APP_NAME find_close_terminate
+!define WND_PROCESS_TITLE "Moonshine SDK Installer"
+!define TO_MS 2000
+!define SYNC_TERM 0x00100001
+
+LangString termMsg 0 "An instance of ${WND_PROCESS_TITLE} is already running.$\nDo you want to terminate the instance and continue?"
+LangString stopMsg 0 "Stopping ${WND_PROCESS_TITLE} Application"
+
+!macro TerminateApp processName
+ 
+    Push $0 ; window handle
+    Push $1
+    Push $2 ; process handle
+    DetailPrint "$(stopMsg)"	
+	ExecCmd::exec "%SystemRoot%\System32\tasklist /NH /FI $\"IMAGENAME eq ${processName}$\" | %SystemRoot%\System32\find /I $\"${processName}$\"" 
+    Pop $0 ; The handle for the process
+    ExecCmd::wait $0
+    StrCmp $0 "0" 0 doneTerminateApp
+    System::Call 'user32.dll::GetWindowThreadProcessId(i r0, *i .r1) i .r2'
+    System::Call 'kernel32.dll::OpenProcess(i ${SYNC_TERM}, i 0, i r1) i .r2'
+    SendMessage $0 ${WM_CLOSE} 0 0 /TIMEOUT=${TO_MS}
+    System::Call 'kernel32.dll::WaitForSingleObject(i r2, i ${TO_MS}) i .r1'
+    IntCmp $1 0 close
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(termMsg)" /SD IDYES IDYES terminate
+    System::Call 'kernel32.dll::CloseHandle(i r2) i .r1'
+    Quit
+  terminate:
+    ExecCmd::exec "%SystemRoot%\System32\taskkill /IM $\"${processName}$\" /F"
+    ExecCmd::wait $0
+  close:
+    System::Call 'kernel32.dll::CloseHandle(i r2) i .r1'
+  doneTerminateApp:
+    Pop $2
+    Pop $1
+    Pop $0
+ 
+!macroend
+
+;--------------------------------
+;End of running process check
 	
 Function .onInit
+	!insertmacro TerminateApp "${INSTALLERNAME}.exe"
+	
 	ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"TimeStamp"
 	StrCmp $R0 "" done
 	StrCmp $R0 "${TIMESTAMP}" 0 done
 	MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
 		"A same version of Moonshine-SDK-Installer found already installed. Do you want to run the installed version?$\n$\n \
-		$\"YES$\" to run the previous version.$\n \
-		$\"NO$\" to uninstall the previous version and install again.$\n \
-		$\"Cancel$\" to cancel this installation." \
+		Yes - To run the previous version.$\n \
+		No - To uninstall the previous version and re-install again.$\n \
+		Cancel - to cancel this installation." \
 		IDYES run_application IDNO run_uninstaller
 		Abort
 	run_application:
@@ -91,7 +138,7 @@ FunctionEnd
 ;--------------------------------
 ;Installer Sections
 
-Section "Moonshine-SDK-Installer" SecFeathersSDKManager
+Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 
 	;copy all files
 	SetOutPath "$INSTDIR"
@@ -115,8 +162,8 @@ Section "Moonshine-SDK-Installer" SecFeathersSDKManager
 		"TimeStamp" "${TIMESTAMP}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"HelpLink" "https://moonshine-ide.com/faq/"
-	;WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
-		"DisplayIcon" "$\"$INSTDIR\Feathers SDK Manager.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
+		"DisplayIcon" "$\"$INSTDIR\${INSTALLERNAME}.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"UninstallString" "$\"$INSTDIR\uninstall.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
