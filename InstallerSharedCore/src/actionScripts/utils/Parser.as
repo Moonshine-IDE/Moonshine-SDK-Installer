@@ -129,11 +129,7 @@ package actionScripts.utils
 			// store 64-bit windows url
 			if (!HelperConstants.IS_MACOS)
 			{
-				var pathSplit:Array = File.applicationStorageDirectory.nativePath.split(File.separator);
-				pathSplit.pop();
-				pathSplit.pop();
-				
-				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = pathSplit.join(File.separator) + File.separator +"net.prominic.MoonshineSDKInstaller"+ File.separator +"64Bit";
+				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = (File.getRootDirectories()[0] as File).nativePath +"Program Files"+ File.separator +"MoonshineSDKInstaller";
 				HelperConstants.INSTALLER_UPDATE_CHECK_URL = String(xmlData.installerUpdateCheckUrl);
 			}
 			
