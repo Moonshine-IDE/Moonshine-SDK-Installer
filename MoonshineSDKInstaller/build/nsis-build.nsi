@@ -91,7 +91,7 @@ Function .onInit
 		ClearErrors
 		;look for the nsis uninstaller as a special case
 		ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
-			"UninstallString"
+			"UninstallString64bit"
 		StrCmp $R1 "$\"$INSTDIR\uninstall.exe$\"" 0 +3
 			ExecWait '$R1 _?=$INSTDIR'
 				Goto +2
@@ -167,6 +167,8 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"UninstallString" "$\"$INSTDIR\uninstall.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
+		"UninstallString64bit" "$\"$INSTDIR\uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"NoModify" 0x1
@@ -179,7 +181,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 		"EstimatedSize" "$0"
 	
 	;Create Start Menu entry
-	CreateShortCut "$SMPROGRAMS\${INSTALLERNAME}.lnk" "$INSTDIR\${INSTALLERNAME}.exe"
+	CreateShortCut "$SMPROGRAMS\${INSTALLERNAME} (64-bit).lnk" "$INSTDIR\${INSTALLERNAME}.exe"
 
 SectionEnd
 

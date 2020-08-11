@@ -218,6 +218,7 @@
 			<arg line="-storepass '${certSelfSignedPassword}'" />
 			<arg line="-tsa 'http://timestamp.entrust.net/TSS/RFC3161sha2TS'" />
 	   		<arg line="-target bundle"/>
+			<!--arg line="-target native"/-->
 	   		<arg line="${windowsBundleFilename}" />
 	   		<arg line="'${desktopApplicationDescriptor}'" />
 	   		<arg line="'${swfFilename}'" />
