@@ -38,13 +38,15 @@ LangString stopMsg 0 "Stopping ${WND_PROCESS_TITLE} Application"
 
 !macro TerminateApp processName
  
+ 
     Push $0 ; window handle
     Push $1
     Push $2 ; process handle
-    DetailPrint "$(stopMsg)"	
-	ExecCmd::exec "%SystemRoot%\System32\tasklist /NH /FI $\"IMAGENAME eq ${processName}$\" | %SystemRoot%\System32\find /I $\"${processName}$\"" 
+    DetailPrint "$(stopMsg)"
+	ExecCmd::exec /NOUNLOAD /ASYNC /TIMEOUT=2000 "%SystemRoot%\System32\tasklist /NH /FI $\"IMAGENAME eq ${processName}$\" | %SystemRoot%\System32\find /I $\"Moonshine$\""
     Pop $0 ; The handle for the process
     ExecCmd::wait $0
+	Pop $0 ; return value
     StrCmp $0 "0" 0 doneTerminateApp
     System::Call 'user32.dll::GetWindowThreadProcessId(i r0, *i .r1) i .r2'
     System::Call 'kernel32.dll::OpenProcess(i ${SYNC_TERM}, i 0, i r1) i .r2'
@@ -70,7 +72,7 @@ LangString stopMsg 0 "Stopping ${WND_PROCESS_TITLE} Application"
 ;End of running process check
 	
 Function .onInit
-	!insertmacro TerminateApp "${INSTALLERNAME}.exe"
+	!insertmacro TerminateApp "${EXECUTABLENAME}.exe"
 	
 	ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"TimeStamp"
@@ -85,7 +87,7 @@ Function .onInit
 		Abort
 	run_application:
 		ClearErrors
-		Exec "$INSTDIR\${INSTALLERNAME}.exe"
+		Exec "$INSTDIR\${EXECUTABLENAME}.exe"
 		Abort
 	run_uninstaller:
 		ClearErrors
@@ -112,8 +114,8 @@ FunctionEnd
 	!define MUI_HEADERIMAGE
 	;!define MUI_HEADERIMAGE_BITMAP "header.bmp"
 	;!define MUI_WELCOMEFINISHPAGE_BITMAP "wizard.bmp"
-	!define MUI_FINISHPAGE_RUN "$INSTDIR\${INSTALLERNAME}.exe"
-	!define MUI_FINISHPAGE_RUN_TEXT "Run ${INSTALLERNAME}"
+	!define MUI_FINISHPAGE_RUN "$INSTDIR\${EXECUTABLENAME}.exe"
+	!define MUI_FINISHPAGE_RUN_TEXT "Run ${EXECUTABLENAME}"
 	!define MUI_FINISHPAGE_NOAUTOCLOSE
 	;!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
 	;!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
@@ -163,7 +165,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"HelpLink" "https://moonshine-ide.com/faq/"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
-		"DisplayIcon" "$\"$INSTDIR\${INSTALLERNAME}.exe$\""
+		"DisplayIcon" "$\"$INSTDIR\${EXECUTABLENAME}.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"UninstallString" "$\"$INSTDIR\uninstall.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
@@ -181,7 +183,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 		"EstimatedSize" "$0"
 	
 	;Create Start Menu entry
-	CreateShortCut "$SMPROGRAMS\${INSTALLERNAME} (64-bit).lnk" "$INSTDIR\${INSTALLERNAME}.exe"
+	CreateShortCut "$SMPROGRAMS\${INSTALLERNAME} (64-bit).lnk" "$INSTDIR\${EXECUTABLENAME}.exe"
 
 SectionEnd
 

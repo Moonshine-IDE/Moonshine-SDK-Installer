@@ -235,12 +235,13 @@
 			<arg value="${debug_dir}/${certSelfSigned}"/>
 			<arg value="/p"/>
 			<arg value="${certSelfSignedPassword}"/>
-			<arg value="${windowsBundleFilename}/${installerName}.exe"/>
+			<arg value="${windowsBundleFilename}/${executableName}.exe"/>
 		</exec>
 		<echo># Signed Process Running - Praparing Installer</echo>
 		<exec executable="${NSIS_HOME}/makensis.exe" failonerror="true">
 			<arg value="/DVERSION=${BuildVersion}"/>
 			<arg value="/DINSTALLERNAME=${installerName}"/>
+			<arg value="/DEXECUTABLENAME=${executableName}"/>
 			<arg value="/DAPPID=${applicationID}"/>
 			<arg value="/DTIMESTAMP=${timestamp.time}"/>
 			<arg value="nsis-build.nsi"/>
@@ -476,7 +477,7 @@
 			<else>
 				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller"/>
 				<property name="applicationName" value="Moonshine SDK Installer"/>
-				<property name="executableName" value="MoonshineSDKInstaller" />
+				<property name="executableName" value="Moonshine SDK Installer" />
 				<property name="installerName" value="MoonshineSDKInstaller" />
 			</else>			
 		</if>
