@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
-	<installerUpdateCheckUrl>http://moonshine-ide.com/downloads/msdki/nsisTest/MoonshineSDKInstaller_update.xml</installerUpdateCheckUrl>
+	<installerUpdateCheckUrl>http://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update_v2.xml</installerUpdateCheckUrl>
 	<air version="32.0"/>
 	<packages>
 		<item integrated="true">
