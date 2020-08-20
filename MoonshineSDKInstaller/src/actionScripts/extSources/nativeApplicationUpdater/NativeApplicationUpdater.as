@@ -20,6 +20,7 @@ package actionScripts.extSources.nativeApplicationUpdater
 	
 	import mx.controls.Alert;
 	
+	import actionScripts.extSources.nativeApplicationUpdater.UpdaterErrorCodes;
 	import actionScripts.extSources.nativeApplicationUpdater.utils.HdiutilHelper;
 	
 	import air.update.events.DownloadErrorEvent;
@@ -92,6 +93,8 @@ package actionScripts.extSources.nativeApplicationUpdater
 		[Bindable]		
 		public var updateURL:String;
 		
+		public var exitApplicationBeforeInstall:Boolean = true;
+		
 		protected var _isNewerVersionFunction:Function;
 		
 		protected var _updateDescriptor:XML;
@@ -137,13 +140,16 @@ package actionScripts.extSources.nativeApplicationUpdater
 			hideAlert = _hideAlert;
 			currentState = INITIALIZING;
 			
-			var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
-			var xmlns:Namespace = new Namespace(applicationDescriptor.namespace());
-			
-			if (xmlns.uri == "http://ns.adobe.com/air/application/2.1")
-				currentVersion = applicationDescriptor.xmlns::version;
-			else
-				currentVersion = applicationDescriptor.xmlns::versionNumber;
+			if (!currentVersion)
+			{
+				var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
+				var xmlns:Namespace = new Namespace(applicationDescriptor.namespace());
+				
+				if (xmlns.uri == "http://ns.adobe.com/air/application/2.1")
+					currentVersion = applicationDescriptor.xmlns::version;
+				else
+					currentVersion = applicationDescriptor.xmlns::versionNumber;
+			}
 			
 			if (os.indexOf("win") > -1)
 			{
@@ -249,9 +255,22 @@ package actionScripts.extSources.nativeApplicationUpdater
 			
 			updateDescriptor = new XML(updateDescriptorLoader.data);
 			
-			updateVersion = String(updateDescriptor[installerType].version);
-			updatePackageURL = String(updateDescriptor[installerType].url);
-			updateDescription = String(updateDescriptor[installerType].description);
+			if (updateDescriptor.namespace() == UPDATE_XMLNS_1_0)
+			{
+				updateVersion = updateDescriptor.UPDATE_XMLNS_1_0::version;
+				updateDescription = updateDescriptor.UPDATE_XMLNS_1_0::description;
+				updatePackageURL = updateDescriptor.UPDATE_XMLNS_1_0::urls.UPDATE_XMLNS_1_1::[installerType];
+			}
+			else
+			{
+				var typeXml:XMLList = updateDescriptor.UPDATE_XMLNS_1_1::[installerType];
+				if (typeXml.length() > 0)
+				{
+					updateVersion = typeXml.UPDATE_XMLNS_1_1::version;
+					updateDescription = typeXml.UPDATE_XMLNS_1_1::description;
+					updatePackageURL = typeXml.UPDATE_XMLNS_1_1::url;
+				}
+			}
 			
 			if (!updateVersion || !updatePackageURL)
 			{
@@ -272,9 +291,9 @@ package actionScripts.extSources.nativeApplicationUpdater
 			updateDescriptorLoader.removeEventListener(IOErrorEvent.IO_ERROR, updateDescriptorLoader_ioErrorHandler);
 			updateDescriptorLoader.close();
 			
-			dispatchEvent(new StatusUpdateErrorEvent(StatusUpdateErrorEvent.UPDATE_ERROR, false, false, 
-				"Error downloading updater file, try again later.",
-				UpdaterErrorCodes.ERROR_9003, event.errorID));
+			/*dispatchEvent(new StatusUpdateErrorEvent(StatusUpdateErrorEvent.UPDATE_ERROR, false, false, 
+			"Error downloading updater file, try again later.",
+			UpdaterErrorCodes.ERROR_9003, event.errorID));*/
 		}
 		
 		/**
@@ -403,7 +422,7 @@ package actionScripts.extSources.nativeApplicationUpdater
 			hdiutilHelper.removeEventListener(ErrorEvent.ERROR, hdiutilHelper_errorHandler);
 			
 			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, 
-				"Error attaching pkg file!", UpdaterErrorCodes.ERROR_9008));
+				"Error attaching dmg file!", UpdaterErrorCodes.ERROR_9008));
 		}
 		
 		private function hdiutilHelper_completeHandler(event:Event):void
@@ -467,7 +486,7 @@ package actionScripts.extSources.nativeApplicationUpdater
 					installProcess.start(info);
 				}
 				
-				setTimeout(NativeApplication.nativeApplication.exit, 200);
+				if (exitApplicationBeforeInstall) setTimeout(NativeApplication.nativeApplication.exit, 200);
 			}
 		}
 		
@@ -539,13 +558,9 @@ package actionScripts.extSources.nativeApplicationUpdater
 		public function get isNewerVersionFunction():Function
 		{
 			if (_isNewerVersionFunction != null)
-			{
 				return _isNewerVersionFunction;
-			}
 			else
-			{
-				return function(currentVersion:String, updateVersion:String):Boolean 
-				{ 
+				return function(currentVersion:String, updateVersion:String):Boolean { 
 					var tmpSplit:Array = updateVersion.split(".");
 					var uv1:Number = Number(tmpSplit[0]);
 					var uv2:Number = Number(tmpSplit[1]);
@@ -557,7 +572,6 @@ package actionScripts.extSources.nativeApplicationUpdater
 					
 					return false;
 				};
-			}
 		}
 		
 		public function set isNewerVersionFunction(value:Function):void
