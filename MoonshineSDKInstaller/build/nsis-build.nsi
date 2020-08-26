@@ -29,7 +29,7 @@
 ;Start of running process check
 
 !define APP_NAME find_close_terminate
-!define WND_PROCESS_TITLE "Moonshine SDK Installer"
+!define WND_PROCESS_TITLE "MoonshineSDKInstaller"
 !define TO_MS 2000
 !define SYNC_TERM 0x00100001
 
@@ -79,10 +79,10 @@ Function .onInit
 	StrCmp $R0 "" done
 	StrCmp $R0 "${TIMESTAMP}" 0 done
 	MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
-		"A same version of Moonshine-SDK-Installer found already installed. Do you want to run the installed version?$\n$\n \
-		Yes - To run the installed version.$\n \
-		No - To uninstall the installed version and re-install again.$\n \
-		Cancel - to cancel this installation." \
+		"This version of ${EXECUTABLENAME} is already installed. Do you want to run the current installation?$\n$\n \
+		Yes - Start ${EXECUTABLENAME} now$\n \
+		No - Do a fresh install$\n \
+		Cancel - Cancel this installation" \
 		IDYES run_application IDNO run_uninstaller
 		Abort
 	run_application:
