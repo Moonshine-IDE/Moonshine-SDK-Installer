@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [3.7.0]
+
+* Windows: Switch native Adobe Air installer to NSIS.
+* Windows: Enable automatic updates.
+
 ## Moonshine SDK Installer [3.6.0]
 
 ### Added
