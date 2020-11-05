@@ -425,7 +425,7 @@
 			<image>/helperResources/images/logoSVN.png</image>
 			<pathValidation>
 				<windows>bin/svn.exe</windows>
-				<mac>bin/svn</mac>
+				<mac>usr/bin/svn</mac>
 			</pathValidation>
 			<sdkType>svn</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
@@ -469,7 +469,7 @@
 			<image>/helperResources/images/logoGit.png</image>
 			<pathValidation>
 				<windows>bin/git.exe</windows>
-				<mac>bin/git</mac>
+				<mac>usr/bin/git</mac>
 			</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://feathersui.com</website>
