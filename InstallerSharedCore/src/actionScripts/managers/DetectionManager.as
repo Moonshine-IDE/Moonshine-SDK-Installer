@@ -1,8 +1,11 @@
 package actionScripts.managers
 {
 	import flash.events.EventDispatcher;
+	import flash.net.registerClassAlias;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
+	
+	import mx.utils.ObjectUtil;
 	
 	import actionScripts.events.HelperEvent;
 	import actionScripts.locator.HelperModel;
@@ -210,18 +213,20 @@ package actionScripts.managers
 				{
 					case ComponentTypes.TYPE_GIT:
 					case ComponentTypes.TYPE_SVN:
+						itemTestCount -= 1;
 						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
 						break;
 					case ComponentTypes.TYPE_NOTES:
+						itemTestCount -= 1;
 						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
 				}
 			}
 			
+			notifyMoonshineOnDetection(item, item.isAlreadyDownloaded);
+			
 			/*if (item.isAlreadyDownloaded) notifyMoonshineOnDetection(item);
 			else notifyMoonshineOnDetection(item, false);*/
-			
-			notifyMoonshineOnDetection(item, item.isAlreadyDownloaded);
 		}
 		
 		private function checkUpdateVersion(againstVersion:String, item:ComponentVO):void
@@ -257,8 +262,20 @@ package actionScripts.managers
 			function updateComponent():void
 			{
 				component.isAlreadyDownloaded = true;
-				component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
-				notifyMoonshineOnDetection(component);
+				if (model.moonshineBridge.isAppStoreVersion())
+				{
+					component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+					notifyMoonshineOnDetection(component);
+				}
+				else
+				{
+					registerClassAlias("actionScripts.valueObjects.ComponentVO", ComponentVO);
+					var xcodeComponent:ComponentVO = ObjectUtil.clone(component) as ComponentVO;
+					xcodeComponent.type = ComponentTypes.TYPE_XCODE;
+					xcodeComponent.installToPath = value;
+					
+					notifyMoonshineOnDetection(xcodeComponent);
+				}
 			}
 		}
 		

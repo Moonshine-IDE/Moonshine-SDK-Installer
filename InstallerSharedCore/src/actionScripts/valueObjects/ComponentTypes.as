@@ -15,5 +15,6 @@ package actionScripts.valueObjects
 		public static const TYPE_OPENJAVA:String = "openjava";
 		public static const TYPE_NODEJS:String = "nodejs";
 		public static const TYPE_NOTES:String = "notes";
+		public static const TYPE_XCODE:String = "xcode";
 	}
 }
