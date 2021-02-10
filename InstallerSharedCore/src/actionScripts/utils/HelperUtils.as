@@ -201,7 +201,7 @@ package actionScripts.utils
 		
 		public static function updateComponentByVariant(component:ComponentVO, variant:ComponentVariantVO):void
 		{
-			component.installToPath = Parser.getInstallDirectoryPath(component.type, variant.version, HelperConstants.CONFIG_AIR_VERSION);
+			component.installToPath = Parser.getInstallDirectoryPath(component.type, variant.version);
 			component.version = variant.version;
 			component.downloadURL = variant.downloadURL;
 			component.sizeInMb = variant.sizeInMb;

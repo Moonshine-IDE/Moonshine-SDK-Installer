@@ -41,7 +41,9 @@
 				if (model.components.length == 0) return;
 				
 				// load between single or multiple
-				if (singleLicenseItem) 
+				if (singleLicenseItem && 
+					(singleLicenseItem.type != ComponentTypes.TYPE_FLEX && 
+					singleLicenseItem.type != ComponentTypes.TYPE_FLEX_HARMAN)) 
 				{
 					loadSingleLicenseItem();
 				}				
@@ -53,21 +55,14 @@
 			
 			private function loadSingleLicenseItem():void
 			{
-				if (singleLicenseItem.type == ComponentTypes.TYPE_FLEX)
+				addMoreLicenses(singleLicenseItem.type);
+				hgButtons.removeElement(biCopyrights);
+				installComponentsList.callLater(function():void
 				{
-					loadAllLicenseItems();
-				}
-				else
-				{
-					addMoreLicenses(singleLicenseItem.type);
-					hgButtons.removeElement(biCopyrights);
-					installComponentsList.callLater(function():void
-					{
-						installComponentsList.expandItem(copyrightComponentsDataProvider[0], true);
-						installComponentsList.selectedItem = copyrightComponentsDataProvider[0].children[0];
-						installComponentsList.dispatchEvent(new ListEvent(ListEvent.CHANGE));
-					});
-				}
+					installComponentsList.expandItem(copyrightComponentsDataProvider[0], true);
+					installComponentsList.selectedItem = copyrightComponentsDataProvider[0].children[0];
+					installComponentsList.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+				});
 			}
 			
 			private function loadAllLicenseItems():void
@@ -77,7 +72,7 @@
 				var flexItem:ComponentVO;
 				for each (var item:ComponentVO in model.components.source)
 				{
-					if (item.type == ComponentTypes.TYPE_FLEX)
+					if (item.type == singleLicenseItem.type)
 					{
 						flexItem = item;
 						break;

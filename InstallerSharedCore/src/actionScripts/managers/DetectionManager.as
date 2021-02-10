@@ -86,6 +86,9 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_FLEX:
 						item.isAlreadyDownloaded = (model.moonshineBridge.isFlexSDKAvailable() != null);
 						break;
+					case ComponentTypes.TYPE_FLEX_HARMAN:
+						item.isAlreadyDownloaded = (model.moonshineBridge.isFlexHarmanSDKAvailable() != null);
+						break;
 					case ComponentTypes.TYPE_FLEXJS:
 						item.isAlreadyDownloaded = (model.moonshineBridge.isFlexJSSDKAvailable() != null);
 						break;
@@ -147,6 +150,7 @@ package actionScripts.managers
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_FLEX:
+					case ComponentTypes.TYPE_FLEX_HARMAN:
 					case ComponentTypes.TYPE_FLEXJS:
 					case ComponentTypes.TYPE_ROYALE:
 					case ComponentTypes.TYPE_FEATHERS:

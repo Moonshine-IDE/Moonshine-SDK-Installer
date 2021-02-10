@@ -10,7 +10,6 @@
 			import mx.events.FlexEvent;
 			
 			import actionScripts.ui.menu.MenuManager;
-			import actionScripts.valueObjects.HelperConstants;
 			
 			import components.AboutDialog;
 			

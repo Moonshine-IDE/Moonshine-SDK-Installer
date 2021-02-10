@@ -96,7 +96,7 @@
 				
 				// initiate the original installer source
 				INSTALLER_APACHE_FLEX = new InstallApacheFlex();
-				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 				INSTALLER_APACHE_FLEX.moonshineFlexVersion = "4.16.1"; // default value irrespective of configuration XML
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady, false, 0, true);
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
@@ -223,7 +223,7 @@
 					case ComponentTypes.TYPE_FLEX:
 						item.isDownloading = true;
 						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
 						INSTALLER_APACHE_FLEX.startInstallation();
 						break;
@@ -231,7 +231,7 @@
 						var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();
 						item.isDownloading = true;
 						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 						INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
 						INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
 						break;

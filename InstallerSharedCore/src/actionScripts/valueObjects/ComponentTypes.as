@@ -3,6 +3,7 @@ package actionScripts.valueObjects
 	public class ComponentTypes
 	{
 		public static const TYPE_FLEX:String = "flex";
+		public static const TYPE_FLEX_HARMAN:String = "flexHarman";
 		public static const TYPE_FLEXJS:String = "flexjs";
 		public static const TYPE_ROYALE:String = "royale";
 		public static const TYPE_ANT:String = "ant";

@@ -124,7 +124,8 @@ package actionScripts.utils
 			var staticRequiredText:String = "Required for: ";
 			
 			// store AIR version
-			HelperConstants.CONFIG_AIR_VERSION = xmlData.air.@version.toString();
+			HelperConstants.CONFIG_ADOBE_AIR_VERSION = xmlData.airAdobe.@version.toString();
+			HelperConstants.CONFIG_HARMAN_AIR_VERSION = xmlData.airHarman.@version.toString();
 			
 			// store 64-bit windows url
 			if (!HelperConstants.IS_MACOS)
@@ -161,7 +162,7 @@ package actionScripts.utils
 					tmpComponent.version = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
 					tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() 
 						+ comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
-					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
+					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version);
 					tmpComponent.sizeInMb = int(comp.download.variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
 				}
 				else
@@ -194,7 +195,7 @@ package actionScripts.utils
 					tmpComponent.selectedVariantIndex = tmpComponent.downloadVariants.getItemIndex(preSelectedVariant);
 					tmpComponent.version = preSelectedVariant.version;
 					tmpComponent.downloadURL = preSelectedVariant.downloadURL;
-					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
+					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version);
 					tmpComponent.sizeInMb = preSelectedVariant.sizeInMb;
 				}
 				
@@ -272,12 +273,14 @@ package actionScripts.utils
 			};
 		}
 		
-		public static function getInstallDirectoryPath(type:String, version:String, airVersion:String=null):String
+		public static function getInstallDirectoryPath(type:String, version:String):String
 		{
 			switch (type)
 			{
 				case ComponentTypes.TYPE_FLEX:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Flex_SDK"+ File.separator +"Flex_"+ version +"_AIR_"+ airVersion;
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Flex_SDK"+ File.separator +"Flex_"+ version +"_AIR_"+ HelperConstants.CONFIG_ADOBE_AIR_VERSION;
+				case ComponentTypes.TYPE_FLEX_HARMAN:
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Flex_SDK"+ File.separator +"Flex_"+ version +"_AIR_"+ HelperConstants.CONFIG_HARMAN_AIR_VERSION;
 				case ComponentTypes.TYPE_FLEXJS:
 					return null;
 				case ComponentTypes.TYPE_ROYALE:

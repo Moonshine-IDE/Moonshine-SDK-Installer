@@ -24,7 +24,8 @@ package actionScripts.valueObjects
 		public static var IS_RUNNING_IN_MOON:Boolean;
 		public static var IS_INSTALLER_READY:Boolean;
 		public static var DEFAULT_INSTALLATION_PATH:File;
-		public static var CONFIG_AIR_VERSION:String;
+		public static var CONFIG_ADOBE_AIR_VERSION:String;
+		public static var CONFIG_HARMAN_AIR_VERSION:String;
 		public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 		public static var INSTALLER_UPDATE_CHECK_URL:String;
 		public static var IS_DETECTION_IN_PROCESS:Boolean;

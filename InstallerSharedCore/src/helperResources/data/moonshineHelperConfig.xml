@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
 	<installerUpdateCheckUrl>http://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update_v2.xml</installerUpdateCheckUrl>
-	<air version="32.0"/>
+	<airAdobe version="32.0"/>
+	<airHarman version="33.1"/>
 	<packages>
 		<item integrated="true">
 			<title>Project Management</title>
@@ -49,7 +50,7 @@
 			<title>Flex/ActionScript Compilation</title>
 			<description><![CDATA[Compile Flex Applications]]></description>
 			<image></image>
-			<componentDependencyIDs>flex,openjava</componentDependencyIDs>
+			<componentDependencyIDs>flex,flexHarman,openjava</componentDependencyIDs>
 		</item>
 		<item integrated="false">
 			<title>Apache Royale Compilation and Debug</title>
@@ -114,7 +115,7 @@
 	</packages>
 	<components>
 		<item id="flex">
-			<title>Apache Flex SDK</title>
+			<title>Apache Flex SDK (Adobe AIR)</title>
 			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
 			<image>/helperResources/images/logoApacheFlex.png</image>
 			<pathValidation>flex-sdk-description.xml</pathValidation>
@@ -143,6 +144,40 @@
 			                <path></path>
 			                <file></file>
 			            </version>
+					</mac>
+				</variant>
+			</download>
+		</item>
+		<item id="flexHarman">
+			<title>Apache Flex SDK (Harman AIR)</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoApacheFlex.png</image>
+			<pathValidation>flex-sdk-description.xml</pathValidation>
+			<sdkType>flexHarman</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>http://flex.apache.org</website>
+			<license>
+				<url>https://moonshine-ide.com/downloads/msdki/apache-flex-harman-sdk-installer-config.xml</url>
+				<title></title>
+				<description></description>
+			</license>
+			<download>
+				<variant>
+					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
+					<diskMBusage>
+						<windows>1400</windows>
+						<mac>1530</mac>
+					</diskMBusage>
+					<windows>
+						<version version="4.16.1" displayVersion="4.16.1">
+			            	<path>http://www.apache.org/dyn/closer.lua/flex/4.16.1/binaries/</path>
+		              		<file>apache-flex-sdk-4.16.1-bin.zip</file>
+		            	</version>
+		 			</windows>
+					<mac>
+						<version version="4.16.1" displayVersion="4.16.1">
+		                	<path>http://www.apache.org/dyn/closer.lua/flex/4.16.1/binaries/</path>
+		              		<file>apache-flex-sdk-4.16.1-bin.tar.gz</file>
+		             </version>
 					</mac>
 				</variant>
 			</download>
