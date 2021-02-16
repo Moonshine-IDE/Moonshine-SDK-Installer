@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<project name="sdk_harman_ide_install" default="check-OS" basedir=".">
+	
+	<!--
+	//==========================================================================
+	//
+	//  PROPERTIES
+	//
+	//==========================================================================
+	-->
+	
+    <property name="air.download.server" location="${AIR.DOWNLOAD.SERVER}"/>
+	<property name="air.download.file" location="${AIR.DOWNLOAD.FILE}"/>
+	<property name="dest.air.sdk.directory" location="TEMP/AIR"/>
+	
+	<tstamp>
+		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
+	</tstamp>
+	
+<!--
+	//==========================================================================
+	//
+	//  TASKS
+	//
+	//==========================================================================
+	-->
+	
+	<!-- OS Check and decision on opening Task -->
+	<target name="check-OS">
+		<if>
+			<os family="windows"/>
+			<then>
+				<property name="isOSX" value="false"/>
+				<antcall target="dispose-temp-windows" />
+			</then>
+			<elseif>
+				<os family="unix"/>
+				<then>
+					<property name="isOSX" value="true"/>
+					<antcall target="dispose-temp-UNIX" />
+				</then>
+			</elseif>
+		</if>
+	</target>
+	
+	<target name="get-air-sdk">
+		<mkdir dir="${dest.air.sdk.directory}" />
+        <get src="${air.download.server}/${air.download.file}?ts=${timestamp.time}" dest="${dest.air.sdk.directory}"/>
+	</target>
+	
+	<target name="unzip-air-sdk">
+        <unzip src="${dest.air.sdk.directory}/${air.download.file}" dest="." />
+	</target>
+	
+	<target name="untar-air-sdk">
+		<exec executable="tar" dir=".">
+            <arg value="-xvf" />
+            <arg value="${dest.air.sdk.directory}/${air.download.file}" />
+        </exec>
+	</target>
+	
+	<target name="mac-copy-dir" description="copies a directory using exec and rsync so that symbolic links are preserved">
+        <echo file="${basedir}/maccopy.properties">mac.copy.echo=${mac.copy.echo.pattern}</echo>
+        <property file="${basedir}/maccopy.properties" />
+        <delete file="${basedir}/maccopy.properties" />
+        <echo>${mac.copy.echo}</echo>
+        <exec executable="rsync" dir="${FLEX_HOME}">
+            <arg value="--archive" />
+            <arg value="--ignore-existing" />
+            <arg value="--force" />
+            <arg value="${download.dir}/airsdk/${srcdir}"/>
+            <arg value="${destdir}" />
+        </exec>
+    </target>
+	
+	<target name="fixup-air-config-file">
+        <replace file="frameworks/air-config.xml">
+            <replacefilter token="{airHome}/frameworks/"
+                            value=""/>
+        </replace>
+    </target>
+	
+	<!-- Deletes temporary files for Windows -->
+	<target name="dispose-temp-windows" depends="get-air-sdk,unzip-air-sdk,fixup-air-config-file">
+		<!--delete dir="${deploy_dir}/MoonshineEXE" /-->
+	</target>
+	<target name="dispose-temp-UNIX" depends="get-air-sdk,untar-air-sdk,fixup-air-config-file">
+		<!--delete dir="${debug_dir}" /-->
+	</target>
+</project>
