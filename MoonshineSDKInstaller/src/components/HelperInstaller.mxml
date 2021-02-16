@@ -22,6 +22,7 @@
 			import actionScripts.managers.GitSVNDetector;
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
+			import actionScripts.utils.LinkVerifier;
 			import actionScripts.utils.MoonshineNotifier;
 			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentTypes;
@@ -380,7 +381,37 @@
 			
 			private function onDownloadAComponentRequested(event:HelperEvent):void
 			{
-				openLicenseView(singleInstallConfirmHandler, (event.value as ComponentVO));
+				isDownloadInProgress = true;
+				lblLastMessage.visible = true;
+				lblLastMessage.setStyle("fontWeight", "bold");
+				lblLastMessage.setStyle("color", 0xc165b8);
+				lblLastMessage.text = "Verifying download link: "+ (event.value as ComponentVO).title;
+				
+				if ((event.value as ComponentVO).type == ComponentTypes.TYPE_FLEX)
+				{
+					new LinkVerifier((event.value as ComponentVO), 
+						onDownloadLinkVerified, 
+						INSTALLER_APACHE_FLEX.apacheFlexDownloadURL);
+				}
+				else
+				{
+					new LinkVerifier((event.value as ComponentVO), onDownloadLinkVerified);
+				}
+			}
+			
+			private function onDownloadLinkVerified(isSuccess:Boolean, component:ComponentVO):void
+			{
+				if (isSuccess)
+				{
+					lblLastMessage.setStyle("color", 0x444444);
+					isDownloadInProgress = false;
+					openLicenseView(singleInstallConfirmHandler, component);
+				}
+				else
+				{
+					lblLastMessage.setStyle("color", 0xff0000);
+					lblLastMessage.text = "Oops! "+ component.title +" download is currently unavailable!\nPlease, contact the administrator, or try again later.";
+				}
 			}
 			
 			private function onOpenAComponentLicenseRequested(event:HelperEvent):void
