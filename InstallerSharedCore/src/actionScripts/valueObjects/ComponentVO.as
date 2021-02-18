@@ -143,6 +143,16 @@ package actionScripts.valueObjects
 			return _installToPath;
 		}
 		
+		private var _temporaryInstallToPath:String;
+		public function get temporaryInstallToPath():String
+		{
+			return _temporaryInstallToPath;
+		}
+		public function set temporaryInstallToPath(value:String):void
+		{
+			_temporaryInstallToPath = value;
+		}
+		
 		private var _oldInstalledVersion:String;
 		public function get oldInstalledVersion():String
 		{

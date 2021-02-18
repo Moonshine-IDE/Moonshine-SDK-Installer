@@ -100,6 +100,10 @@
 				data.sizeInMb = tmpVariant.sizeInMb;
 				data.createdOn = FileUtils.getCreationDateForPath(installToPath);
 				
+				var tmpPath:Array = installToPath.split(File.separator);
+				var tmpTargetDirectoryName:String = "temp-"+ tmpPath.pop();
+				data.temporaryInstallToPath = tmpPath.join(File.separator) + File.separator + tmpTargetDirectoryName;
+				
 				// do update All Install button label
 				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED, null, true));
 			}
@@ -168,7 +172,8 @@
 			<s:Image id="imgDownloaded"
 					 width="50"
 					 source="@Embed('/helperResources/images/icoTickLabel.png')"
-					 includeInLayout="{data.isAlreadyDownloaded}" visible="{data.isAlreadyDownloaded}"
+					 includeInLayout="{data.isAlreadyDownloaded &amp;&amp; !data.isDownloading}" 
+					 visible="{data.isAlreadyDownloaded &amp;&amp; !data.isDownloading}"
 					 toolTip="{'Installed: '+ data.createdOn.toLocaleString()}"/>
 			<s:Image id="imgVersionNote"
 					 buttonMode="true"

@@ -14,8 +14,6 @@
 			import mx.managers.CursorManager;
 			import mx.managers.PopUpManager;
 			
-			import spark.components.Alert;
-			
 			import actionScripts.events.HelperEvent;
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.CookieManager;
@@ -24,6 +22,7 @@
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.LinkVerifier;
 			import actionScripts.utils.MoonshineNotifier;
+			import actionScripts.utils.MoveDirectory;
 			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentTypes;
 			import actionScripts.valueObjects.ComponentVO;
@@ -206,7 +205,7 @@
 			private function startSingleInstallation(item:ComponentVO):void
 			{
 				// remove existing folder before proceed
-				if (FileUtils.isPathExists(item.installToPath))
+				/*if (FileUtils.isPathExists(item.installToPath))
 				{
 					deleteExistingFolderBeforeDownload(item, function(item:ComponentVO):void
 															{
@@ -215,7 +214,7 @@
 																startSingleInstallation(item);
 															});
 					return;
-				}
+				}*/
 				
 				itemDownloading = item;
 				itemDownloading.hasError = null;
@@ -248,34 +247,19 @@
 						archiveDownloader = new ArchiveDownloader(item);
 						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
 						archiveDownloader.viewResourceConstants = viewResourceConstants;
-						archiveDownloader.startInstallation();
+						archiveDownloader.startInstallation(
+							item.isAlreadyDownloaded ? item.temporaryInstallToPath : item.installToPath
+						);
 						break;
 				}
 			}
 			
-			private function deleteExistingFolderBeforeDownload(item:ComponentVO, successFn:Function):void
+			private function deleteExistingFolderBeforeDownload(evemt:Event):void
 			{
 				lblLastMessage.setStyle("fontWeight", "bold");
-				lblLastMessage.text = "Attempting to remove existing \""+ item.title +"\" folder. This may take longer..";
+				lblLastMessage.text = "Attempting to remove existing \""+ itemDownloading.title +"\" folder. This may take longer..";
 				progressBar.visible = false;
 				CursorManager.setBusyCursor();
-				FileUtils.deleteDirectoryAsync(new File(item.installToPath), onDeletionCompleted, onDeleteionError);
-				
-				/*
-				* @local
-				*/
-				function onDeletionCompleted():void
-				{
-					CursorManager.removeBusyCursor();
-					lblLastMessage.setStyle("fontWeight", "normal");
-					successFn(item);
-				}
-				function onDeleteionError(value:String):void
-				{
-					CursorManager.removeBusyCursor();
-					lblLastMessage.setStyle("fontWeight", "normal");
-					Alert.show(value, "Error!");
-				}
 			}
 			
 			//--------------------------------------------------------------------------
@@ -315,20 +299,10 @@
 				// should be removed when Apache introduce their own fix
 				if (itemDownloading.type == ComponentTypes.TYPE_ROYALE)
 				{
-					var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.getItemAt(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
-					if (variantVO.title.indexOf(ComponentVariantVO.TYPE_STABLE) != -1)
-					{
-						var timeoutValue:uint = setTimeout(function():void
-						{
-							clearTimeout(timeoutValue);
-							var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
-							if (fileToPatch.exists)
-							{
-								var fileToPatchWith:File = File.applicationDirectory.resolvePath("images/royale-config.xml");
-								FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
-							}
-						}, 1000);
-					}
+					runPostRoyaleInstallationJob(
+						flushDownloadQueue
+					);
+					return;
 				}
 				
 				// sometime distributed zip/tar creates an additional
@@ -357,8 +331,7 @@
 				}
 				function onFileFoldersMoveError(error:String):void
 				{
-					trace(error);
-					// terminate by some means?
+					INSTALLER_APACHE_FLEX.log(error);
 				}
 				function flushDownloadQueue():void
 				{
@@ -371,6 +344,81 @@
 					moonshineNotifier.notifyMoonshineWithUpdate();
 					
 					flush();
+				}
+			}
+			
+			private function runPostRoyaleInstallationJob(onCompletion:Function):void
+			{
+				var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.getItemAt(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
+				if (variantVO.title.indexOf(ComponentVariantVO.TYPE_STABLE) != -1)
+				{
+					var timeoutValue:uint = setTimeout(function():void
+					{
+						clearTimeout(timeoutValue);
+						var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
+						if (fileToPatch.exists)
+						{
+							var fileToPatchWith:File = File.applicationDirectory.resolvePath("images/royale-config.xml");
+							FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
+						}
+					}, 1000);
+				}
+				
+				if (itemDownloading.isAlreadyDownloaded && 
+					FileUtils.isPathExists(itemDownloading.temporaryInstallToPath))
+				{
+					var tmpMove:MoveDirectory = new MoveDirectory();
+					attachListeners(true, tmpMove);
+					tmpMove.move(
+						itemDownloading.temporaryInstallToPath,
+						itemDownloading.installToPath
+					);
+				}
+				else
+				{
+					onCompletion();
+				}
+				
+				/*
+				 * @local
+				 */
+				function onDeletionBegins(evemt:Event):void
+				{
+					lblLastMessage.setStyle("fontWeight", "bold");
+					lblLastMessage.text = "Updating with the existing \""+ itemDownloading.title +"\" folder. This may take longer..";
+					progressBar.visible = false;
+					CursorManager.setBusyCursor();
+				}
+				function onCacheDirectoryMovedAsStable(event:Event):void
+				{
+					CursorManager.removeBusyCursor();
+					attachListeners(false, event.target as MoveDirectory);
+					onCompletion();
+				}
+				function onFileFoldersMoveError(event:HelperEvent):void
+				{
+					CursorManager.removeBusyCursor();
+					attachListeners(false, event.target as MoveDirectory);
+					
+					INSTALLER_APACHE_FLEX.log(event.value as String);
+					
+					lblLastMessage.setStyle("color", 0xff0000);
+					lblLastMessage.text = "Oops! "+ itemDownloading.title +" download is currently unavailable!\nPlease, contact the administrator, or try again later.";
+				}
+				function attachListeners(attach:Boolean, mover:MoveDirectory):void
+				{
+					if (attach)
+					{
+						mover.addEventListener(MoveDirectory.EVENT_DELETING_OLD_DIRECTORY, onDeletionBegins, false, 0, true);
+						mover.addEventListener(MoveDirectory.EVENT_DIRECTORY_MOVE_COMPLETED, onCacheDirectoryMovedAsStable);
+						mover.addEventListener(MoveDirectory.EVENT_DIRECTORY_MOVE_FAILED, onFileFoldersMoveError);
+					}
+					else
+					{
+						mover.removeEventListener(MoveDirectory.EVENT_DELETING_OLD_DIRECTORY, onDeletionBegins);
+						mover.removeEventListener(MoveDirectory.EVENT_DIRECTORY_MOVE_COMPLETED, onCacheDirectoryMovedAsStable);
+						mover.removeEventListener(MoveDirectory.EVENT_DIRECTORY_MOVE_FAILED, onFileFoldersMoveError);
+					}
 				}
 			}
 			

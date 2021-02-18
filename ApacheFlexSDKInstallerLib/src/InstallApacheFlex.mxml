@@ -4053,7 +4053,7 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 		
-		private function log(text:String, position:int = -1, isPublic:Boolean = true, skipLog:Boolean = false):void
+		public function log(text:String, position:int = -1, isPublic:Boolean = true, skipLog:Boolean = false):void
 		{
 			if (text == null)
 			{

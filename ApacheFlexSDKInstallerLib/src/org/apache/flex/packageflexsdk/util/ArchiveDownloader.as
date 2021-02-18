@@ -52,10 +52,12 @@ package org.apache.flex.packageflexsdk.util
 			this.errorHandler = error;
 		}
 		
-		public function startInstallation():void
+		public function startInstallation(installToPath:String=null):void
 		{
 			// check if the version already downloaded or not
-			var sdkHome:File = new File(versionSelected.installToPath);
+			var sdkHome:File = new File(
+				installToPath ? installToPath : versionSelected.installToPath
+			);
 			homeDir = sdkHome;
 			if (!sdkHome.exists) sdkHome.createDirectory();
 			else if (sdkHome.exists && versionSelected.pathValidation)
