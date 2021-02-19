@@ -27,6 +27,8 @@ package actionScripts.utils
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
+	import flash.utils.clearInterval;
+	import flash.utils.setTimeout;
 	
 	public class FileUtils
 	{
@@ -148,7 +150,16 @@ package actionScripts.utils
 				if (event.bytesPending == 0)
 				{
 					manageListeners(event.target as FileStream, false);
-					if (successHandler != null) successHandler();
+					if (successHandler != null) 
+					{
+						var successReturnInterval:uint = setTimeout(
+							function():void
+							{
+								clearInterval(successReturnInterval);
+								successHandler();
+							},
+							500);
+					}
 				}
 			}
 			function handleFSError(event:IOErrorEvent):void
