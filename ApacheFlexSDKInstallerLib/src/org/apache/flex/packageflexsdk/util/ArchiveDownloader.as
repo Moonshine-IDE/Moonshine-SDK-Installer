@@ -92,7 +92,7 @@ package org.apache.flex.packageflexsdk.util
 			}
 		}
 		
-		protected function handleArchiveDownload(event:Event):void
+		protected function handleArchiveDownload(event:*):void
 		{
 			try
 			{

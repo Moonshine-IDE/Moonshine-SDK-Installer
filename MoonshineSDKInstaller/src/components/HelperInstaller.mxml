@@ -278,6 +278,15 @@
 			
 			private function onInstallAborted(event:GenericEvent):void
 			{
+				if (itemDownloading.type == ComponentTypes.TYPE_ROYALE && 
+					itemDownloading.isAlreadyDownloaded && itemDownloading.temporaryInstallToPath)
+				{
+					try
+					{
+						FileUtils.deleteDirectoryAsync(new File(itemDownloading.temporaryInstallToPath));
+					} catch (e:Error){}
+				}
+				
 				if (itemDownloading)
 				{
 					itemDownloading.isDownloading = false;

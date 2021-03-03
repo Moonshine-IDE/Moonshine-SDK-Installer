@@ -3706,8 +3706,10 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 		
+		private var tempHandlerFunction:Function;
 		private function download(url:String, handlerFunction:Function, errorFunction:Function = null, nocache:Boolean = false):void
 		{
+			tempHandlerFunction = handlerFunction;
 			loader = new ApacheURLLoader();
 			if (debugMode)
 			{
@@ -3764,7 +3766,7 @@ variables are not required because the locations of these pieces are known.
 			}
 			var req:URLRequest = new URLRequest(url);
 			//Wait for 5 minutes before aborting download attempt.  Adobe download sites as well as some Apache mirrors are extremely slow.
-			req.idleTimeout = 300000;
+			req.idleTimeout = 3000;
 			
 			loader.dataFormat = URLLoaderDataFormat.BINARY;
 			if (usingDownloadCache)
@@ -3830,8 +3832,8 @@ variables are not required because the locations of these pieces are known.
 					
 				});
 			}
-			loader.addEventListener(Event.COMPLETE, handlerFunction, false, 0, true);
-			loader.addEventListener(Event.COMPLETE, handleDownloadComplete, false, 0, true);
+			//loader.addEventListener(Event.COMPLETE, handlerFunction, false, 0, true);
+			//loader.addEventListener(Event.COMPLETE, handleDownloadComplete, false, 0, true);
 			
 			// @devsena
 			// MASH
@@ -3871,6 +3873,7 @@ variables are not required because the locations of these pieces are known.
 				// MASH
 				// progressBar.percent = 100;
 				progress = 100;
+				tempHandlerFunction(event);
 			}
 		}
 		

@@ -38,7 +38,7 @@ package org.apache.flex.packageflexsdk.util
 		{
 			var loader:URLLoader = new URLLoader();
 			var req:URLRequest = new URLRequest(url);
-			req.idleTimeout = 60000;
+			//req.idleTimeout = 60000;
 			
 			loader.dataFormat = URLLoaderDataFormat.BINARY; 
 			loader.addEventListener(Event.COMPLETE, completeFunction,false,0,true);

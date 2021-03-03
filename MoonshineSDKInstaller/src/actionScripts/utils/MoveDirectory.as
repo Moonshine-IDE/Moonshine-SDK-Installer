@@ -18,8 +18,6 @@ package actionScripts.utils
 		public static const EVENT_DIRECTORY_MOVE_COMPLETED:String = "directoryMoveCompleted";
 		public static const EVENT_DIRECTORY_MOVE_FAILED:String = "directoryMoveFailed";
 		
-		public var isDeleteNewerDirectoryOnError:Boolean = true;
-		
 		private var fromDirectory:File;
 		private var toDirectory:File;
 		
@@ -89,14 +87,6 @@ package actionScripts.utils
 					origin.removeEventListener(Event.COMPLETE, completeHandlerMove);
 					origin.removeEventListener(IOErrorEvent.IO_ERROR, onIOErrorMove);
 				}
-			}
-		}
-		
-		private function deleteNewerDirectoryOnError():void
-		{
-			if (isDeleteNewerDirectoryOnError)
-			{
-				FileUtils.deleteDirectoryAsync(fromDirectory);
 			}
 		}
 		
