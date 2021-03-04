@@ -137,7 +137,7 @@
 					  verticalAlign="middle">
 				<s:Label text="{data.title}"
 						 styleName="uiTextRendererLabel"/>
-				<s:Label text="({HelperUtils.getSizeFix(data.sizeInMb)})"
+				<s:Label text="(v{data.version +', '+ HelperUtils.getSizeFix(data.sizeInMb)})"
 						 styleName="uiTextRendererDescription" paddingLeft="6"/>
 			</s:HGroup>
 			<s:Label text="{data.description}" width="100%"
