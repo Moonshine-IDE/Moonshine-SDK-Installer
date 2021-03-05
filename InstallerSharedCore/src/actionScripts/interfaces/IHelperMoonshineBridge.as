@@ -8,6 +8,7 @@ package actionScripts.interfaces
 		function isRoyaleSDKAvailable():Object;
 		function isFeathersSDKAvailable():Object;
 		function isJavaPresent():Boolean;
+		function isJava8Present():Boolean;
 		function isAntPresent():Boolean;
 		function isMavenPresent():Boolean;
 		function isGradlePresent():Boolean;

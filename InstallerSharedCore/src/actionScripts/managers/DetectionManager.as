@@ -1,5 +1,6 @@
 package actionScripts.managers
 {
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
@@ -8,6 +9,7 @@ package actionScripts.managers
 	import actionScripts.locator.HelperModel;
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.utils.HelperUtils;
+	import actionScripts.utils.JavaVersionReader;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -110,6 +112,9 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_OPENJAVA:
 						item.isAlreadyDownloaded = model.moonshineBridge.isJavaPresent();
 						break;
+					case ComponentTypes.TYPE_OPENJAVA_V8:
+						item.isAlreadyDownloaded = model.moonshineBridge.isJava8Present();
+						break;
 					case ComponentTypes.TYPE_GIT:
 						item.isAlreadyDownloaded = model.moonshineBridge.isGitPresent();
 						break;
@@ -187,10 +192,14 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
+					case ComponentTypes.TYPE_OPENJAVA_V8:
 						if (environmentUtil.environments.JAVA_HOME) 
 						{
-							item.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
-							item.isAlreadyDownloaded = true;
+							var javaVersionReader:JavaVersionReader = new JavaVersionReader();
+							javaVersionReader.component = item;
+							addJavaVersionReaderEvents(javaVersionReader);
+							javaVersionReader.readVersion(environmentUtil.environments.JAVA_HOME.nativePath);
+							return;
 						}
 						break;
 					case ComponentTypes.TYPE_NODEJS:
@@ -226,7 +235,7 @@ package actionScripts.managers
 		
 		private function checkUpdateVersion(againstVersion:String, item:ComponentVO):void
 		{
-			if (HelperUtils.isNewUpdateVersion(againstVersion, item.version))
+			if (HelperUtils.isNewUpdateVersion(againstVersion, item.version) == 1)
 			{
 				item.oldInstalledVersion = againstVersion;
 			}
@@ -274,6 +283,41 @@ package actionScripts.managers
 			}
 			
 			itemTestCount = itemTestCount + 1;
+		}
+		
+		private function addJavaVersionReaderEvents(reader:JavaVersionReader):void
+		{
+			reader.addEventListener(JavaVersionReader.ENV_READ_COMPLETED, onJavaVersionReadCompletes);
+			reader.addEventListener(JavaVersionReader.ENV_READ_ERROR, onJavaVersionReadError);
+		}
+		
+		private function removeJavaVersionReaderEvents(reader:JavaVersionReader):void
+		{
+			reader.removeEventListener(JavaVersionReader.ENV_READ_COMPLETED, onJavaVersionReadCompletes);
+			reader.removeEventListener(JavaVersionReader.ENV_READ_ERROR, onJavaVersionReadError);
+		}
+		
+		private function onJavaVersionReadCompletes(event:HelperEvent):void
+		{
+			var reader:JavaVersionReader = event.target as JavaVersionReader;
+			removeJavaVersionReaderEvents(reader);
+			
+			var versionFindIndex:int = HelperUtils.isNewUpdateVersion(reader.component.version, event.value as String);
+			if (versionFindIndex <= 0)
+			{
+				reader.component.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
+				reader.component.isAlreadyDownloaded = true;
+			}
+			
+			notifyMoonshineOnDetection(reader.component);
+			reader.component = null;
+		}
+		
+		private function onJavaVersionReadError(event:HelperEvent):void
+		{
+			removeJavaVersionReaderEvents(event.target as JavaVersionReader);
+			notifyMoonshineOnDetection((event.target as JavaVersionReader).component);
+			(event.target as JavaVersionReader).component = null;
 		}
 	}
 }
