@@ -251,7 +251,7 @@
 				<windows>bin/javac.exe</windows>
 				<mac>bin/javac</mac>
 			</pathValidation>
-			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<sdkType>openjava8</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>

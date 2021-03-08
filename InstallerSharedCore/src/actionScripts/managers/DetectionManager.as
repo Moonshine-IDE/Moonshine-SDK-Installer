@@ -1,6 +1,5 @@
 package actionScripts.managers
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
@@ -21,7 +20,7 @@ package actionScripts.managers
 		private var model:HelperModel = HelperModel.getInstance();
 		private var gitSvnDetector:GitSVNDetector = GitSVNDetector.getInstance();
 		
-		private var _itemTestCount:int;
+		private var _itemTestCount:int = -1;
 		private function get itemTestCount():int
 		{
 			return _itemTestCount;
@@ -37,7 +36,7 @@ package actionScripts.managers
 		
 		public function detect():void
 		{
-			itemTestCount = 0;
+			itemTestCount = -1;
 			HelperConstants.IS_DETECTION_IN_PROCESS = true;
 			if (!HelperConstants.IS_MACOS && !environmentUtil)
 			{
