@@ -301,8 +301,11 @@ package actionScripts.managers
 			var reader:JavaVersionReader = event.target as JavaVersionReader;
 			removeJavaVersionReaderEvents(reader);
 			
+			// for 1.8.0 the founding JDK version must match
+			// for default-JDK the founding JDK version can compare
 			var versionFindIndex:int = HelperUtils.isNewUpdateVersion(reader.component.version, event.value as String);
-			if (versionFindIndex <= 0)
+			if ((reader.component.version == "1.8.0" && versionFindIndex == -1) || 
+				(reader.component.version != "1.8.0" && versionFindIndex != 0))
 			{
 				reader.component.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
 				reader.component.isAlreadyDownloaded = true;
