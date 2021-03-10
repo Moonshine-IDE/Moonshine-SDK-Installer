@@ -19,9 +19,12 @@ package actionScripts.utils
 		
 		private var errorCloseData:String;
 		private var outputData:String = "";
+		private var onComplete:Function;
 		
-		public function readVersion(javaPath:String=null):void
+		public function readVersion(javaPath:String=null, onComplete:Function=null):void
 		{
+			this.onComplete = onComplete;
+			
 			var tmpArgs:Vector.<String> = javaPath ? 
 				new <String>[javaPath +"\\bin\\java", "-version"] : 
 				new <String>["java", "-version"];
@@ -73,6 +76,7 @@ package actionScripts.utils
 				
 				// pass completion
 				if (errorCloseData) this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
+				onComplete = null;
 			}
 		}
 		
@@ -91,6 +95,10 @@ package actionScripts.utils
 			
 			// pass completion
 			this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED, version));
+			if (onComplete != null)
+			{
+				onComplete(version);
+			}
 		}
 	}
 }

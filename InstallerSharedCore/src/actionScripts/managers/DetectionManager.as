@@ -109,10 +109,20 @@ package actionScripts.managers
 						item.isAlreadyDownloaded = model.moonshineBridge.isGrailsPresent();
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
-						item.isAlreadyDownloaded = model.moonshineBridge.isJavaPresent();
+						if (model.moonshineBridge.isJavaPresent())
+						{
+							item.isAlreadyDownloaded = 
+								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionForTypeahead, "11.0.10") != 1) ? 
+								true : false;
+						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA_V8:
-						item.isAlreadyDownloaded = model.moonshineBridge.isJava8Present();
+						if (model.moonshineBridge.isJava8Present())
+						{
+							item.isAlreadyDownloaded = 
+								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionInJava8Path, "1.8.0") != 1) ? 
+								true : false;
+						}
 						break;
 					case ComponentTypes.TYPE_GIT:
 						item.isAlreadyDownloaded = model.moonshineBridge.isGitPresent();
