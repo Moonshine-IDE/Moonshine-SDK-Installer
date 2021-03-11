@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+<meta title="MoonshineSDKInstallerGUICore" package="Moonshine" version="1.0.0" company="Prominic.NET" />
+<app file="MoonshineSDKInstallerGUICore" />
+	
+<source path="src" />
+<source path="externs" />
+	
+<haxelib name="openfl" />
+<haxelib name="actuate" />
+<haxelib name="feathersui" />
+
+<template path="templates" if="flash"/>
+
+<haxeflag name="--macro" value="include('moonshine')"/>
+<haxeflag name="--macro" value="include('feathers')"/>
+</project>
