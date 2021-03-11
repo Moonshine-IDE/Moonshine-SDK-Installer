@@ -23,6 +23,12 @@ package actionScripts.utils
 		
 		public function readVersion(javaPath:String=null, onComplete:Function=null):void
 		{
+			if (!FileUtils.isPathExists(javaPath))
+			{
+				this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, "Invalid Java Path"));
+				return;
+			}
+			
 			this.onComplete = onComplete;
 			
 			var tmpArgs:Vector.<String> = javaPath ? 

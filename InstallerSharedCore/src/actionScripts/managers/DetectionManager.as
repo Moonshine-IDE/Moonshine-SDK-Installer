@@ -115,6 +115,10 @@ package actionScripts.managers
 								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionForTypeahead, "11.0.10") != 1) ? 
 								true : false;
 						}
+						else
+						{
+							item.isAlreadyDownloaded = false;
+						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA_V8:
 						if (model.moonshineBridge.isJava8Present())
@@ -122,6 +126,10 @@ package actionScripts.managers
 							item.isAlreadyDownloaded = 
 								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionInJava8Path, "1.8.0") != 1) ? 
 								true : false;
+						}
+						else
+						{
+							item.isAlreadyDownloaded = false;
 						}
 						break;
 					case ComponentTypes.TYPE_GIT:
