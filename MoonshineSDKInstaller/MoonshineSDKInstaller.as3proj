@@ -67,6 +67,7 @@
     <element path="../ApacheFlexSDKInstallerLib/libs/as3commons-zip-1.0.0-alpha.1.swc"/>
     <element path="../ApacheFlexSDKInstallerLib/libs/as3httpclient.swc"/>
     <element path="libs/ApacheFlexSDKInstallerLib.swc"/>
+	<element path="../MoonshineSDKInstallerGUICore/bin/flash/bin/MoonshineSDKInstallerGUICore.swc"/>
   </libraryPaths>
   <externalLibraryPaths></externalLibraryPaths>
   <rslPaths></rslPaths>
