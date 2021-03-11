@@ -49,7 +49,7 @@
 			<title>Java Development</title>
 			<description><![CDATA[Compile Java Applications]]></description>
 			<image></image>
-			<componentDependencyIDs>openjava,openjava8</componentDependencyIDs>
+			<componentDependencyIDs>openjava</componentDependencyIDs>
 		</item>
 		<item integrated="false">
 			<title>Flex/ActionScript Compilation</title>

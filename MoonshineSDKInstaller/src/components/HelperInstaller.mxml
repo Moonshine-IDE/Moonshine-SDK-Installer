@@ -170,6 +170,7 @@
 							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Maven");
 							break;
 						case ComponentTypes.TYPE_OPENJAVA:
+						case ComponentTypes.TYPE_OPENJAVA_V8:
 							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Java");
 							break;
 						case ComponentTypes.TYPE_NODEJS:
@@ -341,7 +342,8 @@
 				if (files.length == 1)
 				{
 					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,
-						(itemDownloading.type == ComponentTypes.TYPE_OPENJAVA && HelperConstants.IS_MACOS) ? "Contents/Home" : null);
+						((itemDownloading.type == ComponentTypes.TYPE_OPENJAVA || itemDownloading.type == ComponentTypes.TYPE_OPENJAVA_V8) && HelperConstants.IS_MACOS) ?
+								"Contents/Home" : null);
 				}
 				else
 				{
