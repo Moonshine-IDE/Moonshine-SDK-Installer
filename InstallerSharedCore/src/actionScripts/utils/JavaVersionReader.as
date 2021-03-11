@@ -32,7 +32,7 @@ package actionScripts.utils
 			this.onComplete = onComplete;
 			
 			var tmpArgs:Vector.<String> = javaPath ? 
-				new <String>[javaPath +"\\bin\\java", "-version"] : 
+				new <String>[javaPath +"/bin/java", "-version"] :
 				new <String>["java", "-version"];
 			start(tmpArgs);
 		}

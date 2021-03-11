@@ -109,9 +109,9 @@ package actionScripts.managers
 						item.isAlreadyDownloaded = model.moonshineBridge.isGrailsPresent();
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
-						if (model.moonshineBridge.isJavaPresent())
+						if (model.moonshineBridge.isJavaPresent() && model.moonshineBridge.javaVersionForTypeahead)
 						{
-							item.isAlreadyDownloaded = 
+							item.isAlreadyDownloaded =
 								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionForTypeahead, "11.0.10") != 1) ? 
 								true : false;
 						}
@@ -121,9 +121,9 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA_V8:
-						if (model.moonshineBridge.isJava8Present())
+						if (model.moonshineBridge.isJava8Present() && model.moonshineBridge.javaVersionInJava8Path)
 						{
-							item.isAlreadyDownloaded = 
+							item.isAlreadyDownloaded =
 								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionInJava8Path, "1.8.0") != 1) ? 
 								true : false;
 						}
