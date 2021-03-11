@@ -1,0 +1,18 @@
+package actionScripts.valueObjects;
+extern class ComponentVariantVO
+{
+	public static final TYPE_STABLE:String;
+	public static final TYPE_RELEASE_CANDIDATE:String;
+	public static final TYPE_NIGHTLY:String;
+	public static final TYPE_BETA:String;
+	public static final TYPE_ALPHA:String;
+	public static final TYPE_PRE_ALPHA:String;
+	
+	public var title:String;
+	public var version:String;
+	public var downloadURL:String;
+	public var sizeInMb:int;
+	
+	@:flash.property
+	public var isReDownloadAvailable(default, default):Boolean;
+}
