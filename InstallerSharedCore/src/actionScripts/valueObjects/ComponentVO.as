@@ -1,8 +1,8 @@
 package actionScripts.valueObjects
 {
-	import mx.collections.ArrayList;
-	
 	import actionScripts.utils.FileUtils;
+	
+	import feathers.data.ArrayCollection;
 
 	[Bindable] public class ComponentVO
 	{
@@ -16,7 +16,7 @@ package actionScripts.valueObjects
 		public var licenseTitle:String;
 		public var licenseSmallDescription:String;
 		public var sizeInMb:int;
-		public var downloadVariants:ArrayList;
+		public var downloadVariants:ArrayCollection;
 		
 		public function ComponentVO()
 		{

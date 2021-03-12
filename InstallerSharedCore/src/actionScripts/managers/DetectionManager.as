@@ -27,7 +27,7 @@ package actionScripts.managers
 		private function set itemTestCount(value:int):void
 		{
 			_itemTestCount = value;
-			if (_itemTestCount == model.components.source.length)
+			if (_itemTestCount == model.components.length)
 			{
 				this.dispatchEvent(new HelperEvent(HelperEvent.ALL_COMPONENTS_TESTED, null));
 			}
@@ -62,9 +62,9 @@ package actionScripts.managers
 		private function startDetectionProcess():void
 		{
 			// go by source as collection can be in filtered state
-			for (var i:int; i < model.components.source.length; i++)
+			for (var i:int; i < model.components.length; i++)
 			{
-				stepA_checkMoonshineInternal(model.components.source[i]);
+				stepA_checkMoonshineInternal(model.components.get(i) as ComponentVO);
 			}
 			
 			// check non-listed items if any

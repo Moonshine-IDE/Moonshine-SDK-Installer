@@ -48,7 +48,7 @@ package actionScripts.utils
 			var root:XML = new XML(<root/>);
 			var items:XML = new XML(<items/>);
 			
-			for each (var item:ComponentVO in model.components.source)
+			for each (var item:ComponentVO in model.components.array)
 			{
 				if (item.isAlreadyDownloaded)
 				{

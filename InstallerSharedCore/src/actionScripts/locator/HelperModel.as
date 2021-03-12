@@ -1,8 +1,8 @@
 package actionScripts.locator
 {
-	import mx.collections.ArrayCollection;
-	
 	import actionScripts.interfaces.IHelperMoonshineBridge;
+	
+	import feathers.data.ArrayCollection;
 
 	[Bindable] public class HelperModel
 	{

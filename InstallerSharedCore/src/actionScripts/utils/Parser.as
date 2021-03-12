@@ -3,9 +3,6 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.Dictionary;
 	
-	import mx.collections.ArrayCollection;
-	import mx.collections.ArrayList;
-	
 	import actionScripts.locator.HelperModel;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
@@ -14,7 +11,9 @@ package actionScripts.utils
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
 	import actionScripts.valueObjects.PackageVO;
-
+	
+	import feathers.data.ArrayCollection;
+	
 	public class Parser
 	{
 		public static function parseEnvironmentFrom(values:String, to:EnvironmentVO):void
@@ -166,7 +165,7 @@ package actionScripts.utils
 				}
 				else
 				{
-					tmpComponent.downloadVariants = new ArrayList();
+					tmpComponent.downloadVariants = new ArrayCollection()
 					
 					var tmpVariant:ComponentVariantVO;
 					var preSelectedVariant:ComponentVariantVO;
@@ -178,7 +177,7 @@ package actionScripts.utils
 						tmpVariant.downloadURL = variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 						tmpVariant.sizeInMb = int(variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
 						
-						tmpComponent.downloadVariants.addItem(tmpVariant);
+						tmpComponent.downloadVariants.add(tmpVariant);
 						if (variant.hasOwnProperty("@isSelected"))
 						{
 							preSelectedVariant = tmpVariant;
@@ -191,7 +190,7 @@ package actionScripts.utils
 					
 					if (!preSelectedVariant) preSelectedVariant = tmpComponent.downloadVariants[0];
 					
-					tmpComponent.selectedVariantIndex = tmpComponent.downloadVariants.getItemIndex(preSelectedVariant);
+					tmpComponent.selectedVariantIndex = tmpComponent.downloadVariants.indexOf(preSelectedVariant);
 					tmpComponent.version = preSelectedVariant.version;
 					tmpComponent.downloadURL = preSelectedVariant.downloadURL;
 					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version, HelperConstants.CONFIG_AIR_VERSION);
@@ -224,7 +223,7 @@ package actionScripts.utils
 					setDescriptionBy(comp.license.description, tmpComponent);
 				}
 				
-				model.components.addItem(tmpComponent);
+				model.components.add(tmpComponent);
 			}
 			
 			// parse components
@@ -241,16 +240,16 @@ package actionScripts.utils
 				var dependencyIDs:Array = String(pkg.componentDependencyIDs).split(",");
 				if (dependencyIDs[0] != "") 
 				{
-					tmpPackage.dependencyTypes = new ArrayList();
+					tmpPackage.dependencyTypes = new ArrayCollection()
 					for each (var id:String in dependencyIDs)
 					{
 						tmpComponent = HelperUtils.getComponentById(id);
 						tmpComponent.description += ((tmpComponent.description == staticRequiredText) ? tmpPackage.title : ", "+ tmpPackage.title);
-						tmpPackage.dependencyTypes.addItem(tmpComponent);
+						tmpPackage.dependencyTypes.add(tmpComponent);
 					}
 				}
 				
-				model.packages.addItem(tmpPackage);
+				model.packages.add(tmpPackage);
 			}
 		}
 		

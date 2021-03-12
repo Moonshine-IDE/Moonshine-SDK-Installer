@@ -24,9 +24,12 @@
 			import actionScripts.utils.EnvironmentUtils;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
+			import actionScripts.valueObjects.PackageVO;
 			
 			import components.renderers.ComponentRenderer;
 			import components.renderers.PackageRenderer;
+			
+			import feathers.data.ArrayCollection;
 			
 			//--------------------------------------------------------------------------
 			//
@@ -49,7 +52,7 @@
 			//
 			//--------------------------------------------------------------------------
 			
-			[Bindable] private var packageList:ArrayCollection;
+			[Bindable] private var packageList:mx.collections.ArrayCollection;
 			
 			private var model:HelperModel = HelperModel.getInstance();
 			private var itemsManager:InstallerItemsManager = InstallerItemsManager.getInstance();
@@ -62,7 +65,7 @@
 			
 			public function updateComponentStatusAsDownloaded(id:String, path:String=null):void
 			{
-				for each (var item:ComponentVO in model.components.source)
+				for each (var item:ComponentVO in model.components.array)
 				{
 					if (item.id == id)
 					{
@@ -176,16 +179,26 @@
 				if (rgType.selectedValue == "feature")
 				{
 					lstItems.itemRenderer = new ClassFactory(PackageRenderer);
-					packageList = model.packages;
+					packageList = getTemporaryMXCollectionFromFeathers(model.packages);
 				}
 				else
 				{
 					lstItems.itemRenderer = new ClassFactory(ComponentRenderer);
-					packageList = model.components;
+					packageList = getTemporaryMXCollectionFromFeathers(model.components);
 				}
 				
 				// update filter state
 				onFilterChange(null);
+			}
+			
+			private function getTemporaryMXCollectionFromFeathers(collection:feathers.data.ArrayCollection):mx.collections.ArrayCollection
+			{
+				var tmpCollection:mx.collections.ArrayCollection = new mx.collections.ArrayCollection();
+				for each (var item:Object in collection.array)
+				{
+					tmpCollection.addItem(item);
+				}
+				return tmpCollection;
 			}
 			
 			private function onFilterChange(event:Event):void

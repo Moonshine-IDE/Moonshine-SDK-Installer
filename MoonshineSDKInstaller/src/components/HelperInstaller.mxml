@@ -124,7 +124,7 @@
 			private function proceedAllInstallation():void
 			{
 				// generate list of downloads
-				for each (var item:ComponentVO in model.components.source)
+				for each (var item:ComponentVO in model.components.array)
 				{
 					if (!item.isAlreadyDownloaded)
 					{
@@ -153,7 +153,7 @@
 				var sdkFolderName:String;
 				
 				// generate sub-folders
-				for each (var item:ComponentVO in model.components.source)
+				for each (var item:ComponentVO in model.components.array)
 				{
 					switch (item.type)
 					{
@@ -315,7 +315,7 @@
 				// should be removed when Apache introduce their own fix
 				if (itemDownloading.type == ComponentTypes.TYPE_ROYALE)
 				{
-					var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.getItemAt(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
+					var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.get(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
 					if (variantVO.title.indexOf(ComponentVariantVO.TYPE_STABLE) != -1)
 					{
 						var timeoutValue:uint = setTimeout(function():void

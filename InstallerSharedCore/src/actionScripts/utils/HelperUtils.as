@@ -19,9 +19,9 @@ package actionScripts.utils
 			if (!model.components) return null;
 			
 			// go by source as collection can be in filtered state
-			for (var i:int; i < model.components.source.length; i++)
+			for (var i:int; i < model.components.length; i++)
 			{
-				if (model.components.source[i].id == id) return model.components.source[i];
+				if (model.components.get(i).id == id) return (model.components.get(i) as ComponentVO);
 			}
 			return null;
 		}
@@ -31,7 +31,7 @@ package actionScripts.utils
 			if (!model.components) return null;
 
 			// go by source as collection can be in filtered state
-			for each (var item:ComponentVO in model.components.source)
+			for each (var item:ComponentVO in model.components.array)
 			{
 				if (item.type == type)
 				{
@@ -168,7 +168,7 @@ package actionScripts.utils
 			HelperConstants.DEFAULT_INSTALLATION_PATH = new File(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
 			
 			// update target location for each components
-			for each (var item:ComponentVO in model.components.source)
+			for each (var item:ComponentVO in model.components.array)
 			{
 				item.installToPath = HelperConstants.CUSTOM_PATH_SDK_WINDOWS +  
 					item.installToPath.substring(item.installToPath.indexOf(HelperConstants.DEFAULT_SDK_FOLDER_NAME) + HelperConstants.DEFAULT_SDK_FOLDER_NAME.length);
@@ -178,7 +178,7 @@ package actionScripts.utils
 		public static function getTotalDiskSizePendingItems():String
 		{
 			var totalMbs:int;
-			for each (var item:ComponentVO in model.components)
+			for each (var item:ComponentVO in model.components.array)
 			{
 				if (!item.isAlreadyDownloaded)
 				{

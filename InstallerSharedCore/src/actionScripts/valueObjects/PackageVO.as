@@ -1,6 +1,6 @@
 package actionScripts.valueObjects
 {
-	import mx.collections.ArrayList;
+	import feathers.data.ArrayCollection;
 
 	[Bindable] public class PackageVO
 	{
@@ -13,12 +13,12 @@ package actionScripts.valueObjects
 		{
 		}
 		
-		private var _dependencyTypes:ArrayList;
-		public function set dependencyTypes(value:ArrayList):void
+		private var _dependencyTypes:ArrayCollection;
+		public function set dependencyTypes(value:ArrayCollection):void
 		{
 			_dependencyTypes = value;
 		}
-		public function get dependencyTypes():ArrayList
+		public function get dependencyTypes():ArrayCollection
 		{
 			return _dependencyTypes;
 		}

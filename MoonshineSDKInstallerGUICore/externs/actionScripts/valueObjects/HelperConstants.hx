@@ -1,5 +1,7 @@
 package actionScripts.valueObjects;
 
+import sys.io.File;
+
 extern class HelperConstants
 {
 	public static final BG_LIST_DIVIDER:Class;
@@ -25,5 +27,6 @@ extern class HelperConstants
 	public static var IS_CUSTOM_WINDOWS_PATH:Boolean;
 	public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Boolean;
 	
-	public static function get HELPER_STORAGE():File;
+	@:flash.property
+	public static var HELPER_STORAGE(default, default):File;
 }
