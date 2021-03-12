@@ -81,7 +81,10 @@
 				{
 					item.isSelectedToDownload = true;
 					packageLists.push(item);
-					if (!isDownloadInProgress) flush();
+					if (!isDownloadInProgress) 
+					{
+						flush();
+					}
 				};
 			}
 			
@@ -383,12 +386,7 @@
 			
 			private function onDownloadAComponentRequested(event:HelperEvent):void
 			{
-				isDownloadInProgress = true;
-				lblLastMessage.visible = true;
-				lblLastMessage.setStyle("fontWeight", "bold");
-				lblLastMessage.setStyle("color", 0xc165b8);
-				lblLastMessage.text = "Verifying download link: "+ (event.value as ComponentVO).title;
-				
+				(event.value as ComponentVO).isDownloading = true;
 				if ((event.value as ComponentVO).type == ComponentTypes.TYPE_FLEX)
 				{
 					new LinkVerifier((event.value as ComponentVO), 
@@ -403,16 +401,14 @@
 			
 			private function onDownloadLinkVerified(isSuccess:Boolean, component:ComponentVO):void
 			{
+				component.isDownloading = false;
 				if (isSuccess)
 				{
-					lblLastMessage.setStyle("color", 0x444444);
-					isDownloadInProgress = false;
 					openLicenseView(singleInstallConfirmHandler, component);
 				}
 				else
 				{
-					lblLastMessage.setStyle("color", 0xff0000);
-					lblLastMessage.text = "Oops! "+ component.title +" download is currently unavailable!\nPlease, contact the administrator, or try again later.";
+					Alert.show("Oops! "+ component.title +" download is currently unavailable!\nPlease, contact the administrator, or try again later.", "Error!");
 				}
 			}
 			
