@@ -20,6 +20,7 @@
 
 package moonshine.theme;
 
+import feathers.controls.dataRenderers.LayoutGroupItemRenderer;
 import moonshine.components.StandardPopupView;
 import feathers.controls.Button;
 import feathers.controls.Callout;
@@ -79,6 +80,7 @@ class MoonshineTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_BUSY_LABEL:String = "moonshine-label-busy-status-light";
 	public static final THEME_VARIANT_PLUGIN_LARGE_TITLE:String = "moonshine-plugin-large-title";
 	public static final THEME_VARIANT_BODY_WITH_GREY_BACKGROUND:String = "moonshine-layoutgroup-grey-background";
+	public static final THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND:String = "moonshine-layoutgroup-white-background";
 
 	public function new() {
 		super();
@@ -97,7 +99,7 @@ class MoonshineTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererStyles);
 
-		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
+		//this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
 		this.styleProvider.setStyleFunction(Label, DefaultToolTipManager.CHILD_VARIANT_TOOL_TIP, setToolTipLabelStyles);
@@ -121,6 +123,7 @@ class MoonshineTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(StandardPopupView, null, setStandardPopupViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
+		this.styleProvider.setStyleFunction(LayoutGroupItemRenderer, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
 
 		this.styleProvider.setStyleFunction(TitleWindow, null, setTitleWindowStyles);
 		this.styleProvider.setStyleFunction(Label, TitleWindow.CHILD_VARIANT_TITLE, setTitleWindowTitleStyles);
@@ -196,9 +199,9 @@ class MoonshineTheme extends ClassVariantTheme {
 		focusRectSkin.cornerRadius = 5.0;
 		button.focusRectSkin = focusRectSkin;
 
-		button.textFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x999999));
-		button.embedFonts = true;
+		//button.textFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
+		//button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x999999));
+		//button.embedFonts = true;
 
 		button.paddingTop = 8.0;
 		button.paddingRight = 16.0;
@@ -379,9 +382,9 @@ class MoonshineTheme extends ClassVariantTheme {
 		check.focusPaddingBottom = 2.0;
 		check.focusPaddingLeft = 2.0;
 
-		check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		check.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		check.embedFonts = true;
+		//check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		//check.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		//check.embedFonts = true;
 
 		check.horizontalAlign = LEFT;
 		check.gap = 4.0;
@@ -556,9 +559,9 @@ class MoonshineTheme extends ClassVariantTheme {
 		radio.focusPaddingBottom = 2.0;
 		radio.focusPaddingLeft = 2.0;
 
-		radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		radio.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		radio.embedFonts = true;
+		//radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		//radio.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		//radio.embedFonts = true;
 
 		radio.horizontalAlign = LEFT;
 		radio.gap = 4.0;
@@ -799,6 +802,13 @@ class MoonshineTheme extends ClassVariantTheme {
 	private function setBodyWithGreyBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xf5f5f5);
+		backgroundSkin.cornerRadius = 0.0;
+		view.backgroundSkin = backgroundSkin;
+	}
+	
+	private function setBodyWithWhiteBackgroundViewStyles(view:LayoutGroupItemRenderer):Void {
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = SolidColor(0xffffff);
 		backgroundSkin.cornerRadius = 0.0;
 		view.backgroundSkin = backgroundSkin;
 	}

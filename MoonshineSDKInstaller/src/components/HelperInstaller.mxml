@@ -20,6 +20,7 @@
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.CookieManager;
 			import actionScripts.managers.GitSVNDetector;
+			import actionScripts.ui.views.HelperViewWrapper;
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.LinkVerifier;
@@ -31,6 +32,8 @@
 			import actionScripts.valueObjects.HelperConstants;
 			
 			import assets.skins.DarkButtonSkin;
+			
+			import moonshine.ui.views.HelperView;
 			
 			import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
 			import org.apache.flex.packageflexsdk.util.ArchiveDownloader;
@@ -59,6 +62,7 @@
 			private var archiveDownloader:ArchiveDownloader;
 			private var viewResourceConstants:ViewResourceConstants;
 			private var itemDownloading:ComponentVO;
+			private var helperViewWrapper:HelperViewWrapper;
 			
 			private var _moonshineNotifier:MoonshineNotifier;
 			private function get moonshineNotifier():MoonshineNotifier
@@ -93,6 +97,8 @@
 			
 			private function onComplete(event:FlexEvent):void
 			{
+				attachHelperViewWrapper();
+				
 				btnInstallAll.label = allInstallButtonLabel;
 				
 				// initiate the original installer source
@@ -106,8 +112,24 @@
 				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
 				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
 				
-				sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS : 
-					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;
+				/*sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS : 
+					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;*/
+			}
+			
+			private function attachHelperViewWrapper():void
+			{
+				helperViewWrapper = new HelperViewWrapper(
+					new moonshine.ui.views.HelperView()
+				);
+				
+				helperViewWrapper.percentWidth = 100;
+				helperViewWrapper.percentHeight = 100;
+				helperViewWrapper.minWidth = 0;
+				helperViewWrapper.minHeight = 0;
+				
+				helperViewWrapper.isRunningInsideMoonshine = false;
+				
+				grpListingArea.addElementAt(helperViewWrapper, 0);
 			}
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
@@ -421,12 +443,12 @@
 			
 			private function onAllComponentsFinishDetection(event:HelperEvent):void
 			{
-				view.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection);
+				helperViewWrapper.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection);
 				
 				// determine disk-usage for total pending
 				updateAllInstallButtonLabel();
 				
-				view.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onEachComponentDownloaded, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onEachComponentDownloaded, false, 0, true);
 			}
 			
 			private function onEachComponentDownloaded(event:HelperEvent):void
@@ -538,15 +560,16 @@
 				 visible="false" includeInLayout="false"/>
 	</s:Group>
 	
-	<s:VGroup width="96%" height="100%"
+	<s:VGroup id="grpListingArea" 
+			  width="96%" height="100%"
 			  horizontalAlign="center" verticalAlign="middle" paddingBottom="10">
-		<components:HelperView id="view" 
+		<!--components:HelperView id="view" 
 							   width="100%" height="100%"
 							   DOWNLOAD_COMPONENT="onDownloadAComponentRequested(event)"
 							   OPEN_COMPONENT_LICENSE="onOpenAComponentLicenseRequested(event)"
 							   ALL_COMPONENTS_TESTED="onAllComponentsFinishDetection(event)"
 							   DOWNLOAD_VARIANT_CHANGED="onEachComponentDownloaded(event)"
-							   isRunningInsideMoonshine="false" paddingBottom="10"/>
+							   isRunningInsideMoonshine="false" paddingBottom="10"/-->
 		<s:VGroup width="100%"
 				  verticalAlign="middle" horizontalAlign="center"
 				  includeInLayout="{isDownloadInProgress || HelperConstants.IS_MACOS}" 

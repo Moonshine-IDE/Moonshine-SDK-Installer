@@ -61,7 +61,7 @@
 				if (data.downloadVariants && data.downloadVariants.length > 1)
 				{
 					HelperUtils.updateComponentByVariant(data as ComponentVO,
-						data.downloadVariants.getItemAt(data.selectedVariantIndex) as ComponentVariantVO);
+						data.downloadVariants.get(data.selectedVariantIndex) as ComponentVariantVO);
 				}
 				
 				this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, data, true));
@@ -106,7 +106,7 @@
 			
 			private function setUI():void
 			{
-				if (data.downloadVariants && data.downloadVariants.getItemAt(data.selectedVariantIndex).isReDownloadAvailable && 
+				if (data.downloadVariants && data.downloadVariants.get(data.selectedVariantIndex).isReDownloadAvailable && 
 					data.isAlreadyDownloaded && !data.isDownloading && !data.isSelectedToDownload && data.isDownloadable)
 				{
 					imgReDownload.includeInLayout = imgReDownload.visible = true;
@@ -158,13 +158,13 @@
 			</s:HGroup>
 		</s:VGroup>
 		<s:HGroup autoLayout="true" verticalAlign="middle" horizontalAlign="right">
-			<s:DropDownList id="ddlVariant" 
+			<!--s:DropDownList id="ddlVariant" 
 							dataProvider="{data.downloadVariants}"
 							labelField="title" typicalItem="{ddlVariant.selectedItem}"
 							visible="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}" 
 							includeInLayout="{(data.variantCount != 1) &amp;&amp; !data.isDownloading &amp;&amp; !data.isSelectedToDownload}"
 							requireSelection="true" color="0x000" change="onVariantChange(event)"
-							selectedIndex="{data.selectedVariantIndex}"/>
+							selectedIndex="{data.selectedVariantIndex}"/-->
 			<s:Image id="imgDownloaded"
 					 width="50"
 					 source="@Embed('/helperResources/images/icoTickLabel.png')"

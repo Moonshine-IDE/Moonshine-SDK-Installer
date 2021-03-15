@@ -57,6 +57,8 @@
 -D flash-use-stage
 -D no-compilation
 -D openfl-flash
+-D fdb
+-D openfl-disable-handle-error
 -D web
 --macro include('moonshine')
 --macro include('feathers')

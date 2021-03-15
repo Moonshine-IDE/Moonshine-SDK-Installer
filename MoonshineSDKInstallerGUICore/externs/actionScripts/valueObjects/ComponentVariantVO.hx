@@ -11,8 +11,8 @@ extern class ComponentVariantVO
 	public var title:String;
 	public var version:String;
 	public var downloadURL:String;
-	public var sizeInMb:int;
+	public var sizeInMb:Int;
 	
 	@:flash.property
-	public var isReDownloadAvailable(default, default):Boolean;
+	public var isReDownloadAvailable(default, default):Bool;
 }
