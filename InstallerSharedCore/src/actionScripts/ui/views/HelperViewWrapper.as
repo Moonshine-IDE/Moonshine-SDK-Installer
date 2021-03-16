@@ -2,10 +2,6 @@ package actionScripts.ui.views
 {
 	import flash.events.Event;
 	
-	import mx.core.ClassFactory;
-	
-	import spark.components.Alert;
-	
 	import actionScripts.events.HelperEvent;
 	import actionScripts.interfaces.IHelperMoonshineBridge;
 	import actionScripts.locator.HelperModel;
@@ -15,7 +11,7 @@ package actionScripts.ui.views
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.valueObjects.HelperConstants;
 	
-	import moonshine.ui.views.HelperView;
+	import moonshine.components.HelperView;
 	
 	public class HelperViewWrapper extends FeathersUIWrapper
 	{
@@ -72,6 +68,9 @@ package actionScripts.ui.views
 			this.feathersUIControl.addEventListener(
 				HelperView.EVENT_FILTER_TYPE_CHANGED, onFilterTypeChanged, false, 0, true
 			);
+			this.feathersUIControl.addEventListener(
+				HelperView.EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED, onFilterChange, false, 0, true
+			);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -98,19 +97,16 @@ package actionScripts.ui.views
 				return;
 			}
 			
-			/*if (rgType.selectedValue == "feature")
+			if ((this.feathersUIControl as HelperView).filterTypeIndex == 0)
 			{
 				/*model.packages.filterFunction = filterPackages;
-				model.packages.refresh();*
+				model.packages.refresh();*/
 			}
 			else
 			{
 				model.components.filterFunction = filterComponents;
 				model.components.refresh();
-			}*/
-			// temp
-			model.components.filterFunction = filterComponents;
-			model.components.refresh();
+			}
 		}
 		
 		private function filterPackages(item:Object):Boolean
@@ -138,19 +134,14 @@ package actionScripts.ui.views
 		
 		private function onFilterTypeChanged(event:Event):void
 		{
-			//Alert.show((this.feathersUIControl as HelperView).filterType);
-			/*if (rgType.selectedValue == "feature")
+			if ((this.feathersUIControl as HelperView).filterTypeIndex == 0)
 			{
-				lstItems.itemRenderer = new ClassFactory(PackageRenderer);
-				(this.feathersUIControl as HelperView).packageList = model.packages;
+				(this.feathersUIControl as HelperView).setListPropertiesByFeatureType(model.packages);
 			}
 			else
 			{
-				lstItems.itemRenderer = new ClassFactory(ComponentRenderer);
-				(this.feathersUIControl as HelperView).packageList = model.components;
-			}*/
-			// temp
-			(this.feathersUIControl as HelperView).packageList = model.components;
+				(this.feathersUIControl as HelperView).setListPropertiesBySoftwareType(model.components);
+			}
 			
 			// update filter state
 			onFilterChange(null);
@@ -158,7 +149,7 @@ package actionScripts.ui.views
 		
 		private function onFilterChange(event:Event):void
 		{
-			//filterSearch(cbFilter.selected);
+			filterSearch((this.feathersUIControl as HelperView).checkShowOnlyNeedsSetup);
 		}
 		
 		private function onComponentDetected(event:HelperEvent):void

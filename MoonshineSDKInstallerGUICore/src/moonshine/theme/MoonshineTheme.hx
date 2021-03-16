@@ -81,6 +81,7 @@ class MoonshineTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_PLUGIN_LARGE_TITLE:String = "moonshine-plugin-large-title";
 	public static final THEME_VARIANT_BODY_WITH_GREY_BACKGROUND:String = "moonshine-layoutgroup-grey-background";
 	public static final THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND:String = "moonshine-layoutgroup-white-background";
+	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
 
 	public function new() {
 		super();
@@ -133,6 +134,8 @@ class MoonshineTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_BUSY_LABEL, setBusyLabelStyles);
+		
+		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_TEXT_LINK, setTextLinkyLabelStyles);
 		
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_PLUGIN_LARGE_TITLE, setPluginLargeTitleStyles);
 
@@ -630,6 +633,13 @@ class MoonshineTheme extends ClassVariantTheme {
 		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929, false, true);
 		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999, false, true);
 		label.embedFonts = true;
+	}
+	
+	private function setTextLinkyLabelStyles(label:Label):Void {
+		var tmpFormat = new TextFormat();
+		tmpFormat.color = 0x0000FF;
+		tmpFormat.underline = true;
+		label.textFormat = tmpFormat;
 	}
 
 	private function setToolTipLabelStyles(toolTip:Label):Void {

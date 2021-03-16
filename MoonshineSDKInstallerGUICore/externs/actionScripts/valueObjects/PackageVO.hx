@@ -7,8 +7,8 @@ extern class PackageVO
 	public var title:String;
 	public var description:String;
 	public var imagePath:String;
-	public var isIntegrated:Boolean;
+	public var isIntegrated:Bool;
 	
 	@:flash.property
-	public var dependencyTypes(default, default):ArrayCollection;
+	public var dependencyTypes(default, default):ArrayCollection<ComponentVO>;
 }
