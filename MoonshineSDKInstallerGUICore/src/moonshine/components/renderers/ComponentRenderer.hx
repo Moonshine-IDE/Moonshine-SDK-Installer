@@ -37,9 +37,19 @@ class ComponentRenderer extends LayoutGroup
 	{
 		this.height = 100;
 	 	this.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND;
-	    this.layout = new AnchorLayout();
+	    
+	    var viewLayout = new HorizontalLayout();
+		viewLayout.horizontalAlign = JUSTIFY;
+		viewLayout.verticalAlign = MIDDLE;
+		viewLayout.paddingTop = 10.0;
+		viewLayout.paddingRight = 10.0;
+		viewLayout.paddingBottom = 4.0;
+		viewLayout.paddingLeft = 10.0;
+		viewLayout.gap = 10.0;
+		this.layout = viewLayout;
 	    
 	    var imageContainer = new LayoutGroup();
+	    imageContainer.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
 	    imageContainer.height = this.height;
 	    imageContainer.width = 136;
 	    imageContainer.layout = new AnchorLayout();
@@ -65,7 +75,7 @@ class ComponentRenderer extends LayoutGroup
 	    var titleDesContainer = new LayoutGroup();
 	    titleDesContainer.layout = titleDesContainerLayout;
 	    titleDesContainer.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
-	    titleDesContainer.layoutData = titleDesContainerLayoutData;
+	    titleDesContainer.layoutData = new HorizontalLayoutData(100, null);
 	    this.addChild(titleDesContainer);
 	
 	    this.lblTitle = new Label();
@@ -81,13 +91,8 @@ class ComponentRenderer extends LayoutGroup
 	    license.variant = MoonshineTheme.THEME_VARIANT_TEXT_LINK;
 	    titleDesContainer.addChild(license);
 	    
-	    var stateImageContainerLayoutData = new AnchorLayoutData();
-	    stateImageContainerLayoutData.right = 0;
-	    stateImageContainerLayoutData.verticalCenter = 0.0;
-	    
 	  	var stateImageContainer = new LayoutGroup();		
 	    stateImageContainer.width = 50;
-	    stateImageContainer.layoutData = stateImageContainerLayoutData;
 	    stateImageContainer.layout = new HorizontalLayout();
 		this.addChild(stateImageContainer);
 		

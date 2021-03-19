@@ -21,7 +21,6 @@
 package moonshine.theme;
 
 import feathers.controls.dataRenderers.LayoutGroupItemRenderer;
-import moonshine.components.StandardPopupView;
 import feathers.controls.Button;
 import feathers.controls.Callout;
 import feathers.controls.Check;
@@ -48,14 +47,7 @@ import feathers.skins.CircleSkin;
 import feathers.skins.RectangleSkin;
 import feathers.style.Theme;
 import feathers.themes.ClassVariantTheme;
-import moonshine.plugin.help.view.TourDeFlexTreeViewItemRenderer;
 import moonshine.style.MoonshineButtonSkin;
-import moonshine.style.MoonshineControlBarSkin;
-import moonshine.style.MoonshineHScrollBarThumbSkin;
-import moonshine.style.MoonshineVScrollBarThumbSkin;
-import moonshine.ui.ResizableTitleWindow;
-import moonshine.ui.SideBarViewHeader;
-import moonshine.ui.TitleWindow;
 import openfl.display.Shape;
 import openfl.filters.GlowFilter;
 import openfl.text.TextFormat;
@@ -113,23 +105,10 @@ class MoonshineTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 
-		this.styleProvider.setStyleFunction(HScrollBar, null, setHScrollBarStyles);
-		this.styleProvider.setStyleFunction(VScrollBar, null, setVScrollBarStyles);
-
 		this.styleProvider.setStyleFunction(Radio, null, setRadioStyles);
 
-		this.styleProvider.setStyleFunction(SideBarViewHeader, null, setSideBarViewHeaderStyles);
-		this.styleProvider.setStyleFunction(Label, SideBarViewHeader.CHILD_VARIANT_TITLE, setSideBarViewHeaderTitleStyles);
-		this.styleProvider.setStyleFunction(Button, SideBarViewHeader.CHILD_VARIANT_CLOSE_BUTTON, setSideBarViewHeaderCloseButtonStyles);
-
-		this.styleProvider.setStyleFunction(StandardPopupView, null, setStandardPopupViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
-
-		this.styleProvider.setStyleFunction(TitleWindow, null, setTitleWindowStyles);
-		this.styleProvider.setStyleFunction(Label, TitleWindow.CHILD_VARIANT_TITLE, setTitleWindowTitleStyles);
-		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_TITLE_WINDOW_CONTROL_BAR, setTitleWindowControlBarStyles);
-		this.styleProvider.setStyleFunction(Button, TitleWindow.CHILD_VARIANT_CLOSE_BUTTON, setTitleWindowCloseButtonStyles);
 
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 		
@@ -142,7 +121,6 @@ class MoonshineTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(TreeView, null, setTreeViewStyles);
 		this.styleProvider.setStyleFunction(TreeView, TreeView.VARIANT_BORDERLESS, setBorderlessTreeViewStyles);
 		this.styleProvider.setStyleFunction(TreeViewItemRenderer, null, setTreeViewItemRendererStyles);
-		this.styleProvider.setStyleFunction(TourDeFlexTreeViewItemRenderer, null, setTourDeFlexTreeViewItemRendererItemRendererStyles);
 		this.styleProvider.setStyleFunction(ToggleButton, TreeViewItemRenderer.CHILD_VARIANT_DISCLOSURE_BUTTON, setTreeViewItemRendererDisclosureButtonStyles);
 	}
 
@@ -595,28 +573,6 @@ class MoonshineTheme extends ClassVariantTheme {
 		itemRenderer.gap = 4.0;
 	}
 
-	private function setTitleWindowCloseButtonStyles(button:Button):Void {
-		var backgroundSkin = new CircleSkin();
-		backgroundSkin.border = SolidColor(1.0, 0xffffff);
-		backgroundSkin.fill = SolidColor(0xff00ff, 0.0);
-		backgroundSkin.width = 16.0;
-		backgroundSkin.height = 16.0;
-		button.backgroundSkin = backgroundSkin;
-
-		var icon = new Shape();
-		icon.graphics.beginFill(0xff00ff, 0.0);
-		icon.graphics.drawRect(0.0, 0.0, 8.0, 8.0);
-		icon.graphics.lineStyle(3.0, 0xffffff, 1.0, true, NORMAL, SQUARE);
-		icon.graphics.moveTo(2.0, 2.0);
-		icon.graphics.lineTo(6.0, 6.0);
-		icon.graphics.moveTo(2.0, 6.0);
-		icon.graphics.lineTo(6.0, 2.0);
-		button.icon = icon;
-
-		button.horizontalAlign = CENTER;
-		button.verticalAlign = MIDDLE;
-	}
-
 	private function setLabelStyles(label:Label):Void {
 		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
 		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
@@ -719,95 +675,6 @@ class MoonshineTheme extends ClassVariantTheme {
 		backgroundSkin.cornerRadius = 7.0;
 		panel.backgroundSkin = backgroundSkin;
 	}
-
-	private function setHScrollBarStyles(scrollBar:HScrollBar):Void {
-		var trackSkin = new RectangleSkin();
-		trackSkin.fill = Gradient(LINEAR, [0x3A3A3A, 0x414141, 0x414141], [1.0, 1.0, 1.0], [0x00, 0x3F, 0xFF], 90.0 * Math.PI / 180.0);
-		trackSkin.width = 16.0;
-		trackSkin.height = 16.0;
-		trackSkin.minWidth = 16.0;
-		trackSkin.minHeight = 16.0;
-		scrollBar.trackSkin = trackSkin;
-
-		var thumbSkin = new MoonshineHScrollBarThumbSkin();
-		thumbSkin.width = 15.0;
-		thumbSkin.height = 15.0;
-		thumbSkin.minWidth = 15.0;
-		thumbSkin.minHeight = 15.0;
-		scrollBar.thumbSkin = thumbSkin;
-	}
-
-	private function setVScrollBarStyles(scrollBar:VScrollBar):Void {
-		var trackSkin = new RectangleSkin();
-		trackSkin.fill = Gradient(LINEAR, [0x3A3A3A, 0x414141, 0x414141], [1.0, 1.0, 1.0], [0x00, 0x3F, 0xFF]);
-		trackSkin.width = 15.0;
-		trackSkin.height = 15.0;
-		trackSkin.minWidth = 15.0;
-		trackSkin.minHeight = 15.0;
-		scrollBar.trackSkin = trackSkin;
-
-		var thumbSkin = new MoonshineVScrollBarThumbSkin();
-		thumbSkin.width = 15.0;
-		thumbSkin.height = 15.0;
-		thumbSkin.minWidth = 15.0;
-		thumbSkin.minHeight = 15.0;
-		scrollBar.thumbSkin = thumbSkin;
-	}
-
-	private function setSideBarViewHeaderStyles(header:SideBarViewHeader):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = Gradient(LINEAR, [0xF2F2F2, 0xEEEEEE, 0xEEEEEE, 0xD8D8D8], [1.0, 1.0, 1.0, 1.0], [0x00, 0x3F, 0xCF, 0xFF],
-			90.0 * Math.PI / 180.0);
-		backgroundSkin.border = null;
-		header.backgroundSkin = backgroundSkin;
-
-		var layout = new HorizontalLayout();
-		layout.horizontalAlign = LEFT;
-		layout.verticalAlign = MIDDLE;
-		layout.paddingTop = 6.0;
-		layout.paddingRight = 6.0;
-		layout.paddingBottom = 6.0;
-		layout.paddingLeft = 6.0;
-		layout.gap = 4.0;
-		header.layout = layout;
-	}
-
-	private function setSideBarViewHeaderTitleStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 11, 0x292929);
-		label.embedFonts = true;
-		label.layoutData = new HorizontalLayoutData(100.0);
-	}
-
-	private function setSideBarViewHeaderCloseButtonStyles(button:Button):Void {
-		var backgroundSkin = new CircleSkin();
-		backgroundSkin.border = SolidColor(1.0, 0x444444, 0.8);
-		backgroundSkin.fill = SolidColor(0xff00ff, 0.0);
-		backgroundSkin.width = 14.0;
-		backgroundSkin.height = 14.0;
-		button.backgroundSkin = backgroundSkin;
-
-		var icon = new Shape();
-		icon.graphics.beginFill(0xff00ff, 0.0);
-		icon.graphics.drawRect(0.0, 0.0, 8.0, 8.0);
-		icon.graphics.lineStyle(2.0, 0x444444, 0.8, true, NORMAL, SQUARE);
-		icon.graphics.moveTo(2.0, 2.0);
-		icon.graphics.lineTo(6.0, 6.0);
-		icon.graphics.moveTo(2.0, 6.0);
-		icon.graphics.lineTo(6.0, 2.0);
-		button.icon = icon;
-
-		button.horizontalAlign = CENTER;
-		button.verticalAlign = MIDDLE;
-	}
-
-	private function setStandardPopupViewStyles(view:LayoutGroup):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0xf9f9f7);
-		backgroundSkin.cornerRadius = 0.0;
-		view.backgroundSkin = backgroundSkin;
-
-		view.filters = [new GlowFilter(0x000000, 0.3, 6, 6, 2)];
-	}
 	
 	private function setBodyWithGreyBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
@@ -822,52 +689,6 @@ class MoonshineTheme extends ClassVariantTheme {
 		backgroundSkin.cornerRadius = 0.0;
 		view.backgroundSkin = backgroundSkin;
 	}
-
-	private function setTitleWindowStyles(window:TitleWindow):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0xA0A0A0);
-		backgroundSkin.border = SolidColor(1.0, 0x292929);
-		backgroundSkin.cornerRadius = 7.0;
-		window.backgroundSkin = backgroundSkin;
-
-		if (Std.is(window, ResizableTitleWindow)) {
-			var resizableWindow = cast(window, ResizableTitleWindow);
-
-			var resizeHandleSkin = new Shape();
-			resizeHandleSkin.graphics.beginFill(0xff00ff, 0.0);
-			resizeHandleSkin.graphics.drawRect(0.0, 0.0, 16.0, 16.0);
-			resizeHandleSkin.graphics.endFill();
-
-			resizeHandleSkin.graphics.lineStyle(1.0, 0xa6a6a6, 1.0, true, NORMAL, SQUARE);
-			resizeHandleSkin.graphics.moveTo(2.0, 14.0);
-			resizeHandleSkin.graphics.lineTo(14.0, 2.0);
-			resizeHandleSkin.graphics.moveTo(6.0, 14.0);
-			resizeHandleSkin.graphics.lineTo(14.0, 6.0);
-			resizeHandleSkin.graphics.moveTo(10.0, 14.0);
-			resizeHandleSkin.graphics.lineTo(14.0, 10.0);
-
-			resizeHandleSkin.graphics.lineStyle(1.0, 0x292929, 1.0, true, NORMAL, SQUARE);
-			resizeHandleSkin.graphics.moveTo(3.0, 14.0);
-			resizeHandleSkin.graphics.lineTo(14.0, 3.0);
-			resizeHandleSkin.graphics.moveTo(7.0, 14.0);
-			resizeHandleSkin.graphics.lineTo(14.0, 7.0);
-			resizeHandleSkin.graphics.moveTo(11.0, 14.0);
-			resizeHandleSkin.graphics.lineTo(14.0, 11.0);
-			resizableWindow.resizeHandleSkin = resizeHandleSkin;
-		}
-
-		window.paddingTop = 1.0;
-		window.paddingRight = 1.0;
-		window.paddingBottom = 1.0;
-		window.paddingLeft = 1.0;
-
-		window.fixedScrollBars = true;
-	}
-
-	private function setTitleWindowTitleStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929, true);
-		label.embedFonts = true;
-	}
 	
 	private function setBusyLabelStyles(label:Label):Void {
 		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xffffff, false);
@@ -877,20 +698,6 @@ class MoonshineTheme extends ClassVariantTheme {
 	private function setPluginLargeTitleStyles(label:Label):Void {
 		label.textFormat = new TextFormat("DejaVuSansTF", 24, 0xe252d3, false);
 		label.embedFonts = true;
-	}
-
-	private function setTitleWindowControlBarStyles(controlBar:LayoutGroup):Void {
-		controlBar.backgroundSkin = new MoonshineControlBarSkin();
-
-		var layout = new HorizontalLayout();
-		layout.horizontalAlign = RIGHT;
-		layout.verticalAlign = MIDDLE;
-		layout.paddingTop = 10.0;
-		layout.paddingRight = 10.0;
-		layout.paddingBottom = 10.0;
-		layout.paddingLeft = 10.0;
-		layout.gap = 4.0;
-		controlBar.layout = layout;
 	}
 
 	private function setToolBarLayoutGroupStyles(group:LayoutGroup):Void {
@@ -1022,18 +829,6 @@ class MoonshineTheme extends ClassVariantTheme {
 		itemRenderer.paddingBottom = 4.0;
 		itemRenderer.paddingLeft = 4.0;
 		itemRenderer.indentation = 12.0;
-	}
-
-	private function setTourDeFlexTreeViewItemRendererItemRendererStyles(itemRenderer:TourDeFlexTreeViewItemRenderer):Void {
-		this.setTreeViewItemRendererStyles(itemRenderer);
-
-		var activeFileIndicator = new Shape();
-		activeFileIndicator.graphics.clear();
-		activeFileIndicator.graphics.beginFill(0xe15fd5);
-		activeFileIndicator.graphics.drawCircle(2.0, 2.0, 2.0);
-		activeFileIndicator.graphics.endFill();
-		activeFileIndicator.filters = [new GlowFilter(0xff00e4, 0.4, 6, 6, 2)];
-		itemRenderer.activeFileIndicator = activeFileIndicator;
 	}
 
 	private function setTreeViewItemRendererDisclosureButtonStyles(button:ToggleButton):Void {
