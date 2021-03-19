@@ -10,41 +10,36 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.AnchorLayout;
 import feathers.controls.LayoutGroup;
 import feathers.layout.HorizontalLayout;
+import feathers.core.InvalidationFlag;
 import moonshine.theme.MoonshineTheme;
-import feathers.controls.dataRenderers.LayoutGroupItemRenderer;
 
-class ComponentRenderer extends LayoutGroupItemRenderer 
+class ComponentRenderer extends LayoutGroup 
 {
 	private var itemImageState:AssetLoader;
+	private var itemImageNote:AssetLoader;
+	private var stateData:ComponentVO;
+	private var assetLogo:AssetLoader;
+	private var lblTitle:Label;
+	private var lblDescription:Label;
 	
 	public function new()
 	{
 		super();
-		buildLayout();
 	}
 	
 	public function updateItemState(stateData:ComponentVO):Void
 	{
-		itemImageState.source = "/helperResources/images/icoTickLabel.png";
+		this.stateData = stateData;
+		this.setInvalid(InvalidationFlag.DATA);
 	}
 	
-	private function buildLayout():Void
+	override private function initialize():Void
 	{
 		this.height = 100;
 	 	this.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND;
-	
-	    var layout = new HorizontalLayout();
-	    layout.horizontalAlign = JUSTIFY;
-	    layout.verticalAlign = MIDDLE;
-	    layout.gap = 6.0;
-	    layout.paddingTop = 4.0;
-	    layout.paddingBottom = 4.0;
-	    layout.paddingLeft = 6.0;
-	    layout.paddingRight = 6.0;
-	    this.layout = layout;
+	    this.layout = new AnchorLayout();
 	    
 	    var imageContainer = new LayoutGroup();
-	    imageContainer.name = "imageContainer";
 	    imageContainer.height = this.height;
 	    imageContainer.width = 136;
 	    imageContainer.layout = new AnchorLayout();
@@ -54,47 +49,117 @@ class ComponentRenderer extends LayoutGroupItemRenderer
 		assetLoaderLayoutData.horizontalCenter = 0.0;
 		assetLoaderLayoutData.verticalCenter = 0.0;
 		
-	    var icon = new AssetLoader();
-	    icon.layoutData = assetLoaderLayoutData;
-	    icon.name = "logo";
-	    imageContainer.addChild(icon);
+	    this.assetLogo = new AssetLoader();
+	    this.assetLogo.layoutData = assetLoaderLayoutData;
+	    imageContainer.addChild(this.assetLogo);
 	    
 	    var titleDesContainerLayout = new VerticalLayout();
 	    titleDesContainerLayout.verticalAlign = MIDDLE;
 	    titleDesContainerLayout.horizontalAlign = JUSTIFY;
 	    
+	    var titleDesContainerLayoutData = new AnchorLayoutData();
+	    titleDesContainerLayoutData.left = 136;
+	    titleDesContainerLayoutData.right = 50;
+	    titleDesContainerLayoutData.verticalCenter = 0.0;
+	    
 	    var titleDesContainer = new LayoutGroup();
-	    titleDesContainer.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
-	    titleDesContainer.name = "titleDesContainer";
 	    titleDesContainer.layout = titleDesContainerLayout;
-	    titleDesContainer.layoutData = new VerticalLayoutData(100, 100);
+	    titleDesContainer.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
+	    titleDesContainer.layoutData = titleDesContainerLayoutData;
 	    this.addChild(titleDesContainer);
 	
-	    var label = new Label();
-	    label.name = "title";
-	    titleDesContainer.addChild(label);
+	    this.lblTitle = new Label();
+	    titleDesContainer.addChild(this.lblTitle);
 	    
-	    var description = new Label();
-	    description.name = "description";
-	    description.layoutData = new HorizontalLayoutData(100, null);
-	    description.wordWrap = true;
-	    titleDesContainer.addChild(description);
+	    this.lblDescription = new Label();
+	    this.lblDescription.layoutData = new HorizontalLayoutData(100, null);
+	    this.lblDescription.wordWrap = true;
+	    titleDesContainer.addChild(this.lblDescription);
 	    
 	    var license = new Label();
 	    license.text = "License Agreement";
 	    license.variant = MoonshineTheme.THEME_VARIANT_TEXT_LINK;
 	    titleDesContainer.addChild(license);
 	    
-	    var stateImageContainer = new LayoutGroup();		
-	    stateImageContainer.name = "stateImageContainer";
-	    stateImageContainer.height = this.height;
+	    var stateImageContainerLayoutData = new AnchorLayoutData();
+	    stateImageContainerLayoutData.right = 0;
+	    stateImageContainerLayoutData.verticalCenter = 0.0;
+	    
+	  	var stateImageContainer = new LayoutGroup();		
 	    stateImageContainer.width = 50;
-	    stateImageContainer.layout = new AnchorLayout();
+	    stateImageContainer.layoutData = stateImageContainerLayoutData;
+	    stateImageContainer.layout = new HorizontalLayout();
 		this.addChild(stateImageContainer);
+		
+		this.itemImageNote = new AssetLoader();
+	    this.itemImageNote.layoutData = assetLoaderLayoutData;
+		this.itemImageNote.visible = false;
+		this.itemImageNote.includeInLayout = false;
+	    stateImageContainer.addChild(this.itemImageNote);
 		
 	    this.itemImageState = new AssetLoader();
 	    this.itemImageState.layoutData = assetLoaderLayoutData;
-	    this.itemImageState.name = "itemImageState";
-	    this.addChild(this.itemImageState);
+	    stateImageContainer.addChild(this.itemImageState);
+	    
+	    super.initialize();
+	}
+	
+	override private function update():Void 
+	{
+		var dataInvalid = this.isInvalid(InvalidationFlag.DATA);
+		if (dataInvalid) 
+		{
+			if (this.stateData != null)
+			{
+				this.updateFields();
+			}
+			else
+			{
+				this.resetFields();
+			}
+		}
+
+		super.update();
+	}
+	
+	private function updateFields():Void
+	{
+		this.lblTitle.text = this.stateData.title;
+    	this.lblDescription.text = this.stateData.description;
+		this.assetLogo.source = this.stateData.imagePath;
+		
+		this.updateItemIconState();
+	}
+	
+	private function resetFields():Void
+	{
+		this.lblTitle.text = "";
+    	this.lblDescription.text = "";
+    	this.assetLogo.source = null;
+	    	this.itemImageState.source = null;
+	}
+	
+	private function updateItemIconState():Void
+	{
+		if (this.stateData.isAlreadyDownloaded)
+		{
+			this.itemImageState.source = "/helperResources/images/icoTickLabel.png";
+		}
+		else
+		{
+			this.itemImageState.source = "/helperResources/images/icoErrorLabel.png";
+		}
+		
+		if (this.stateData.oldInstalledVersion != null)
+		{
+			this.itemImageNote.visible = true;
+			this.itemImageNote.includeInLayout = true;
+			this.itemImageState.source = "/helperResources/images/icoNote.png";
+		}
+		else
+		{
+			this.itemImageNote.visible = false;
+			this.itemImageNote.includeInLayout = false;
+		}
 	}
 }

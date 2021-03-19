@@ -141,29 +141,12 @@ class HelperView extends LayoutGroup
 	
 	private var bySoftwareRecyclerUpdateFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
 	{
-		var titleDesContainer = cast(itemRenderer.getChildByName("titleDesContainer"), LayoutGroup);
-	    var label = cast(titleDesContainer.getChildByName("title"), Label);
-	    var description = cast(titleDesContainer.getChildByName("description"), Label);
-	    var imageContainer = cast(itemRenderer.getChildByName("imageContainer"), LayoutGroup);
-	    var loader = cast(imageContainer.getChildByName("logo"), AssetLoader);
-	
-	    label.text = state.data.title;
-	    description.text = state.data.description;
-	    loader.source = state.data.imagePath;
 	    itemRenderer.updateItemState(cast(state.data, ComponentVO));
 	};
 	
 	private var bySoftwareRecyclerResetFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
 	{
-	    var titleDesContainer = cast(itemRenderer.getChildByName("titleDesContainer"), LayoutGroup);
-	    var label = cast(titleDesContainer.getChildByName("title"), Label);
-	    var description = cast(titleDesContainer.getChildByName("description"), Label);
-	    var imageContainer = cast(itemRenderer.getChildByName("imageContainer"), LayoutGroup);
-	    var loader = cast(imageContainer.getChildByName("logo"), AssetLoader);
-	    
-	    label.text = "";
-	    description.text = "";
-	    loader.source = null;
+	    itemRenderer.updateItemState(null);
 	};
 
 	override private function initialize():Void 

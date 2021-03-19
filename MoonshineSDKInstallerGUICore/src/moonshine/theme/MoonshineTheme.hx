@@ -124,7 +124,7 @@ class MoonshineTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(StandardPopupView, null, setStandardPopupViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
-		this.styleProvider.setStyleFunction(LayoutGroupItemRenderer, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
 
 		this.styleProvider.setStyleFunction(TitleWindow, null, setTitleWindowStyles);
 		this.styleProvider.setStyleFunction(Label, TitleWindow.CHILD_VARIANT_TITLE, setTitleWindowTitleStyles);
@@ -816,7 +816,7 @@ class MoonshineTheme extends ClassVariantTheme {
 		view.backgroundSkin = backgroundSkin;
 	}
 	
-	private function setBodyWithWhiteBackgroundViewStyles(view:LayoutGroupItemRenderer):Void {
+	private function setBodyWithWhiteBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xffffff);
 		backgroundSkin.cornerRadius = 0.0;
