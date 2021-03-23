@@ -1,5 +1,8 @@
 package moonshine.components.renderers;
 
+import moonshine.events.HelperEvent;
+import openfl.events.MouseEvent;
+import actionScripts.valueObjects.HelperConstants;
 import feathers.layout.HorizontalLayoutData;
 import actionScripts.valueObjects.ComponentVO;
 import feathers.controls.Label;
@@ -15,12 +18,18 @@ import moonshine.theme.MoonshineTheme;
 
 class ComponentRenderer extends LayoutGroup 
 {
-	private var itemImageState:AssetLoader;
-	private var itemImageNote:AssetLoader;
+	private var assetDownloaded:AssetLoader;
+	private var assetNote:AssetLoader;
+	private var assetError:AssetLoader;
+	private var assetDownload:AssetLoader;
+	private var assetReDownload:AssetLoader;
+	private var assetQueued:AssetLoader;
+	private var assetConfigure:AssetLoader;
 	private var stateData:ComponentVO;
 	private var assetLogo:AssetLoader;
 	private var lblTitle:Label;
 	private var lblDescription:Label;
+	private var lblCreatedOn:Label;
 	
 	public function new()
 	{
@@ -86,25 +95,74 @@ class ComponentRenderer extends LayoutGroup
 	    this.lblDescription.wordWrap = true;
 	    titleDesContainer.addChild(this.lblDescription);
 	    
+	    var licenseAndCreatedOnContainer = new LayoutGroup();
+	    licenseAndCreatedOnContainer.layout = new HorizontalLayout();
+	    licenseAndCreatedOnContainer.layoutData = new HorizontalLayoutData(100, null);
+	    titleDesContainer.addChild(licenseAndCreatedOnContainer);
+	    
 	    var license = new Label();
 	    license.text = "License Agreement";
 	    license.variant = MoonshineTheme.THEME_VARIANT_TEXT_LINK;
-	    titleDesContainer.addChild(license);
+	    licenseAndCreatedOnContainer.addChild(license);
+	    
+	    this.lblCreatedOn = new Label();
+	    licenseAndCreatedOnContainer.addChild(this.lblCreatedOn);
 	    
 	  	var stateImageContainer = new LayoutGroup();		
 	    stateImageContainer.width = 50;
 	    stateImageContainer.layout = new HorizontalLayout();
 		this.addChild(stateImageContainer);
 		
-		this.itemImageNote = new AssetLoader();
-	    this.itemImageNote.layoutData = assetLoaderLayoutData;
-		this.itemImageNote.visible = false;
-		this.itemImageNote.includeInLayout = false;
-	    stateImageContainer.addChild(this.itemImageNote);
+		this.assetNote = new AssetLoader();
+	    this.assetNote.layoutData = assetLoaderLayoutData;
+		this.assetNote.visible = false;
+		this.assetNote.includeInLayout = false;
+		this.assetNote.source = "/helperResources/images/icoNote.png";
+	    stateImageContainer.addChild(this.assetNote);
+	    
+	    this.assetError = new AssetLoader();
+	    this.assetError.layoutData = assetLoaderLayoutData;
+		this.assetError.visible = false;
+		this.assetError.includeInLayout = false;
+		this.assetError.source = "/helperResources/images/icoErrorLabel.png";
+	    stateImageContainer.addChild(this.assetError);
 		
-	    this.itemImageState = new AssetLoader();
-	    this.itemImageState.layoutData = assetLoaderLayoutData;
-	    stateImageContainer.addChild(this.itemImageState);
+	    this.assetDownloaded = new AssetLoader();
+	    this.assetDownloaded.layoutData = assetLoaderLayoutData;
+	    this.assetDownloaded.visible = false;
+		this.assetDownloaded.includeInLayout = false;
+		this.assetDownloaded.source = "/helperResources/images/icoTickLabel.png";
+	    stateImageContainer.addChild(this.assetDownloaded);
+	    
+	    this.assetDownload = new AssetLoader();
+	    this.assetDownload.layoutData = assetLoaderLayoutData;
+	    this.assetDownload.visible = false;
+		this.assetDownload.includeInLayout = false;
+		this.assetDownload.source = "/helperResources/images/icoErrorLabel.png";
+		this.assetDownload.buttonMode = true;
+		this.assetDownload.addEventListener(MouseEvent.CLICK, this.onDownloadButtonClicked, false, 0, true);
+	    stateImageContainer.addChild(this.assetDownload);
+	    
+	    this.assetReDownload = new AssetLoader();
+	    this.assetReDownload.layoutData = assetLoaderLayoutData;
+	    this.assetReDownload.visible = false;
+		this.assetReDownload.includeInLayout = false;
+		this.assetReDownload.source = "/helperResources/images/icoReDownload.png";
+	    stateImageContainer.addChild(this.assetReDownload);
+	    
+	    this.assetQueued = new AssetLoader();
+	    this.assetQueued.layoutData = assetLoaderLayoutData;
+	    this.assetQueued.visible = false;
+		this.assetQueued.includeInLayout = false;
+		this.assetQueued.source = "/helperResources/images/icoQueuedLabel.png";
+	    stateImageContainer.addChild(this.assetQueued);
+	    
+	    this.assetConfigure = new AssetLoader();
+	    this.assetConfigure.layoutData = assetLoaderLayoutData;
+	    this.assetConfigure.visible = false;
+		this.assetConfigure.includeInLayout = false;
+		this.assetConfigure.source = "/helperResources/images/icoConfigure.png";
+	    stateImageContainer.addChild(this.assetConfigure);
 	    
 	    super.initialize();
 	}
@@ -133,6 +191,18 @@ class ComponentRenderer extends LayoutGroup
     	this.lblDescription.text = this.stateData.description;
 		this.assetLogo.source = this.stateData.imagePath;
 		
+		if (this.stateData.isAlreadyDownloaded && (this.stateData.createdOn != null))
+		{
+			this.lblCreatedOn.includeInLayout = true;
+			this.lblCreatedOn.visible = true;
+			this.lblCreatedOn.text = " | Installed: (to be calculated)";
+		}
+		else
+		{
+			this.lblCreatedOn.includeInLayout = false;
+			this.lblCreatedOn.visible = false;
+		}
+		
 		this.updateItemIconState();
 	}
 	
@@ -141,30 +211,110 @@ class ComponentRenderer extends LayoutGroup
 		this.lblTitle.text = "";
     	this.lblDescription.text = "";
     	this.assetLogo.source = null;
-	    	this.itemImageState.source = null;
+	    	this.assetDownloaded.source = null;
 	}
 	
 	private function updateItemIconState():Void
 	{
 		if (this.stateData.isAlreadyDownloaded)
 		{
-			this.itemImageState.source = "/helperResources/images/icoTickLabel.png";
+			this.assetDownloaded.visible = true;
+			this.assetDownloaded.includeInLayout = true;
+			this.assetDownloaded.toolTip = "Installed: "+ this.stateData.createdOn.toString();
 		}
 		else
 		{
-			this.itemImageState.source = "/helperResources/images/icoErrorLabel.png";
+			this.assetDownloaded.visible = false;
+			this.assetDownloaded.includeInLayout = false;
 		}
 		
-		if (this.stateData.oldInstalledVersion != null)
+		if ((this.stateData.oldInstalledVersion != null) || (this.stateData.hasWarning != null))
 		{
-			this.itemImageNote.visible = true;
-			this.itemImageNote.includeInLayout = true;
-			this.itemImageState.source = "/helperResources/images/icoNote.png";
+			this.assetNote.visible = true;
+			this.assetNote.includeInLayout = true;
+			this.assetNote.toolTip = (this.stateData.oldInstalledVersion != null) ? 
+					"Version Mismatch" : this.stateData.hasWarning;
 		}
 		else
 		{
-			this.itemImageNote.visible = false;
-			this.itemImageNote.includeInLayout = false;
+			this.assetNote.visible = false;
+			this.assetNote.includeInLayout = false;
 		}
+		
+		if (this.stateData.hasError != null)
+		{
+			this.assetError.visible = true;
+			this.assetError.includeInLayout = true;
+			this.assetError.toolTip = this.stateData.hasError;
+		}
+		else
+		{
+			this.assetError.visible = false;
+			this.assetError.includeInLayout = false;
+		}
+		
+		if (this.stateData.isSelectedToDownload && !this.stateData.isDownloading)
+		{
+			this.assetQueued.visible = true;
+			this.assetQueued.includeInLayout = true;
+		}
+		else
+		{
+			this.assetQueued.visible = false;
+			this.assetQueued.includeInLayout = false;
+		}
+		
+		if (this.stateData.isDownloadable && !this.stateData.isAlreadyDownloaded && 
+				!this.stateData.isDownloading && !this.stateData.isDownloaded && !this.stateData.isSelectedToDownload)
+		{
+			this.assetDownload.visible = true;
+			this.assetDownload.includeInLayout = true;
+			this.assetDownload.toolTip = this.stateData.hasError;
+			this.assetDownload.enabled = HelperConstants.IS_RUNNING_IN_MOON || 
+											(!HelperConstants.IS_RUNNING_IN_MOON && HelperConstants.IS_INSTALLER_READY);
+			this.assetDownload.alpha = this.assetDownload.enabled ? 1.0 : 0.8;
+		}
+		else
+		{
+			this.assetDownload.visible = false;
+			this.assetDownload.includeInLayout = false;
+		}
+		
+		if ((this.stateData.downloadVariants != null) && this.stateData.downloadVariants.get(this.stateData.selectedVariantIndex).isReDownloadAvailable && 
+					this.stateData.isAlreadyDownloaded && !this.stateData.isDownloading && !this.stateData.isSelectedToDownload && this.stateData.isDownloadable)
+		{
+			this.assetReDownload.visible = true;
+			this.assetReDownload.includeInLayout = true;
+			this.assetReDownload.toolTip = this.stateData.hasError;
+			this.assetReDownload.enabled = HelperConstants.IS_RUNNING_IN_MOON || 
+											(!HelperConstants.IS_RUNNING_IN_MOON && HelperConstants.IS_INSTALLER_READY);
+			this.assetReDownload.alpha = this.assetReDownload.enabled ? 1.0 : 0.8;
+		}
+		else
+		{
+			this.assetReDownload.visible = false;
+			this.assetReDownload.includeInLayout = false;
+		}
+		
+		if (!this.stateData.isAlreadyDownloaded && HelperConstants.IS_RUNNING_IN_MOON)
+		{
+			this.assetConfigure.visible = true;
+			this.assetConfigure.includeInLayout = true;
+		}
+		else
+		{
+			this.assetConfigure.visible = false;
+			this.assetConfigure.includeInLayout = false;
+		}
+	}
+	
+	private function onDownloadButtonClicked(event:MouseEvent):Void
+	{
+		if ((this.stateData.downloadVariants != null) && this.stateData.downloadVariants.length > 1)
+		{
+			
+		}
+		
+		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData));
 	}
 }

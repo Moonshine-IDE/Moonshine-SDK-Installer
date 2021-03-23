@@ -1,12 +1,7 @@
 package actionScripts.valueObjects;
 
-import sys.io.File;
-
 extern class HelperConstants
 {
-	public static final BG_LIST_DIVIDER:Class;
-	public static final BG_LIST_DIVIDER_WHITE:Class;
-	
 	public static final SUCCESS:String;
 	public static final ERROR:String;
 	public static final WARNING:String;
@@ -15,18 +10,18 @@ extern class HelperConstants
 	public static final INSTALLER_COOKIE:String;
 	public static final DEFAULT_SDK_FOLDER_NAME:String;
 	
-	public static var IS_MACOS:Boolean;
-	public static var IS_RUNNING_IN_MOON:Boolean;
-	public static var IS_INSTALLER_READY:Boolean;
-	public static var DEFAULT_INSTALLATION_PATH:File;
+	public static var IS_MACOS:Bool;
+	public static var IS_RUNNING_IN_MOON:Bool;
+	public static var IS_INSTALLER_READY:Bool;
+	public static var DEFAULT_INSTALLATION_PATH:Dynamic;
 	public static var CONFIG_AIR_VERSION:String;
 	public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 	public static var INSTALLER_UPDATE_CHECK_URL:String;
-	public static var IS_DETECTION_IN_PROCESS:Boolean;
+	public static var IS_DETECTION_IN_PROCESS:Bool;
 	public static var CUSTOM_PATH_SDK_WINDOWS:String;
-	public static var IS_CUSTOM_WINDOWS_PATH:Boolean;
-	public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Boolean;
+	public static var IS_CUSTOM_WINDOWS_PATH:Bool;
+	public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Bool;
 	
 	@:flash.property
-	public static var HELPER_STORAGE(default, default):File;
+	public static var HELPER_STORAGE(default, default):Dynamic;
 }

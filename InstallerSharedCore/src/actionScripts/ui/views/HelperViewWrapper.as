@@ -2,6 +2,8 @@ package actionScripts.ui.views
 {
 	import flash.events.Event;
 	
+	import spark.components.Alert;
+	
 	import actionScripts.events.HelperEvent;
 	import actionScripts.interfaces.IHelperMoonshineBridge;
 	import actionScripts.locator.HelperModel;
@@ -12,6 +14,7 @@ package actionScripts.ui.views
 	import actionScripts.valueObjects.HelperConstants;
 	
 	import moonshine.components.HelperView;
+	import moonshine.events.HelperEvent;
 	
 	public class HelperViewWrapper extends FeathersUIWrapper
 	{
@@ -55,8 +58,8 @@ package actionScripts.ui.views
 			{
 				itemsManager.dependencyCheckUtil = dependencyCheckUtil;
 				itemsManager.environmentUtil = environmentUtil;
-				itemsManager.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
-				itemsManager.addEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected, false, 0, true);
+				itemsManager.addEventListener(actionScripts.events.HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
+				itemsManager.addEventListener(actionScripts.events.HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected, false, 0, true);
 				itemsManager.addEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
 				itemsManager.loadItemsAndDetect();
 			}
@@ -70,6 +73,9 @@ package actionScripts.ui.views
 			);
 			this.feathersUIControl.addEventListener(
 				HelperView.EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED, onFilterChange, false, 0, true
+			);
+			this.feathersUIControl.addEventListener(
+				moonshine.events.HelperEvent.DOWNLOAD_COMPONENT, onDownloadComponentRequest, false, 0, true
 			);
 		}
 		
@@ -119,7 +125,7 @@ package actionScripts.ui.views
 			return !item.isAlreadyDownloaded;
 		}
 		
-		private function onConfigLoaded(event:HelperEvent):void
+		private function onConfigLoaded(event:actionScripts.events.HelperEvent):void
 		{
 			itemsManager.removeEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
 			onFilterTypeChanged(null);
@@ -152,15 +158,20 @@ package actionScripts.ui.views
 			filterSearch((this.feathersUIControl as HelperView).checkShowOnlyNeedsSetup);
 		}
 		
-		private function onComponentDetected(event:HelperEvent):void
+		private function onComponentDetected(event:actionScripts.events.HelperEvent):void
 		{
 			dispatchEvent(event);
 		}
 		
-		private function onAllComponentsDetected(event:HelperEvent):void
+		private function onAllComponentsDetected(event:actionScripts.events.HelperEvent):void
 		{
-			itemsManager.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected);
+			itemsManager.removeEventListener(actionScripts.events.HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected);
 			dispatchEvent(event);
+		}
+		
+		private function onDownloadComponentRequest(event:moonshine.events.HelperEvent):void
+		{
+			Alert.show("Download Request from Haxe");
 		}
 	}
 }
