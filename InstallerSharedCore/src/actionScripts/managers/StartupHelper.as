@@ -3,14 +3,15 @@ package actionScripts.managers
 	import flash.events.EventDispatcher;
 	import flash.filesystem.File;
 	
-	import actionScripts.events.HelperEvent;
 	import actionScripts.utils.FileUtils;
 	import actionScripts.utils.HelperUtils;
 	import actionScripts.utils.Parser;
 	import actionScripts.valueObjects.HelperConstants;
+	
+	import moonshine.events.HelperEvent;
 
-	[Event(name="EVENT_CONFIG_LOADED", type="actionScripts.events.HelperEvent")]
-	[Event(name="EVENT_CONFIG_ERROR", type="actionScripts.events.HelperEvent")]
+	[Event(name="EVENT_CONFIG_LOADED", type="moonshine.events.HelperEvent")]
+	[Event(name="EVENT_CONFIG_ERROR", type="moonshine.events.HelperEvent")]
 	public class StartupHelper extends EventDispatcher
 	{
 		public static const EVENT_CONFIG_LOADED:String = "eventConfigLoaded";

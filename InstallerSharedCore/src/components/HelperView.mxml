@@ -4,33 +4,32 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 initialize="onInitialized(event)" creationComplete="onCreationCompletes(event)">
 	<fx:Metadata>
-		[Event(name="DOWNLOAD_COMPONENT", type="actionScripts.events.HelperEvent")]
-		[Event(name="OPEN_MOON_SETTINGS", type="actionScripts.events.HelperEvent")]
-		[Event(name="COMPONENT_DOWNLOADED", type="actionScripts.events.HelperEvent")]
-		[Event(name="OPEN_COMPONENT_LICENSE", type="actionScripts.events.HelperEvent")]
-		[Event(name="ALL_COMPONENTS_TESTED", type="actionScripts.events.HelperEvent")]
-		[Event(name="DOWNLOAD_VARIANT_CHANGED", type="actionScripts.events.HelperEvent")]
+		[Event(name="DOWNLOAD_COMPONENT", type="moonshine.events.HelperEvent")]
+		[Event(name="OPEN_MOON_SETTINGS", type="moonshine.events.HelperEvent")]
+		[Event(name="COMPONENT_DOWNLOADED", type="moonshine.events.HelperEvent")]
+		[Event(name="OPEN_COMPONENT_LICENSE", type="moonshine.events.HelperEvent")]
+		[Event(name="ALL_COMPONENTS_TESTED", type="moonshine.events.HelperEvent")]
+		[Event(name="DOWNLOAD_VARIANT_CHANGED", type="moonshine.events.HelperEvent")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
-			import actionScripts.events.HelperEvent;
 			import actionScripts.interfaces.IHelperMoonshineBridge;
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.InstallerItemsManager;
 			import actionScripts.managers.StartupHelper;
-			import actionScripts.ui.FeathersUIWrapper;
 			import actionScripts.utils.EnvironmentUtils;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
-			import actionScripts.valueObjects.PackageVO;
 			
 			import components.renderers.ComponentRenderer;
 			import components.renderers.PackageRenderer;
 			
 			import feathers.data.ArrayCollection;
+			
+			import moonshine.events.HelperEvent;
 			
 			//--------------------------------------------------------------------------
 			//

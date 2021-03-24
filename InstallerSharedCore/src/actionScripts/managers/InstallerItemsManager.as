@@ -4,10 +4,11 @@ package actionScripts.managers
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
-	import actionScripts.events.HelperEvent;
 	import actionScripts.interfaces.IHelperMoonshineBridge;
 	import actionScripts.locator.HelperModel;
 	import actionScripts.utils.EnvironmentUtils;
+	
+	import moonshine.events.HelperEvent;
 
 	public class InstallerItemsManager extends EventDispatcher
 	{

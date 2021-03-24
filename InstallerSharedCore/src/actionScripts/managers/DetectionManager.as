@@ -4,13 +4,14 @@ package actionScripts.managers
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
-	import actionScripts.events.HelperEvent;
 	import actionScripts.locator.HelperModel;
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.utils.HelperUtils;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
+	
+	import moonshine.events.HelperEvent;
 
 	public class DetectionManager extends EventDispatcher
 	{

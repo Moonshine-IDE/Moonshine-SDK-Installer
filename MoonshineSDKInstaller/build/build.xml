@@ -57,6 +57,22 @@
 			<property name="certSignedMacOSKeychainInstallerName" value="${APP_PROPERTIES.certSignedMacOSKeychainInstallerName}" />
 			<property name="certSignedMacOSKeychainPass" value="${APP_PROPERTIES.certSignedMacOSKeychainPass}" />
 			<property name="svn.revision" value="3913"/>
+			<condition property="HAXE_LIB_DIRECTORY" value="${APP_PROPERTIES.haxeLibDirectory}">
+				<isset property="APP_PROPERTIES.haxeLibDirectory"/>
+			</condition>
+			<!-- fall back to default Haxe install location, if available -->
+			<condition property="HAXE_LIB_DIRECTORY" value="c:/HaxeToolkit/haxe/haxelib.exe">
+				<and>
+					<os family="windows" />
+					<available file="c:/HaxeToolkit/haxe" />
+				</and>
+			</condition>
+			<condition property="HAXE_LIB_DIRECTORY" value="/usr/local/lib/haxe">
+				<and>
+					<os family="mac" />
+					<available file="/usr/local/lib/haxe/haxelib" />
+				</and>
+			</condition>
 		</then>
 		<else>
 			<echo>Reading properties from Bamboo Variables</echo>
@@ -73,6 +89,7 @@
 			<property name="certSignedMacOSKeychainInstallerName" value="${CERT_OSX_KEYCHAIN_INSTALLER}" />
 			<property name="certSignedMacOSKeychainPass" value="${CERT_OSX_KEYCHAIN_PASS}" />
 			<property name="svn.revision" value="${svn.revision}" />
+			<property name="HAXE_LIB_DIRECTORY" value="${HAXE_LIB}"/>
 		</else>
 	</if>
 	
@@ -125,6 +142,7 @@
     <property name="swfFilename" value="${debug_dir}/MoonshineSDKInstaller.swf" />
 	<property name="applicationSourceDirectory" value="../src"/>
 	<property name="LibraryHelperSharedCore" value="../../InstallerSharedCore"/>
+	<property name="LibrarySDKInstallerHaxe" value="../../MoonshineSDKInstallerGUICore"/>
 	<property name="desktopMainSource" value="${applicationSourceDirectory}/MoonshineSDKInstaller.mxml" />
 	<property name="desktopApplicationDescriptor" value="${debug_dir}/MoonshineSDKInstaller-app.xml" />
 	<property name="desktopApplicationDescriptorOriginal" value="${applicationSourceDirectory}/MoonshineSDKInstaller-app.xml" />
@@ -194,6 +212,50 @@
 		</java>
 		<copy file="${certSelfSigned}" todir="${debug_dir}" overwrite="true"/>
 	 </target>
+	
+	<target name="InstallHaxeDependencies">
+		<echo>Installing Haxe Libraries</echo>
+		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
+			dir="${LibrarySDKInstallerHaxe}"
+			failonerror="true">
+			<arg value="install"/>
+			<arg value="feathersui"/>
+			<arg value="--quiet"/>
+		</exec>
+		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
+			dir="${LibrarySDKInstallerHaxe}"
+			failonerror="true">
+			<arg value="install"/>
+			<arg value="openfl"/>
+			<arg value="--quiet"/>
+		</exec>
+		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
+			dir="${LibrarySDKInstallerHaxe}"
+			failonerror="true">
+			<arg value="install"/>
+			<arg value="actuate"/>
+			<arg value="--quiet"/>
+		</exec>
+		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
+			dir="${LibrarySDKInstallerHaxe}"
+			failonerror="true">
+			<arg value="install"/>
+			<arg value="lime"/>
+			<arg value="--quiet"/>
+		</exec>
+	</target>
+
+	<target name="CompileGUICore" depends="InstallHaxeDependencies">
+		<echo>Compiling GUI Core SWC</echo>
+		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
+			dir="${LibrarySDKInstallerHaxe}"
+			failonerror="true">
+			<arg value="run"/>
+			<arg value="openfl"/>
+			<arg value="build"/>
+			<arg value="flash"/>
+		</exec>
+	</target>
 	
 	<!--
 	//==========================================================================
@@ -545,7 +607,7 @@
 	</target>
 	
 	<!-- Compile SWF to build directory for desktop packaging -->
-	<target name="CompileSWF" depends="createBuildInfoFile">
+	<target name="CompileSWF" depends="createBuildInfoFile, CompileGUICore">
 		<echo>${swfFilename}</echo>
 		<mxmlc file="${desktopMainSource}" 
 			   output="${swfFilename}" 
@@ -570,6 +632,9 @@
 				<include name="*.swc" />
 			</compiler.library-path>
 			<library-path dir="${debug_dir}" includes="*.swc" append="true" />
+			<compiler.library-path dir="${LibrarySDKInstallerHaxe}/bin/flash/bin" append="true">
+				<include name="*.swc" />
+			</compiler.library-path>
 		</mxmlc>
 	</target>
 	

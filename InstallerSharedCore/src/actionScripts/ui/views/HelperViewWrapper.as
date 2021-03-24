@@ -1,16 +1,17 @@
 package actionScripts.ui.views
 {
 	import flash.events.Event;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	
-	import spark.components.Alert;
-	
-	import actionScripts.events.HelperEvent;
 	import actionScripts.interfaces.IHelperMoonshineBridge;
 	import actionScripts.locator.HelperModel;
 	import actionScripts.managers.InstallerItemsManager;
 	import actionScripts.managers.StartupHelper;
 	import actionScripts.ui.FeathersUIWrapper;
 	import actionScripts.utils.EnvironmentUtils;
+	import actionScripts.valueObjects.ComponentTypes;
+	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
 	import moonshine.components.HelperView;
@@ -58,8 +59,8 @@ package actionScripts.ui.views
 			{
 				itemsManager.dependencyCheckUtil = dependencyCheckUtil;
 				itemsManager.environmentUtil = environmentUtil;
-				itemsManager.addEventListener(actionScripts.events.HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
-				itemsManager.addEventListener(actionScripts.events.HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected, false, 0, true);
+				itemsManager.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onComponentDetected, false, 0, true);
+				itemsManager.addEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected, false, 0, true);
 				itemsManager.addEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
 				itemsManager.loadItemsAndDetect();
 			}
@@ -75,8 +76,8 @@ package actionScripts.ui.views
 				HelperView.EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED, onFilterChange, false, 0, true
 			);
 			this.feathersUIControl.addEventListener(
-				moonshine.events.HelperEvent.DOWNLOAD_COMPONENT, onDownloadComponentRequest, false, 0, true
-			);
+				HelperEvent.OPEN_COMPONENT_LICENSE, onComponentLicenseViewRequest, false, 0, true
+			)
 		}
 		
 		//--------------------------------------------------------------------------
@@ -125,7 +126,7 @@ package actionScripts.ui.views
 			return !item.isAlreadyDownloaded;
 		}
 		
-		private function onConfigLoaded(event:actionScripts.events.HelperEvent):void
+		private function onConfigLoaded(event:HelperEvent):void
 		{
 			itemsManager.removeEventListener(StartupHelper.EVENT_CONFIG_LOADED, onConfigLoaded);
 			onFilterTypeChanged(null);
@@ -158,20 +159,30 @@ package actionScripts.ui.views
 			filterSearch((this.feathersUIControl as HelperView).checkShowOnlyNeedsSetup);
 		}
 		
-		private function onComponentDetected(event:actionScripts.events.HelperEvent):void
+		private function onComponentLicenseViewRequest(event:HelperEvent):void
+		{
+			var stateData:ComponentVO = event.data as ComponentVO;
+			if (stateData.type == ComponentTypes.TYPE_FLEX ||
+				stateData.type == ComponentTypes.TYPE_SVN || 
+				(HelperConstants.IS_MACOS && stateData.type == ComponentTypes.TYPE_GIT)) 
+			{
+				dispatchEvent(event);
+			}
+			else 
+			{
+				navigateToURL(new URLRequest(stateData.licenseUrl), "_blank");
+			}
+		}
+		
+		private function onComponentDetected(event:HelperEvent):void
 		{
 			dispatchEvent(event);
 		}
 		
-		private function onAllComponentsDetected(event:actionScripts.events.HelperEvent):void
+		private function onAllComponentsDetected(event:HelperEvent):void
 		{
-			itemsManager.removeEventListener(actionScripts.events.HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected);
+			itemsManager.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected);
 			dispatchEvent(event);
-		}
-		
-		private function onDownloadComponentRequest(event:moonshine.events.HelperEvent):void
-		{
-			Alert.show("Download Request from Haxe");
 		}
 	}
 }

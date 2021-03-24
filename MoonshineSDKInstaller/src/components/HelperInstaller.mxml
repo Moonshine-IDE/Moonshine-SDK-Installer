@@ -16,7 +16,6 @@
 			
 			import spark.components.Alert;
 			
-			import actionScripts.events.HelperEvent;
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.CookieManager;
 			import actionScripts.managers.GitSVNDetector;
@@ -34,6 +33,7 @@
 			import assets.skins.DarkButtonSkin;
 			
 			import moonshine.components.HelperView;
+			import moonshine.events.HelperEvent;
 			
 			import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
 			import org.apache.flex.packageflexsdk.util.ArchiveDownloader;
@@ -130,6 +130,11 @@
 				helperViewWrapper.isRunningInsideMoonshine = false;
 				
 				grpListingArea.addElementAt(helperViewWrapper, 0);
+				
+				helperViewWrapper.addEventListener(HelperEvent.DOWNLOAD_COMPONENT, onDownloadAComponentRequested, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onOpenAComponentLicenseRequested, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onEachComponentDownloaded, false, 0, true);
 			}
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
@@ -407,17 +412,17 @@
 				lblLastMessage.visible = true;
 				lblLastMessage.setStyle("fontWeight", "bold");
 				lblLastMessage.setStyle("color", 0xc165b8);
-				lblLastMessage.text = "Verifying download link: "+ (event.value as ComponentVO).title;
+				lblLastMessage.text = "Verifying download link: "+ (event.data as ComponentVO).title;
 				
-				if ((event.value as ComponentVO).type == ComponentTypes.TYPE_FLEX)
+				if ((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX)
 				{
-					new LinkVerifier((event.value as ComponentVO), 
+					new LinkVerifier((event.data as ComponentVO), 
 						onDownloadLinkVerified, 
 						INSTALLER_APACHE_FLEX.apacheFlexDownloadURL);
 				}
 				else
 				{
-					new LinkVerifier((event.value as ComponentVO), onDownloadLinkVerified);
+					new LinkVerifier((event.data as ComponentVO), onDownloadLinkVerified);
 				}
 			}
 			
@@ -438,7 +443,7 @@
 			
 			private function onOpenAComponentLicenseRequested(event:HelperEvent):void
 			{
-				openLicenseView(singleInstallConfirmHandler, (event.value as ComponentVO), true);
+				openLicenseView(singleInstallConfirmHandler, (event.data as ComponentVO), true);
 			}
 			
 			private function onAllComponentsFinishDetection(event:HelperEvent):void

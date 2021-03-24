@@ -12,7 +12,6 @@
 			import spark.components.BusyIndicator;
 			import spark.events.IndexChangeEvent;
 			
-			import actionScripts.events.HelperEvent;
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
@@ -20,6 +19,8 @@
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.ComponentVariantVO;
 			import actionScripts.valueObjects.HelperConstants;
+			
+			import moonshine.events.HelperEvent;
 			
 			[Bindable] private var isReDownloadAvailable:Boolean;
 			

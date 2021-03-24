@@ -20,6 +20,7 @@
 
 package moonshine.components;
 
+import moonshine.events.HelperEvent;
 import moonshine.components.renderers.PackageRenderer;
 import moonshine.components.renderers.ComponentRenderer;
 import feathers.layout.HorizontalLayoutData;
@@ -113,30 +114,21 @@ class HelperView extends LayoutGroup
 	    return (new PackageRenderer());
 	});
 	
-	private var byFeatureRecyclerUpdateFn = (itemRenderer:LayoutGroupItemRenderer, state:ListViewItemState) -> 
+	private var byFeatureRecyclerUpdateFn = (itemRenderer:PackageRenderer, state:ListViewItemState) -> 
 	{
-	    var titleDesContainer = cast(itemRenderer.getChildByName("titleDesContainer"), LayoutGroup);
-	    var label = cast(titleDesContainer.getChildByName("title"), Label);
-	    var description = cast(titleDesContainer.getChildByName("description"), Label);
-	
-	    label.text = state.data.title;
-	    description.text = state.data.description;
-	    
+	    itemRenderer.updateItemState(cast(state.data, PackageVO));
 	};
 	
-	private var byFeatureRecyclerResetFn = (itemRenderer:LayoutGroupItemRenderer, state:ListViewItemState) -> 
+	private var byFeatureRecyclerResetFn = (itemRenderer:PackageRenderer, state:ListViewItemState) -> 
 	{
-	    var titleDesContainer = cast(itemRenderer.getChildByName("titleDesContainer"), LayoutGroup);
-	    var label = cast(titleDesContainer.getChildByName("title"), Label);
-	    var description = cast(titleDesContainer.getChildByName("description"), Label);
-	
-	    label.text = "";
-	    description.text = "";
+	    itemRenderer.updateItemState(null);
 	};
 	
 	private var bySoftwareRecycler = DisplayObjectRecycler.withFunction(
 		() -> {
-	    return (new ComponentRenderer());
+		var itemRenderer = new ComponentRenderer();
+		//itemRenderer.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested, false, 0, true);
+	    return itemRenderer;
 	});
 	
 	private var bySoftwareRecyclerUpdateFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
@@ -146,6 +138,7 @@ class HelperView extends LayoutGroup
 	
 	private var bySoftwareRecyclerResetFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
 	{
+		//itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
 	    itemRenderer.updateItemState(null);
 	};
 
@@ -216,6 +209,8 @@ class HelperView extends LayoutGroup
 			{
 				this.itemsListView.dataProvider = this.collectionBySoftware;
 			}
+			
+			this.updateShowNeedsInstallVisibility();
 		}
 
 		super.update();
@@ -235,6 +230,8 @@ class HelperView extends LayoutGroup
 		{
 			this._filterTypeIndex = this.filterByGroup.selectedIndex;
 			dispatchEvent(new Event(EVENT_FILTER_TYPE_CHANGED));
+			
+			this.updateShowNeedsInstallVisibility();
 		}
 	}
 	
@@ -246,5 +243,15 @@ class HelperView extends LayoutGroup
 			this._checkShowOnlyNeedsSetup = check.selected;
 			dispatchEvent(new Event(EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED));
 		}
+	}
+	
+	private function updateShowNeedsInstallVisibility():Void
+	{
+		this.checkShowFeaturesNeedsSetup.visible = (this._filterTypeIndex == 1);
+	}
+	
+	private function onLicenseViewRequested(event:HelperEvent):Void
+	{
+		this.dispatchEvent(event);
 	}
 }

@@ -3,8 +3,10 @@ package moonshine.components.renderers;
 import moonshine.events.HelperEvent;
 import openfl.events.MouseEvent;
 import actionScripts.valueObjects.HelperConstants;
+import actionScripts.utils.HelperUtils;
 import feathers.layout.HorizontalLayoutData;
 import actionScripts.valueObjects.ComponentVO;
+import actionScripts.valueObjects.ComponentVariantVO;
 import feathers.controls.Label;
 import feathers.layout.VerticalLayoutData;
 import feathers.layout.VerticalLayout;
@@ -102,7 +104,10 @@ class ComponentRenderer extends LayoutGroup
 	    
 	    var license = new Label();
 	    license.text = "License Agreement";
+	    license.buttonMode = true;
+	    license.mouseChildren = false;
 	    license.variant = MoonshineTheme.THEME_VARIANT_TEXT_LINK;
+	    license.addEventListener(MouseEvent.CLICK, onLicenseViewRequested, false, 0, true);
 	    licenseAndCreatedOnContainer.addChild(license);
 	    
 	    this.lblCreatedOn = new Label();
@@ -113,55 +118,27 @@ class ComponentRenderer extends LayoutGroup
 	    stateImageContainer.layout = new HorizontalLayout();
 		this.addChild(stateImageContainer);
 		
-		this.assetNote = new AssetLoader();
-	    this.assetNote.layoutData = assetLoaderLayoutData;
-		this.assetNote.visible = false;
-		this.assetNote.includeInLayout = false;
-		this.assetNote.source = "/helperResources/images/icoNote.png";
+		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNote.png", assetLoaderLayoutData);
 	    stateImageContainer.addChild(this.assetNote);
 	    
-	    this.assetError = new AssetLoader();
-	    this.assetError.layoutData = assetLoaderLayoutData;
-		this.assetError.visible = false;
-		this.assetError.includeInLayout = false;
-		this.assetError.source = "/helperResources/images/icoErrorLabel.png";
+	    this.assetError = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoErrorLabel.png", assetLoaderLayoutData);
 	    stateImageContainer.addChild(this.assetError);
 		
-	    this.assetDownloaded = new AssetLoader();
-	    this.assetDownloaded.layoutData = assetLoaderLayoutData;
-	    this.assetDownloaded.visible = false;
-		this.assetDownloaded.includeInLayout = false;
-		this.assetDownloaded.source = "/helperResources/images/icoTickLabel.png";
+	    this.assetDownloaded = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoTickLabel.png", assetLoaderLayoutData);
 	    stateImageContainer.addChild(this.assetDownloaded);
 	    
-	    this.assetDownload = new AssetLoader();
-	    this.assetDownload.layoutData = assetLoaderLayoutData;
-	    this.assetDownload.visible = false;
-		this.assetDownload.includeInLayout = false;
-		this.assetDownload.source = "/helperResources/images/icoErrorLabel.png";
+	    this.assetDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoDownloadLabel.png", assetLoaderLayoutData);
 		this.assetDownload.buttonMode = true;
 		this.assetDownload.addEventListener(MouseEvent.CLICK, this.onDownloadButtonClicked, false, 0, true);
 	    stateImageContainer.addChild(this.assetDownload);
 	    
-	    this.assetReDownload = new AssetLoader();
-	    this.assetReDownload.layoutData = assetLoaderLayoutData;
-	    this.assetReDownload.visible = false;
-		this.assetReDownload.includeInLayout = false;
-		this.assetReDownload.source = "/helperResources/images/icoReDownload.png";
+	    this.assetReDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoReDownload.png", assetLoaderLayoutData);
 	    stateImageContainer.addChild(this.assetReDownload);
 	    
-	    this.assetQueued = new AssetLoader();
-	    this.assetQueued.layoutData = assetLoaderLayoutData;
-	    this.assetQueued.visible = false;
-		this.assetQueued.includeInLayout = false;
-		this.assetQueued.source = "/helperResources/images/icoQueuedLabel.png";
+	    this.assetQueued = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoQueuedLabel.png", assetLoaderLayoutData);
 	    stateImageContainer.addChild(this.assetQueued);
 	    
-	    this.assetConfigure = new AssetLoader();
-	    this.assetConfigure.layoutData = assetLoaderLayoutData;
-	    this.assetConfigure.visible = false;
-		this.assetConfigure.includeInLayout = false;
-		this.assetConfigure.source = "/helperResources/images/icoConfigure.png";
+	    this.assetConfigure = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoConfigure.png", assetLoaderLayoutData);
 	    stateImageContainer.addChild(this.assetConfigure);
 	    
 	    super.initialize();
@@ -183,6 +160,17 @@ class ComponentRenderer extends LayoutGroup
 		}
 
 		super.update();
+	}
+	
+	private function getNewAssetLoaderForStateIcons(srcPath:String, layoutData:AnchorLayoutData):AssetLoader
+	{
+		var tmpAsset = new AssetLoader();
+	    tmpAsset.layoutData = layoutData;
+	    tmpAsset.visible = false;
+		tmpAsset.includeInLayout = false;
+		tmpAsset.source = srcPath;
+		
+		return tmpAsset;
 	}
 	
 	private function updateFields():Void
@@ -312,9 +300,17 @@ class ComponentRenderer extends LayoutGroup
 	{
 		if ((this.stateData.downloadVariants != null) && this.stateData.downloadVariants.length > 1)
 		{
-			
+			HelperUtils.updateComponentByVariant(
+				this.stateData, 
+				cast(this.stateData.downloadVariants.get(this.stateData.selectedVariantIndex), ComponentVariantVO)
+			);
 		}
 		
-		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData));
+		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData, true));
+	}
+	
+	private function onLicenseViewRequested(event:MouseEvent):Void
+	{
+		this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, this.stateData));
 	}
 }

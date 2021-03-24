@@ -9,12 +9,13 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
-	import actionScripts.events.HelperEvent;
 	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
-	[Event(name="ENV_READ_COMPLETED", type="actionScripts.events.HelperEvent")]
-	[Event(name="ENV_READ_ERROR", type="actionScripts.events.HelperEvent")]
+	import moonshine.events.HelperEvent;
+	
+	[Event(name="ENV_READ_COMPLETED", type="moonshine.events.HelperEvent")]
+	[Event(name="ENV_READ_ERROR", type="moonshine.events.HelperEvent")]
 	public class EnvironmentUtils extends EventDispatcher
 	{
 		public static const ENV_READ_COMPLETED:String = "ENV_READ_COMPLETED";

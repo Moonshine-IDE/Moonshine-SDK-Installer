@@ -14,15 +14,15 @@ class HelperEvent extends Event
 	
 	public var data:Dynamic;
 	
-	public function new(type:String, value:Dynamic=null)
+	public function new(type:String, value:Dynamic=null, canBubble:Bool=false, isCancelable:Bool=true)
 	{
-		super(type);
+		super(type, canBubble, isCancelable);
 		
 		this.data = value;
 	}
 	
 	override public function clone():Event 
 	{
-		return new HelperEvent(this.type, this.data);
+		return new HelperEvent(this.type, this.data, this.bubbles, this.cancelable);
 	}
 }

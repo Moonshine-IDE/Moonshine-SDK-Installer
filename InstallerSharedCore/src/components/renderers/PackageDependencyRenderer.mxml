@@ -8,12 +8,13 @@
 			import spark.components.BusyIndicator;
 			import spark.events.IndexChangeEvent;
 			
-			import actionScripts.events.HelperEvent;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.ComponentVariantVO;
 			import actionScripts.valueObjects.HelperConstants;
+			
+			import moonshine.events.HelperEvent;
 			
 			private var busyIndicator:BusyIndicator;
 			
