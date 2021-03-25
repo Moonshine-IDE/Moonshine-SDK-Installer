@@ -10,8 +10,11 @@ package actionScripts.ui.views
 	import actionScripts.managers.StartupHelper;
 	import actionScripts.ui.FeathersUIWrapper;
 	import actionScripts.utils.EnvironmentUtils;
+	import actionScripts.utils.HelperUtils;
+	import actionScripts.utils.Parser;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
+	import actionScripts.valueObjects.ComponentVariantVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
 	import moonshine.components.HelperView;
@@ -77,7 +80,10 @@ package actionScripts.ui.views
 			);
 			this.feathersUIControl.addEventListener(
 				HelperEvent.OPEN_COMPONENT_LICENSE, onComponentLicenseViewRequest, false, 0, true
-			)
+			);
+			this.feathersUIControl.addEventListener(
+				HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true
+			);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -183,6 +189,18 @@ package actionScripts.ui.views
 		{
 			itemsManager.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsDetected);
 			dispatchEvent(event);
+		}
+		
+		private function onDownloadVariantChanged(event:HelperEvent):void
+		{
+			var tmpVariant:ComponentVariantVO = event.data.ComponentVariantVO;
+			var tmpComponent:ComponentVO = event.data.ComponentVO;
+			var installToPath:String = Parser.getInstallDirectoryPath(tmpComponent.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
+			tmpComponent.selectedVariantIndex = event.data.newIndex;
+			tmpComponent.isDownloaded = tmpComponent.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(tmpComponent.type, installToPath, tmpComponent.pathValidation);
+			tmpComponent.sizeInMb = tmpVariant.sizeInMb;
+			
+			this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED));
 		}
 	}
 }

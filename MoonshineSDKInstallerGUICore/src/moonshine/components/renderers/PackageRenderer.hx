@@ -1,5 +1,7 @@
 package moonshine.components.renderers;
 
+import moonshine.events.HelperEvent;
+import openfl.display.DisplayObject;
 import feathers.data.ListViewItemState;
 import actionScripts.valueObjects.ComponentVO;
 import feathers.utils.DisplayObjectRecycler;
@@ -24,10 +26,27 @@ class PackageRenderer extends LayoutGroup
 	private var stateData:PackageVO;
 	private var stateImageContainer:LayoutGroup;
 	private var lstDependencyTypes:ListView;
+	private var packageDependencyRendererRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>;
+	
+	private var packageDependencyRendererUpdateFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
+	{
+	    itemRenderer.updateItemState(cast(state.data, ComponentVO));
+	};
 	
 	public function new()
 	{
 		super();
+		
+		this.packageDependencyRendererRecycler = DisplayObjectRecycler.withFunction(
+			() -> {
+			var itemRenderer = new PackageDependencyRenderer();
+			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
+		    return itemRenderer;
+		}, this.packageDependencyRendererUpdateFn, (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
+		{
+			itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
+		    itemRenderer.updateItemState(null);
+		});
 	}
 	
 	public function updateItemState(stateData:PackageVO):Void
@@ -69,11 +88,7 @@ class PackageRenderer extends LayoutGroup
 	    titleDesContainer.addChild(this.lblDescription);
 	    
 	    this.lstDependencyTypes = new ListView();
-	    this.lstDependencyTypes.itemRendererRecycler = DisplayObjectRecycler.withClass(
-	    		PackageDependencyRenderer,
-	    		this.packageDependencyRendererUpdateFn,
-	    		this.packageDependencyRendererResetFn
-	    		);
+	    this.lstDependencyTypes.itemRendererRecycler = this.packageDependencyRendererRecycler;
 	    this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 	    this.addChild(this.lstDependencyTypes);
 	    
@@ -114,16 +129,6 @@ class PackageRenderer extends LayoutGroup
 		super.update();
 	}
 	
-	private var packageDependencyRendererUpdateFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
-	{
-	    itemRenderer.updateItemState(cast(state.data, ComponentVO));
-	};
-	
-	private var packageDependencyRendererResetFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
-	{
-	    itemRenderer.updateItemState(null);
-	};
-	
 	private function updateFields():Void
 	{
 		this.lblTitle.text = this.stateData.title;
@@ -150,5 +155,10 @@ class PackageRenderer extends LayoutGroup
 		
 		this.lstDependencyTypes.dataProvider = null;
 		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
+	}
+	
+	private function onDownloadVariantChanged(event:HelperEvent):Void
+	{
+		dispatchEvent(event);
 	}
 }

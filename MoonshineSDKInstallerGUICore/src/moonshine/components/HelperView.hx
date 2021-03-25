@@ -74,9 +74,12 @@ class HelperView extends LayoutGroup
 		
 		this.byFeatureRecycler = DisplayObjectRecycler.withFunction(
 			() -> {
-			return (new PackageRenderer());
+			var itemRenderer = new PackageRenderer();
+			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
+			return itemRenderer;
 		}, this.byFeatureRecyclerUpdateFn, (itemRenderer:PackageRenderer, state:ListViewItemState) -> 
 		{
+			itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
 		    itemRenderer.updateItemState(null);
 		});
 	}
@@ -247,6 +250,11 @@ class HelperView extends LayoutGroup
 	}
 	
 	private function onLicenseViewRequested(event:HelperEvent):Void
+	{
+		this.dispatchEvent(event);
+	}
+	
+	private function onDownloadVariantChanged(event:HelperEvent):Void
 	{
 		this.dispatchEvent(event);
 	}

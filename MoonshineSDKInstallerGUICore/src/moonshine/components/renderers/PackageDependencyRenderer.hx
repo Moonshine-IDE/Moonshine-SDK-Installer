@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import openfl.events.Event;
 import feathers.controls.TextInput;
 import feathers.controls.Button;
 import feathers.controls.dataRenderers.ItemRenderer;
@@ -71,6 +72,7 @@ class PackageDependencyRenderer extends LayoutGroup
 	    };
 	    this.cmbVariants.itemToText = (item:ComponentVariantVO) -> item.title;
 	    this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
+	    this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);
 	    this.addChild(this.cmbVariants);
 	
 		var assetLoaderLayoutData = new AnchorLayoutData();
@@ -278,5 +280,15 @@ class PackageDependencyRenderer extends LayoutGroup
 		}
 		
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData, true));
+	}
+	
+	private function onVariantChange(event:Event):Void
+	{
+		this.dispatchEvent(
+			new HelperEvent(
+				HelperEvent.DOWNLOAD_VARIANT_CHANGED, 
+				{ComponentVariantVO:this.cmbVariants.selectedItem, ComponentVO:this.stateData, newIndex:this.cmbVariants.selectedIndex}
+			)
+		);
 	}
 }
