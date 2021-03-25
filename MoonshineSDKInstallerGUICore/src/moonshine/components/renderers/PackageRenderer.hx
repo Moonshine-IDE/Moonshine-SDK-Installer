@@ -1,5 +1,9 @@
 package moonshine.components.renderers;
 
+import feathers.data.ListViewItemState;
+import actionScripts.valueObjects.ComponentVO;
+import feathers.utils.DisplayObjectRecycler;
+import feathers.controls.ListView;
 import feathers.layout.HorizontalLayoutData;
 import actionScripts.valueObjects.PackageVO;
 import feathers.controls.Label;
@@ -19,6 +23,7 @@ class PackageRenderer extends LayoutGroup
 	private var lblDescription:Label;
 	private var stateData:PackageVO;
 	private var stateImageContainer:LayoutGroup;
+	private var lstDependencyTypes:ListView;
 	
 	public function new()
 	{
@@ -33,7 +38,7 @@ class PackageRenderer extends LayoutGroup
 	
 	override private function initialize():Void
 	{
-		this.height = 100;
+		this.minHeight = 100;
 	 	this.variant = MoonshineTheme.THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND;
 	
 	    var viewLayout = new HorizontalLayout();
@@ -62,6 +67,15 @@ class PackageRenderer extends LayoutGroup
 	    this.lblDescription.layoutData = new VerticalLayoutData(100, null);
 	    this.lblDescription.wordWrap = true;
 	    titleDesContainer.addChild(this.lblDescription);
+	    
+	    this.lstDependencyTypes = new ListView();
+	    this.lstDependencyTypes.itemRendererRecycler = DisplayObjectRecycler.withClass(
+	    		PackageDependencyRenderer,
+	    		this.packageDependencyRendererUpdateFn,
+	    		this.packageDependencyRendererResetFn
+	    		);
+	    this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
+	    this.addChild(this.lstDependencyTypes);
 	    
 	    this.stateImageContainer = new LayoutGroup();		
 	    this.stateImageContainer.width = 50;
@@ -100,6 +114,16 @@ class PackageRenderer extends LayoutGroup
 		super.update();
 	}
 	
+	private var packageDependencyRendererUpdateFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
+	{
+	    itemRenderer.updateItemState(cast(state.data, ComponentVO));
+	};
+	
+	private var packageDependencyRendererResetFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
+	{
+	    itemRenderer.updateItemState(null);
+	};
+	
 	private function updateFields():Void
 	{
 		this.lblTitle.text = this.stateData.title;
@@ -107,6 +131,13 @@ class PackageRenderer extends LayoutGroup
 		
 		this.stateImageContainer.includeInLayout = this.stateData.isIntegrated;
 		this.stateImageContainer.visible = this.stateData.isIntegrated;
+		
+		if (this.stateData.dependencyTypes != null)
+		{
+			this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = true;
+			this.lstDependencyTypes.dataProvider = this.stateData.dependencyTypes;
+			this.lstDependencyTypes.height = this.stateData.dependencyTypes.length * 40;
+		}
 	}
 	
 	private function resetFields():Void
@@ -116,5 +147,8 @@ class PackageRenderer extends LayoutGroup
     	
     	this.stateImageContainer.includeInLayout = false;
 		this.stateImageContainer.visible = false;
+		
+		this.lstDependencyTypes.dataProvider = null;
+		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 	}
 }

@@ -20,6 +20,7 @@
 
 package moonshine.components;
 
+import openfl.display.DisplayObject;
 import moonshine.events.HelperEvent;
 import moonshine.components.renderers.PackageRenderer;
 import moonshine.components.renderers.ComponentRenderer;
@@ -59,13 +60,30 @@ class HelperView extends LayoutGroup
 	{
 		MoonshineTheme.initializeTheme();
 		super();
+		
+		this.bySoftwareRecycler = DisplayObjectRecycler.withFunction(
+			() -> {
+			var itemRenderer = new ComponentRenderer();
+			itemRenderer.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested, false, 0, true);
+		    return itemRenderer;
+		}, this.bySoftwareRecyclerUpdateFn, (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
+		{
+			itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
+		    itemRenderer.updateItemState(null);
+		});
+		
+		this.byFeatureRecycler = DisplayObjectRecycler.withFunction(
+			() -> {
+			return (new PackageRenderer());
+		}, this.byFeatureRecyclerUpdateFn, (itemRenderer:PackageRenderer, state:ListViewItemState) -> 
+		{
+		    itemRenderer.updateItemState(null);
+		});
 	}
 	
 	public function setListPropertiesBySoftwareType(withCollection:ArrayCollection<ComponentVO>):Void
 	{
 		this.itemsListView.itemRendererRecycler = this.bySoftwareRecycler;
-		this.bySoftwareRecycler.update = this.bySoftwareRecyclerUpdateFn;
-		this.bySoftwareRecycler.reset = this.bySoftwareRecyclerResetFn;
 		
 		this.collectionBySoftware = withCollection;
 		this.setInvalid(InvalidationFlag.DATA);
@@ -74,8 +92,6 @@ class HelperView extends LayoutGroup
 	public function setListPropertiesByFeatureType(withCollection:ArrayCollection<PackageVO>):Void
 	{
 		this.itemsListView.itemRendererRecycler = this.byFeatureRecycler;
-		this.byFeatureRecycler.update = this.byFeatureRecyclerUpdateFn;
-		this.byFeatureRecycler.reset = this.byFeatureRecyclerResetFn;
 		
 		this.collectionByFeature = withCollection;
 		this.setInvalid(InvalidationFlag.DATA);
@@ -109,37 +125,17 @@ class HelperView extends LayoutGroup
 	private var collectionBySoftware:ArrayCollection<ComponentVO> = new ArrayCollection();
 	private var collectionByFeature:ArrayCollection<PackageVO> = new ArrayCollection();
 	
-	private var byFeatureRecycler = DisplayObjectRecycler.withFunction(
-		() -> {    
-	    return (new PackageRenderer());
-	});
+	private var byFeatureRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>;
+	private var bySoftwareRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>;
 	
 	private var byFeatureRecyclerUpdateFn = (itemRenderer:PackageRenderer, state:ListViewItemState) -> 
 	{
 	    itemRenderer.updateItemState(cast(state.data, PackageVO));
 	};
 	
-	private var byFeatureRecyclerResetFn = (itemRenderer:PackageRenderer, state:ListViewItemState) -> 
-	{
-	    itemRenderer.updateItemState(null);
-	};
-	
-	private var bySoftwareRecycler = DisplayObjectRecycler.withFunction(
-		() -> {
-		var itemRenderer = new ComponentRenderer();
-		//itemRenderer.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested, false, 0, true);
-	    return itemRenderer;
-	});
-	
 	private var bySoftwareRecyclerUpdateFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
 	{
 	    itemRenderer.updateItemState(cast(state.data, ComponentVO));
-	};
-	
-	private var bySoftwareRecyclerResetFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> 
-	{
-		//itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
-	    itemRenderer.updateItemState(null);
 	};
 
 	override private function initialize():Void 
