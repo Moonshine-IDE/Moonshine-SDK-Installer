@@ -693,7 +693,7 @@ variables are not required because the locations of these pieces are known.
 			}
 			else
 			{
-				userLocale = new StringTools(LocaleID.DEFAULT).actualLocaleIDName.replace("-", "_");
+				userLocale = new flash.globalization.StringTools(LocaleID.DEFAULT).actualLocaleIDName.replace("-", "_");
 			}
 			
 			if (languageOverride)
@@ -806,7 +806,7 @@ variables are not required because the locations of these pieces are known.
 			}
 			else
 			{
-				userLocale = new StringTools(LocaleID.DEFAULT).actualLocaleIDName.replace("-", "_");
+				userLocale = new flash.globalization.StringTools(LocaleID.DEFAULT).actualLocaleIDName.replace("-", "_");
 			}
 			
 			if (languageOverride)
