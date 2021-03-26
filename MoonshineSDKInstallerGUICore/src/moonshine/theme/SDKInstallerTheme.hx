@@ -52,14 +52,14 @@ import openfl.display.Shape;
 import openfl.filters.GlowFilter;
 import openfl.text.TextFormat;
 
-class MoonshineTheme extends ClassVariantTheme {
-	private static var _instance:MoonshineTheme;
+class SDKInstallerTheme extends ClassVariantTheme {
+	private static var _instance:SDKInstallerTheme;
 
 	public static function initializeTheme():Void {
 		if (_instance != null) {
 			return;
 		}
-		_instance = new MoonshineTheme();
+		_instance = new SDKInstallerTheme();
 		Theme.setTheme(_instance);
 	}
 
@@ -92,7 +92,7 @@ class MoonshineTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererStyles);
 
-		//this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
+		// this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
 		this.styleProvider.setStyleFunction(Label, DefaultToolTipManager.CHILD_VARIANT_TOOL_TIP, setToolTipLabelStyles);
@@ -100,7 +100,7 @@ class MoonshineTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, LayoutGroup.VARIANT_TOOL_BAR, setToolBarLayoutGroupStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_WARNING_BAR, setWarningBarLayoutGroupStyles);
 
-		//this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewStyles);
+		// this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewStyles);
 
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 
@@ -110,11 +110,11 @@ class MoonshineTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
 
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
-		
+
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_BUSY_LABEL, setBusyLabelStyles);
-		
+
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_TEXT_LINK, setTextLinkyLabelStyles);
-		
+
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_PLUGIN_LARGE_TITLE, setPluginLargeTitleStyles);
 
 		this.styleProvider.setStyleFunction(TreeView, null, setTreeViewStyles);
@@ -179,9 +179,9 @@ class MoonshineTheme extends ClassVariantTheme {
 		focusRectSkin.cornerRadius = 5.0;
 		button.focusRectSkin = focusRectSkin;
 
-		//button.textFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		//button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x999999));
-		//button.embedFonts = true;
+		// button.textFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
+		// button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x999999));
+		// button.embedFonts = true;
 
 		button.paddingTop = 8.0;
 		button.paddingRight = 16.0;
@@ -362,9 +362,9 @@ class MoonshineTheme extends ClassVariantTheme {
 		check.focusPaddingBottom = 2.0;
 		check.focusPaddingLeft = 2.0;
 
-		//check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		//check.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		//check.embedFonts = true;
+		// check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		// check.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		// check.embedFonts = true;
 
 		check.horizontalAlign = LEFT;
 		check.gap = 4.0;
@@ -539,9 +539,9 @@ class MoonshineTheme extends ClassVariantTheme {
 		radio.focusPaddingBottom = 2.0;
 		radio.focusPaddingLeft = 2.0;
 
-		//radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		//radio.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		//radio.embedFonts = true;
+		// radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		// radio.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		// radio.embedFonts = true;
 
 		radio.horizontalAlign = LEFT;
 		radio.gap = 4.0;
@@ -583,13 +583,13 @@ class MoonshineTheme extends ClassVariantTheme {
 		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
 		label.embedFonts = true;
 	}
-	
+
 	private function setItalicLabelStyles(label:Label):Void {
 		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929, false, true);
 		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999, false, true);
 		label.embedFonts = true;
 	}
-	
+
 	private function setTextLinkyLabelStyles(label:Label):Void {
 		var tmpFormat = new TextFormat();
 		tmpFormat.color = 0x0000FF;
@@ -674,26 +674,26 @@ class MoonshineTheme extends ClassVariantTheme {
 		backgroundSkin.cornerRadius = 7.0;
 		panel.backgroundSkin = backgroundSkin;
 	}
-	
+
 	private function setBodyWithGreyBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xf5f5f5);
 		backgroundSkin.cornerRadius = 0.0;
 		view.backgroundSkin = backgroundSkin;
 	}
-	
+
 	private function setBodyWithWhiteBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xffffff);
 		backgroundSkin.cornerRadius = 0.0;
 		view.backgroundSkin = backgroundSkin;
 	}
-	
+
 	private function setBusyLabelStyles(label:Label):Void {
 		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xffffff, false);
 		label.embedFonts = true;
 	}
-	
+
 	private function setPluginLargeTitleStyles(label:Label):Void {
 		label.textFormat = new TextFormat("DejaVuSansTF", 24, 0xe252d3, false);
 		label.embedFonts = true;
