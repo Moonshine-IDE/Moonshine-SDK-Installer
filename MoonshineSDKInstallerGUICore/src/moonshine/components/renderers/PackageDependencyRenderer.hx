@@ -1,11 +1,11 @@
 package moonshine.components.renderers;
 
+import feathers.controls.PopUpListView;
 import openfl.events.Event;
 import feathers.controls.TextInput;
 import feathers.controls.Button;
 import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.utils.DisplayObjectRecycler;
-import feathers.controls.ComboBox;
 import feathers.controls.ListView;
 import moonshine.events.HelperEvent;
 import openfl.events.MouseEvent;
@@ -35,7 +35,7 @@ class PackageDependencyRenderer extends LayoutGroup {
 	private var assetConfigure:AssetLoader;
 	private var stateData:ComponentVO;
 	private var lblTitle:Label;
-	private var cmbVariants:ComboBox;
+	private var cmbVariants:PopUpListView;
 
 	public function new() {
 		super();
@@ -60,12 +60,7 @@ class PackageDependencyRenderer extends LayoutGroup {
 		viewLayout.gap = 10.0;
 		this.layout = viewLayout;
 
-		this.cmbVariants = new ComboBox();
-		this.cmbVariants.textInputFactory = () -> {
-			var tmpInput = new TextInput();
-			tmpInput.editable = false;
-			return tmpInput;
-		};
+		this.cmbVariants = new PopUpListView();
 		this.cmbVariants.itemToText = (item:ComponentVariantVO) -> item.title;
 		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
 		this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);

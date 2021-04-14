@@ -2,13 +2,13 @@
 <project>
   <output>
     <movie disabled="False"/>
-    <movie platform="null"/>
-    <movie version="30"/>
+    <movie background="#000000"/>
     <movie width="100"/>
+    <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
     <movie fps="24"/>
     <movie height="100"/>
-    <movie background="#000000"/>
-    <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
+    <movie version="32"/>
+    <movie platform="null"/>
     <movie input=""/>
   </output>
   &lt;!-- Other classes to be compiled into your SWF --&gt;
@@ -27,32 +27,35 @@
   </moonshineResourcePaths>
   <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
   <build>
-    <option es="False"/>
-    <option verboseStackTraces="False"/>
-    <option allowSourcePathOverlap="False"/>
-    <option loadConfig=""/>
-    <option linkReport=""/>
-    <option additional="-locale en_US -allow-source-path-overlap=true -swf-version 41 +configname=air"/>
-    <option staticLinkRSL="False"/>
-    <option showActionScriptWarnings="True"/>
-    <option antBuildPath=""/>
-    <option useResourceBundleMetadata="True"/>
+    <option customSDK="/Users/santanu/Downloads/MoonshineSDKs/Flex_SDK/Flex_4.16.1_AIR_33.1"/>
     <option showUnusedTypeSelectorWarnings="True"/>
-    <option optimize="True"/>
-    <option showDeprecationWarnings="True"/>
-    <option customSDK=""/>
-    <option showBindingWarnings="True"/>
+    <option es="False"/>
+    <option staticLinkRSL="False"/>
     <option strict="True"/>
-    <option accessible="True"/>
-    <option useNetwork="True"/>
-    <option locale=""/>
+    <option loadConfig=""/>
     <option compilerConstants=""/>
-    <option benchmark="False"/>
+    <option antBuildPath=""/>
+    <option useNetwork="True"/>
+    <option optimize="True"/>
+    <option sourceMap="False"/>
+    <option useResourceBundleMetadata="True"/>
+    <option showActionScriptWarnings="True"/>
+    <option accessible="True"/>
     <option warnings="True"/>
+    <option locale=""/>
+    <option showBindingWarnings="True"/>
+    <option allowSourcePathOverlap="False"/>
+    <option verboseStackTraces="False"/>
+    <option showDeprecationWarnings="True"/>
+    <option additional="-locale en_US -allow-source-path-overlap=true -swf-version 41 +configname=air"/>
+    <option benchmark="False"/>
+    <option linkReport=""/>
   </build>
   <mavenBuild>
-    <option mavenBuildPath="G:\DevareaLocal\Prominic\Prominic_Git\git\Moonshine-SDK-Installer\MoonshineSDKInstaller"/>
     <option settingsFilePath=""/>
+    <option dominoNotesProgram=""/>
+    <option mavenBuildPath="G:\DevareaLocal\Prominic\Prominic_Git\git\Moonshine-SDK-Installer\MoonshineSDKInstaller"/>
+    <option dominoNotesPlatform=""/>
     <option commandLine=""/>
     <actions>
       <action actionName="Build" action="install"/>
@@ -67,12 +70,13 @@
     <element path="../ApacheFlexSDKInstallerLib/libs/as3commons-zip-1.0.0-alpha.1.swc"/>
     <element path="../ApacheFlexSDKInstallerLib/libs/as3httpclient.swc"/>
     <element path="libs/ApacheFlexSDKInstallerLib.swc"/>
-	<element path="../MoonshineSDKInstallerGUICore/bin/flash/bin/MoonshineSDKInstallerGUICore.swc"/>
+    <element path="../MoonshineSDKInstallerGUICore/bin/flash/bin/MoonshineSDKInstallerGUICore.swc"/>
   </libraryPaths>
   <externalLibraryPaths></externalLibraryPaths>
   <rslPaths></rslPaths>
   <intrinsics></intrinsics>
   <library></library>
+  <modules/>
   <compileTargets>
     <compile path="src/MoonshineSDKInstaller.mxml"/>
   </compileTargets>
@@ -81,21 +85,24 @@
   <postBuildCommand alwaysRun="False">null</postBuildCommand>
   <trustSVNCertificate>False</trustSVNCertificate>
   <options>
-    <option visualEditorExportPath=""/>
-    <option defaultBuildTargets=""/>
     <option testMovie="AIR"/>
+    <option isExportedToExistingSource="False"/>
     <option testMovieCommand=""/>
+    <option visualEditorExportPath=""/>
     <option showHiddenPaths="False"/>
     <option isPrimeFacesVisualEditor="False"/>
-    <option isExportedToExistingSource="False"/>
+    <option defaultBuildTargets=""/>
+    <option isRoyale="False"/>
   </options>
   <moonshineRunCustomization>
-    <option projectType="1"/>
-    <option urlToLaunch=""/>
+    <option deviceConnectType="USB"/>
     <option customUrlToLaunch=""/>
-    <option deviceSimulator="null"/>
     <option targetPlatform="1"/>
+    <option deviceSimulator="null"/>
+    <option webBrowser="null"/>
+    <option urlToLaunch=""/>
     <option launchMethod="Simulator"/>
+    <option projectType="1"/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>
