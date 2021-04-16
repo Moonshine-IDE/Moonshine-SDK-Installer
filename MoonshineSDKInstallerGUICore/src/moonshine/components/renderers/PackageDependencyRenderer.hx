@@ -159,7 +159,10 @@ class PackageDependencyRenderer extends LayoutGroup {
 		if (this.stateData.isAlreadyDownloaded) {
 			this.assetDownloaded.visible = true;
 			this.assetDownloaded.includeInLayout = true;
-			this.assetDownloaded.toolTip = "Installed: " + this.stateData.createdOn.toString();
+			if (this.stateData.createdOn != null)
+			{
+				this.assetDownloaded.toolTip = "Installed: " + this.stateData.createdOn.toString();
+			}
 		} else {
 			this.assetDownloaded.visible = false;
 			this.assetDownloaded.includeInLayout = false;

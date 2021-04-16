@@ -74,11 +74,6 @@ class ComponentRenderer extends LayoutGroup {
 		titleDesContainerLayout.verticalAlign = MIDDLE;
 		titleDesContainerLayout.horizontalAlign = JUSTIFY;
 
-		var titleDesContainerLayoutData = new AnchorLayoutData();
-		titleDesContainerLayoutData.left = 136;
-		titleDesContainerLayoutData.right = 50;
-		titleDesContainerLayoutData.verticalCenter = 0.0;
-
 		var titleDesContainer = new LayoutGroup();
 		titleDesContainer.layout = titleDesContainerLayout;
 		titleDesContainer.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
@@ -110,8 +105,9 @@ class ComponentRenderer extends LayoutGroup {
 		licenseAndCreatedOnContainer.addChild(this.lblCreatedOn);
 
 		var stateImageContainer = new LayoutGroup();
-		stateImageContainer.width = 50;
+		stateImageContainer.layoutData = new HorizontalLayoutData(null, 100);
 		stateImageContainer.layout = new HorizontalLayout();
+		cast(stateImageContainer.layout, HorizontalLayout).verticalAlign = MIDDLE;
 		this.addChild(stateImageContainer);
 
 		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNote.png", assetLoaderLayoutData);
@@ -191,7 +187,10 @@ class ComponentRenderer extends LayoutGroup {
 		if (this.stateData.isAlreadyDownloaded) {
 			this.assetDownloaded.visible = true;
 			this.assetDownloaded.includeInLayout = true;
-			this.assetDownloaded.toolTip = "Installed: " + this.stateData.createdOn.toString();
+			if (this.stateData.createdOn != null) 
+			{
+				this.assetDownloaded.toolTip = "Installed: " + this.stateData.createdOn.toString();
+			}
 		} else {
 			this.assetDownloaded.visible = false;
 			this.assetDownloaded.includeInLayout = false;

@@ -90,8 +90,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(GridView, GridView.VARIANT_BORDERLESS, setBorderlessGridViewStyles);
 		this.styleProvider.setStyleFunction(ItemRenderer, GridView.CHILD_VARIANT_HEADER, setGridViewHeaderStyles);
 
-		this.styleProvider.setStyleFunction(ItemRenderer, null, setItemRendererStyles);
-
 		// this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
@@ -545,31 +543,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		radio.horizontalAlign = LEFT;
 		radio.gap = 4.0;
-	}
-
-	private function setItemRendererStyles(itemRenderer:ItemRenderer):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.selectedFill = SolidColor(0xC165B8);
-		backgroundSkin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(0x393939));
-		itemRenderer.backgroundSkin = backgroundSkin;
-
-		var alternateBackgroundSkin = new RectangleSkin();
-		alternateBackgroundSkin.fill = SolidColor(0x4D4C4C);
-		alternateBackgroundSkin.selectedFill = SolidColor(0xC165B8);
-		alternateBackgroundSkin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(0x393939));
-		itemRenderer.alternateBackgroundSkin = alternateBackgroundSkin;
-
-		itemRenderer.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		itemRenderer.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		itemRenderer.embedFonts = true;
-
-		itemRenderer.horizontalAlign = LEFT;
-		itemRenderer.paddingTop = 4.0;
-		itemRenderer.paddingRight = 4.0;
-		itemRenderer.paddingBottom = 4.0;
-		itemRenderer.paddingLeft = 4.0;
-		itemRenderer.gap = 4.0;
 	}
 
 	private function setLabelStyles(label:Label):Void {
