@@ -13,7 +13,6 @@ extern class HelperConstants
 	public static var IS_MACOS:Bool;
 	public static var IS_RUNNING_IN_MOON:Bool;
 	public static var IS_INSTALLER_READY:Bool;
-	public static var DEFAULT_INSTALLATION_PATH:Dynamic;
 	public static var CONFIG_AIR_VERSION:String;
 	public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 	public static var INSTALLER_UPDATE_CHECK_URL:String;
@@ -21,7 +20,4 @@ extern class HelperConstants
 	public static var CUSTOM_PATH_SDK_WINDOWS:String;
 	public static var IS_CUSTOM_WINDOWS_PATH:Bool;
 	public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Bool;
-	
-	@:flash.property
-	public static var HELPER_STORAGE(default, default):Dynamic;
 }

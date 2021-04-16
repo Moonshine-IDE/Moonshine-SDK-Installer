@@ -167,7 +167,7 @@ class ComponentRenderer extends LayoutGroup {
 		if (this.stateData.isAlreadyDownloaded && (this.stateData.createdOn != null)) {
 			this.lblCreatedOn.includeInLayout = true;
 			this.lblCreatedOn.visible = true;
-			this.lblCreatedOn.text = " | Installed: (to be calculated)";
+			this.lblCreatedOn.text = " | Installed: " + this.stateData.createdOn.toString();
 		} else {
 			this.lblCreatedOn.includeInLayout = false;
 			this.lblCreatedOn.visible = false;

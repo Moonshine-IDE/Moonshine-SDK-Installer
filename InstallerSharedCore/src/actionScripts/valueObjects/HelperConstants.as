@@ -1,10 +1,11 @@
 package actionScripts.valueObjects
 {
 	import flash.desktop.NativeApplication;
-	import flash.filesystem.File;
 	
 	import actionScripts.utils.HelperUtils;
-	
+
+	import flash.filesystem.File;
+
 	[Bindable] public class HelperConstants
 	{
 		[Embed(source="/helperResources/images/bg_listDivider.png")]
@@ -42,8 +43,10 @@ package actionScripts.valueObjects
 				DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
 				return DEFAULT_INSTALLATION_PATH;
 			}
-			
-			return File.userDirectory.resolvePath("AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store");
+
+			return File.userDirectory.resolvePath(
+					"AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store"
+			);
 		}
 	}
 }
