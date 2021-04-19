@@ -1,3 +1,5 @@
 MoonshineSDKInstaller/bin-debug
 MoonshineSDKInstaller/obj/MoonshineSDKInstallerConfig.xml
 InstallerSharedCore/bin
+.DS_Store
+.vscode/
