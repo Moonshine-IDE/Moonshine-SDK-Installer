@@ -261,13 +261,13 @@
 					</diskMBusage>
 					<windows>
 						<version version="1.10.1" displayVersion="1.10.1">
-			                <path>http://moonshine-ide.com/downloads/ant/</path>
+			                <path>https://moonshine-ide.com/downloads/ant/</path>
 			                <file>apache-ant-1.10.1-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
 						<version version="1.10.1" displayVersion="1.10.1">
-			                <path>http://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+			                <path>https://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
 			                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>

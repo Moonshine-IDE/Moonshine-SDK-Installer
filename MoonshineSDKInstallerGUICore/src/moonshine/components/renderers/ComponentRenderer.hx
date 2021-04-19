@@ -1,7 +1,8 @@
 package moonshine.components.renderers;
 
-import moonshine.events.HelperEvent;
 import openfl.events.MouseEvent;
+import feathers.events.TriggerEvent;
+import moonshine.events.HelperEvent;
 import actionScripts.valueObjects.HelperConstants;
 import actionScripts.utils.HelperUtils;
 import feathers.layout.HorizontalLayoutData;
@@ -29,6 +30,7 @@ class ComponentRenderer extends LayoutGroup {
 	private var stateData:ComponentVO;
 	private var assetLogo:AssetLoader;
 	private var lblTitle:Label;
+	private var lblSize:Label;
 	private var lblDescription:Label;
 	private var lblCreatedOn:Label;
 
@@ -80,8 +82,18 @@ class ComponentRenderer extends LayoutGroup {
 		titleDesContainer.layoutData = new HorizontalLayoutData(100, null);
 		this.addChild(titleDesContainer);
 
+		var titleAndSizeContainer = new LayoutGroup();
+		titleAndSizeContainer.layoutData = new HorizontalLayoutData(100, null);
+		titleAndSizeContainer.layout = new HorizontalLayout();
+		cast(titleAndSizeContainer.layout, HorizontalLayout).gap = 10;
+		cast(titleAndSizeContainer.layout, HorizontalLayout).verticalAlign = MIDDLE;
+		titleDesContainer.addChild(titleAndSizeContainer);
+
 		this.lblTitle = new Label();
-		titleDesContainer.addChild(this.lblTitle);
+		titleAndSizeContainer.addChild(this.lblTitle);
+
+		this.lblSize = new Label();
+		titleAndSizeContainer.addChild(this.lblSize);
 
 		this.lblDescription = new Label();
 		this.lblDescription.layoutData = new HorizontalLayoutData(100, null);
@@ -108,6 +120,7 @@ class ComponentRenderer extends LayoutGroup {
 		stateImageContainer.layoutData = new HorizontalLayoutData(null, 100);
 		stateImageContainer.layout = new HorizontalLayout();
 		cast(stateImageContainer.layout, HorizontalLayout).verticalAlign = MIDDLE;
+		cast(stateImageContainer.layout, HorizontalLayout).gap = 10;
 		this.addChild(stateImageContainer);
 
 		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNote.png", assetLoaderLayoutData);
@@ -161,6 +174,7 @@ class ComponentRenderer extends LayoutGroup {
 
 	private function updateFields():Void {
 		this.lblTitle.text = this.stateData.title;
+		this.lblSize.text = "("+ HelperUtils.getSizeFix(this.stateData.sizeInMb) +")";
 		this.lblDescription.text = this.stateData.description;
 		this.assetLogo.source = this.stateData.imagePath;
 

@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import feathers.events.TriggerEvent;
 import feathers.controls.PopUpListView;
 import openfl.events.Event;
 import feathers.controls.TextInput;
@@ -8,7 +9,6 @@ import feathers.controls.dataRenderers.ItemRenderer;
 import feathers.utils.DisplayObjectRecycler;
 import feathers.controls.ListView;
 import moonshine.events.HelperEvent;
-import openfl.events.MouseEvent;
 import actionScripts.valueObjects.HelperConstants;
 import actionScripts.utils.HelperUtils;
 import feathers.layout.HorizontalLayoutData;
@@ -51,11 +51,11 @@ class PackageDependencyRenderer extends LayoutGroup {
 		// this.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
 
 		var viewLayout = new HorizontalLayout();
-		viewLayout.horizontalAlign = JUSTIFY;
+		viewLayout.horizontalAlign = RIGHT;
 		viewLayout.verticalAlign = MIDDLE;
-		viewLayout.paddingTop = 10.0;
+		viewLayout.paddingTop = 0.0;
 		viewLayout.paddingRight = 10.0;
-		viewLayout.paddingBottom = 4.0;
+		viewLayout.paddingBottom = 0.0;
 		viewLayout.paddingLeft = 10.0;
 		viewLayout.gap = 10.0;
 		this.layout = viewLayout;
@@ -78,37 +78,40 @@ class PackageDependencyRenderer extends LayoutGroup {
 		titleDesContainer.layout = titleDesContainerLayout;
 		titleDesContainer.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
 		titleDesContainer.layoutData = new HorizontalLayoutData(100, null);
-		this.addChild(titleDesContainer);
+		//this.addChild(titleDesContainer);
 
 		this.lblTitle = new Label();
-		titleDesContainer.addChild(this.lblTitle);
+		this.addChild(this.lblTitle);
 
 		var stateImageContainer = new LayoutGroup();
-		stateImageContainer.width = 50;
 		stateImageContainer.layout = new HorizontalLayout();
+		cast(stateImageContainer.layout, HorizontalLayout).verticalAlign = MIDDLE;
+		cast(stateImageContainer.layout, HorizontalLayout).horizontalAlign = RIGHT;
+		cast(stateImageContainer.layout, HorizontalLayout).gap = 4;
+		stateImageContainer.layoutData = new HorizontalLayoutData(null, 100);
 		this.addChild(stateImageContainer);
 
-		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNoteNoLabel.png", assetLoaderLayoutData);
+		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNoteNoLabel.png");
 		stateImageContainer.addChild(this.assetNote);
 
-		this.assetError = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoErrorNoLabel.png", assetLoaderLayoutData);
+		this.assetError = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoErrorNoLabel.png");
 		stateImageContainer.addChild(this.assetError);
 
-		this.assetDownloaded = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoTickNoLabel.png", assetLoaderLayoutData);
+		this.assetDownloaded = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoTickNoLabel.png");
 		stateImageContainer.addChild(this.assetDownloaded);
 
-		this.assetDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoDownloadNoLabel.png", assetLoaderLayoutData);
+		this.assetDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoDownloadNoLabel.png");
 		this.assetDownload.buttonMode = true;
-		this.assetDownload.addEventListener(MouseEvent.CLICK, this.onDownloadButtonClicked, false, 0, true);
+		this.assetDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetDownload);
 
-		this.assetReDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoReDownloadNoLabel.png", assetLoaderLayoutData);
+		this.assetReDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoReDownloadNoLabel.png");
 		stateImageContainer.addChild(this.assetReDownload);
 
-		this.assetQueued = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoQueuedNoLabel.png", assetLoaderLayoutData);
+		this.assetQueued = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoQueuedNoLabel.png");
 		stateImageContainer.addChild(this.assetQueued);
 
-		this.assetConfigure = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoConfigureNoLabel.png", assetLoaderLayoutData);
+		this.assetConfigure = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoConfigureNoLabel.png");
 		stateImageContainer.addChild(this.assetConfigure);
 
 		super.initialize();
@@ -127,9 +130,8 @@ class PackageDependencyRenderer extends LayoutGroup {
 		super.update();
 	}
 
-	private function getNewAssetLoaderForStateIcons(srcPath:String, layoutData:AnchorLayoutData):AssetLoader {
+	private function getNewAssetLoaderForStateIcons(srcPath:String):AssetLoader {
 		var tmpAsset = new AssetLoader();
-		tmpAsset.layoutData = layoutData;
 		tmpAsset.visible = false;
 		tmpAsset.includeInLayout = false;
 		tmpAsset.source = srcPath;
@@ -233,7 +235,7 @@ class PackageDependencyRenderer extends LayoutGroup {
 		}
 	}
 
-	private function onDownloadButtonClicked(event:MouseEvent):Void {
+	private function onDownloadButtonClicked(event:TriggerEvent):Void {
 		if ((this.stateData.downloadVariants != null) && this.stateData.downloadVariants.length > 1) {
 			HelperUtils.updateComponentByVariant(this.stateData,
 				cast(this.stateData.downloadVariants.get(this.stateData.selectedVariantIndex), ComponentVariantVO));

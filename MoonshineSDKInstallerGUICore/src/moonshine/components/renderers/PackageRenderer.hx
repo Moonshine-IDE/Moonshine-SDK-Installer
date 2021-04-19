@@ -58,7 +58,7 @@ class PackageRenderer extends LayoutGroup {
 		viewLayout.horizontalAlign = JUSTIFY;
 		viewLayout.verticalAlign = MIDDLE;
 		viewLayout.paddingTop = 10.0;
-		viewLayout.paddingRight = 10.0;
+		viewLayout.paddingRight = 0.0;
 		viewLayout.paddingBottom = 4.0;
 		viewLayout.paddingLeft = 10.0;
 		viewLayout.gap = 10.0;
@@ -83,6 +83,7 @@ class PackageRenderer extends LayoutGroup {
 
 		this.lstDependencyTypes = new ListView();
 		this.lstDependencyTypes.itemRendererRecycler = this.packageDependencyRendererRecycler;
+		this.lstDependencyTypes.layoutData = new HorizontalLayoutData(null, null);
 		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 		this.addChild(this.lstDependencyTypes);
 

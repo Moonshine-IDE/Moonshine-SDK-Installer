@@ -651,6 +651,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	private function setBodyWithGreyBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xf5f5f5);
+		//backgroundSkin.fill = SolidColor(0xffff00);
 		backgroundSkin.cornerRadius = 0.0;
 		view.backgroundSkin = backgroundSkin;
 	}

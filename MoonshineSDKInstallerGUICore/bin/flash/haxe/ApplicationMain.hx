@@ -32,7 +32,7 @@ class ApplicationMain
 
 		ManifestResources.init(config);
 
-		app.meta["build"] = "226";
+		app.meta["build"] = "243";
 		app.meta["company"] = "Prominic.NET";
 		app.meta["file"] = "MoonshineSDKInstallerGUICore";
 		app.meta["name"] = "MoonshineSDKInstallerGUICore";
@@ -113,7 +113,7 @@ class ApplicationMain
 			@:privateAccess preloader.start();
 		});
 
-		preloader.onComplete.add(start.bind(cast(app.window, openfl.display.Window).stage));
+		preloader.onComplete.add(start.bind((cast app.window:openfl.display.Window).stage));
 
 		for (library in ManifestResources.preloadLibraries)
 		{

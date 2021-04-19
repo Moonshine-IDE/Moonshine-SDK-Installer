@@ -65,7 +65,7 @@ class HelperView extends LayoutGroup {
 			return itemRenderer;
 		}, this.bySoftwareRecyclerUpdateFn,
 			(itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
-				itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
+				//itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
 				itemRenderer.updateItemState(null);
 			});
 
