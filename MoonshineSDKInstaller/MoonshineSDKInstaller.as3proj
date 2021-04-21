@@ -100,9 +100,9 @@
     <option targetPlatform="1"/>
     <option deviceSimulator="null"/>
     <option webBrowser="null"/>
+    <option projectType="1"/>
     <option urlToLaunch=""/>
     <option launchMethod="Simulator"/>
-    <option projectType="1"/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>
