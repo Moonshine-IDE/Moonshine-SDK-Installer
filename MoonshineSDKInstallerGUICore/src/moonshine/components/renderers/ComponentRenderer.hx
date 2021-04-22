@@ -174,7 +174,7 @@ class ComponentRenderer extends LayoutGroup {
 
 	private function updateFields():Void {
 		this.lblTitle.text = this.stateData.title;
-		this.lblSize.text = "("+ HelperUtils.getSizeFix(this.stateData.sizeInMb) +")";
+		this.lblSize.text = "(v"+ this.stateData.version +", "+ HelperUtils.getSizeFix(this.stateData.sizeInMb) +")";
 		this.lblDescription.text = this.stateData.description;
 		this.assetLogo.source = this.stateData.imagePath;
 

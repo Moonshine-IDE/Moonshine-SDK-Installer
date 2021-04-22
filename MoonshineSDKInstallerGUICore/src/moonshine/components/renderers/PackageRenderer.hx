@@ -131,6 +131,11 @@ class PackageRenderer extends LayoutGroup {
 			this.lstDependencyTypes.dataProvider = this.stateData.dependencyTypes;
 			this.lstDependencyTypes.height = this.stateData.dependencyTypes.length * 40;
 		}
+		else
+		{
+			this.lstDependencyTypes.dataProvider = null;
+			this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
+		}
 	}
 
 	private function resetFields():Void {

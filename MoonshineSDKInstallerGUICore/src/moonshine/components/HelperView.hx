@@ -65,8 +65,10 @@ class HelperView extends LayoutGroup {
 			return itemRenderer;
 		}, this.bySoftwareRecyclerUpdateFn,
 			(itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
-				//itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
 				itemRenderer.updateItemState(null);
+			}, 
+			(itemRenderer:ComponentRenderer) -> {
+				itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
 			});
 
 		this.byFeatureRecycler = DisplayObjectRecycler.withFunction(() -> {
@@ -75,8 +77,10 @@ class HelperView extends LayoutGroup {
 			return itemRenderer;
 		}, this.byFeatureRecyclerUpdateFn,
 			(itemRenderer:PackageRenderer, state:ListViewItemState) -> {
-				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
 				itemRenderer.updateItemState(null);
+			}, 
+			(itemRenderer:PackageRenderer) -> {
+				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
 			});
 	}
 
