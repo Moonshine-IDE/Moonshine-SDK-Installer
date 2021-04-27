@@ -1,0 +1,25 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+
+name: Moonshine SDK Installer Windows
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout Moonshine-SDK-Installer
+      uses: actions/checkout@v2
+      with:
+        path: './Moonshine-SDK-Installer'
+    - uses: joshtynjala/setup-apache-flex-action@v1
+      with:
+        flex-version: "4.16.1"
+    - name: Build with Ant
+      run: ant -noinput -buildfile 'MoonshineSDKInstaller\build\build.xml'

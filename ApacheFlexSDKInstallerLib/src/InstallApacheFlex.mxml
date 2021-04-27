@@ -381,6 +381,11 @@ variables are not required because the locations of these pieces are known.
 			return _lastPublicMessage;
 		}
 		
+		public function get apacheFlexDownloadURL():String
+		{
+			return APACHE_FLEX_BIN_DISTRO_URL;
+		}
+		
 		//--------------------------------------------------------------------------
 		//
 		//  MASH INTERFACE API
