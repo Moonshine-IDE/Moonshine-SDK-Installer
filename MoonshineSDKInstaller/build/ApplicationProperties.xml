@@ -6,8 +6,8 @@
 	<keepDebugFiles>false</keepDebugFiles> <!-- true|false -->
 
 	<!-- FLEX SDK INFORMATION -->
-	<winSDKPath><![CDATA[C:\MoonshineSDKs\Flex_SDK\Flex_4.16.1_AIR_32.0]]></winSDKPath> <!-- Leave blank if FLEX_HOME setup as environment variable -->
-	<winSDKPath64><![CDATA[C:\MoonshineSDKs\Flex_SDK\Flex_4.16.1_AIR_32.0]]></winSDKPath64> <!-- Leave blank if FLEX_HOME setup as environment variable -->
+	<winSDKPath><![CDATA[]]></winSDKPath> <!-- Leave blank if FLEX_HOME setup as environment variable -->
+	<winSDKPath64><![CDATA[]]></winSDKPath64> <!-- Leave blank if FLEX_HOME setup as environment variable -->
 	<unixSDKPath><![CDATA[]]></unixSDKPath> <!-- Leave blank if FLEX_HOME setup as environment variable -->
 
 	<!-- USE FOLLOWING PROPERTIES SELF-SIGN PACKAGES FOR WINDOWS & MACOS -->
@@ -17,10 +17,10 @@
 	
 	<!-- USE FOLLOWING FIELDS ONLY TO BUILD SIGNED PACKAGES FOR WINDOWS & MACOS -->
 	<isSignedBuild>true</isSignedBuild> <!-- true|false --> <!-- Leave false if you're not sure or do not have requisite certificates -->
-	<certSignedAIR><![CDATA[../../../../SVN/ProminicANTBuilds/libs/Thawte-Adobe-AIR-2014-04-08.p12]]></certSignedAIR> <!-- Relative path to Adobe AIR certificate (.p12) distributed by signing authorities -->
-	<certSignedAIRPass><![CDATA[348fdj4FQb]]></certSignedAIRPass>
-	<certSignedWindowsBinary><![CDATA[../../../../SVN/ProminicANTBuilds/libs/KSoftware-Comodo-CodeSigningCert-Issued-2016-09-14.p12]]></certSignedWindowsBinary> <!-- Relative path to Windows binary installer certificate (.p12) distributed by signer authorities -->
-	<certSignedWindowsBinaryPass><![CDATA[comodo20160915]]></certSignedWindowsBinaryPass>
+	<certSignedAIR><![CDATA[]]></certSignedAIR> <!-- Relative path to Adobe AIR certificate (.p12) distributed by signing authorities -->
+	<certSignedAIRPass><![CDATA[]]></certSignedAIRPass>
+	<certSignedWindowsBinary><![CDATA[]]></certSignedWindowsBinary> <!-- Relative path to Windows binary installer certificate (.p12) distributed by signer authorities -->
+	<certSignedWindowsBinaryPass><![CDATA[]]></certSignedWindowsBinaryPass>
 	<certSignedDevIDKeychainName><![CDATA[]]></certSignedDevIDKeychainName> <!-- apple developer ID name as installed in keychain -->
 	<certSignedMacOSKeychainName><![CDATA[]]></certSignedMacOSKeychainName> <!-- apple developer certificate name as installed in keychain -->
 	<certSignedMacOSKeychainInstallerName><![CDATA[]]></certSignedMacOSKeychainInstallerName> <!-- apple installer certificate name as installed in keychain -->
