@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
-	<installerUpdateCheckUrl>http://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update_v2.xml</installerUpdateCheckUrl>
+	<installerUpdateCheckUrl>https://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update_v2.xml</installerUpdateCheckUrl>
 	<airAdobe version="32.0"/>
-	<airHarman version="33.1"/>
+	<airHarman version="33.1">
+		<download>
+			<windows>
+				<version version="33.1.1.406" displayVersion="33.1.1.406">
+					<path>https://airsdk.harman.com/api/versions/33.1.1.406/sdks</path>
+					<file>AIRSDK_Windows.zip</file>
+				</version>
+			</windows>
+			<mac>
+				<version version="33.1.1.406" displayVersion="33.1.1.406">
+					<path>https://airsdk.harman.com/api/versions/33.1.1.406/sdks</path>
+					<file>AIRSDK_MacOS.zip</file>
+				</version>
+			</mac>
+		</download>
+	</airHarman>
 	<packages>
 		<item integrated="true">
 			<title>Project Management</title>
@@ -169,13 +184,13 @@
 					</diskMBusage>
 					<windows>
 						<version version="4.16.1" displayVersion="4.16.1">
-			            	<path>http://www.apache.org/dyn/closer.lua/flex/4.16.1/binaries/</path>
+			            	<path>https://apachemirror.wuchna.com/flex/4.16.1/binaries/</path>
 		              		<file>apache-flex-sdk-4.16.1-bin.zip</file>
 		            	</version>
 		 			</windows>
 					<mac>
 						<version version="4.16.1" displayVersion="4.16.1">
-		                	<path>http://www.apache.org/dyn/closer.lua/flex/4.16.1/binaries/</path>
+		                	<path>https://apachemirror.wuchna.com/flex/4.16.1/binaries/</path>
 		              		<file>apache-flex-sdk-4.16.1-bin.tar.gz</file>
 		             </version>
 					</mac>

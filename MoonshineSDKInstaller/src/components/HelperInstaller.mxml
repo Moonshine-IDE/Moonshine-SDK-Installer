@@ -245,10 +245,24 @@
 							return;
 						}
 					default:
-						archiveDownloader = new ArchiveDownloader(item);
+						/*archiveDownloader = new ArchiveDownloader(item);
 						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
 						archiveDownloader.viewResourceConstants = viewResourceConstants;
-						archiveDownloader.startInstallation();
+						archiveDownloader.startInstallation();*/
+
+						var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
+						FileUtils.copyFile(
+								File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
+								targetAntFile,
+								true
+						);
+
+						INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
+								targetAntFile,
+								HelperConstants.CONFIG_HARMAN_AIR_SERVER,
+								HelperConstants.CONFIG_HARMAN_AIR_FILE,
+								"?license=accepted"
+						);
 						break;
 				}
 			}
@@ -333,7 +347,24 @@
 				
 				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
 				{
-					
+					var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
+					FileUtils.copyFile(
+							File.applicationDirectory.resolvePath("installer/ant-contrib-0.6.jar"),
+							(new File(itemDownloading.installToPath)).resolvePath("ant-contrib-0.6.jar"),
+							true
+					);
+					FileUtils.copyFile(
+							File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
+							targetAntFile,
+							true
+					);
+
+					INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
+							targetAntFile,
+							HelperConstants.CONFIG_HARMAN_AIR_SERVER,
+							HelperConstants.CONFIG_HARMAN_AIR_FILE,
+							"?license=accepted"
+					);
 				}
 				
 				// sometime distributed zip/tar creates an additional

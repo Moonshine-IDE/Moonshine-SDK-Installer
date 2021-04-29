@@ -19,9 +19,7 @@
 -->
 
 <project name="sdk_harman_ide_install" default="check-OS" basedir=".">
-	
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="ant-contrib-0.6.jar"/>
-	
+
 	<!--
 	//==========================================================================
 	//
@@ -34,10 +32,16 @@
 	<property name="air.download.file" value="${AIR.DOWNLOAD.FILE}"/>
 	<property name="air.download.suffix" value="${AIR.DOWNLOAD.SUFFIX}"/>
 	<property name="dest.air.sdk.directory" location="TEMP/AIR"/>
-	
-	<tstamp>
-		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
-	</tstamp>
+
+	<condition property="isMac" value="mac">
+		<os family="mac" />
+	</condition>
+	<condition property="isWindows" value="windows">
+		<os family="windows" />
+	</condition>
+	<condition property="isLinux" value="linux">
+		<os family="unix" />
+	</condition>
 	
 <!--
 	//==========================================================================
@@ -48,36 +52,34 @@
 	-->
 	
 	<!-- OS Check and decision on opening Task -->
-	<target name="check-OS">
-		<if>
-			<os family="windows"/>
-			<then>
-				<property name="isOSX" value="false"/>
-				<antcall target="dispose-temp-windows" />
-			</then>
-			<elseif>
-				<os family="unix"/>
-				<then>
-					<property name="isOSX" value="true"/>
-					<antcall target="dispose-temp-UNIX" />
-				</then>
-			</elseif>
-		</if>
+	<target name="check-OS" depends="runWindows,runMacOS">
+	</target>
+
+	<target name="runWindows" if="isWindows">
+		<antcall target="dispose-temp-windows" />
+	</target>
+
+	<target name="runMacOS" if="isMac">
+		<antcall target="dispose-temp-UNIX" />
 	</target>
 	
 	<target name="get-air-sdk">
-		<mkdir dir="${dest.air.sdk.directory}" />
-        <get src="${air.download.server}/${air.download.file}{$air.download.suffix}" dest="${dest.air.sdk.directory}"/>
+		<mkdir dir="${basedir}/${dest.air.sdk.directory}" />
+        <!--get src="${air.download.server}/${air.download.file}${air.download.suffix}" dest="${basedir}/${dest.air.sdk.directory}"/-->
+		<copy file="/Users/santanu/Downloads/MoonshineSDKss/Flex_SDK/AIRSDK_MacOS.zip" tofile="${basedir}/${dest.air.sdk.directory}/${air.download.file}" overwrite="true"/>
+		<echo>Copied into: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
 	</target>
 	
 	<target name="unzip-air-sdk">
-        <unzip src="${dest.air.sdk.directory}/${air.download.file}" dest="." />
+		<echo>Starting UNZIP: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
+        <unzip src="${basedir}/${dest.air.sdk.directory}/${air.download.file}" dest="." />
 	</target>
 	
 	<target name="untar-air-sdk">
-		<exec executable="tar" dir=".">
+		<echo>Starting UNTAR: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
+		<exec executable="tar" dir="${basedir}">
             <arg value="-xvf" />
-            <arg value="${dest.air.sdk.directory}/${air.download.file}" />
+            <arg value="${basedir}/${dest.air.sdk.directory}/${air.download.file}" />
         </exec>
 	</target>
 	
@@ -104,9 +106,9 @@
 	
 	<!-- Deletes temporary files for Windows -->
 	<target name="dispose-temp-windows" depends="get-air-sdk,unzip-air-sdk,fixup-air-config-file">
-		<delete dir="TEMP" />
+		<delete dir="${basedir}/TEMP" />
 	</target>
 	<target name="dispose-temp-UNIX" depends="get-air-sdk,untar-air-sdk,fixup-air-config-file">
-		<delete dir="TEMP" />
+		<delete dir="${basedir}/TEMP" />
 	</target>
 </project>

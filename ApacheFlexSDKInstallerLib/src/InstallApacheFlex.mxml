@@ -2527,6 +2527,32 @@ variables are not required because the locations of these pieces are known.
 				completeHandler(null);
 			}
 		}
+
+		public function runInstallerScriptHarmanAIR(antPath:File, server:String, fileName:String, suffix:String):void
+		{
+			ant = new Ant();
+			ant.output = output;
+
+			var file:File = antPath;
+			addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+			var context:Object = {installer: true};
+			// @devsena
+			// MASH
+			context["air.download.server"] = server;
+			context["air.download.file"] = fileName;
+			context["air.download.suffix"] = suffix;
+			context["verbose"] = true;
+
+			if (file.exists && !ant.processXMLFile(file, context, true))
+			{
+				ant.addEventListener(Event.COMPLETE, completeHandler);
+				ant.addEventListener(ProgressEvent.PROGRESS, progressEventHandler);
+			}
+			else
+			{
+				completeHandler(null);
+			}
+		}
 		
 		private function progressEventHandler(event:ProgressEvent):void
 		{

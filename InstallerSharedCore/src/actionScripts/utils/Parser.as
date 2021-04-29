@@ -126,6 +126,8 @@ package actionScripts.utils
 			// store AIR version
 			HelperConstants.CONFIG_ADOBE_AIR_VERSION = xmlData.airAdobe.@version.toString();
 			HelperConstants.CONFIG_HARMAN_AIR_VERSION = xmlData.airHarman.@version.toString();
+			HelperConstants.CONFIG_HARMAN_AIR_SERVER = String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path);
+			HelperConstants.CONFIG_HARMAN_AIR_FILE = String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file);
 			
 			// store 64-bit windows url
 			if (!HelperConstants.IS_MACOS)
