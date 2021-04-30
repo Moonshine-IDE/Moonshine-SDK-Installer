@@ -249,24 +249,10 @@
 							return;
 						}
 					default:
-						/*archiveDownloader = new ArchiveDownloader(item);
+						archiveDownloader = new ArchiveDownloader(item);
 						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
 						archiveDownloader.viewResourceConstants = viewResourceConstants;
-						archiveDownloader.startInstallation();*/
-
-						var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
-						FileUtils.copyFile(
-								File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
-								targetAntFile,
-								true
-						);
-
-						INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
-								targetAntFile,
-								HelperConstants.CONFIG_HARMAN_AIR_SERVER,
-								HelperConstants.CONFIG_HARMAN_AIR_FILE,
-								"?license=accepted"
-						);
+						archiveDownloader.startInstallation();
 						break;
 				}
 			}
@@ -353,22 +339,26 @@
 				{
 					var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
 					FileUtils.copyFile(
-							File.applicationDirectory.resolvePath("installer/ant-contrib-0.6.jar"),
-							(new File(itemDownloading.installToPath)).resolvePath("ant-contrib-0.6.jar"),
-							true
-					);
-					FileUtils.copyFile(
 							File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
 							targetAntFile,
 							true
 					);
 
+					var tmpArr:Array = itemDownloading.downloadURL.split("/");
+					var packageFileName:String = tmpArr[tmpArr.length - 1];
+					packageFileName = HelperConstants.IS_MACOS ?
+							packageFileName.replace(".tar.gz", "") :
+							packageFileName.replace(".zip", "");
+
 					INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
 							targetAntFile,
 							HelperConstants.CONFIG_HARMAN_AIR_SERVER,
 							HelperConstants.CONFIG_HARMAN_AIR_FILE,
-							"?license=accepted"
+							"?license=accepted",
+							packageFileName
 					);
+
+					return;
 				}
 				
 				// sometime distributed zip/tar creates an additional

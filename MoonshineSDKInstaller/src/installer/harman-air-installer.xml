@@ -31,6 +31,7 @@
     <property name="air.download.server" value="${AIR.DOWNLOAD.SERVER}"/>
 	<property name="air.download.file" value="${AIR.DOWNLOAD.FILE}"/>
 	<property name="air.download.suffix" value="${AIR.DOWNLOAD.SUFFIX}"/>
+	<property name="flex.unzipped.folder" value="${FLEX.UNZIPPED.FOLDER}"/>
 	<property name="dest.air.sdk.directory" location="TEMP/AIR"/>
 
 	<condition property="isMac" value="mac">
@@ -56,49 +57,52 @@
 	</target>
 
 	<target name="runWindows" if="isWindows">
+		<echo>Running Windows target</echo>
 		<antcall target="dispose-temp-windows" />
 	</target>
 
 	<target name="runMacOS" if="isMac">
+		<echo>Running Mac target</echo>
 		<antcall target="dispose-temp-UNIX" />
 	</target>
 	
 	<target name="get-air-sdk">
 		<mkdir dir="${basedir}/${dest.air.sdk.directory}" />
-        <!--get src="${air.download.server}/${air.download.file}${air.download.suffix}" dest="${basedir}/${dest.air.sdk.directory}"/-->
-		<copy file="/Users/santanu/Downloads/MoonshineSDKss/Flex_SDK/AIRSDK_MacOS.zip" tofile="${basedir}/${dest.air.sdk.directory}/${air.download.file}" overwrite="true"/>
+		<echo>Downloading Harman AIR SDK</echo>
+        <get src="${air.download.server}/${air.download.file}${air.download.suffix}" dest="${basedir}/${dest.air.sdk.directory}"/>
+		<!--copy file="/Users/santanu/Downloads/MoonshineSDKss/Flex_SDK/AIRSDK_MacOS.zip" tofile="${basedir}/${dest.air.sdk.directory}/${air.download.file}" overwrite="true"/-->
 		<echo>Copied into: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
 	</target>
 	
 	<target name="unzip-air-sdk">
-		<echo>Starting UNZIP: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
+		<echo>Starting to unzip: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
         <unzip src="${basedir}/${dest.air.sdk.directory}/${air.download.file}" dest="." />
 	</target>
 	
 	<target name="untar-air-sdk">
-		<echo>Starting UNTAR: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
+		<echo>Starting to untar: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
 		<exec executable="tar" dir="${basedir}">
             <arg value="-xvf" />
             <arg value="${basedir}/${dest.air.sdk.directory}/${air.download.file}" />
         </exec>
+		<echo>Completed untar Harman AIR SDK</echo>
 	</target>
 	
-	<target name="mac-copy-dir" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo file="${basedir}/maccopy.properties">mac.copy.echo=${mac.copy.echo.pattern}</echo>
-        <property file="${basedir}/maccopy.properties" />
-        <delete file="${basedir}/maccopy.properties" />
-        <echo>${mac.copy.echo}</echo>
-        <exec executable="rsync" dir="${FLEX_HOME}">
+	<target name="mac-copy-flex-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
+        <echo>Moving files to SDK directory</echo>
+        <exec executable="rsync" dir="${basedir}">
             <arg value="--archive" />
             <arg value="--ignore-existing" />
             <arg value="--force" />
-            <arg value="${download.dir}/airsdk/${srcdir}"/>
-            <arg value="${destdir}" />
+            <arg value="${basedir}/${flex.unzipped.folder}/."/>
+            <arg value="${basedir}" />
         </exec>
+		<delete dir="${basedir}/${flex.unzipped.folder}" />
     </target>
 	
 	<target name="fixup-air-config-file">
-        <replace file="frameworks/air-config.xml">
+		<echo>Fixing AIR configuration file</echo>
+        <replace file="${basedir}/frameworks/air-config.xml">
             <replacefilter token="{airHome}/frameworks/"
                             value=""/>
         </replace>
@@ -107,8 +111,11 @@
 	<!-- Deletes temporary files for Windows -->
 	<target name="dispose-temp-windows" depends="get-air-sdk,unzip-air-sdk,fixup-air-config-file">
 		<delete dir="${basedir}/TEMP" />
+		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="get-air-sdk,untar-air-sdk,fixup-air-config-file">
+	<target name="dispose-temp-UNIX" depends="mac-copy-flex-dir,get-air-sdk,untar-air-sdk,fixup-air-config-file">
+		<echo>Trying to delete temp files..</echo>
 		<delete dir="${basedir}/TEMP" />
+		<echo>Deleted temp files.</echo>
 	</target>
 </project>
