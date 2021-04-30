@@ -298,6 +298,7 @@ package actionScripts.utils
 				case ComponentTypes.TYPE_GRAILS:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Grails"+ File.separator +"grails-"+ version;
 				case ComponentTypes.TYPE_OPENJAVA:
+				case ComponentTypes.TYPE_OPENJAVA_V8:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Java"+ File.separator +"openjdk-"+ version;
 				case ComponentTypes.TYPE_GIT:
 					if (HelperConstants.IS_MACOS) return "Command Line Tools";

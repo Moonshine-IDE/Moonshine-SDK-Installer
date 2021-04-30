@@ -8,6 +8,7 @@ package actionScripts.managers
 	import actionScripts.locator.HelperModel;
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.utils.HelperUtils;
+	import actionScripts.utils.JavaVersionReader;
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -19,7 +20,7 @@ package actionScripts.managers
 		private var model:HelperModel = HelperModel.getInstance();
 		private var gitSvnDetector:GitSVNDetector = GitSVNDetector.getInstance();
 		
-		private var _itemTestCount:int;
+		private var _itemTestCount:int = -1;
 		private function get itemTestCount():int
 		{
 			return _itemTestCount;
@@ -35,7 +36,7 @@ package actionScripts.managers
 		
 		public function detect():void
 		{
-			itemTestCount = 0;
+			itemTestCount = -1;
 			HelperConstants.IS_DETECTION_IN_PROCESS = true;
 			if (!HelperConstants.IS_MACOS && !environmentUtil)
 			{
@@ -111,7 +112,28 @@ package actionScripts.managers
 						item.isAlreadyDownloaded = model.moonshineBridge.isGrailsPresent();
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
-						item.isAlreadyDownloaded = model.moonshineBridge.isJavaPresent();
+						if (model.moonshineBridge.isJavaPresent() && model.moonshineBridge.javaVersionForTypeahead)
+						{
+							item.isAlreadyDownloaded =
+								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionForTypeahead, "11.0.10") != 1) ? 
+								true : false;
+						}
+						else
+						{
+							item.isAlreadyDownloaded = false;
+						}
+						break;
+					case ComponentTypes.TYPE_OPENJAVA_V8:
+						if (model.moonshineBridge.isJava8Present() && model.moonshineBridge.javaVersionInJava8Path)
+						{
+							item.isAlreadyDownloaded =
+								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionInJava8Path, "1.8.0") != 1) ? 
+								true : false;
+						}
+						else
+						{
+							item.isAlreadyDownloaded = false;
+						}
 						break;
 					case ComponentTypes.TYPE_GIT:
 						item.isAlreadyDownloaded = model.moonshineBridge.isGitPresent();
@@ -191,10 +213,14 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
+					case ComponentTypes.TYPE_OPENJAVA_V8:
 						if (environmentUtil.environments.JAVA_HOME) 
 						{
-							item.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
-							item.isAlreadyDownloaded = true;
+							var javaVersionReader:JavaVersionReader = new JavaVersionReader();
+							javaVersionReader.component = item;
+							addJavaVersionReaderEvents(javaVersionReader);
+							javaVersionReader.readVersion(environmentUtil.environments.JAVA_HOME.nativePath);
+							return;
 						}
 						break;
 					case ComponentTypes.TYPE_NODEJS:
@@ -230,7 +256,7 @@ package actionScripts.managers
 		
 		private function checkUpdateVersion(againstVersion:String, item:ComponentVO):void
 		{
-			if (HelperUtils.isNewUpdateVersion(againstVersion, item.version))
+			if (HelperUtils.isNewUpdateVersion(againstVersion, item.version) == 1)
 			{
 				item.oldInstalledVersion = againstVersion;
 			}
@@ -278,6 +304,44 @@ package actionScripts.managers
 			}
 			
 			itemTestCount = itemTestCount + 1;
+		}
+		
+		private function addJavaVersionReaderEvents(reader:JavaVersionReader):void
+		{
+			reader.addEventListener(JavaVersionReader.ENV_READ_COMPLETED, onJavaVersionReadCompletes);
+			reader.addEventListener(JavaVersionReader.ENV_READ_ERROR, onJavaVersionReadError);
+		}
+		
+		private function removeJavaVersionReaderEvents(reader:JavaVersionReader):void
+		{
+			reader.removeEventListener(JavaVersionReader.ENV_READ_COMPLETED, onJavaVersionReadCompletes);
+			reader.removeEventListener(JavaVersionReader.ENV_READ_ERROR, onJavaVersionReadError);
+		}
+		
+		private function onJavaVersionReadCompletes(event:HelperEvent):void
+		{
+			var reader:JavaVersionReader = event.target as JavaVersionReader;
+			removeJavaVersionReaderEvents(reader);
+			
+			// for 1.8.0 the founding JDK version must match
+			// for default-JDK the founding JDK version can compare
+			var versionFindIndex:int = HelperUtils.isNewUpdateVersion(reader.component.version, event.value as String);
+			if ((reader.component.version == "1.8.0" && versionFindIndex == -1) || 
+				(reader.component.version != "1.8.0" && versionFindIndex != 0))
+			{
+				reader.component.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
+				reader.component.isAlreadyDownloaded = true;
+			}
+			
+			notifyMoonshineOnDetection(reader.component);
+			reader.component = null;
+		}
+		
+		private function onJavaVersionReadError(event:HelperEvent):void
+		{
+			removeJavaVersionReaderEvents(event.target as JavaVersionReader);
+			notifyMoonshineOnDetection((event.target as JavaVersionReader).component);
+			(event.target as JavaVersionReader).component = null;
 		}
 	}
 }

@@ -68,6 +68,12 @@
 			<componentDependencyIDs>flex,flexHarman,openjava</componentDependencyIDs>
 		</item>
 		<item integrated="false">
+			<title>Java Development</title>
+			<description><![CDATA[Compile Java Applications]]></description>
+			<image></image>
+			<componentDependencyIDs>openjava</componentDependencyIDs>
+		</item>
+		<item integrated="false">
 			<title>Apache Royale Compilation and Debug</title>
 			<description><![CDATA[Compile and launch, or debug Royale projects]]></description>
 			<image></image>
@@ -125,7 +131,7 @@
 			<title>Domino Support</title>
 			<description><![CDATA[Use Domino On Disk Projects and import Java agents]]></description>
 			<image></image>
-			<componentDependencyIDs>notes</componentDependencyIDs>
+			<componentDependencyIDs>notes,openjava8</componentDependencyIDs>
 		</item>
 	</packages>
 	<components>
@@ -259,6 +265,43 @@
 				<mac>bin/javac</mac>
 			</pathValidation>
 			<sdkType>openjava</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://adoptopenjdk.net/</website>
+			<license>
+				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of OpenJDK</description>
+			</license>
+			<download>
+				<variant>
+					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
+					<diskMBusage>
+						<windows>196</windows>
+						<mac>186</mac>
+					</diskMBusage>
+					<windows>
+						<version version="11.0.10" displayVersion="11.0.10">
+			                <path>https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/</path>
+			                <file>OpenJDK11U-jdk_x64_windows_hotspot_11.0.10_9.zip</file>
+			            </version>
+					</windows>
+					<mac>
+						<version version="11.0.10" displayVersion="11.0.10">
+			                <path>https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+			                <file>OpenJDK11U-jdk_x64_mac_hotspot_11.0.10_9.tar.gz</file> <!-- flexSDK.tar.gz -->
+			            </version>
+					</mac>
+				</variant>
+			</download>
+		</item>
+		<item id="openjava8">
+			<title>OpenJDK 8</title>
+			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
+			<image>/helperResources/images/logoOpenJDK.png</image>
+			<pathValidation>
+				<windows>bin/javac.exe</windows>
+				<mac>bin/javac</mac>
+			</pathValidation>
+			<sdkType>openjava8</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://adoptopenjdk.net/</website>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>

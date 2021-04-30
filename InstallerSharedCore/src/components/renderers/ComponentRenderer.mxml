@@ -80,8 +80,8 @@
 			protected function onLicenseClick(event:MouseEvent):void
 			{
 				if (data.type == ComponentTypes.TYPE_FLEX ||
-					data.type == ComponentTypes.TYPE_FLEX_HARMAN || 
-					data.type == ComponentTypes.TYPE_SVN || 
+						data.type == ComponentTypes.TYPE_FLEX_HARMAN ||
+						data.type == ComponentTypes.TYPE_SVN ||
 					(HelperConstants.IS_MACOS && data.type == ComponentTypes.TYPE_GIT)) 
 				{
 					this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, data, true));
@@ -138,7 +138,7 @@
 					  verticalAlign="middle">
 				<s:Label text="{data.title}"
 						 styleName="uiTextRendererLabel"/>
-				<s:Label text="({HelperUtils.getSizeFix(data.sizeInMb)})"
+				<s:Label text="(v{data.version +', '+ HelperUtils.getSizeFix(data.sizeInMb)})"
 						 styleName="uiTextRendererDescription" paddingLeft="6"/>
 			</s:HGroup>
 			<s:Label text="{data.description}" width="100%"
