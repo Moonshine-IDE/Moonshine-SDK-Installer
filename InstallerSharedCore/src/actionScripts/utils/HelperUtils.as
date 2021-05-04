@@ -76,8 +76,16 @@ package actionScripts.utils
 			return null;
 		}
 		
-		public static function isNewUpdateVersion(currentVersion:String, updateVersion:String):Boolean
+		/**
+		 * @returns
+		 * 0 = no
+		 * 1 = yes
+		 * -1 = similar 
+		 */
+		public static function isNewUpdateVersion(currentVersion:String, updateVersion:String):int
 		{
+			if (currentVersion == updateVersion) return -1;
+			
 			var _currentMajor:int = -1;
 			var _currentMinor:int = -1;
 			var _currentRevision:int = -1;
@@ -95,11 +103,11 @@ package actionScripts.utils
 			var uv2:Number = Number(tmpSplit[1]);
 			var uv3:Number = Number(tmpSplit[2]);
 			
-			if (uv1 > _currentMajor) return true;
-			else if (uv1 >= _currentMajor && uv2 > _currentMinor) return true;
-			else if (uv1 >= _currentMajor && uv2 >= _currentMinor && uv3 > _currentRevision) return true;
+			if (uv1 > _currentMajor) return 1;
+			else if (uv1 >= _currentMajor && uv2 > _currentMinor) return 1;
+			else if (uv1 >= _currentMajor && uv2 >= _currentMinor && uv3 > _currentRevision) return 1;
 			
-			return false;
+			return 0;
 		}
 		
 		public static function getMacOSDownloadsDirectory():File

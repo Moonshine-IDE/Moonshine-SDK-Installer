@@ -27,29 +27,29 @@
   </moonshineResourcePaths>
   <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
   <build>
-    <option customSDK="/Users/santanu/Downloads/MoonshineSDKs/Flex_SDK/Flex_4.16.1_AIR_33.1"/>
-    <option showUnusedTypeSelectorWarnings="True"/>
-    <option es="False"/>
-    <option staticLinkRSL="False"/>
-    <option strict="True"/>
-    <option loadConfig=""/>
-    <option compilerConstants=""/>
-    <option antBuildPath=""/>
-    <option useNetwork="True"/>
-    <option optimize="True"/>
-    <option sourceMap="False"/>
-    <option useResourceBundleMetadata="True"/>
-    <option showActionScriptWarnings="True"/>
-    <option accessible="True"/>
-    <option warnings="True"/>
-    <option locale=""/>
-    <option showBindingWarnings="True"/>
     <option allowSourcePathOverlap="False"/>
     <option verboseStackTraces="False"/>
     <option showDeprecationWarnings="True"/>
-    <option additional="-locale en_US -allow-source-path-overlap=true -swf-version 41 +configname=air"/>
-    <option benchmark="False"/>
+    <option es="False"/>
     <option linkReport=""/>
+    <option customSDK="/Users/santanu/Downloads/MoonshineSDKs/Flex_SDK/Flex_4.16.1_AIR_33.1"/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option showActionScriptWarnings="True"/>
+    <option staticLinkRSL="False"/>
+    <option accessible="True"/>
+    <option locale=""/>
+    <option loadConfig=""/>
+    <option compilerConstants=""/>
+    <option useNetwork="True"/>
+    <option optimize="True"/>
+    <option sourceMap="False"/>
+    <option benchmark="False"/>
+    <option useResourceBundleMetadata="True"/>
+    <option additional="-locale en_US -allow-source-path-overlap=true -swf-version 41 +configname=air"/>
+    <option showBindingWarnings="True"/>
+    <option antBuildPath=""/>
+    <option warnings="True"/>
+    <option strict="True"/>
   </build>
   <mavenBuild>
     <option settingsFilePath=""/>
@@ -85,24 +85,26 @@
   <postBuildCommand alwaysRun="False">null</postBuildCommand>
   <trustSVNCertificate>False</trustSVNCertificate>
   <options>
-    <option testMovie="AIR"/>
-    <option isExportedToExistingSource="False"/>
-    <option testMovieCommand=""/>
-    <option visualEditorExportPath=""/>
-    <option showHiddenPaths="False"/>
-    <option isPrimeFacesVisualEditor="False"/>
     <option defaultBuildTargets=""/>
     <option isRoyale="False"/>
+    <option isPrimeFacesVisualEditor="False"/>
+    <option isDominoVisualEditor="False"/>
+    <option testMovie="AIR"/>
+    <option isExportedToExistingSource="False"/>
+    <option visualEditorExportPath=""/>
+    <option jdkType="default-java"/>
+    <option testMovieCommand=""/>
+    <option showHiddenPaths="False"/>
   </options>
   <moonshineRunCustomization>
+    <option targetPlatform="1"/>
+    <option launchMethod="Simulator"/>
+    <option webBrowser="null"/>
     <option deviceConnectType="USB"/>
     <option customUrlToLaunch=""/>
-    <option targetPlatform="1"/>
-    <option deviceSimulator="null"/>
-    <option webBrowser="null"/>
     <option projectType="1"/>
     <option urlToLaunch=""/>
-    <option launchMethod="Simulator"/>
+    <option deviceSimulator="null"/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>

@@ -1,12 +1,7 @@
 package actionScripts.utils
 {
-	import flash.desktop.NativeProcess;
-	import flash.desktop.NativeProcessStartupInfo;
-	import flash.events.EventDispatcher;
-	import flash.events.IOErrorEvent;
 	import flash.events.NativeProcessExitEvent;
 	import flash.events.ProgressEvent;
-	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
 	import actionScripts.valueObjects.EnvironmentVO;
@@ -16,13 +11,11 @@ package actionScripts.utils
 	
 	[Event(name="ENV_READ_COMPLETED", type="moonshine.events.HelperEvent")]
 	[Event(name="ENV_READ_ERROR", type="moonshine.events.HelperEvent")]
-	public class EnvironmentUtils extends EventDispatcher
+	public class EnvironmentUtils extends NativeProcessBase
 	{
 		public static const ENV_READ_COMPLETED:String = "ENV_READ_COMPLETED";
 		public static const ENV_READ_ERROR:String = "ENV_READ_ERROR";
 		
-		private var customProcess:NativeProcess;
-		private var customInfo:NativeProcessStartupInfo;
 		private var errorCloseData:String;
 		private var environmentData:String;
 		
@@ -47,17 +40,13 @@ package actionScripts.utils
 				// we need a container to hold the breakups
 				environmentData = "";
 				
-				customInfo = new NativeProcessStartupInfo();
-				customInfo.executable = new File("c:\\Windows\\System32\\cmd.exe");
-				
-				customInfo.arguments = new <String>["/c", "set"];
-				startShell();
+				start(new <String>["set"]);
 			}
 		}
 
-		private function shellData(e:ProgressEvent):void 
+		override protected function onNativeProcessStandardOutputData(event:ProgressEvent):void 
 		{
-			var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
+			var output:IDataInput = (nativeProcess.standardOutput.bytesAvailable != 0) ? nativeProcess.standardOutput : nativeProcess.standardError;
 			var data:String = output.readUTFBytes(output.bytesAvailable);
 
 			var match:Array = data.match(/fatal: .*/);
@@ -71,24 +60,25 @@ package actionScripts.utils
 			}
 		}
 		
-		private function shellError(e:ProgressEvent):void 
+		override protected function onNativeProcessStandardErrorData(event:ProgressEvent):void 
 		{
-			if (customProcess)
+			if (nativeProcess)
 			{
-				var output:IDataInput = customProcess.standardError;
+				var output:IDataInput = nativeProcess.standardError;
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
 
 				errorCloseData = data;
-				stopShell();
+				dispose();
+				
 				this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
 			}
 		}
 		
-		private function shellExit(e:NativeProcessExitEvent):void 
+		override protected function onNativeProcessExit(event:NativeProcessExitEvent):void 
 		{
-			if (customProcess) 
+			if (nativeProcess) 
 			{
-				stopShell();
+				dispose();
 				
 				// parse
 				if (errorCloseData)
@@ -111,39 +101,6 @@ package actionScripts.utils
 				// pass completion
 				this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED, environmentData));
 			}
-		}
-
-		private function startShell():void
-		{
-			customProcess = new NativeProcess();
-			customProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, shellData);
-
-			// @note
-			// for some strange reason all the standard output turns to standard error output by git command line.
-			// to have them dictate and continue the native process (without terminating by assuming as an error)
-			// let's listen standard errors to shellData method only
-			customProcess.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, shellData);
-
-			customProcess.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR, shellError);
-			customProcess.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, shellError);
-			customProcess.addEventListener(NativeProcessExitEvent.EXIT, shellExit);
-			customProcess.start(customInfo);
-		}
-
-		private function stopShell():void
-		{
-			if (!customProcess) return;
-
-			customProcess.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, shellData);
-			customProcess.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA, shellData);
-			customProcess.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR, shellError);
-			customProcess.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, shellError);
-			customProcess.removeEventListener(NativeProcessExitEvent.EXIT, shellExit);
-			if (customProcess.running)
-			{
-				customProcess.exit();
-			}
-			customProcess = null;
 		}
 	}
 }
