@@ -2528,7 +2528,7 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 
-		public function runInstallerScriptHarmanAIR(antPath:File, server:String, fileName:String, suffix:String, flexUnzippedFolderName:String):void
+		public function runInstallerScriptHarmanAIR(antPath:File, server:String, fileName:String, suffix:String, versionNumber:String, flexUnzippedFolderName:String):void
 		{
 			ant = new Ant();
 			ant.output = output;
@@ -2543,6 +2543,7 @@ variables are not required because the locations of these pieces are known.
 			context["air.download.file"] = fileName;
 			context["air.download.suffix"] = suffix;
 			context["flex.unzipped.folder"] = flexUnzippedFolderName;
+			context["air.download.version"] = versionNumber;
 			context["verbose"] = true;
 
 			if (file.exists && !ant.processXMLFile(file, context, true))

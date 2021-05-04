@@ -70,14 +70,13 @@
 	<target name="get-air-sdk">
 		<mkdir dir="${basedir}/${dest.air.sdk.directory}" />
 		<echo>Downloading Harman AIR SDK v.${air.download.version}</echo>
-        <get src="${air.download.server}/${air.download.file}${air.download.suffix}" dest="${basedir}/${dest.air.sdk.directory}"/>
-		<!--copy file="/Users/santanu/Downloads/MoonshineSDKss/Flex_SDK/AIRSDK_MacOS.zip" tofile="${basedir}/${dest.air.sdk.directory}/${air.download.file}" overwrite="true"/-->
-		<echo>Copied into: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
+        <get src="${air.download.server}${air.download.file}${air.download.suffix}" dest="${basedir}/${dest.air.sdk.directory}"/>
 	</target>
 	
 	<target name="unzip-air-sdk">
 		<echo>Starting to unzip: ${basedir}/${dest.air.sdk.directory}/${air.download.file}</echo>
-        <unzip src="${basedir}/${dest.air.sdk.directory}/${air.download.file}" dest="${basedir}" overwrite="true"/>
+        <unzip overwrite="true" src="${basedir}/${dest.air.sdk.directory}/${air.download.file}" dest="${basedir}"/>
+		<echo>Completed unzip Harman AIR SDK</echo>
 	</target>
 	
 	<target name="untar-air-sdk">
@@ -114,8 +113,7 @@
 		<delete dir="${basedir}/TEMP" />
 		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="mac-copy-flex-dir,get-air-sdk,unzip-air-sdk,fixup-air-config-file">
-		<echo>Trying to delete temp files..</echo>
+	<target name="dispose-temp-UNIX" depends="mac-copy-flex-dir,get-air-sdk,untar-air-sdk,fixup-air-config-file">
 		<delete dir="${basedir}/TEMP" />
 		<echo>Deleted temp files.</echo>
 	</target>

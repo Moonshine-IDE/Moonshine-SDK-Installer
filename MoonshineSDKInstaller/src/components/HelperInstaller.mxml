@@ -59,6 +59,7 @@
 			private var archiveDownloader:ArchiveDownloader;
 			private var viewResourceConstants:ViewResourceConstants;
 			private var itemDownloading:ComponentVO;
+			private var isHarmanAIRDownloading:Boolean;
 			
 			private var _moonshineNotifier:MoonshineNotifier;
 			private function get moonshineNotifier():MoonshineNotifier
@@ -311,7 +312,7 @@
 			{
 				progressBar.percent = event.value as Number;
 			}
-			private var isCalledOnce:Boolean;
+			
 			private function onInstallationFinished(event:GenericEvent):void
 			{
 				// TEMPORARY PATCH-FIX
@@ -335,9 +336,12 @@
 					}
 				}
 				
-				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isCalledOnce)
+				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
 				{
-					isCalledOnce = true;
+					isHarmanAIRDownloading = true;
+					itemDownloading.isDownloaded = false;
+					itemDownloading.isDownloading = true;
+
 					var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
 					FileUtils.copyFile(
 							File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
@@ -356,6 +360,7 @@
 							HelperConstants.CONFIG_HARMAN_AIR_SERVER,
 							HelperConstants.CONFIG_HARMAN_AIR_FILE,
 							"?license=accepted",
+							HelperConstants.CONFIG_HARMAN_AIR_VERSION,
 							packageFileName
 					);
 

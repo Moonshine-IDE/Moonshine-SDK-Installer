@@ -6,14 +6,14 @@
 		<download>
 			<windows>
 				<version version="33.1.1.406" displayVersion="33.1.1.406">
-					<path>https://airsdk.harman.com/api/versions/33.1.1.406/sdks</path>
-					<file>AIRSDK_Windows.zip</file>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.476/sdks/</path>
+					<file>/AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
 				<version version="33.1.1.406" displayVersion="33.1.1.406">
-					<path>https://airsdk.harman.com/api/versions/33.1.1.406/sdks</path>
-					<file>AIRSDK_MacOS.zip</file>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.476/sdks/</path>
+					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
 		</download>
