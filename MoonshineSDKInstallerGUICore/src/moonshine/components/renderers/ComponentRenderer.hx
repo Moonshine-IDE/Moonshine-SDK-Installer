@@ -146,6 +146,11 @@ class ComponentRenderer extends LayoutGroup {
 		this.assetConfigure = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoConfigure.png", assetLoaderLayoutData);
 		stateImageContainer.addChild(this.assetConfigure);
 
+		var tmpIconTest = new LayoutGroup();
+		tmpIconTest.variant = SDKInstallerTheme.IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL;
+		tmpIconTest.layoutData = assetLoaderLayoutData;
+		stateImageContainer.addChild(tmpIconTest);
+
 		super.initialize();
 	}
 

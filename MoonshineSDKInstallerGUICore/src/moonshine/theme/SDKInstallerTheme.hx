@@ -20,6 +20,7 @@
 
 package moonshine.theme;
 
+import openfl.geom.Matrix;
 import feathers.controls.dataRenderers.LayoutGroupItemRenderer;
 import feathers.controls.Button;
 import feathers.controls.Callout;
@@ -51,6 +52,7 @@ import moonshine.style.MoonshineButtonSkin;
 import openfl.display.Shape;
 import openfl.filters.GlowFilter;
 import openfl.text.TextFormat;
+import moonshine.theme.assets.DownloadIconWithLabel;
 
 class SDKInstallerTheme extends ClassVariantTheme {
 	private static var _instance:SDKInstallerTheme;
@@ -74,6 +76,8 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_BODY_WITH_GREY_BACKGROUND:String = "moonshine-layoutgroup-grey-background";
 	public static final THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND:String = "moonshine-layoutgroup-white-background";
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
+	
+	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
 
 	public function new() {
 		super();
@@ -119,6 +123,8 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(TreeView, TreeView.VARIANT_BORDERLESS, setBorderlessTreeViewStyles);
 		this.styleProvider.setStyleFunction(TreeViewItemRenderer, null, setTreeViewItemRendererStyles);
 		this.styleProvider.setStyleFunction(ToggleButton, TreeViewItemRenderer.CHILD_VARIANT_DISCLOSURE_BUTTON, setTreeViewItemRendererDisclosureButtonStyles);
+
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, setImageDownloadWithLabelStyles);
 	}
 
 	private function setLightButtonStyles(button:Button):Void {
@@ -828,5 +834,16 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		selectedIcon.graphics.lineTo(2.0, 2.0);
 		selectedIcon.graphics.endFill();
 		button.selectedIcon = selectedIcon;
+	}
+	
+	private function setImageDownloadWithLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new DownloadIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new Shape();
+		backgroundSkin.graphics.beginBitmapFill(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.graphics.drawRect(0, 0, layout.width, layout.height);
+		backgroundSkin.graphics.endFill();
+
+		layout.backgroundSkin = backgroundSkin;
 	}
 }
