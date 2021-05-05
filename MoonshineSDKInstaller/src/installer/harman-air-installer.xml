@@ -58,12 +58,10 @@
 	</target>
 
 	<target name="runWindows" if="isWindows">
-		<echo>Running Windows target</echo>
 		<antcall target="dispose-temp-windows" />
 	</target>
 
 	<target name="runMacOS" if="isMac">
-		<echo>Running Mac target</echo>
 		<antcall target="dispose-temp-UNIX" />
 	</target>
 	
@@ -97,6 +95,12 @@
             <arg value="${basedir}/${flex.unzipped.folder}/."/>
             <arg value="${basedir}" />
         </exec>
+		<replace file="${basedir}/flex-sdk-description.xml">
+			<replacefilter token="FP27.0"
+						   value="FP33.1"/>
+			<replacefilter token="AIR27.0"
+						   value="AIR33.1"/>
+		</replace>
 		<delete dir="${basedir}/${flex.unzipped.folder}" />
     </target>
 	

@@ -2532,6 +2532,7 @@ variables are not required because the locations of these pieces are known.
 		{
 			ant = new Ant();
 			ant.output = output;
+			cleanedUp = false;
 			_flexTempDir = null;
 
 			var file:File = antPath;

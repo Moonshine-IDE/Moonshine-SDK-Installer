@@ -35,6 +35,7 @@
 			[Bindable] private var currentLicenseURL:String;
 			
 			private var model:HelperModel = HelperModel.getInstance();
+			private var isHarmanAIRDownload:Boolean;
 			
 			private function onAllLicenseViewCreationComplete():void
 			{
@@ -81,6 +82,8 @@
 				
 				if (flexItem)
 				{
+					isHarmanAIRDownload = (flexItem.licenseUrl.indexOf("harman") != -1);
+
 					var req:URLRequest = new URLRequest(flexItem.licenseUrl);
 					var loader:ApacheURLLoader = new ApacheURLLoader();
 					loader.dataFormat = URLLoaderDataFormat.TEXT;
@@ -109,7 +112,7 @@
 			private function handleFlexCopyrightLoaded(event:Event):void
 			{
 				attachLoaderListeners(event.target as ApacheURLLoader, false);
-				
+
 				var data:XML = XML(event.target.data);
 				var compDList:XMLList = data.component.copy();
 				var tmpChildrens:ArrayCollection = new ArrayCollection();
@@ -122,7 +125,10 @@
 					tmpChildrens.addItem(vo);
 				}
 				
-				copyrightComponentsDataProvider.addItem({label:"Apache Flex®", children:tmpChildrens});
+				copyrightComponentsDataProvider.addItem({
+					label:"Apache Flex ®, " + (isHarmanAIRDownload ? "Harman AIR" : "Adobe® AIR®"),
+					children:tmpChildrens
+				});
 				if (!singleLicenseItem) 
 				{
 					addMoreLicenses();
@@ -237,7 +243,7 @@
 				 alternatingItemColors="[0x444444, 0x4d4c4c]"
 				 verticalScrollBarStyleName="black"
 				 borderVisible="false"
-				 rowHeight="18"
+				 fontSize="14"
 				 useRollOver="true"
 				 iconFunction="{getIconForFile}"
 				 borderStyle="none"
@@ -248,7 +254,7 @@
 				  gap="5" paddingTop="10" paddingBottom="10">
 			<s:Label text="{currentLicenseLabel}" fontWeight="bold"/>
 			<s:TextArea id="optionalInstallsTxtArea" text="This installer will download software from multiple sites with various license agreements. Please click on each item on the left, read the license and confirm that you agree to the terms of each license by checking the checkbox next to it."
-						fontSize="12"
+						fontSize="14"
 						width="100%"
 						height="100%"
 						editable="false"/>

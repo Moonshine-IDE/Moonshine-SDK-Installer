@@ -143,7 +143,7 @@
 			<sdkType>flex</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>http://flex.apache.org</website>
 			<license>
-				<url>http://www.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-installer-config.xml</url>
+				<url>https://www.apache.org/dist/flex/4.16.1/binaries/apache-flex-sdk-installer-config.xml</url>
 				<title></title>
 				<description></description>
 			</license>
