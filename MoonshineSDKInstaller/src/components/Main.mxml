@@ -5,7 +5,9 @@
 		 creationComplete="onCreationCompletes(event)" xmlns:controls="ws.tink.spark.controls.*">
 	<fx:Script>
 		<![CDATA[
-			import flash.net.navigateToURL;
+		import actionScripts.managers.StartupHelper;
+
+		import flash.net.navigateToURL;
 			import flash.utils.setTimeout;
 			
 			import mx.collections.ArrayCollection;
@@ -49,7 +51,7 @@
 			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
-				setLocalPathConfig();
+				StartupHelper.setLocalPathConfig();
 				loadMoonshineConfig();
 			}
 			
@@ -101,17 +103,6 @@
 			{
 				packageLists[currentItemInstallationIndex].isDownloading = false;
 				packageLists[currentItemInstallationIndex].hasError = true;
-			}
-			
-			protected function setLocalPathConfig():void
-			{
-				var tmpUserFolderSplit: Array = File.userDirectory.nativePath.split(File.separator);
-				if (tmpUserFolderSplit[1] == "Users")
-				{
-					tmpUserFolderSplit = tmpUserFolderSplit.slice(1, 3);
-				}
-				
-				defaultInstallPathToSDK = new File("/" + tmpUserFolderSplit.join("/") + "/Downloads/MoonshineSDKs");
 			}
 			
 			protected function loadMoonshineConfig():void

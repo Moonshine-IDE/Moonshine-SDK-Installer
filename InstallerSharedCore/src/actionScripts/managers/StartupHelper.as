@@ -15,9 +15,13 @@ package actionScripts.managers
 	{
 		public static const EVENT_CONFIG_LOADED:String = "eventConfigLoaded";
 		public static const EVENT_CONFIG_ERROR:String = "eventConfigError";
+
+		private static var isLocalPathConfigured:Boolean;
 		
-		public function setLocalPathConfig():void
+		public static function setLocalPathConfig():void
 		{
+			if (isLocalPathConfigured) return;
+
 			if (HelperConstants.IS_MACOS)
 			{
 				// for macOS ~/Downloads directory
@@ -47,6 +51,8 @@ package actionScripts.managers
 					HelperConstants.IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH = true;
 				}
 			}
+
+			isLocalPathConfigured = true;
 		}
 		
 		public function loadMoonshineConfig():void
