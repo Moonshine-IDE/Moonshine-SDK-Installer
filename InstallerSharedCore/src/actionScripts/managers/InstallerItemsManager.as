@@ -38,7 +38,7 @@ package actionScripts.managers
 				CookieManager.getInstance().loadLocalStorage();
 				
 				attachStartupHelperListeners(true);
-				startupHelper.setLocalPathConfig();
+				StartupHelper.setLocalPathConfig();
 				startupHelper.loadMoonshineConfig();
 			}
 			else
