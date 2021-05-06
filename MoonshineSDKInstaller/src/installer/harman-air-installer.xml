@@ -95,12 +95,7 @@
             <arg value="${basedir}/${flex.unzipped.folder}/."/>
             <arg value="${basedir}" />
         </exec>
-		<replace file="${basedir}/flex-sdk-description.xml">
-			<replacefilter token="FP27.0"
-						   value="FP33.1"/>
-			<replacefilter token="AIR27.0"
-						   value="AIR33.1"/>
-		</replace>
+		<antcall target="fixup-flex-config-file" />
 		<delete dir="${basedir}/${flex.unzipped.folder}" />
     </target>
 	
@@ -111,9 +106,19 @@
                             value=""/>
         </replace>
     </target>
+
+	<target name="fixup-flex-config-file">
+		<echo>Fixing Flex configuration file</echo>
+		<replace file="${basedir}/flex-sdk-description.xml">
+			<replacefilter token="FP27.0"
+						   value="FP33.1"/>
+			<replacefilter token="AIR27.0"
+						   value="AIR33.1"/>
+		</replace>
+	</target>
 	
 	<!-- Deletes temporary files for Windows -->
-	<target name="dispose-temp-windows" depends="get-air-sdk,unzip-air-sdk,fixup-air-config-file">
+	<target name="dispose-temp-windows" depends="fixup-flex-config-file,get-air-sdk,unzip-air-sdk,fixup-air-config-file">
 		<delete dir="${basedir}/TEMP" />
 		<echo>Deleted temp files.</echo>
 	</target>
