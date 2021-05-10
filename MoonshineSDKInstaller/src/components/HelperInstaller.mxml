@@ -53,6 +53,7 @@
 			[Bindable] private var sdkPathMessage:String;
 			[Bindable] private var isDownloadInProgress:Boolean;
 			[Bindable] private var allInstallButtonLabel:String = "INSTALL EVERYTHING NOW!";
+			[Bindable] private var isDownloadedAll:Boolean;
 			
 			private var model:HelperModel = HelperModel.getInstance();
 			private var packageLists:Array = [];
@@ -467,7 +468,9 @@
 			
 			private function updateAllInstallButtonLabel():void
 			{
-				btnInstallAll.label = allInstallButtonLabel +" ("+ HelperUtils.getTotalDiskSizePendingItems() +")";
+				var tmpSize:String = HelperUtils.getTotalDiskSizePendingItems();
+				btnInstallAll.label = allInstallButtonLabel +" ("+ tmpSize +")";
+				isDownloadedAll = (tmpSize == "0 MB");
 			}
 			
 			private function onShowLog(event:MouseEvent):void
@@ -558,7 +561,7 @@
 		<s:Button id="btnInstallAll" 
 				  click="openLicenseView(allInstallConfirmHandler)"
 				  horizontalCenter="0" verticalCenter="0"
-				  enabled="{HelperConstants.IS_INSTALLER_READY}"
+				  enabled="{HelperConstants.IS_INSTALLER_READY &amp;&amp; !isDownloadedAll}"
 				  icon="@Embed('/assets/images/icoDownloadSmall.png')"
 				  styleName="greyButton"/>
 		<s:Label id="lblInstalling" 
