@@ -98,9 +98,11 @@ class PackageRenderer extends LayoutGroup {
 		assetLoaderLayoutData.horizontalCenter = 0.0;
 		assetLoaderLayoutData.verticalCenter = 0.0;
 
-		var assetTick = new AssetLoader();
+		var assetTick = new LayoutGroup();
+		assetTick.width = 42;
+		assetTick.height = 46;
+		assetTick.variant = SDKInstallerTheme.IMAGE_VARIANT_DOWNLOADED_ICON_WITH_LABEL;
 		assetTick.layoutData = assetLoaderLayoutData;
-		assetTick.source = "/helperResources/images/icoTickLabel.png";
 		this.stateImageContainer.addChild(assetTick);
 
 		super.initialize();

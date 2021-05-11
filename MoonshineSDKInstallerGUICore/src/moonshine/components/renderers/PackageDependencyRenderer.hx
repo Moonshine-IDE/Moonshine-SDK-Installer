@@ -26,13 +26,13 @@ import feathers.core.InvalidationFlag;
 import moonshine.theme.SDKInstallerTheme;
 
 class PackageDependencyRenderer extends LayoutGroup {
-	private var assetDownloaded:AssetLoader;
-	private var assetNote:AssetLoader;
-	private var assetError:AssetLoader;
-	private var assetDownload:AssetLoader;
-	private var assetReDownload:AssetLoader;
-	private var assetQueued:AssetLoader;
-	private var assetConfigure:AssetLoader;
+	private var assetDownloaded:LayoutGroup;
+	private var assetNote:LayoutGroup;
+	private var assetError:LayoutGroup;
+	private var assetDownload:Button;
+	private var assetReDownload:Button;
+	private var assetQueued:LayoutGroup;
+	private var assetConfigure:LayoutGroup;
 	private var stateData:ComponentVO;
 	private var lblTitle:Label;
 	private var cmbVariants:PopUpListView;
@@ -91,27 +91,41 @@ class PackageDependencyRenderer extends LayoutGroup {
 		stateImageContainer.layoutData = new HorizontalLayoutData(null, 100);
 		this.addChild(stateImageContainer);
 
-		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNoteNoLabel.png");
+		this.assetNote = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_NOTE_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetNote.width = 32;
+		this.assetNote.height = 32;
 		stateImageContainer.addChild(this.assetNote);
 
-		this.assetError = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoErrorNoLabel.png");
+		this.assetError = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_ERROR_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetError.width = 33;
+		this.assetError.height = 32;
 		stateImageContainer.addChild(this.assetError);
 
-		this.assetDownloaded = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoTickNoLabel.png");
+		this.assetDownloaded = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_DOWNLOADED_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetDownloaded.width = 36;
+		this.assetDownloaded.height = 32;
 		stateImageContainer.addChild(this.assetDownloaded);
 
-		this.assetDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoDownloadNoLabel.png");
-		this.assetDownload.buttonMode = true;
+		this.assetDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetDownload.width = 42;
+		this.assetDownload.height = 32;
 		this.assetDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetDownload);
 
-		this.assetReDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoReDownloadNoLabel.png");
+		this.assetReDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetReDownload.width = 42;
+		this.assetReDownload.height = 32;
+		//this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetReDownload);
 
-		this.assetQueued = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoQueuedNoLabel.png");
+		this.assetQueued = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetQueued.width = 33;
+		this.assetQueued.height = 32;
 		stateImageContainer.addChild(this.assetQueued);
 
-		this.assetConfigure = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoConfigureNoLabel.png");
+		this.assetConfigure = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetConfigure.width = 32;
+		this.assetConfigure.height = 32;
 		stateImageContainer.addChild(this.assetConfigure);
 
 		super.initialize();
@@ -130,11 +144,24 @@ class PackageDependencyRenderer extends LayoutGroup {
 		super.update();
 	}
 
-	private function getNewAssetLoaderForStateIcons(srcPath:String):AssetLoader {
-		var tmpAsset = new AssetLoader();
+	private function getNewAssetButtonForStateIcons(variant:String, layoutData:AnchorLayoutData):Button {
+		var tmpAsset = new Button();
+		tmpAsset.useHandCursor = true;
+		tmpAsset.layoutData = layoutData;
 		tmpAsset.visible = false;
 		tmpAsset.includeInLayout = false;
-		tmpAsset.source = srcPath;
+		tmpAsset.variant = variant;
+
+		return tmpAsset;
+	}
+
+	private function getNewAssetLayoutForStateIcons(variant:String, layoutData:AnchorLayoutData):LayoutGroup {
+		var tmpAsset = new LayoutGroup();
+		tmpAsset.useHandCursor = true;
+		tmpAsset.layoutData = layoutData;
+		tmpAsset.visible = false;
+		tmpAsset.includeInLayout = false;
+		tmpAsset.variant = variant;
 
 		return tmpAsset;
 	}
@@ -154,7 +181,6 @@ class PackageDependencyRenderer extends LayoutGroup {
 
 	private function resetFields():Void {
 		this.lblTitle.text = "";
-		this.assetDownloaded.source = null;
 	}
 
 	private function updateItemIconState():Void {

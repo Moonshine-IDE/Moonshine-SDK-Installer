@@ -53,6 +53,19 @@ import openfl.display.Shape;
 import openfl.filters.GlowFilter;
 import openfl.text.TextFormat;
 import moonshine.theme.assets.DownloadIconWithLabel;
+import moonshine.theme.assets.DownloadIconWithoutLabel;
+import moonshine.theme.assets.NoteIconWithLabel;
+import moonshine.theme.assets.NoteIconWithoutLabel;
+import moonshine.theme.assets.DownloadedIconWithLabel;
+import moonshine.theme.assets.DownloadedIconWithoutLabel;
+import moonshine.theme.assets.ErrorIconWithLabel;
+import moonshine.theme.assets.ErrorIconWithoutLabel;
+import moonshine.theme.assets.ConfigureIconWithLabel;
+import moonshine.theme.assets.ConfigureIconWithoutLabel;
+import moonshine.theme.assets.QueuedIconWithLabel;
+import moonshine.theme.assets.QueuedIconWithoutLabel;
+import moonshine.theme.assets.RedownloadIconWithLabel;
+import moonshine.theme.assets.RedownloadIconWithoutLabel;
 
 class SDKInstallerTheme extends ClassVariantTheme {
 	private static var _instance:SDKInstallerTheme;
@@ -78,6 +91,19 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
 	
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
+	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-download-with-no-label";
+	public static final IMAGE_VARIANT_NOTE_ICON_WITH_LABEL:String = "image-icon-note-with-label";
+	public static final IMAGE_VARIANT_NOTE_ICON_WITH_NO_LABEL:String = "image-icon-note-with-no-label";
+	public static final IMAGE_VARIANT_DOWNLOADED_ICON_WITH_LABEL:String = "image-icon-downloaded-with-label";
+	public static final IMAGE_VARIANT_DOWNLOADED_ICON_WITH_NO_LABEL:String = "image-icon-downloaded-with-no-label";
+	public static final IMAGE_VARIANT_ERROR_ICON_WITH_LABEL:String = "image-icon-error-with-label";
+	public static final IMAGE_VARIANT_ERROR_ICON_WITH_NO_LABEL:String = "image-icon-error-with-no-label";
+	public static final IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL:String = "image-icon-configure-with-label";
+	public static final IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL:String = "image-icon-configure-with-no-label";
+	public static final IMAGE_VARIANT_QUEUED_ICON_WITH_LABEL:String = "image-icon-queued-with-label";
+	public static final IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL:String = "image-icon-queued-with-no-label";
+	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL:String = "image-icon-redownload-with-label";
+	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-redownload-with-no-label";
 
 	public function new() {
 		super();
@@ -124,7 +150,20 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(TreeViewItemRenderer, null, setTreeViewItemRendererStyles);
 		this.styleProvider.setStyleFunction(ToggleButton, TreeViewItemRenderer.CHILD_VARIANT_DISCLOSURE_BUTTON, setTreeViewItemRendererDisclosureButtonStyles);
 
-		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, setImageDownloadWithLabelStyles);
+		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, setImageDownloadWithLabelStyles);
+		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL, setImageDownloadWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_NOTE_ICON_WITH_LABEL, setImageNoteWithLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_NOTE_ICON_WITH_NO_LABEL, setImageNoteWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADED_ICON_WITH_LABEL, setImageDownloadedWithLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADED_ICON_WITH_NO_LABEL, setImageDownloadedWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_ERROR_ICON_WITH_LABEL, setImageErrorWithLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_ERROR_ICON_WITH_NO_LABEL, setImageErrorWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL, setImageConfigureWithLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, setImageConfigureWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_QUEUED_ICON_WITH_LABEL, setImageQueuedWithLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL, setImageQueuedWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL, setImageRedownloadWithLabelStyles);
+		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, setImageRedownloadWithoutLabelStyles);
 	}
 
 	private function setLightButtonStyles(button:Button):Void {
@@ -836,13 +875,156 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		button.selectedIcon = selectedIcon;
 	}
 	
-	private function setImageDownloadWithLabelStyles(layout:LayoutGroup):Void 
+	private function setImageDownloadWithLabelStyles(layout:Button):Void 
 	{
 		var downloadIconBitmap = new DownloadIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
-		var backgroundSkin = new Shape();
-		backgroundSkin.graphics.beginBitmapFill(downloadIconBitmap, new Matrix(), false);
-		backgroundSkin.graphics.drawRect(0, 0, layout.width, layout.height);
-		backgroundSkin.graphics.endFill();
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageDownloadWithoutLabelStyles(layout:Button):Void 
+	{
+		var downloadIconBitmap = new DownloadIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageNoteWithLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new NoteIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageNoteWithoutLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new NoteIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageDownloadedWithLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new DownloadedIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageDownloadedWithoutLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new DownloadedIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageErrorWithLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new ErrorIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageErrorWithoutLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new ErrorIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageConfigureWithLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new ConfigureIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageConfigureWithoutLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new ConfigureIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageQueuedWithLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new QueuedIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageQueuedWithoutLabelStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new QueuedIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageRedownloadWithLabelStyles(layout:Button):Void 
+	{
+		var downloadIconBitmap = new RedownloadIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageRedownloadWithoutLabelStyles(layout:Button):Void 
+	{
+		var downloadIconBitmap = new RedownloadIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
 
 		layout.backgroundSkin = backgroundSkin;
 	}

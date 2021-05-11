@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import feathers.controls.Button;
 import openfl.events.MouseEvent;
 import feathers.events.TriggerEvent;
 import moonshine.events.HelperEvent;
@@ -20,13 +21,13 @@ import feathers.core.InvalidationFlag;
 import moonshine.theme.SDKInstallerTheme;
 
 class ComponentRenderer extends LayoutGroup {
-	private var assetDownloaded:AssetLoader;
-	private var assetNote:AssetLoader;
-	private var assetError:AssetLoader;
-	private var assetDownload:AssetLoader;
-	private var assetReDownload:AssetLoader;
-	private var assetQueued:AssetLoader;
-	private var assetConfigure:AssetLoader;
+	private var assetDownloaded:LayoutGroup;
+	private var assetNote:LayoutGroup;
+	private var assetError:LayoutGroup;
+	private var assetDownload:Button;
+	private var assetReDownload:Button;
+	private var assetQueued:LayoutGroup;
+	private var assetConfigure:LayoutGroup;
 	private var stateData:ComponentVO;
 	private var assetLogo:AssetLoader;
 	private var lblTitle:Label;
@@ -123,33 +124,42 @@ class ComponentRenderer extends LayoutGroup {
 		cast(stateImageContainer.layout, HorizontalLayout).gap = 10;
 		this.addChild(stateImageContainer);
 
-		this.assetNote = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoNote.png", assetLoaderLayoutData);
+		this.assetNote = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_NOTE_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetNote.width = 46;
+		this.assetNote.height = 44;
 		stateImageContainer.addChild(this.assetNote);
 
-		this.assetError = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoErrorLabel.png", assetLoaderLayoutData);
+		this.assetError = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_ERROR_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetError.width = 34;
+		this.assetError.height = 44;
 		stateImageContainer.addChild(this.assetError);
 
-		this.assetDownloaded = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoTickLabel.png", assetLoaderLayoutData);
+		this.assetDownloaded = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_DOWNLOADED_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetDownloaded.width = 42;
+		this.assetDownloaded.height = 46;
 		stateImageContainer.addChild(this.assetDownloaded);
 
-		this.assetDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoDownloadLabel.png", assetLoaderLayoutData);
-		this.assetDownload.buttonMode = true;
-		this.assetDownload.addEventListener(MouseEvent.CLICK, this.onDownloadButtonClicked, false, 0, true);
+		this.assetDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetDownload.width = 49;
+		this.assetDownload.height = 48;
+		this.assetDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetDownload);
 
-		this.assetReDownload = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoReDownload.png", assetLoaderLayoutData);
+		this.assetReDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetReDownload.width = 61;
+		this.assetReDownload.height = 48;
+		//this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetReDownload);
 
-		this.assetQueued = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoQueuedLabel.png", assetLoaderLayoutData);
+		this.assetQueued = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_QUEUED_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetQueued.width = 38;
+		this.assetQueued.height = 46;
 		stateImageContainer.addChild(this.assetQueued);
 
-		this.assetConfigure = this.getNewAssetLoaderForStateIcons("/helperResources/images/icoConfigure.png", assetLoaderLayoutData);
+		this.assetConfigure = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetConfigure.width = 47;
+		this.assetConfigure.height = 49;
 		stateImageContainer.addChild(this.assetConfigure);
-
-		var tmpIconTest = new LayoutGroup();
-		tmpIconTest.variant = SDKInstallerTheme.IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL;
-		tmpIconTest.layoutData = assetLoaderLayoutData;
-		stateImageContainer.addChild(tmpIconTest);
 
 		super.initialize();
 	}
@@ -167,12 +177,24 @@ class ComponentRenderer extends LayoutGroup {
 		super.update();
 	}
 
-	private function getNewAssetLoaderForStateIcons(srcPath:String, layoutData:AnchorLayoutData):AssetLoader {
-		var tmpAsset = new AssetLoader();
+	private function getNewAssetButtonForStateIcons(variant:String, layoutData:AnchorLayoutData):Button {
+		var tmpAsset = new Button();
+		tmpAsset.useHandCursor = true;
 		tmpAsset.layoutData = layoutData;
 		tmpAsset.visible = false;
 		tmpAsset.includeInLayout = false;
-		tmpAsset.source = srcPath;
+		tmpAsset.variant = variant;
+
+		return tmpAsset;
+	}
+
+	private function getNewAssetLayoutForStateIcons(variant:String, layoutData:AnchorLayoutData):LayoutGroup {
+		var tmpAsset = new LayoutGroup();
+		tmpAsset.useHandCursor = true;
+		tmpAsset.layoutData = layoutData;
+		tmpAsset.visible = false;
+		tmpAsset.includeInLayout = false;
+		tmpAsset.variant = variant;
 
 		return tmpAsset;
 	}
@@ -199,7 +221,6 @@ class ComponentRenderer extends LayoutGroup {
 		this.lblTitle.text = "";
 		this.lblDescription.text = "";
 		this.assetLogo.source = null;
-		this.assetDownloaded.source = null;
 	}
 
 	private function updateItemIconState():Void {
@@ -280,7 +301,7 @@ class ComponentRenderer extends LayoutGroup {
 		}
 	}
 
-	private function onDownloadButtonClicked(event:MouseEvent):Void {
+	private function onDownloadButtonClicked(event:TriggerEvent):Void {
 		if ((this.stateData.downloadVariants != null) && this.stateData.downloadVariants.length > 1) {
 			HelperUtils.updateComponentByVariant(this.stateData,
 				cast(this.stateData.downloadVariants.get(this.stateData.selectedVariantIndex), ComponentVariantVO));
