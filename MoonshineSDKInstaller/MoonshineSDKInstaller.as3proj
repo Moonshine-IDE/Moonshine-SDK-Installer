@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
   <output>
+    <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
     <movie disabled="False"/>
+<<<<<<< HEAD
     <movie background="#000000"/>
     <movie width="100"/>
     <movie path="bin-debug/MoonshineSDKInstaller.swf"/>
+=======
+>>>>>>> origin/master
     <movie fps="24"/>
-    <movie height="100"/>
     <movie version="32"/>
+    <movie width="100"/>
+    <movie height="100"/>
+<<<<<<< HEAD
+    <movie version="32"/>
+=======
+    <movie background="#000000"/>
+>>>>>>> origin/master
     <movie platform="null"/>
     <movie input=""/>
   </output>
@@ -27,6 +37,7 @@
   </moonshineResourcePaths>
   <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
   <build>
+<<<<<<< HEAD
     <option allowSourcePathOverlap="False"/>
     <option verboseStackTraces="False"/>
     <option showDeprecationWarnings="True"/>
@@ -52,17 +63,47 @@
     <option strict="True"/>
   </build>
   <mavenBuild>
+=======
+    <option customSDK=""/>
+    <option showBindingWarnings="True"/>
+    <option strict="True"/>
+    <option compilerConstants=""/>
+    <option loadConfig=""/>
+    <option accessible="True"/>
+    <option antBuildPath=""/>
+    <option linkReport=""/>
+    <option showActionScriptWarnings="True"/>
+    <option optimize="True"/>
+    <option showDeprecationWarnings="True"/>
+    <option staticLinkRSL="False"/>
+    <option sourceMap="False"/>
+    <option locale=""/>
+    <option es="False"/>
+    <option useResourceBundleMetadata="True"/>
+    <option warnings="True"/>
+    <option useNetwork="True"/>
+    <option benchmark="False"/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option verboseStackTraces="False"/>
+    <option additional="-locale en_US -allow-source-path-overlap=true -swf-version 41 +configname=air"/>
+    <option allowSourcePathOverlap="False"/>
+  </build>
+  <mavenBuild>
+    <option dominoNotesPlatform=""/>
+    <option dominoNotesProgram=""/>
+>>>>>>> origin/master
     <option settingsFilePath=""/>
     <option dominoNotesProgram=""/>
     <option mavenBuildPath="G:\DevareaLocal\Prominic\Prominic_Git\git\Moonshine-SDK-Installer\MoonshineSDKInstaller"/>
     <option dominoNotesPlatform=""/>
     <option commandLine=""/>
+    <option mavenBuildPath="G:\DevareaLocal\Prominic\Prominic_Git\git\Moonshine-SDK-Installer\MoonshineSDKInstaller"/>
     <actions>
-      <action actionName="Build" action="install"/>
-      <action actionName="Clean and package" action="clean package"/>
-      <action actionName="Clean" action="clean"/>
-      <action actionName="Clean and Build" action="clean install"/>
-      <action actionName="Exploded" action="war:exploded"/>
+      <action action="install" actionName="Build"/>
+      <action action="clean package" actionName="Clean and package"/>
+      <action action="clean" actionName="Clean"/>
+      <action action="clean install" actionName="Clean and Build"/>
+      <action action="war:exploded" actionName="Exploded"/>
     </actions>
   </mavenBuild>
   <includeLibraries></includeLibraries>
@@ -85,6 +126,7 @@
   <postBuildCommand alwaysRun="False">null</postBuildCommand>
   <trustSVNCertificate>False</trustSVNCertificate>
   <options>
+<<<<<<< HEAD
     <option defaultBuildTargets=""/>
     <option isRoyale="False"/>
     <option isPrimeFacesVisualEditor="False"/>
@@ -105,6 +147,26 @@
     <option projectType="1"/>
     <option urlToLaunch=""/>
     <option deviceSimulator="null"/>
+=======
+    <option isRoyale="False"/>
+    <option testMovie="AIR"/>
+    <option visualEditorExportPath=""/>
+    <option showHiddenPaths="False"/>
+    <option isExportedToExistingSource="False"/>
+    <option testMovieCommand=""/>
+    <option isPrimeFacesVisualEditor="False"/>
+    <option defaultBuildTargets=""/>
+  </options>
+  <moonshineRunCustomization>
+    <option deviceSimulator="null"/>
+    <option deviceConnectType="USB"/>
+    <option urlToLaunch=""/>
+    <option webBrowser="null"/>
+    <option customUrlToLaunch=""/>
+    <option launchMethod="Simulator"/>
+    <option projectType="1"/>
+    <option targetPlatform="1"/>
+>>>>>>> origin/master
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>

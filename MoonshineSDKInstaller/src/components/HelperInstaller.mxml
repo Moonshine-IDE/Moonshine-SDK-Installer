@@ -56,6 +56,7 @@
 			[Bindable] private var sdkPathMessage:String;
 			[Bindable] private var isDownloadInProgress:Boolean;
 			[Bindable] private var allInstallButtonLabel:String = "INSTALL EVERYTHING NOW!";
+			[Bindable] private var isDownloadedAll:Boolean;
 			
 			private var model:HelperModel = HelperModel.getInstance();
 			private var packageLists:Array = [];
@@ -63,7 +64,8 @@
 			private var viewResourceConstants:ViewResourceConstants;
 			private var itemDownloading:ComponentVO;
 			private var helperViewWrapper:HelperViewWrapper;
-			
+			private var isHarmanAIRDownloading:Boolean;
+
 			private var _moonshineNotifier:MoonshineNotifier;
 			private function get moonshineNotifier():MoonshineNotifier
 			{
@@ -106,7 +108,7 @@
 				
 				// initiate the original installer source
 				INSTALLER_APACHE_FLEX = new InstallApacheFlex();
-				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 				INSTALLER_APACHE_FLEX.moonshineFlexVersion = "4.16.1"; // default value irrespective of configuration XML
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady, false, 0, true);
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
@@ -142,6 +144,27 @@
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
 			{
+				// give a check before opening license view
+				// in case all items are downloaded or downloading
+				var tmpCountLeftToDownload:int;
+				for each (var item:ComponentVO in model.components)
+				{
+					if (item.isAlreadyDownloaded || item.isDownloaded ||
+							item.isDownloading || item.isSelectedToDownload ||
+							!item.isDownloadable)
+					{
+						continue;
+					}
+
+					tmpCountLeftToDownload++;
+				}
+
+				if (tmpCountLeftToDownload == 0)
+				{
+					Alert.show("All item(s) either downloading or being downloaded.", "Note!");
+					return;
+				}
+
 				var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView , true));
 				licenses.width = this.width * .9;
 				licenses.height = this.height * .8;
@@ -156,7 +179,7 @@
 				// generate list of downloads
 				for each (var item:ComponentVO in model.components.array)
 				{
-					if (!item.isAlreadyDownloaded)
+					if (!item.isAlreadyDownloaded && item.isDownloadable)
 					{
 						item.isSelectedToDownload = true;
 						packageLists.push(item);
@@ -164,7 +187,6 @@
 				}
 				
 				// start download process
-				btnInstallAll.enabled = false;
 				flush();
 			}
 			
@@ -215,6 +237,7 @@
 			
 			private function flush():void
 			{
+				updateAllInstallButtonLabel();
 				if (packageLists.length != 0 && !isDownloadInProgress) 
 				{
 					prepareBeforeDownloads();
@@ -255,7 +278,7 @@
 					case ComponentTypes.TYPE_FLEX:
 						item.isDownloading = true;
 						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
 						INSTALLER_APACHE_FLEX.startInstallation();
 						break;
@@ -263,7 +286,7 @@
 						var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();
 						item.isDownloading = true;
 						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 						INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
 						INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
 						break;
@@ -355,11 +378,42 @@
 							var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
 							if (fileToPatch.exists)
 							{
-								var fileToPatchWith:File = File.applicationDirectory.resolvePath("images/royale-config.xml");
+								var fileToPatchWith:File = File.applicationDirectory.resolvePath("scripts/royale-config.xml");
 								FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
 							}
 						}, 1000);
 					}
+				}
+				
+				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
+				{
+					isHarmanAIRDownloading = true;
+					itemDownloading.isDownloaded = false;
+					itemDownloading.isDownloading = true;
+
+					var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
+					FileUtils.copyFile(
+							File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
+							targetAntFile,
+							true
+					);
+
+					var tmpArr:Array = itemDownloading.downloadURL.split("/");
+					var packageFileName:String = tmpArr[tmpArr.length - 1];
+					packageFileName = HelperConstants.IS_MACOS ?
+							packageFileName.replace(".tar.gz", "") :
+							packageFileName.replace(".zip", "");
+
+					INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
+							targetAntFile,
+							HelperConstants.CONFIG_HARMAN_AIR_SERVER,
+							HelperConstants.CONFIG_HARMAN_AIR_FILE,
+							"?license=accepted",
+							HelperConstants.CONFIG_HARMAN_AIR_VERSION,
+							packageFileName
+					);
+
+					return;
 				}
 				
 				// sometime distributed zip/tar creates an additional
@@ -462,7 +516,9 @@
 			
 			private function updateAllInstallButtonLabel():void
 			{
-				btnInstallAll.label = allInstallButtonLabel +" ("+ HelperUtils.getTotalDiskSizePendingItems() +")";
+				var tmpSize:String = HelperUtils.getTotalDiskSizePendingItems();
+				btnInstallAll.label = allInstallButtonLabel +" ("+ tmpSize +")";
+				isDownloadedAll = (tmpSize == "0 MB");
 			}
 			
 			private function onShowLog(event:MouseEvent):void
@@ -553,7 +609,7 @@
 		<s:Button id="btnInstallAll" 
 				  click="openLicenseView(allInstallConfirmHandler)"
 				  horizontalCenter="0" verticalCenter="0"
-				  enabled="{HelperConstants.IS_INSTALLER_READY}"
+				  enabled="{HelperConstants.IS_INSTALLER_READY &amp;&amp; !isDownloadedAll}"
 				  icon="@Embed('/assets/images/icoDownloadSmall.png')"
 				  styleName="greyButton"/>
 		<s:Label id="lblInstalling" 

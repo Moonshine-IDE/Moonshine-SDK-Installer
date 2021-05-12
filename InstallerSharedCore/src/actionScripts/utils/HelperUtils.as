@@ -188,7 +188,7 @@ package actionScripts.utils
 			var totalMbs:int;
 			for each (var item:ComponentVO in model.components.array)
 			{
-				if (!item.isAlreadyDownloaded)
+				if (!item.isAlreadyDownloaded && item.isDownloadable)
 				{
 					totalMbs += item.sizeInMb;
 				}
@@ -209,7 +209,7 @@ package actionScripts.utils
 		
 		public static function updateComponentByVariant(component:ComponentVO, variant:ComponentVariantVO):void
 		{
-			component.installToPath = Parser.getInstallDirectoryPath(component.type, variant.version, HelperConstants.CONFIG_AIR_VERSION);
+			component.installToPath = Parser.getInstallDirectoryPath(component.type, variant.version);
 			component.version = variant.version;
 			component.downloadURL = variant.downloadURL;
 			component.sizeInMb = variant.sizeInMb;

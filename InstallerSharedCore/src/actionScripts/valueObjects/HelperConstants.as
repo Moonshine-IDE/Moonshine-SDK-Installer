@@ -1,11 +1,10 @@
 package actionScripts.valueObjects
 {
 	import flash.desktop.NativeApplication;
+	import flash.filesystem.File;
 	
 	import actionScripts.utils.HelperUtils;
-
-	import flash.filesystem.File;
-
+	
 	[Bindable] public class HelperConstants
 	{
 		[Embed(source="/helperResources/images/bg_listDivider.png")]
@@ -25,7 +24,10 @@ package actionScripts.valueObjects
 		public static var IS_RUNNING_IN_MOON:Boolean;
 		public static var IS_INSTALLER_READY:Boolean;
 		public static var DEFAULT_INSTALLATION_PATH:File;
-		public static var CONFIG_AIR_VERSION:String;
+		public static var CONFIG_ADOBE_AIR_VERSION:String;
+		public static var CONFIG_HARMAN_AIR_VERSION:String;
+		public static var CONFIG_HARMAN_AIR_SERVER:String;
+		public static var CONFIG_HARMAN_AIR_FILE:String;
 		public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 		public static var INSTALLER_UPDATE_CHECK_URL:String;
 		public static var IS_DETECTION_IN_PROCESS:Boolean;
@@ -43,10 +45,8 @@ package actionScripts.valueObjects
 				DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
 				return DEFAULT_INSTALLATION_PATH;
 			}
-
-			return File.userDirectory.resolvePath(
-					"AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store"
-			);
+			
+			return File.userDirectory.resolvePath("AppData/Roaming/net.prominic.MoonshineSDKInstaller/Local Store");
 		}
 	}
 }

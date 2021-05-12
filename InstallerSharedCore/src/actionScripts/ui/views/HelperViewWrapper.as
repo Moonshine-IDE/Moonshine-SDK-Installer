@@ -195,7 +195,7 @@ package actionScripts.ui.views
 		{
 			var tmpVariant:ComponentVariantVO = event.data.ComponentVariantVO;
 			var tmpComponent:ComponentVO = event.data.ComponentVO;
-			var installToPath:String = Parser.getInstallDirectoryPath(tmpComponent.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
+			var installToPath:String = Parser.getInstallDirectoryPath(tmpComponent.type, tmpVariant.version);
 			tmpComponent.selectedVariantIndex = event.data.newIndex;
 			tmpComponent.isDownloaded = tmpComponent.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(tmpComponent.type, installToPath, tmpComponent.pathValidation);
 			tmpComponent.sizeInMb = tmpVariant.sizeInMb;

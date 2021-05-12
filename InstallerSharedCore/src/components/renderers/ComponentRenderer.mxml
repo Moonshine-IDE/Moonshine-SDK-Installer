@@ -81,7 +81,8 @@
 			protected function onLicenseClick(event:MouseEvent):void
 			{
 				if (data.type == ComponentTypes.TYPE_FLEX ||
-					data.type == ComponentTypes.TYPE_SVN || 
+						data.type == ComponentTypes.TYPE_FLEX_HARMAN ||
+						data.type == ComponentTypes.TYPE_SVN ||
 					(HelperConstants.IS_MACOS && data.type == ComponentTypes.TYPE_GIT)) 
 				{
 					this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, data, true));
@@ -95,7 +96,7 @@
 			protected function onVariantChange(event:IndexChangeEvent):void
 			{
 				var tmpVariant:ComponentVariantVO = event.target.selectedItem as ComponentVariantVO;
-				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
+				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version);
 				data.selectedVariantIndex = event.newIndex;
 				data.isDownloaded = data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
 				data.sizeInMb = tmpVariant.sizeInMb;

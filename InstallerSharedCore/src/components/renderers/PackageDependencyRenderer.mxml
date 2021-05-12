@@ -7,14 +7,13 @@
 		<![CDATA[
 			import spark.components.BusyIndicator;
 			import spark.events.IndexChangeEvent;
-			
+
+			import moonshine.events.HelperEvent;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.ComponentVariantVO;
 			import actionScripts.valueObjects.HelperConstants;
-			
-			import moonshine.events.HelperEvent;
 			
 			private var busyIndicator:BusyIndicator;
 			
@@ -98,7 +97,7 @@
 			protected function onVariantChange(event:IndexChangeEvent):void
 			{
 				var tmpVariant:ComponentVariantVO = event.target.selectedItem as ComponentVariantVO;
-				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version, HelperConstants.CONFIG_AIR_VERSION);
+				var installToPath:String = Parser.getInstallDirectoryPath(data.type, tmpVariant.version);
 				data.selectedVariantIndex = event.newIndex;
 				data.isDownloaded = data.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(data.type, installToPath, data.pathValidation);
 				data.sizeInMb = tmpVariant.sizeInMb;

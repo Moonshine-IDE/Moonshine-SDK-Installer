@@ -4,6 +4,7 @@ package actionScripts.interfaces
 	{
 		function isDefaultSDKPresent():Boolean;
 		function isFlexSDKAvailable():Object;
+		function isFlexHarmanSDKAvailable():Object;
 		function isFlexJSSDKAvailable():Object;
 		function isRoyaleSDKAvailable():Object;
 		function isFeathersSDKAvailable():Object;

@@ -35,62 +35,38 @@
 			[Bindable] private var currentLicenseURL:String;
 			
 			private var model:HelperModel = HelperModel.getInstance();
+			private var remoteLicenseLoaders:Dictionary = new Dictionary();
+			private var remoteLicenseLoadCount:int;
 			
 			private function onAllLicenseViewCreationComplete():void
 			{
 				if (model.components.length == 0) return;
-				
-				// load between single or multiple
-				if (singleLicenseItem) 
-				{
-					loadSingleLicenseItem();
-				}				
-				else 
-				{
-					loadAllLicenseItems();
-				}
+				initiateLicenseLoad();
 			}
 			
-			private function loadSingleLicenseItem():void
+			private function initiateLicenseLoad():void
 			{
-				if (singleLicenseItem.type == ComponentTypes.TYPE_FLEX)
+				var tmpComponents:Array = singleLicenseItem ? [singleLicenseItem] : model.components.array;
+				var flexItems:Array = [];
+				for each (var item:ComponentVO in tmpComponents)
 				{
-					loadAllLicenseItems();
-				}
-				else
-				{
-					addMoreLicenses(singleLicenseItem.type);
-					hgButtons.removeElement(biCopyrights);
-					installComponentsList.callLater(function():void
+					if (item.isAlreadyDownloaded || item.isDownloaded ||
+					item.isDownloading || item.isSelectedToDownload ||
+							!item.isDownloadable)
 					{
-						installComponentsList.expandItem(copyrightComponentsDataProvider[0], true);
-						installComponentsList.selectedItem = copyrightComponentsDataProvider[0].children[0];
-						installComponentsList.dispatchEvent(new ListEvent(ListEvent.CHANGE));
-					});
-				}
-			}
-			
-			private function loadAllLicenseItems():void
-			{
-				// we need to parse different license items
-				// from apache website
-				var flexItem:ComponentVO;
-				for each (var item:ComponentVO in model.components.array)
-				{
-					if (item.type == ComponentTypes.TYPE_FLEX)
-					{
-						flexItem = item;
-						break;
+						continue;
 					}
-				}
-				
-				if (flexItem)
-				{
-					var req:URLRequest = new URLRequest(flexItem.licenseUrl);
-					var loader:ApacheURLLoader = new ApacheURLLoader();
-					loader.dataFormat = URLLoaderDataFormat.TEXT;
-					attachLoaderListeners(loader, true);
-					loader.load(req);
+
+					remoteLicenseLoadCount++;
+					if (item.type == ComponentTypes.TYPE_FLEX ||
+					item.type == ComponentTypes.TYPE_FLEX_HARMAN)
+					{
+						addRemoteLicenseDetails(item);
+					}
+					else
+					{
+						addLocalLicenseDetails(item.type);
+					}
 				}
 			}
 			
@@ -98,23 +74,33 @@
 			{
 				if (attach)
 				{
-					loader.addEventListener(Event.COMPLETE, handleFlexCopyrightLoaded, false, 0, true);
-					loader.addEventListener(ErrorEvent.ERROR, handleCopyrightXMLError, false, 0, true);
-					loader.addEventListener(IOErrorEvent.IO_ERROR, handleCopyrightXMLError, false, 0, true);
+					loader.addEventListener(Event.COMPLETE, handleRemoteCopyrightLoaded, false, 0, true);
+					loader.addEventListener(ErrorEvent.ERROR, handleRemoteCopyrightXMLError, false, 0, true);
+					loader.addEventListener(IOErrorEvent.IO_ERROR, handleRemoteCopyrightXMLError, false, 0, true);
 				}
 				else
 				{
-					loader.removeEventListener(Event.COMPLETE, handleFlexCopyrightLoaded);
-					loader.removeEventListener(ErrorEvent.ERROR, handleCopyrightXMLError);
-					loader.removeEventListener(IOErrorEvent.IO_ERROR, handleCopyrightXMLError);
+					loader.removeEventListener(Event.COMPLETE, handleRemoteCopyrightLoaded);
+					loader.removeEventListener(ErrorEvent.ERROR, handleRemoteCopyrightXMLError);
+					loader.removeEventListener(IOErrorEvent.IO_ERROR, handleRemoteCopyrightXMLError);
+
+					removeBusyCursorIfAppropriates();
+				}
+			}
+
+			private function removeBusyCursorIfAppropriates():void
+			{
+				remoteLicenseLoadCount--;
+				if (remoteLicenseLoadCount == 0)
+				{
 					hgButtons.removeElement(biCopyrights);
 				}
 			}
 			
-			private function handleFlexCopyrightLoaded(event:Event):void
+			private function handleRemoteCopyrightLoaded(event:Event):void
 			{
 				attachLoaderListeners(event.target as ApacheURLLoader, false);
-				
+
 				var data:XML = XML(event.target.data);
 				var compDList:XMLList = data.component.copy();
 				var tmpChildrens:ArrayCollection = new ArrayCollection();
@@ -126,15 +112,24 @@
 						comp.@id.toString(), comp.@required.toString() == "true");
 					tmpChildrens.addItem(vo);
 				}
-				
-				copyrightComponentsDataProvider.addItem({label:"Apache Flex®", children:tmpChildrens});
-				if (!singleLicenseItem) 
+
+				var tmpComponent:ComponentVO = remoteLicenseLoaders[event.target];
+				var isHarmanAIRDownload:Boolean;
+				if (tmpComponent)
 				{
-					addMoreLicenses();
+					delete remoteLicenseLoaders[event.target];
+					isHarmanAIRDownload = tmpComponent.licenseUrl.indexOf("harman") != -1
 				}
+
+				copyrightComponentsDataProvider.addItemAt({
+					label:"Apache Flex ®, " + (isHarmanAIRDownload ? "Harman AIR" : "Adobe® AIR®"),
+					children:tmpChildrens
+				}, 0);
+
+				updateTreeView();
 			}
 			
-			private function handleCopyrightXMLError(event:Event):void
+			private function handleRemoteCopyrightXMLError(event:Event):void
 			{
 				attachLoaderListeners(event.target as ApacheURLLoader, false);
 			}
@@ -168,14 +163,13 @@
 				return "";
 			}
 			
-			private function addMoreLicenses(byType:String=""):void
+			private function addLocalLicenseDetails(byType:String=""):void
 			{
 				var tmpChildrens:ArrayCollection;
 				var installComponent:InstallerComponentVO;
 				for each (var item:ComponentVO in model.components.array)
 				{
-					if ((item.type != ComponentTypes.TYPE_FLEX) && 
-						(byType == "" || byType == item.type))
+					if (byType == "" || byType == item.type)
 					{
 						tmpChildrens = new ArrayCollection();
 						installComponent = new InstallerComponentVO(item.installToPath.split(File.separator).pop(),
@@ -183,10 +177,35 @@
 							item.licenseUrl, "", true);
 						tmpChildrens.addItem(installComponent);
 						copyrightComponentsDataProvider.addItem({label:item.title, children:tmpChildrens});
+						updateTreeView();
+						this.callLater(removeBusyCursorIfAppropriates);
 						
 						if (byType != "") break;
 					}
 				}
+			}
+
+			private function addRemoteLicenseDetails(component:ComponentVO):void
+			{
+				var req:URLRequest = new URLRequest(component.licenseUrl);
+				var loader:ApacheURLLoader = new ApacheURLLoader();
+				loader.dataFormat = URLLoaderDataFormat.TEXT;
+				attachLoaderListeners(loader, true);
+				remoteLicenseLoaders[loader] = component;
+				loader.load(req);
+			}
+
+			private function updateTreeView():void
+			{
+				installComponentsList.callLater(function():void
+				{
+					for (var i:int=0; i <copyrightComponentsDataProvider.length; i++)
+					{
+						installComponentsList.expandItem(copyrightComponentsDataProvider[i], true);
+					}
+					installComponentsList.selectedItem = copyrightComponentsDataProvider[0].children[0];
+					installComponentsList.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+				});
 			}
 			
 			private function getIconForFile(object:Object):Class
@@ -242,7 +261,7 @@
 				 alternatingItemColors="[0x444444, 0x4d4c4c]"
 				 verticalScrollBarStyleName="black"
 				 borderVisible="false"
-				 rowHeight="18"
+				 fontSize="14"
 				 useRollOver="true"
 				 iconFunction="{getIconForFile}"
 				 borderStyle="none"
@@ -253,7 +272,7 @@
 				  gap="5" paddingTop="10" paddingBottom="10">
 			<s:Label text="{currentLicenseLabel}" fontWeight="bold"/>
 			<s:TextArea id="optionalInstallsTxtArea" text="This installer will download software from multiple sites with various license agreements. Please click on each item on the left, read the license and confirm that you agree to the terms of each license by checking the checkbox next to it."
-						fontSize="12"
+						fontSize="14"
 						width="100%"
 						height="100%"
 						editable="false"/>
