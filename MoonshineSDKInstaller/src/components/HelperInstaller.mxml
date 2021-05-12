@@ -117,6 +117,27 @@
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
 			{
+				// give a check before opening license view
+				// in case all items are downloaded or downloading
+				var tmpCountLeftToDownload:int;
+				for each (var item:ComponentVO in model.components)
+				{
+					if (item.isAlreadyDownloaded || item.isDownloaded ||
+							item.isDownloading || item.isSelectedToDownload ||
+							!item.isDownloadable)
+					{
+						continue;
+					}
+
+					tmpCountLeftToDownload++;
+				}
+
+				if (tmpCountLeftToDownload == 0)
+				{
+					Alert.show("All item(s) either downloading or being downloaded.", "Note!");
+					return;
+				}
+
 				var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView , true));
 				licenses.width = this.width * .9;
 				licenses.height = this.height * .8;
@@ -131,7 +152,7 @@
 				// generate list of downloads
 				for each (var item:ComponentVO in model.components.source)
 				{
-					if (!item.isAlreadyDownloaded)
+					if (!item.isAlreadyDownloaded && item.isDownloadable)
 					{
 						item.isSelectedToDownload = true;
 						packageLists.push(item);
@@ -139,7 +160,6 @@
 				}
 				
 				// start download process
-				btnInstallAll.enabled = false;
 				flush();
 			}
 			
@@ -190,6 +210,7 @@
 			
 			private function flush():void
 			{
+				updateAllInstallButtonLabel();
 				if (packageLists.length != 0 && !isDownloadInProgress) 
 				{
 					prepareBeforeDownloads();

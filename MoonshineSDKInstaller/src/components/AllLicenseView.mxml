@@ -46,10 +46,9 @@
 			
 			private function initiateLicenseLoad():void
 			{
-				var components:Array = singleLicenseItem ?
-						[singleLicenseItem] : model.components.source;
+				var tmpComponents:Array = singleLicenseItem ? [singleLicenseItem] : model.components.source;
 				var flexItems:Array = [];
-				for each (var item:ComponentVO in components)
+				for each (var item:ComponentVO in tmpComponents)
 				{
 					if (item.isAlreadyDownloaded || item.isDownloaded ||
 					item.isDownloading || item.isSelectedToDownload ||

@@ -188,7 +188,7 @@ package actionScripts.utils
 			var totalMbs:int;
 			for each (var item:ComponentVO in model.components)
 			{
-				if (!item.isAlreadyDownloaded)
+				if (!item.isAlreadyDownloaded && item.isDownloadable)
 				{
 					totalMbs += item.sizeInMb;
 				}
