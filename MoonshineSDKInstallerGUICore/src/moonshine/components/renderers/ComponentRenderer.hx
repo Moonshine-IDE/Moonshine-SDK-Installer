@@ -28,6 +28,7 @@ class ComponentRenderer extends LayoutGroup {
 	private var assetReDownload:Button;
 	private var assetQueued:LayoutGroup;
 	private var assetConfigure:LayoutGroup;
+	private var assetDownloading:LayoutGroup;
 	private var stateData:ComponentVO;
 	private var assetLogo:AssetLoader;
 	private var lblTitle:Label;
@@ -161,6 +162,11 @@ class ComponentRenderer extends LayoutGroup {
 		this.assetConfigure.height = 49;
 		stateImageContainer.addChild(this.assetConfigure);
 
+		this.assetDownloading = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_DOWNLOADING_ICON, assetLoaderLayoutData);
+		this.assetDownloading.width = 40;
+		this.assetDownloading.height = 40;
+		stateImageContainer.addChild(this.assetDownloading);
+
 		super.initialize();
 	}
 
@@ -223,7 +229,11 @@ class ComponentRenderer extends LayoutGroup {
 		this.assetLogo.source = null;
 	}
 
-	private function updateItemIconState():Void {
+	private function updateItemIconState():Void 
+	{
+		this.assetDownloading.visible = this.stateData.isDownloading;
+		this.assetDownloading.includeInLayout = this.stateData.isDownloading;
+
 		if (this.stateData.isAlreadyDownloaded) {
 			this.assetDownloaded.visible = true;
 			this.assetDownloaded.includeInLayout = true;

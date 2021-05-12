@@ -66,6 +66,7 @@ import moonshine.theme.assets.QueuedIconWithLabel;
 import moonshine.theme.assets.QueuedIconWithoutLabel;
 import moonshine.theme.assets.RedownloadIconWithLabel;
 import moonshine.theme.assets.RedownloadIconWithoutLabel;
+import moonshine.theme.assets.DownloadingIcon;
 
 class SDKInstallerTheme extends ClassVariantTheme {
 	private static var _instance:SDKInstallerTheme;
@@ -104,6 +105,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL:String = "image-icon-queued-with-no-label";
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL:String = "image-icon-redownload-with-label";
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-redownload-with-no-label";
+	public static final IMAGE_VARIANT_DOWNLOADING_ICON:String = "image-icon-downloading";
 
 	public function new() {
 		super();
@@ -162,6 +164,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, setImageConfigureWithoutLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_QUEUED_ICON_WITH_LABEL, setImageQueuedWithLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL, setImageQueuedWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADING_ICON, setImageDownloadingStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL, setImageRedownloadWithLabelStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, setImageRedownloadWithoutLabelStyles);
 	}
@@ -999,6 +1002,17 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	private function setImageQueuedWithoutLabelStyles(layout:LayoutGroup):Void 
 	{
 		var downloadIconBitmap = new QueuedIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageDownloadingStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new DownloadingIcon(cast(layout.width, Int), cast(layout.height, Int));
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
 		backgroundSkin.width = layout.width;
