@@ -29,6 +29,7 @@
 			import actionScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.ComponentVariantVO;
 			import actionScripts.valueObjects.HelperConstants;
+			import actionScripts.valueObjects.InstallerConstants;
 			
 			import assets.skins.DarkButtonSkin;
 			
@@ -594,16 +595,25 @@
 		]]>
 	</fx:Script>
 	
-	<s:Group width="100%" height="100">
-		<s:Rect width="100%" height="100%">
-			<s:fill>
-				<s:SolidColor color="0x444444"/>
-			</s:fill>
-		</s:Rect>
+	<s:BorderContainer width="100%" height="100">
+		<s:backgroundFill>
+			<s:SolidColor color="0x444444"/>
+		</s:backgroundFill>
+		<s:layout>
+			<s:HorizontalLayout horizontalAlign="left" verticalAlign="middle"
+								paddingLeft="20" paddingRight="20"/>
+		</s:layout>
 		<s:Image id="textIcon" 
 				 source="@Embed('/assets/images/logoMoonshine.png')"
 				 horizontalCenter="0" verticalCenter="0"/>
-	</s:Group>
+		<s:Spacer width="100%"/>
+		<s:VGroup autoLayout="true" horizontalAlign="right" gap="2">
+			<s:Label text="Version {InstallerConstants.applicationVersion}"
+					 fontSize="13" color="0xcccccc"/>
+			<s:Label text="(Build {InstallerConstants.applicationBuildVersion})"
+					 fontSize="11" color="0x999999"/>
+		</s:VGroup>
+	</s:BorderContainer>
 	
 	<s:Group width="100%" height="60">
 		<s:Button id="btnInstallAll" 

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark">
+	<fx:Script>
+		<![CDATA[
+			[Bindable] private var thisYear:Number = new Date().fullYear;
+		]]>
+	</fx:Script>
 	<s:Label id="lblBuilding"
 			 fontSize="10" paddingTop="3"
 			 horizontalCenter="0" verticalCenter="0"
-			 color="#333333" text="Copyright 2020 Prominic.NET, Inc. All rights reserved under the Apache license."/>
+			 color="#333333" text="Copyright {thisYear} Prominic.NET, Inc. All rights reserved under the Apache license."/>
 </s:Group>

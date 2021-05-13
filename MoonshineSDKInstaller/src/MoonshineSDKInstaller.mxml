@@ -10,20 +10,24 @@
 			import mx.events.FlexEvent;
 			
 			import actionScripts.ui.menu.MenuManager;
+			import actionScripts.utils.InstallerUtils;
+			import actionScripts.valueObjects.InstallerConstants;
 			
 			import components.AboutDialog;
 			
 			//private var installerView:MoonshineAppStoreHelperLibMain;
 			private var aboutView:AboutDialog;
 			private var menuManager:MenuManager;
-			private var appVersion:String;
 			
 			private function onPreinit(event:FlexEvent):void
 			{
 				// application version
 				var appDescriptor:XML = nativeApplication.applicationDescriptor;
 				var xmlns:Namespace = new Namespace(appDescriptor.namespace());
-				appVersion = appDescriptor.xmlns::versionNumber;
+				InstallerConstants.applicationVersion = appDescriptor.xmlns::versionNumber;
+				
+				// build version
+				InstallerUtils.readBuildVersion();
 			}
 			
 			private function onAppAddedToStage(event:Event):void
@@ -50,7 +54,6 @@
 				aboutView = new AboutDialog;
 				aboutView.minimizable = aboutView.maximizable = aboutView.resizable = false;
 				aboutView.alwaysInFront = true;
-				aboutView.installerVersion = appVersion;
 				aboutView.addEventListener(Event.CLOSE, onAboutViewClosed, false, 0, true);
 				aboutView.open();
 				
