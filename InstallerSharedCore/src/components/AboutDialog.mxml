@@ -23,33 +23,15 @@ limitations under the License.
 		  creationComplete="onCreationCompletes()">
 	<fx:Script>
 		<![CDATA[
+			import actionScripts.valueObjects.InstallerConstants;
 			
-			[Bindable] public var installerVersion:String;
-			[Bindable] public var revisionVersion:String = "0000";
-			
-			[Bindable] private var copyrightNotes:String = "Copyright 2020 Prominic.NET, Inc. All rights reserved under the Apache license. No warranty of merchantability or fitness of any kind. Use this software at your own risk.";
+			[Bindable] private var copyrightNotes:String;
 			
 			// revision version
 			private function onCreationCompletes():void
 			{
-				var revisionInfoFile: File = File.applicationDirectory.resolvePath("images/appProperties.txt");
-				if (revisionInfoFile.exists)
-				{
-					var saveData:String;
-					try
-					{
-						var stream:FileStream = new FileStream();
-						stream.open(revisionInfoFile, FileMode.READ);
-						saveData = String(stream.readUTFBytes(stream.bytesAvailable));
-						stream.close();
-					}
-					catch (e:Error)
-					{
-						return;
-					}
-					
-					revisionVersion = saveData.split("\n")[0];
-				}
+				copyrightNotes = "Copyright "+ (new Date().fullYear) + " Prominic.NET, Inc. All rights reserved under the Apache license. " +
+					"No warranty of merchantability or fitness of any kind. Use this software at your own risk.";
 			}
 		]]>
 	</fx:Script>
@@ -63,7 +45,7 @@ limitations under the License.
 	
 	<s:Label text="Moonshine SDK Installer"
 			 fontWeight="bold"/>
-	<s:Label text="Version {installerVersion} ({revisionVersion})"/>
+	<s:Label text="Version {InstallerConstants.applicationVersion} ({InstallerConstants.applicationBuildVersion})"/>
 	<s:Label textAlign="center" width="90%" maxDisplayedLines="6"
 			 text="{copyrightNotes}"/>
 </s:Window>
