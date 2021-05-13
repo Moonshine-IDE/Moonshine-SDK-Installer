@@ -147,7 +147,7 @@
 				// give a check before opening license view
 				// in case all items are downloaded or downloading
 				var tmpCountLeftToDownload:int;
-				for each (var item:ComponentVO in model.components)
+				for each (var item:ComponentVO in model.components.array)
 				{
 					if (item.isAlreadyDownloaded || item.isDownloaded ||
 							item.isDownloading || item.isSelectedToDownload ||

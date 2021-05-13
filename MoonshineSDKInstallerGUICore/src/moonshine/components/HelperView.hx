@@ -62,6 +62,7 @@ class HelperView extends LayoutGroup {
 		this.bySoftwareRecycler = DisplayObjectRecycler.withFunction(() -> {
 			var itemRenderer = new ComponentRenderer();
 			itemRenderer.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested, false, 0, true);
+			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
 			return itemRenderer;
 		}, this.bySoftwareRecyclerUpdateFn,
 			(itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
@@ -69,6 +70,7 @@ class HelperView extends LayoutGroup {
 			}, 
 			(itemRenderer:ComponentRenderer) -> {
 				itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
+				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
 			});
 
 		this.byFeatureRecycler = DisplayObjectRecycler.withFunction(() -> {

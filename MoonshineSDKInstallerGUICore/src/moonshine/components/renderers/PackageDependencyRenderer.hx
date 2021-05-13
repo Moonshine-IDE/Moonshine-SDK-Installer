@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import actionScripts.utils.Parser;
 import feathers.events.TriggerEvent;
 import feathers.controls.PopUpListView;
 import openfl.events.Event;
@@ -11,6 +12,7 @@ import feathers.controls.ListView;
 import moonshine.events.HelperEvent;
 import actionScripts.valueObjects.HelperConstants;
 import actionScripts.utils.HelperUtils;
+import actionScripts.utils.FileUtils;
 import feathers.layout.HorizontalLayoutData;
 import actionScripts.valueObjects.ComponentVO;
 import actionScripts.valueObjects.ComponentVariantVO;
@@ -63,7 +65,6 @@ class PackageDependencyRenderer extends LayoutGroup {
 		this.cmbVariants = new PopUpListView();
 		this.cmbVariants.itemToText = (item:ComponentVariantVO) -> item.title;
 		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
-		this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);
 		this.addChild(this.cmbVariants);
 
 		var assetLoaderLayoutData = new AnchorLayoutData();
@@ -171,9 +172,12 @@ class PackageDependencyRenderer extends LayoutGroup {
 		if ((this.stateData.variantCount != 1) && !this.stateData.isDownloading && !this.stateData.isSelectedToDownload) {
 			this.cmbVariants.includeInLayout = this.cmbVariants.visible = true;
 			this.cmbVariants.dataProvider = this.stateData.downloadVariants;
+			this.cmbVariants.selectedIndex = this.stateData.selectedVariantIndex;
+			this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);
 		} else {
 			this.cmbVariants.dataProvider = null;
 			this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
+			this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
 		}
 
 		this.updateItemIconState();
@@ -181,6 +185,9 @@ class PackageDependencyRenderer extends LayoutGroup {
 
 	private function resetFields():Void {
 		this.lblTitle.text = "";
+		this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
+		this.cmbVariants.dataProvider = null;
+		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
 	}
 
 	private function updateItemIconState():Void {
@@ -270,7 +277,21 @@ class PackageDependencyRenderer extends LayoutGroup {
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData, true));
 	}
 
-	private function onVariantChange(event:Event):Void {
+	private function onVariantChange(event:Event):Void 
+	{
+		if (!this.cmbVariants.selectedItem) return;
+
+		var tmpVariant = cast(this.cmbVariants.selectedItem, ComponentVariantVO);
+		var installToPath = Parser.getInstallDirectoryPath(this.stateData.type, tmpVariant.version);
+		this.stateData.selectedVariantIndex = this.cmbVariants.selectedIndex;
+		this.stateData.isDownloaded = this.stateData.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(
+			this.stateData.type, installToPath, this.stateData.pathValidation
+			);
+		this.stateData.sizeInMb = tmpVariant.sizeInMb;
+		this.stateData.createdOn = FileUtils.getCreationDateForPath(installToPath);
+
+		this.setInvalid(InvalidationFlag.DATA);
+
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED,
 			{ComponentVariantVO: this.cmbVariants.selectedItem, ComponentVO: this.stateData, newIndex: this.cmbVariants.selectedIndex}));
 	}

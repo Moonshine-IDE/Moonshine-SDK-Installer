@@ -89,6 +89,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_PLUGIN_LARGE_TITLE:String = "moonshine-plugin-large-title";
 	public static final THEME_VARIANT_BODY_WITH_GREY_BACKGROUND:String = "moonshine-layoutgroup-grey-background";
 	public static final THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND:String = "moonshine-layoutgroup-white-background";
+	public static final THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND = "moonshine-layoutgroup-rowItem-white-background";
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
 	
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
@@ -138,6 +139,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND, setRowItemBodyWithWhiteBackgroundViewStyles);
 
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 
@@ -708,6 +710,15 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xffffff);
 		backgroundSkin.cornerRadius = 0.0;
+		view.backgroundSkin = backgroundSkin;
+	}
+
+	private function setRowItemBodyWithWhiteBackgroundViewStyles(view:LayoutGroup):Void
+	{
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = SolidColor(0xffffff);
+		backgroundSkin.cornerRadius = 0.0;
+
 		view.backgroundSkin = backgroundSkin;
 	}
 

@@ -1,11 +1,15 @@
 package moonshine.components.renderers;
 
+import openfl.events.Event;
+import actionScripts.utils.Parser;
+import feathers.controls.PopUpListView;
 import feathers.controls.Button;
 import openfl.events.MouseEvent;
 import feathers.events.TriggerEvent;
 import moonshine.events.HelperEvent;
 import actionScripts.valueObjects.HelperConstants;
 import actionScripts.utils.HelperUtils;
+import actionScripts.utils.FileUtils;
 import feathers.layout.HorizontalLayoutData;
 import actionScripts.valueObjects.ComponentVO;
 import actionScripts.valueObjects.ComponentVariantVO;
@@ -35,6 +39,7 @@ class ComponentRenderer extends LayoutGroup {
 	private var lblSize:Label;
 	private var lblDescription:Label;
 	private var lblCreatedOn:Label;
+	private var cmbVariants:PopUpListView;
 
 	public function new() {
 		super();
@@ -47,7 +52,7 @@ class ComponentRenderer extends LayoutGroup {
 
 	override private function initialize():Void {
 		this.height = 100;
-		this.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND;
+		this.variant = SDKInstallerTheme.THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND;
 
 		var viewLayout = new HorizontalLayout();
 		viewLayout.horizontalAlign = JUSTIFY;
@@ -117,6 +122,11 @@ class ComponentRenderer extends LayoutGroup {
 
 		this.lblCreatedOn = new Label();
 		licenseAndCreatedOnContainer.addChild(this.lblCreatedOn);
+
+		this.cmbVariants = new PopUpListView();
+		this.cmbVariants.itemToText = (item:ComponentVariantVO) -> item.title;
+		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
+		this.addChild(this.cmbVariants);
 
 		var stateImageContainer = new LayoutGroup();
 		stateImageContainer.layoutData = new HorizontalLayoutData(null, 100);
@@ -211,6 +221,17 @@ class ComponentRenderer extends LayoutGroup {
 		this.lblDescription.text = this.stateData.description;
 		this.assetLogo.source = this.stateData.imagePath;
 
+		if ((this.stateData.variantCount != 1) && !this.stateData.isDownloading && !this.stateData.isSelectedToDownload) {
+			this.cmbVariants.includeInLayout = this.cmbVariants.visible = true;
+			this.cmbVariants.dataProvider = this.stateData.downloadVariants;
+			this.cmbVariants.selectedIndex = this.stateData.selectedVariantIndex;
+			this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);
+		} else {
+			this.cmbVariants.dataProvider = null;
+			this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
+			this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
+		}
+
 		if (this.stateData.isAlreadyDownloaded && (this.stateData.createdOn != null)) {
 			this.lblCreatedOn.includeInLayout = true;
 			this.lblCreatedOn.visible = true;
@@ -227,6 +248,9 @@ class ComponentRenderer extends LayoutGroup {
 		this.lblTitle.text = "";
 		this.lblDescription.text = "";
 		this.assetLogo.source = null;
+		this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
+		this.cmbVariants.dataProvider = null;
+		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
 	}
 
 	private function updateItemIconState():Void 
@@ -322,5 +346,24 @@ class ComponentRenderer extends LayoutGroup {
 
 	private function onLicenseViewRequested(event:MouseEvent):Void {
 		this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_COMPONENT_LICENSE, this.stateData));
+	}
+
+	private function onVariantChange(event:Event):Void 
+	{
+		if (!this.cmbVariants.selectedItem) return;
+
+		var tmpVariant = cast(this.cmbVariants.selectedItem, ComponentVariantVO);
+		var installToPath = Parser.getInstallDirectoryPath(this.stateData.type, tmpVariant.version);
+		this.stateData.selectedVariantIndex = this.cmbVariants.selectedIndex;
+		this.stateData.isDownloaded = this.stateData.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(
+			this.stateData.type, installToPath, this.stateData.pathValidation
+			);
+		this.stateData.sizeInMb = tmpVariant.sizeInMb;
+		this.stateData.createdOn = FileUtils.getCreationDateForPath(installToPath);
+
+		this.setInvalid(InvalidationFlag.DATA);
+
+		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED,
+			{ComponentVariantVO: this.cmbVariants.selectedItem, ComponentVO: this.stateData, newIndex: this.cmbVariants.selectedIndex}));
 	}
 }
