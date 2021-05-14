@@ -34,7 +34,7 @@ class PackageDependencyRenderer extends LayoutGroup {
 	private var assetDownload:Button;
 	private var assetReDownload:Button;
 	private var assetQueued:LayoutGroup;
-	private var assetConfigure:LayoutGroup;
+	private var assetConfigure:Button;
 	private var stateData:ComponentVO;
 	private var lblTitle:Label;
 	private var cmbVariants:PopUpListView;
@@ -116,7 +116,7 @@ class PackageDependencyRenderer extends LayoutGroup {
 		this.assetReDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
 		this.assetReDownload.width = 42;
 		this.assetReDownload.height = 32;
-		//this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
+		this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetReDownload);
 
 		this.assetQueued = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
@@ -124,9 +124,10 @@ class PackageDependencyRenderer extends LayoutGroup {
 		this.assetQueued.height = 32;
 		stateImageContainer.addChild(this.assetQueued);
 
-		this.assetConfigure = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
+		this.assetConfigure = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
 		this.assetConfigure.width = 32;
 		this.assetConfigure.height = 32;
+		this.assetConfigure.addEventListener(TriggerEvent.TRIGGER, this.onConfigureButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetConfigure);
 
 		super.initialize();
@@ -275,6 +276,11 @@ class PackageDependencyRenderer extends LayoutGroup {
 		}
 
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData, true));
+	}
+
+	private function onConfigureButtonClicked(event:TriggerEvent):Void
+	{
+		this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_MOON_SETTINGS, this.stateData, true));
 	}
 
 	private function onVariantChange(event:Event):Void 

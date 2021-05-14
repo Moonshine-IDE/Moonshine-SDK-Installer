@@ -33,7 +33,7 @@ class ComponentRenderer extends LayoutGroup
 	private var assetDownload:Button;
 	private var assetReDownload:Button;
 	private var assetQueued:LayoutGroup;
-	private var assetConfigure:LayoutGroup;
+	private var assetConfigure:Button;
 	private var assetDownloading:LayoutGroup;
 	private var stateData:ComponentVO;
 	private var assetLogo:AssetLoader;
@@ -161,7 +161,7 @@ class ComponentRenderer extends LayoutGroup
 		this.assetReDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL, assetLoaderLayoutData);
 		this.assetReDownload.width = 61;
 		this.assetReDownload.height = 48;
-		//this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
+		this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetReDownload);
 
 		this.assetQueued = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_QUEUED_ICON_WITH_LABEL, assetLoaderLayoutData);
@@ -169,9 +169,10 @@ class ComponentRenderer extends LayoutGroup
 		this.assetQueued.height = 46;
 		stateImageContainer.addChild(this.assetQueued);
 
-		this.assetConfigure = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL, assetLoaderLayoutData);
+		this.assetConfigure = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL, assetLoaderLayoutData);
 		this.assetConfigure.width = 47;
 		this.assetConfigure.height = 49;
+		this.assetConfigure.addEventListener(TriggerEvent.TRIGGER, this.onConfigureButtonClicked, false, 0, true);
 		stateImageContainer.addChild(this.assetConfigure);
 
 		this.assetDownloading = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_DOWNLOADING_ICON, assetLoaderLayoutData);
@@ -344,6 +345,11 @@ class ComponentRenderer extends LayoutGroup
 		}
 
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_COMPONENT, this.stateData, true));
+	}
+
+	private function onConfigureButtonClicked(event:TriggerEvent):Void
+	{
+		this.dispatchEvent(new HelperEvent(HelperEvent.OPEN_MOON_SETTINGS, this.stateData, true));
 	}
 
 	private function onLicenseViewRequested(event:MouseEvent):Void {

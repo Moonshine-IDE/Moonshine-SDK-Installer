@@ -153,8 +153,8 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADED_ICON_WITH_NO_LABEL, setImageDownloadedWithoutLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_ERROR_ICON_WITH_LABEL, setImageErrorWithLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_ERROR_ICON_WITH_NO_LABEL, setImageErrorWithoutLabelStyles);
-		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL, setImageConfigureWithLabelStyles);
-		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, setImageConfigureWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_CONFIGURE_ICON_WITH_LABEL, setImageConfigureWithLabelStyles);
+		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_CONFIGURE_ICON_WITH_NO_LABEL, setImageConfigureWithoutLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_QUEUED_ICON_WITH_LABEL, setImageQueuedWithLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL, setImageQueuedWithoutLabelStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADING_ICON, setImageDownloadingStyles);
@@ -747,7 +747,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		layout.backgroundSkin = backgroundSkin;
 	}
 
-	private function setImageConfigureWithLabelStyles(layout:LayoutGroup):Void 
+	private function setImageConfigureWithLabelStyles(layout:Button):Void 
 	{
 		var downloadIconBitmap = new ConfigureIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
 		var backgroundSkin = new RectangleSkin();
@@ -758,7 +758,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		layout.backgroundSkin = backgroundSkin;
 	}
 
-	private function setImageConfigureWithoutLabelStyles(layout:LayoutGroup):Void 
+	private function setImageConfigureWithoutLabelStyles(layout:Button):Void 
 	{
 		var downloadIconBitmap = new ConfigureIconWithoutLabel(cast(layout.width, Int), cast(layout.height, Int));
 		var backgroundSkin = new RectangleSkin();
