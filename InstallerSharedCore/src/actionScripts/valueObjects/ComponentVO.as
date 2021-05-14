@@ -3,8 +3,11 @@ package actionScripts.valueObjects
 	import actionScripts.utils.FileUtils;
 	
 	import feathers.data.ArrayCollection;
-
-	[Bindable] public class ComponentVO
+	import flash.events.EventDispatcher;
+	import flash.events.Event;
+		
+	[Bindable("isUpdated")]
+	public class ComponentVO extends EventDispatcher
 	{
 		public var id:String;
 		public var title:String;
@@ -45,7 +48,11 @@ package actionScripts.valueObjects
 		private var _isDownloading:Boolean;
 		public function set isDownloading(value:Boolean):void
 		{
-			_isDownloading = value;
+			if (_isDownloading != value)
+			{
+				_isDownloading = value;
+				dispatchEvent(new Event("isUpdated"));
+			}
 		}
 		public function get isDownloading():Boolean
 		{
@@ -55,7 +62,11 @@ package actionScripts.valueObjects
 		private var _isDownloaded:Boolean;
 		public function set isDownloaded(value:Boolean):void
 		{
-			_isDownloaded = value;
+			if (_isDownloaded != value)
+			{
+				_isDownloaded = value;
+				dispatchEvent(new Event("isUpdated"));
+			}
 		}
 		public function get isDownloaded():Boolean
 		{
@@ -65,7 +76,11 @@ package actionScripts.valueObjects
 		private var _hasError:String;
 		public function set hasError(value:String):void
 		{
-			_hasError = value;
+			if (_hasError != value)
+			{
+				_hasError = value;
+				dispatchEvent(new Event("isUpdated"));
+			}
 		}
 		public function get hasError():String
 		{
@@ -75,7 +90,11 @@ package actionScripts.valueObjects
 		private var _hasWarning:String;
 		public function set hasWarning(value:String):void
 		{
-			_hasWarning = value;
+			if (_hasWarning != value)
+			{
+				_hasWarning = value;
+				dispatchEvent(new Event("isUpdated"));
+			}
 		}
 		public function get hasWarning():String
 		{
@@ -85,8 +104,14 @@ package actionScripts.valueObjects
 		private var _isAlreadyDownloaded:Boolean;
 		public function set isAlreadyDownloaded(value:Boolean):void
 		{
-			_isAlreadyDownloaded = value;
-			createdOn = FileUtils.getCreationDateForPath(installToPath);
+			if (_isAlreadyDownloaded != value)
+			{
+				_isAlreadyDownloaded = value;
+				createdOn = FileUtils.getCreationDateForPath(installToPath);
+				dispatchEvent(new Event("isUpdated"));
+			}
+			//_isAlreadyDownloaded = value;
+			
 		}
 		public function get isAlreadyDownloaded():Boolean
 		{
@@ -96,7 +121,11 @@ package actionScripts.valueObjects
 		private var _isSelectedToDownload:Boolean;
 		public function set isSelectedToDownload(value:Boolean):void
 		{
-			_isSelectedToDownload = value;
+			if (_isSelectedToDownload != value)
+			{
+				_isSelectedToDownload = value;
+				dispatchEvent(new Event("isUpdated"));
+			}
 		}
 		public function get isSelectedToDownload():Boolean
 		{
@@ -116,7 +145,7 @@ package actionScripts.valueObjects
 		private var _pathValidation:String;
 		public function set pathValidation(value:String):void
 		{
-			_pathValidation = value;
+			_pathValidation = value;			
 		}
 		public function get pathValidation():String
 		{
@@ -176,7 +205,11 @@ package actionScripts.valueObjects
 		}
 		public function set createdOn(value:Date):void
 		{
-			_createdOn = value;
+			if (_createdOn != value)
+			{
+				_createdOn = value;
+				dispatchEvent(new Event("isUpdated"));
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import feathers.controls.dataRenderers.IDataRenderer;
 import openfl.events.Event;
 import actionScripts.utils.Parser;
 import feathers.controls.PopUpListView;
@@ -24,7 +25,8 @@ import feathers.layout.HorizontalLayout;
 import feathers.core.InvalidationFlag;
 import moonshine.theme.SDKInstallerTheme;
 
-class ComponentRenderer extends LayoutGroup {
+class ComponentRenderer extends LayoutGroup
+{
 	private var assetDownloaded:LayoutGroup;
 	private var assetNote:LayoutGroup;
 	private var assetError:LayoutGroup;
@@ -65,7 +67,6 @@ class ComponentRenderer extends LayoutGroup {
 		this.layout = viewLayout;
 
 		var imageContainer = new LayoutGroup();
-		imageContainer.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
 		imageContainer.height = this.height;
 		imageContainer.width = 136;
 		imageContainer.layout = new AnchorLayout();
@@ -85,7 +86,6 @@ class ComponentRenderer extends LayoutGroup {
 
 		var titleDesContainer = new LayoutGroup();
 		titleDesContainer.layout = titleDesContainerLayout;
-		titleDesContainer.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
 		titleDesContainer.layoutData = new HorizontalLayoutData(100, null);
 		this.addChild(titleDesContainer);
 
@@ -360,8 +360,6 @@ class ComponentRenderer extends LayoutGroup {
 			);
 		this.stateData.sizeInMb = tmpVariant.sizeInMb;
 		this.stateData.createdOn = FileUtils.getCreationDateForPath(installToPath);
-
-		this.setInvalid(InvalidationFlag.DATA);
 
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED,
 			{ComponentVariantVO: this.cmbVariants.selectedItem, ComponentVO: this.stateData, newIndex: this.cmbVariants.selectedIndex}));

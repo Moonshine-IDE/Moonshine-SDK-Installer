@@ -20,6 +20,9 @@
 
 package moonshine.theme;
 
+import feathers.graphics.LineStyle;
+import feathers.graphics.FillStyle;
+import feathers.skins.UnderlineSkin;
 import openfl.geom.Matrix;
 import feathers.controls.dataRenderers.LayoutGroupItemRenderer;
 import feathers.controls.Button;
@@ -126,7 +129,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		// this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
-		this.styleProvider.setStyleFunction(Label, DefaultToolTipManager.CHILD_VARIANT_TOOL_TIP, setToolTipLabelStyles);
 
 		this.styleProvider.setStyleFunction(LayoutGroup, LayoutGroup.VARIANT_TOOL_BAR, setToolBarLayoutGroupStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_WARNING_BAR, setWarningBarLayoutGroupStyles);
@@ -620,22 +622,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		label.textFormat = tmpFormat;
 	}
 
-	private function setToolTipLabelStyles(toolTip:Label):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x222222);
-		backgroundSkin.border = SolidColor(1.0, 0x000000);
-		toolTip.backgroundSkin = backgroundSkin;
-
-		toolTip.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		toolTip.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		toolTip.embedFonts = true;
-
-		toolTip.paddingTop = 4.0;
-		toolTip.paddingRight = 4.0;
-		toolTip.paddingBottom = 4.0;
-		toolTip.paddingLeft = 4.0;
-	}
-
 	private function setListViewStyles(listView:ListView):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0x444444);
@@ -715,10 +701,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 	private function setRowItemBodyWithWhiteBackgroundViewStyles(view:LayoutGroup):Void
 	{
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0xffffff);
-		backgroundSkin.cornerRadius = 0.0;
-
+		var backgroundSkin = new UnderlineSkin(SolidColor(0xffffff), SolidColor(1.0, 0xcccccc));
 		view.backgroundSkin = backgroundSkin;
 	}
 

@@ -64,14 +64,18 @@ class HelperView extends LayoutGroup {
 			itemRenderer.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested, false, 0, true);
 			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
 			return itemRenderer;
-		}, this.bySoftwareRecyclerUpdateFn,
-			(itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
-				itemRenderer.updateItemState(null);
-			}, 
-			(itemRenderer:ComponentRenderer) -> {
-				itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
-				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
-			});
+		}, (itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
+			itemRenderer.updateItemState(cast(state.data, ComponentVO));
+			state.data.addEventListener("isUpdated", this.onItemBeingUpdated, false, 0, true);
+		},
+		(itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
+			state.data.removeEventListener("isUpdated", this.onItemBeingUpdated);
+			itemRenderer.updateItemState(null);
+		}, 
+		(itemRenderer:ComponentRenderer) -> {
+			itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
+			itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
+		});
 
 		this.byFeatureRecycler = DisplayObjectRecycler.withFunction(() -> {
 			var itemRenderer = new PackageRenderer();
@@ -137,6 +141,7 @@ class HelperView extends LayoutGroup {
 
 	private var bySoftwareRecyclerUpdateFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
 		itemRenderer.updateItemState(cast(state.data, ComponentVO));
+		//state.data.addEventListener("isUpdated", this.onItemBeingUpdated, false, 0, true);
 	};
 
 	override private function initialize():Void {
@@ -205,6 +210,12 @@ class HelperView extends LayoutGroup {
 		}
 
 		super.update();
+	}
+
+	private function onItemBeingUpdated(event:Event):Void
+	{
+		var tmpIndex = this.collectionBySoftware.indexOf(event.target);
+		this.collectionBySoftware.updateAt(tmpIndex);
 	}
 
 	private function itemsListView_changeHandler(event:Event):Void {
