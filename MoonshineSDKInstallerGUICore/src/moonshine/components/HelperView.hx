@@ -20,6 +20,7 @@
 
 package moonshine.components;
 
+import actionScripts.valueObjects.HelperConstants;
 import openfl.display.DisplayObject;
 import moonshine.events.HelperEvent;
 import moonshine.components.renderers.PackageRenderer;
@@ -104,7 +105,7 @@ class HelperView extends LayoutGroup {
 		this.setInvalid(InvalidationFlag.DATA);
 	}
 
-	private var _filterTypeIndex:Int = 1;
+	private var _filterTypeIndex:Int = HelperConstants.IS_RUNNING_IN_MOON ? 0 : 1;
 
 	@:flash.property
 	public var filterTypeIndex(get, never):Int;
@@ -179,10 +180,11 @@ class HelperView extends LayoutGroup {
 
 		this.radioByFeature = new Radio();
 		this.radioByFeature.text = "By Feature";
+		this.radioByFeature.selected = HelperConstants.IS_RUNNING_IN_MOON ? true : false;
 		this.radioByFeature.toggleGroup = this.filterByGroup;
 		this.radioBySoftware = new Radio();
 		this.radioBySoftware.text = "By Software";
-		this.radioBySoftware.selected = true;
+		this.radioBySoftware.selected = HelperConstants.IS_RUNNING_IN_MOON ? false : true;
 		this.radioBySoftware.toggleGroup = this.filterByGroup;
 		radioContainer.addChild(this.radioByFeature);
 		radioContainer.addChild(this.radioBySoftware);
