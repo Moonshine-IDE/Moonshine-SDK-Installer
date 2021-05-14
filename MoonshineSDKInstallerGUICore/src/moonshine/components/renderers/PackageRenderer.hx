@@ -52,7 +52,7 @@ class PackageRenderer extends LayoutGroup {
 
 	override private function initialize():Void {
 		this.minHeight = 100;
-		this.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND;
+		this.variant = SDKInstallerTheme.THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND;
 
 		var viewLayout = new HorizontalLayout();
 		viewLayout.horizontalAlign = JUSTIFY;
@@ -68,20 +68,22 @@ class PackageRenderer extends LayoutGroup {
 		titleDesContainerLayout.verticalAlign = MIDDLE;
 
 		var titleDesContainer = new LayoutGroup();
-		titleDesContainer.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
 		titleDesContainer.layout = titleDesContainerLayout;
 		titleDesContainer.layoutData = new HorizontalLayoutData(100, 100);
 		this.addChild(titleDesContainer);
 
 		this.lblTitle = new Label();
+		this.lblTitle.variant = SDKInstallerTheme.THEME_VARIANT_LABEL_COMPONENT_TITLE;
 		titleDesContainer.addChild(this.lblTitle);
 
 		this.lblDescription = new Label();
+		// this.lblDescription.variant = SDKInstallerTheme.THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION;
 		this.lblDescription.layoutData = new VerticalLayoutData(100, null);
 		this.lblDescription.wordWrap = true;
 		titleDesContainer.addChild(this.lblDescription);
 
 		this.lstDependencyTypes = new ListView();
+		// this.lstDependencyTypes.variant = ListView.VARIANT_BORDERLESS;
 		this.lstDependencyTypes.itemRendererRecycler = this.packageDependencyRendererRecycler;
 		this.lstDependencyTypes.layoutData = new HorizontalLayoutData(null, null);
 		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
@@ -132,9 +134,7 @@ class PackageRenderer extends LayoutGroup {
 			this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = true;
 			this.lstDependencyTypes.dataProvider = this.stateData.dependencyTypes;
 			this.lstDependencyTypes.height = this.stateData.dependencyTypes.length * 40;
-		}
-		else
-		{
+		} else {
 			this.lstDependencyTypes.dataProvider = null;
 			this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 		}

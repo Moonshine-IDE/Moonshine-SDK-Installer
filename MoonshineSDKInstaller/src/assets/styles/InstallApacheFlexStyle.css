@@ -38,6 +38,12 @@ s|WindowedApplication
 }
 
 @font-face {
+	src: url("/assets/fonts/DejaVuSans.ttf");
+	fontFamily: "DejaVuSansTF";
+	embedAsCFF: false;
+}
+
+@font-face {
 	src: url("/assets/fonts/DejaVuSans-Oblique.ttf");
 	fontFamily: "DejaVuSans";
 	fontStyle: italic;

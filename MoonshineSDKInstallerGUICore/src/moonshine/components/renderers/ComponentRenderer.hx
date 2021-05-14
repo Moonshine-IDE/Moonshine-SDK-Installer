@@ -97,12 +97,14 @@ class ComponentRenderer extends LayoutGroup
 		titleDesContainer.addChild(titleAndSizeContainer);
 
 		this.lblTitle = new Label();
+		this.lblTitle.variant = SDKInstallerTheme.THEME_VARIANT_LABEL_COMPONENT_TITLE;
 		titleAndSizeContainer.addChild(this.lblTitle);
 
 		this.lblSize = new Label();
 		titleAndSizeContainer.addChild(this.lblSize);
 
 		this.lblDescription = new Label();
+		//this.lblDescription.variant = SDKInstallerTheme.THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION;
 		this.lblDescription.layoutData = new HorizontalLayoutData(100, null);
 		this.lblDescription.wordWrap = true;
 		titleDesContainer.addChild(this.lblDescription);

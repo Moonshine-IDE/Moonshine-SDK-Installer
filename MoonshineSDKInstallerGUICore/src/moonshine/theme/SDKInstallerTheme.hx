@@ -20,6 +20,7 @@
 
 package moonshine.theme;
 
+import feathers.controls.ListView;
 import feathers.graphics.LineStyle;
 import feathers.graphics.FillStyle;
 import feathers.skins.UnderlineSkin;
@@ -28,22 +29,17 @@ import feathers.controls.dataRenderers.LayoutGroupItemRenderer;
 import feathers.controls.Button;
 import feathers.controls.Callout;
 import feathers.controls.Check;
-import feathers.controls.GridView;
 import feathers.controls.HScrollBar;
 import feathers.controls.Label;
 import feathers.controls.LayoutGroup;
-import feathers.controls.ListView;
 import feathers.controls.Panel;
 import feathers.controls.Radio;
 import feathers.controls.TextInput;
 import feathers.controls.TextInputState;
 import feathers.controls.ToggleButton;
 import feathers.controls.ToggleButtonState;
-import feathers.controls.TreeView;
 import feathers.controls.VScrollBar;
 import feathers.controls.dataRenderers.ItemRenderer;
-import feathers.controls.dataRenderers.TreeViewItemRenderer;
-import feathers.core.DefaultToolTipManager;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalListLayout;
@@ -94,6 +90,8 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND:String = "moonshine-layoutgroup-white-background";
 	public static final THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND = "moonshine-layoutgroup-rowItem-white-background";
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
+	public static final THEME_VARIANT_LABEL_COMPONENT_TITLE:String = "moonshine-label-item-title";
+	public static final THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION:String = "moonshine-label-item-description";
 	
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-download-with-no-label";
@@ -122,10 +120,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(Check, null, setCheckStyles);
 
-		this.styleProvider.setStyleFunction(GridView, null, setGridViewStyles);
-		this.styleProvider.setStyleFunction(GridView, GridView.VARIANT_BORDERLESS, setBorderlessGridViewStyles);
-		this.styleProvider.setStyleFunction(ItemRenderer, GridView.CHILD_VARIANT_HEADER, setGridViewHeaderStyles);
-
 		// this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
@@ -133,11 +127,11 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, LayoutGroup.VARIANT_TOOL_BAR, setToolBarLayoutGroupStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_WARNING_BAR, setWarningBarLayoutGroupStyles);
 
-		// this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewStyles);
-
 		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
 
 		this.styleProvider.setStyleFunction(Radio, null, setRadioStyles);
+
+		this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewWithoutFixScrollStyles);
 
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
@@ -146,15 +140,10 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_BUSY_LABEL, setBusyLabelStyles);
-
+		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LABEL_COMPONENT_TITLE, setComponentTitleLabelStyle);
+		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION, setComponentDescriptionLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_TEXT_LINK, setTextLinkyLabelStyles);
-
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_PLUGIN_LARGE_TITLE, setPluginLargeTitleStyles);
-
-		this.styleProvider.setStyleFunction(TreeView, null, setTreeViewStyles);
-		this.styleProvider.setStyleFunction(TreeView, TreeView.VARIANT_BORDERLESS, setBorderlessTreeViewStyles);
-		this.styleProvider.setStyleFunction(TreeViewItemRenderer, null, setTreeViewItemRendererStyles);
-		this.styleProvider.setStyleFunction(ToggleButton, TreeViewItemRenderer.CHILD_VARIANT_DISCLOSURE_BUTTON, setTreeViewItemRendererDisclosureButtonStyles);
 
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, setImageDownloadWithLabelStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL, setImageDownloadWithoutLabelStyles);
@@ -420,77 +409,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		check.gap = 4.0;
 	}
 
-	private function setGridViewStyles(gridView:GridView):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.border = SolidColor(1.0, 0x666666);
-		backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
-		backgroundSkin.cornerRadius = 0.0;
-		backgroundSkin.minWidth = 160.0;
-		backgroundSkin.minHeight = 160.0;
-		gridView.backgroundSkin = backgroundSkin;
-
-		var columnResizeSkin = new RectangleSkin(SolidColor(0xC165B8), null);
-		columnResizeSkin.width = 2.0;
-		columnResizeSkin.height = 2.0;
-		gridView.columnResizeSkin = columnResizeSkin;
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		gridView.focusRectSkin = focusRectSkin;
-
-		var layout = new VerticalListLayout();
-		layout.requestedRowCount = 5;
-		gridView.layout = layout;
-
-		gridView.fixedScrollBars = true;
-	}
-
-	private function setBorderlessGridViewStyles(gridView:GridView):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.border = null;
-		backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
-		backgroundSkin.cornerRadius = 0.0;
-		backgroundSkin.minWidth = 160.0;
-		backgroundSkin.minHeight = 160.0;
-		gridView.backgroundSkin = backgroundSkin;
-
-		var columnResizeSkin = new RectangleSkin(SolidColor(0xC165B8), null);
-		columnResizeSkin.width = 2.0;
-		columnResizeSkin.height = 2.0;
-		gridView.columnResizeSkin = columnResizeSkin;
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		gridView.focusRectSkin = focusRectSkin;
-
-		var layout = new VerticalListLayout();
-		layout.requestedRowCount = 5;
-		gridView.layout = layout;
-
-		gridView.fixedScrollBars = true;
-	}
-
-	private function setGridViewHeaderStyles(headerRenderer:ItemRenderer):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x555555);
-		headerRenderer.backgroundSkin = backgroundSkin;
-
-		headerRenderer.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		headerRenderer.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		headerRenderer.embedFonts = true;
-
-		headerRenderer.horizontalAlign = LEFT;
-		headerRenderer.paddingTop = 4.0;
-		headerRenderer.paddingRight = 4.0;
-		headerRenderer.paddingBottom = 4.0;
-		headerRenderer.paddingLeft = 4.0;
-		headerRenderer.gap = 4.0;
-	}
-
 	private function setRadioStyles(radio:Radio):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0x000000, 0.0);
@@ -617,63 +535,10 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 	private function setTextLinkyLabelStyles(label:Label):Void {
 		var tmpFormat = new TextFormat();
+		tmpFormat.size = 14;
 		tmpFormat.color = 0x0000FF;
 		tmpFormat.underline = true;
 		label.textFormat = tmpFormat;
-	}
-
-	private function setListViewStyles(listView:ListView):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.border = SolidColor(1.0, 0x666666);
-		backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
-		backgroundSkin.cornerRadius = 0.0;
-		backgroundSkin.minWidth = 160.0;
-		backgroundSkin.minHeight = 160.0;
-		listView.backgroundSkin = backgroundSkin;
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		listView.focusRectSkin = focusRectSkin;
-
-		var layout = new VerticalListLayout();
-		layout.requestedRowCount = 5;
-		listView.layout = layout;
-
-		listView.paddingTop = 1.0;
-		listView.paddingRight = 1.0;
-		listView.paddingBottom = 1.0;
-		listView.paddingLeft = 1.0;
-
-		listView.fixedScrollBars = true;
-	}
-
-	private function setBorderlessListViewStyles(listView:ListView):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.border = null;
-		backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
-		backgroundSkin.cornerRadius = 0.0;
-		backgroundSkin.minWidth = 160.0;
-		backgroundSkin.minHeight = 160.0;
-		listView.backgroundSkin = backgroundSkin;
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		listView.focusRectSkin = focusRectSkin;
-
-		var layout = new VerticalListLayout();
-		layout.requestedRowCount = 5;
-		listView.layout = layout;
-
-		listView.paddingTop = 0.0;
-		listView.paddingRight = 0.0;
-		listView.paddingBottom = 0.0;
-		listView.paddingLeft = 0.0;
-
-		listView.fixedScrollBars = true;
 	}
 
 	private function setPanelStyles(panel:Panel):Void {
@@ -706,12 +571,24 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	}
 
 	private function setBusyLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xffffff, false);
+		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xffffff);
+		label.embedFonts = true;
+	}
+
+	private function setComponentTitleLabelStyle(label:Label):Void
+	{
+		label.textFormat = new TextFormat("DejaVuSansTF", 16, 0x000000);
+		label.embedFonts = true;
+	}
+
+	private function setComponentDescriptionLabelStyles(label:Label):Void 
+	{
+		label.textFormat = new TextFormat("DejaVuSansTF", 13, 0x444444);
 		label.embedFonts = true;
 	}
 
 	private function setPluginLargeTitleStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 24, 0xe252d3, false);
+		label.textFormat = new TextFormat("DejaVuSansTF", 24, 0xe252d3);
 		label.embedFonts = true;
 	}
 
@@ -768,110 +645,20 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		textInput.paddingLeft = 5.0;
 	}
 
-	private function setTreeViewStyles(treeView:TreeView):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.border = SolidColor(1.0, 0x666666);
-		backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
-		backgroundSkin.cornerRadius = 0.0;
-		backgroundSkin.minWidth = 160.0;
-		backgroundSkin.minHeight = 160.0;
-		treeView.backgroundSkin = backgroundSkin;
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		treeView.focusRectSkin = focusRectSkin;
-
-		var layout = new VerticalListLayout();
-		layout.requestedRowCount = 5;
-		treeView.layout = layout;
-
-		treeView.paddingTop = 1.0;
-		treeView.paddingRight = 1.0;
-		treeView.paddingBottom = 1.0;
-		treeView.paddingLeft = 1.0;
-
-		treeView.fixedScrollBars = true;
-	}
-
-	private function setBorderlessTreeViewStyles(treeView:TreeView):Void {
+	private function setBorderlessListViewWithoutFixScrollStyles(listView:ListView):Void 
+	{
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0x444444);
 		backgroundSkin.border = null;
-		backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
+		//backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
 		backgroundSkin.cornerRadius = 0.0;
 		backgroundSkin.minWidth = 160.0;
 		backgroundSkin.minHeight = 160.0;
-		treeView.backgroundSkin = backgroundSkin;
+		listView.backgroundSkin = backgroundSkin;
 
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		treeView.focusRectSkin = focusRectSkin;
-
-		var layout = new VerticalListLayout();
-		layout.requestedRowCount = 5;
-		treeView.layout = layout;
-
-		treeView.paddingTop = 0.0;
-		treeView.paddingRight = 0.0;
-		treeView.paddingBottom = 0.0;
-		treeView.paddingLeft = 0.0;
-
-		treeView.fixedScrollBars = true;
+		//listView.fixedScrollBars = true;
 	}
 
-	private function setTreeViewItemRendererStyles(itemRenderer:TreeViewItemRenderer):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.selectedFill = SolidColor(0xC165B8);
-		backgroundSkin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(0x393939));
-		itemRenderer.backgroundSkin = backgroundSkin;
-
-		var alternateBackgroundSkin = new RectangleSkin();
-		alternateBackgroundSkin.fill = SolidColor(0x4D4C4C);
-		alternateBackgroundSkin.selectedFill = SolidColor(0xC165B8);
-		alternateBackgroundSkin.setFillForState(ToggleButtonState.HOVER(false), SolidColor(0x393939));
-		itemRenderer.alternateBackgroundSkin = alternateBackgroundSkin;
-
-		itemRenderer.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		itemRenderer.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		itemRenderer.embedFonts = true;
-
-		itemRenderer.paddingTop = 4.0;
-		itemRenderer.paddingRight = 4.0;
-		itemRenderer.paddingBottom = 4.0;
-		itemRenderer.paddingLeft = 4.0;
-		itemRenderer.indentation = 12.0;
-	}
-
-	private function setTreeViewItemRendererDisclosureButtonStyles(button:ToggleButton):Void {
-		var icon = new Shape();
-		icon.graphics.beginFill(0xff00ff, 0.0);
-		icon.graphics.drawRect(0.0, 0.0, 12.0, 12.0);
-		icon.graphics.endFill();
-		icon.graphics.beginFill(0x6F7777);
-		icon.graphics.moveTo(2.0, 2.0);
-		icon.graphics.lineTo(10.0, 6.0);
-		icon.graphics.lineTo(2.0, 10.0);
-		icon.graphics.lineTo(2.0, 2.0);
-		icon.graphics.endFill();
-		button.icon = icon;
-
-		var selectedIcon = new Shape();
-		selectedIcon.graphics.beginFill(0xff00ff, 0.0);
-		selectedIcon.graphics.drawRect(0.0, 0.0, 12.0, 12.0);
-		selectedIcon.graphics.endFill();
-		selectedIcon.graphics.beginFill(0x6F7777);
-		selectedIcon.graphics.moveTo(2.0, 2.0);
-		selectedIcon.graphics.lineTo(10.0, 2.0);
-		selectedIcon.graphics.lineTo(6.0, 10.0);
-		selectedIcon.graphics.lineTo(2.0, 2.0);
-		selectedIcon.graphics.endFill();
-		button.selectedIcon = selectedIcon;
-	}
-	
 	private function setImageDownloadWithLabelStyles(layout:Button):Void 
 	{
 		var downloadIconBitmap = new DownloadIconWithLabel(cast(layout.width, Int), cast(layout.height, Int));
