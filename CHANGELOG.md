@@ -6,18 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ## Moonshine SDK Installer [3.8.0]
 
 ### Added
-* Add [Harman Adobe AIR](https://airsdk.harman.com/) SDK ([#32](https://github.com/prominic/Moonshine-SDK-Installer/milestone/10?closed=1))
-* Add additional version of SDK to satisfy language server ([#38](https://github.com/prominic/Moonshine-SDK-Installer/issues/38))
+* Add [Harman Adobe AIR](https://airsdk.harman.com/) SDK ([#32](https://github.com/prominic/Moonshine-SDK-Installer/issues/32))
+* Updated default OpenJDK to v11.0.10 to support the latest language server ([#38](https://github.com/prominic/Moonshine-SDK-Installer/issues/38))
+* Added additional OpenJDK 8 SDK for projects that still require JDK 8 (including HCL Domino projects).
 
 ### Fixed
-* Fixed queue SDK downloads ([#40](https://github.com/prominic/Moonshine-SDK-Installer/issues/40))
-* Fixed issue with showing bulk license agreement ([#44](https://github.com/prominic/Moonshine-SDK-Installer/issues/44))
+* Fixed queue for SDK downloads ([#40](https://github.com/prominic/Moonshine-SDK-Installer/issues/40))
+* Fixed display for license agreements when installing all SDKs ([#44](https://github.com/prominic/Moonshine-SDK-Installer/issues/44))
 
 ### Changed
-* Improvement to installation process of Apache Royale nightly build ([#34](https://github.com/prominic/Moonshine-SDK-Installer/issues/34), [#35](https://github.com/prominic/Moonshine-SDK-Installer/issues/35)))
-* Show version number of installed SDK ([#39](https://github.com/prominic/Moonshine-SDK-Installer/issues/39))
-* Windows: Upgrade Git distribution to version 2.30.0.windows.1/2 ([#37](https://github.com/prominic/Moonshine-SDK-Installer/issues/37))
-* Show version and build number on main page of app ([#45](https://github.com/prominic/Moonshine-SDK-Installer/issues/45)
+* Improved installation process for Apache Royale nightly build to make it less likely that the last valid installation will be lost if there is an error ([#34](https://github.com/prominic/Moonshine-SDK-Installer/issues/34), [#35](https://github.com/prominic/Moonshine-SDK-Installer/issues/35)))
+* Show a version number for each listed SDK ([#39](https://github.com/prominic/Moonshine-SDK-Installer/issues/39))
+* Windows: Upgraded Git distribution to version 2.30.0.windows.1/2 ([#37](https://github.com/prominic/Moonshine-SDK-Installer/issues/37))
+* Show application version and build number on main page ([#45](https://github.com/prominic/Moonshine-SDK-Installer/issues/45)
 
 ## Moonshine SDK Installer [3.7.0]
 
