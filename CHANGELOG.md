@@ -3,7 +3,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [3.8.0]
+
+### Added
+* Add [Harman Adobe AIR](https://airsdk.harman.com/) SDK ([#32](https://github.com/prominic/Moonshine-SDK-Installer/milestone/10?closed=1))
+* Add additional version of SDK to satisfy language server ([#38](https://github.com/prominic/Moonshine-SDK-Installer/issues/38))
+
+### Fixed
+* Fixed queue SDK downloads ([#40](https://github.com/prominic/Moonshine-SDK-Installer/issues/40))
+* Fixed issue with showing bulk license agreement ([#44](https://github.com/prominic/Moonshine-SDK-Installer/issues/44))
+
+### Changed
+* Improvement to installation process of Apache Royale nightly build ([#34](https://github.com/prominic/Moonshine-SDK-Installer/issues/34), [#35](https://github.com/prominic/Moonshine-SDK-Installer/issues/35)))
+* Show version number of installed SDK ([#39](https://github.com/prominic/Moonshine-SDK-Installer/issues/39))
+* Windows: Upgrade Git distribution to version 2.30.0.windows.1/2 ([#37](https://github.com/prominic/Moonshine-SDK-Installer/issues/37))
+* Show version and build number on main page of app ([#45](https://github.com/prominic/Moonshine-SDK-Installer/issues/45)
+
 ## Moonshine SDK Installer [3.7.0]
+
+### Added
 
 * Windows: Switch native Adobe Air installer to NSIS.
 * Windows: Enable automatic updates.
