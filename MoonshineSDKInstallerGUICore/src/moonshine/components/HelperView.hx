@@ -171,14 +171,15 @@ class HelperView extends LayoutGroup {
 
 		this.radioByFeature = new Radio();
 		this.radioByFeature.text = "By Feature";
-		this.radioByFeature.selected = HelperConstants.IS_RUNNING_IN_MOON ? true : false;
 		this.radioByFeature.toggleGroup = this.filterByGroup;
 		this.radioBySoftware = new Radio();
 		this.radioBySoftware.text = "By Software";
-		this.radioBySoftware.selected = HelperConstants.IS_RUNNING_IN_MOON ? false : true;
 		this.radioBySoftware.toggleGroup = this.filterByGroup;
 		radioContainer.addChild(this.radioByFeature);
 		radioContainer.addChild(this.radioBySoftware);
+
+		if (!HelperConstants.IS_RUNNING_IN_MOON) this.filterByGroup.selectedIndex = 1;
+		this.onFilterTypeChanged(null);
 
 		this.filterByGroup.addEventListener(Event.CHANGE, onFilterTypeChanged, false, 0, true);
 
