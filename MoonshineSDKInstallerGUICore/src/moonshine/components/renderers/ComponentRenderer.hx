@@ -25,7 +25,7 @@ import feathers.layout.HorizontalLayout;
 import feathers.core.InvalidationFlag;
 import moonshine.theme.SDKInstallerTheme;
 
-class ComponentRenderer extends LayoutGroup
+class ComponentRenderer extends LayoutGroup implements IDataRenderer
 {
 	private var assetDownloaded:LayoutGroup;
 	private var assetNote:LayoutGroup;
@@ -42,6 +42,22 @@ class ComponentRenderer extends LayoutGroup
 	private var lblDescription:Label;
 	private var lblCreatedOn:Label;
 	private var cmbVariants:PopUpListView;
+
+	@:flash.property
+	public var data(get, set):Dynamic;
+
+	private function get_data():Dynamic {
+		return this.stateData;
+	}
+
+	private function set_data(value:Dynamic):Dynamic {
+		if(this.stateData == value) {
+			return this.stateData;
+		}
+		this.stateData = cast(value, ComponentVO);
+		setInvalid(InvalidationFlag.DATA);
+		return stateData;
+	}
 
 	public function new() {
 		super();
@@ -62,7 +78,6 @@ class ComponentRenderer extends LayoutGroup
 		viewLayout.paddingTop = 10.0;
 		viewLayout.paddingRight = 10.0;
 		viewLayout.paddingBottom = 4.0;
-		viewLayout.paddingLeft = 10.0;
 		viewLayout.gap = 10.0;
 		this.layout = viewLayout;
 
@@ -196,6 +211,15 @@ class ComponentRenderer extends LayoutGroup
 		super.update();
 	}
 
+	public function resetFields():Void {
+		this.lblTitle.text = "";
+		this.lblDescription.text = "";
+		this.assetLogo.source = null;
+		this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
+		this.cmbVariants.dataProvider = null;
+		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
+	}
+
 	private function getNewAssetButtonForStateIcons(variant:String, layoutData:AnchorLayoutData):Button {
 		var tmpAsset = new Button();
 		tmpAsset.useHandCursor = true;
@@ -245,15 +269,6 @@ class ComponentRenderer extends LayoutGroup
 		}
 
 		this.updateItemIconState();
-	}
-
-	private function resetFields():Void {
-		this.lblTitle.text = "";
-		this.lblDescription.text = "";
-		this.assetLogo.source = null;
-		this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
-		this.cmbVariants.dataProvider = null;
-		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
 	}
 
 	private function updateItemIconState():Void 

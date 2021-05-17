@@ -51,6 +51,7 @@ import moonshine.style.MoonshineButtonSkin;
 import openfl.display.Shape;
 import openfl.filters.GlowFilter;
 import openfl.text.TextFormat;
+import openfl.display.GradientType;
 import moonshine.theme.assets.DownloadIconWithLabel;
 import moonshine.theme.assets.DownloadIconWithoutLabel;
 import moonshine.theme.assets.NoteIconWithLabel;
@@ -92,6 +93,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
 	public static final THEME_VARIANT_LABEL_COMPONENT_TITLE:String = "moonshine-label-item-title";
 	public static final THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION:String = "moonshine-label-item-description";
+	public static final THEME_VARIANT_RENDERER_PACKAGE_DEPENDENCY:String = "msdki-package-dependency-renderer";
 	
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-download-with-no-label";
@@ -120,7 +122,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(Check, null, setCheckStyles);
 
-		// this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
+		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
 
@@ -136,6 +138,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND, setRowItemBodyWithWhiteBackgroundViewStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_RENDERER_PACKAGE_DEPENDENCY, setRowPackageDependencyViewStyle);
 
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 
@@ -406,6 +409,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		// check.embedFonts = true;
 
 		check.horizontalAlign = LEFT;
+		check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
 		check.gap = 4.0;
 	}
 
@@ -512,6 +516,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		// radio.embedFonts = true;
 
 		radio.horizontalAlign = LEFT;
+		radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
 		radio.gap = 4.0;
 	}
 
@@ -534,11 +539,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	}
 
 	private function setTextLinkyLabelStyles(label:Label):Void {
-		var tmpFormat = new TextFormat();
-		tmpFormat.size = 14;
-		tmpFormat.color = 0x0000FF;
-		tmpFormat.underline = true;
-		label.textFormat = tmpFormat;
+		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x0000ff, false, false, true);
 	}
 
 	private function setPanelStyles(panel:Panel):Void {
@@ -568,6 +569,11 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	{
 		var backgroundSkin = new UnderlineSkin(SolidColor(0xffffff), SolidColor(1.0, 0xcccccc));
 		view.backgroundSkin = backgroundSkin;
+	}
+
+	private function setRowPackageDependencyViewStyle(layout:LayoutGroup):Void
+	{
+		layout.backgroundSkin = new UnderlineSkin(Gradient(LINEAR, [0xffffff, 0xe4e4e4], [1.0, 1.0], [0, 255]), SolidColor(1.0, 0xf4f4f4));
 	}
 
 	private function setBusyLabelStyles(label:Label):Void {
@@ -648,15 +654,14 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	private function setBorderlessListViewWithoutFixScrollStyles(listView:ListView):Void 
 	{
 		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
+		backgroundSkin.fill = null;
 		backgroundSkin.border = null;
-		//backgroundSkin.setBorderForState(TextInputState.FOCUSED, SolidColor(1.0, 0xC165B8));
-		backgroundSkin.cornerRadius = 0.0;
-		backgroundSkin.minWidth = 160.0;
-		backgroundSkin.minHeight = 160.0;
 		listView.backgroundSkin = backgroundSkin;
 
-		//listView.fixedScrollBars = true;
+		var layout = new VerticalListLayout();
+		listView.layout = layout;
+
+		listView.fixedScrollBars = false;
 	}
 
 	private function setImageDownloadWithLabelStyles(layout:Button):Void 

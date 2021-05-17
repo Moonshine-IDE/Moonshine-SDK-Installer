@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import feathers.controls.dataRenderers.IDataRenderer;
 import moonshine.events.HelperEvent;
 import openfl.display.DisplayObject;
 import feathers.data.ListViewItemState;
@@ -19,7 +20,7 @@ import feathers.layout.HorizontalLayout;
 import moonshine.theme.SDKInstallerTheme;
 import feathers.core.InvalidationFlag;
 
-class PackageRenderer extends LayoutGroup {
+class PackageRenderer extends LayoutGroup implements IDataRenderer {
 	private var lblTitle:Label;
 	private var lblDescription:Label;
 	private var stateData:PackageVO;
@@ -27,8 +28,25 @@ class PackageRenderer extends LayoutGroup {
 	private var lstDependencyTypes:ListView;
 	private var packageDependencyRendererRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>;
 
-	private var packageDependencyRendererUpdateFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> {
-		itemRenderer.updateItemState(cast(state.data, ComponentVO));
+	@:flash.property
+	public var data(get, set):Dynamic;
+
+	private function get_data():Dynamic {
+		return this.stateData;
+	}
+
+	private function set_data(value:Dynamic):Dynamic {
+		if(this.stateData == value) {
+			return this.stateData;
+		}
+		this.stateData = cast(value, PackageVO);
+		setInvalid(InvalidationFlag.DATA);
+		return stateData;
+	}
+
+	private var packageDependencyRendererUpdateFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
+	{
+		
 	};
 
 	public function new() {
@@ -41,13 +59,8 @@ class PackageRenderer extends LayoutGroup {
 		}, this.packageDependencyRendererUpdateFn,
 			(itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> {
 				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
-				itemRenderer.updateItemState(null);
+				itemRenderer.resetFields();
 			});
-	}
-
-	public function updateItemState(stateData:PackageVO):Void {
-		this.stateData = stateData;
-		this.setInvalid(InvalidationFlag.DATA);
 	}
 
 	override private function initialize():Void {
@@ -83,7 +96,7 @@ class PackageRenderer extends LayoutGroup {
 		titleDesContainer.addChild(this.lblDescription);
 
 		this.lstDependencyTypes = new ListView();
-		// this.lstDependencyTypes.variant = ListView.VARIANT_BORDERLESS;
+		this.lstDependencyTypes.variant = ListView.VARIANT_BORDERLESS;
 		this.lstDependencyTypes.itemRendererRecycler = this.packageDependencyRendererRecycler;
 		this.lstDependencyTypes.layoutData = new HorizontalLayoutData(null, null);
 		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
@@ -123,6 +136,17 @@ class PackageRenderer extends LayoutGroup {
 		super.update();
 	}
 
+	public function resetFields():Void {
+		this.lblTitle.text = "";
+		this.lblDescription.text = "";
+
+		this.stateImageContainer.includeInLayout = false;
+		this.stateImageContainer.visible = false;
+
+		this.lstDependencyTypes.dataProvider = null;
+		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
+	}
+
 	private function updateFields():Void {
 		this.lblTitle.text = this.stateData.title;
 		this.lblDescription.text = this.stateData.description;
@@ -138,17 +162,6 @@ class PackageRenderer extends LayoutGroup {
 			this.lstDependencyTypes.dataProvider = null;
 			this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 		}
-	}
-
-	private function resetFields():Void {
-		this.lblTitle.text = "";
-		this.lblDescription.text = "";
-
-		this.stateImageContainer.includeInLayout = false;
-		this.stateImageContainer.visible = false;
-
-		this.lstDependencyTypes.dataProvider = null;
-		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 	}
 
 	private function onDownloadVariantChanged(event:HelperEvent):Void {

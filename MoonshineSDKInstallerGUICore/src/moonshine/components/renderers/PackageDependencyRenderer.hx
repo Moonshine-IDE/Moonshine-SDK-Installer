@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import feathers.controls.dataRenderers.IDataRenderer;
 import actionScripts.utils.Parser;
 import feathers.events.TriggerEvent;
 import feathers.controls.PopUpListView;
@@ -27,7 +28,7 @@ import feathers.layout.HorizontalLayout;
 import feathers.core.InvalidationFlag;
 import moonshine.theme.SDKInstallerTheme;
 
-class PackageDependencyRenderer extends LayoutGroup {
+class PackageDependencyRenderer extends LayoutGroup implements IDataRenderer {
 	private var assetDownloaded:LayoutGroup;
 	private var assetNote:LayoutGroup;
 	private var assetError:LayoutGroup;
@@ -39,18 +40,29 @@ class PackageDependencyRenderer extends LayoutGroup {
 	private var lblTitle:Label;
 	private var cmbVariants:PopUpListView;
 
+	@:flash.property
+	public var data(get, set):Dynamic;
+
+	private function get_data():Dynamic {
+		return this.stateData;
+	}
+
+	private function set_data(value:Dynamic):Dynamic {
+		if(this.stateData == value) {
+			return this.stateData;
+		}
+		this.stateData = cast(value, ComponentVO);
+		setInvalid(InvalidationFlag.DATA);
+		return stateData;
+	}
+
 	public function new() {
 		super();
 	}
 
-	public function updateItemState(stateData:ComponentVO):Void {
-		this.stateData = stateData;
-		this.setInvalid(InvalidationFlag.DATA);
-	}
-
 	override private function initialize():Void {
 		this.height = 40;
-		// this.variant = SDKInstallerTheme.THEME_VARIANT_BODY_WITH_GREY_BACKGROUND;
+		this.variant = SDKInstallerTheme.THEME_VARIANT_RENDERER_PACKAGE_DEPENDENCY;
 
 		var viewLayout = new HorizontalLayout();
 		viewLayout.horizontalAlign = RIGHT;
@@ -146,6 +158,13 @@ class PackageDependencyRenderer extends LayoutGroup {
 		super.update();
 	}
 
+	public function resetFields():Void {
+		this.lblTitle.text = "";
+		this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
+		this.cmbVariants.dataProvider = null;
+		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
+	}
+
 	private function getNewAssetButtonForStateIcons(variant:String, layoutData:AnchorLayoutData):Button {
 		var tmpAsset = new Button();
 		tmpAsset.useHandCursor = true;
@@ -182,13 +201,6 @@ class PackageDependencyRenderer extends LayoutGroup {
 		}
 
 		this.updateItemIconState();
-	}
-
-	private function resetFields():Void {
-		this.lblTitle.text = "";
-		this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
-		this.cmbVariants.dataProvider = null;
-		this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
 	}
 
 	private function updateItemIconState():Void {

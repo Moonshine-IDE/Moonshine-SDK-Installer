@@ -66,12 +66,11 @@ class HelperView extends LayoutGroup {
 			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
 			return itemRenderer;
 		}, (itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
-			itemRenderer.updateItemState(cast(state.data, ComponentVO));
 			state.data.addEventListener("isUpdated", this.onItemBeingUpdated, false, 0, true);
 		},
 		(itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
 			state.data.removeEventListener("isUpdated", this.onItemBeingUpdated);
-			itemRenderer.updateItemState(null);
+			itemRenderer.resetFields();
 		}, 
 		(itemRenderer:ComponentRenderer) -> {
 			itemRenderer.removeEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onLicenseViewRequested);
@@ -84,7 +83,7 @@ class HelperView extends LayoutGroup {
 			return itemRenderer;
 		}, this.byFeatureRecyclerUpdateFn,
 			(itemRenderer:PackageRenderer, state:ListViewItemState) -> {
-				itemRenderer.updateItemState(null);
+				itemRenderer.resetFields();
 			}, 
 			(itemRenderer:PackageRenderer) -> {
 				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
@@ -137,12 +136,7 @@ class HelperView extends LayoutGroup {
 	private var bySoftwareRecycler:DisplayObjectRecycler<Dynamic, ListViewItemState, DisplayObject>;
 
 	private var byFeatureRecyclerUpdateFn = (itemRenderer:PackageRenderer, state:ListViewItemState) -> {
-		itemRenderer.updateItemState(cast(state.data, PackageVO));
-	};
-
-	private var bySoftwareRecyclerUpdateFn = (itemRenderer:ComponentRenderer, state:ListViewItemState) -> {
-		itemRenderer.updateItemState(cast(state.data, ComponentVO));
-		//state.data.addEventListener("isUpdated", this.onItemBeingUpdated, false, 0, true);
+		//itemRenderer.updateItemState(cast(state.data, PackageVO));
 	};
 
 	override private function initialize():Void {
@@ -151,10 +145,7 @@ class HelperView extends LayoutGroup {
 		// root container
 		var viewLayout = new VerticalLayout();
 		viewLayout.horizontalAlign = CENTER;
-		viewLayout.paddingTop = 10.0;
-		viewLayout.paddingRight = 10.0;
 		viewLayout.paddingBottom = 4.0;
-		viewLayout.paddingLeft = 10.0;
 		viewLayout.gap = 10.0;
 		this.layout = viewLayout;
 
