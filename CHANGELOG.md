@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [3.8.1]
+
+### Fixed
+* Fixed issue where downloading Royale Nightly fails with download unavailable error
+* Fixed issue where downloading Royale Nightly fails with already downloaded error in certain circumstances
+
 ## Moonshine SDK Installer [3.8.0]
 
 ### Added
