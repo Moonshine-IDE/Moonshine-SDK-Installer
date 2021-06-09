@@ -6,8 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ## Moonshine SDK Installer [3.8.1]
 
 ### Fixed
-* Fixed issue where downloading Royale Nightly fails with download unavailable error
-* Fixed issue where downloading Royale Nightly fails with already downloaded error in certain circumstances
+* Fixed issue where downloading Royale Nightly fails with download unavailable error ([#50](https://github.com/prominic/Moonshine-SDK-Installer/issues/50))
+* Fixed issue where downloading Royale Nightly fails with already downloaded error in certain circumstances ([#50](https://github.com/prominic/Moonshine-SDK-Installer/issues/50))
 
 ## Moonshine SDK Installer [3.8.0]
 
