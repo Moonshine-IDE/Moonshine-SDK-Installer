@@ -150,9 +150,15 @@
 				var tmpCountLeftToDownload:int;
 				for each (var item:ComponentVO in model.components.array)
 				{
-					if (item.isAlreadyDownloaded || item.isDownloaded ||
+					if ((item.isAlreadyDownloaded || item.isDownloaded ||
 							item.isDownloading || item.isSelectedToDownload ||
-							!item.isDownloadable)
+							!item.isDownloadable) && !item.downloadVariants)
+					{
+						continue;
+					}
+
+					if (item.downloadVariants &&
+							!item.downloadVariants.getItemAt(item.selectedVariantIndex).isReDownloadAvailable)
 					{
 						continue;
 					}
