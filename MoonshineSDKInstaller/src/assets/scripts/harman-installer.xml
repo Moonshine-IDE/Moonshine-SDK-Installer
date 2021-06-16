@@ -97,6 +97,16 @@
             <replacefilter token="{airHome}/frameworks/"
                             value=""/>
         </replace>
+		<replace file="frameworks/flex-config.xml">
+			<replacefilter token="{playerglobalHome}/"
+						   value="libs/player/"/>
+		</replace>
+		<replaceregexp file="frameworks/flex-config.xml"
+					   match="&lt;target-player&gt;[^&lt;]*&lt;/target-player&gt;" replace="&lt;target-player&gt;32.0&lt;/target-player&gt;"
+					   flags="g"/>
+		<replaceregexp file="frameworks/flex-config.xml"
+					   match="&lt;swf-version&gt;[^&lt;]*&lt;/swf-version&gt;" replace="&lt;swf-version&gt;44&lt;/swf-version&gt;"
+					   flags="g"/>
     </target>
 	
 	<!-- Deletes temporary files for Windows -->
