@@ -145,33 +145,6 @@
 			
 			private function openLicenseView(completion:Function, singleViewItem:ComponentVO=null, showAsNonInstallView:Boolean=false):void
 			{
-				// give a check before opening license view
-				// in case all items are downloaded or downloading
-				var tmpCountLeftToDownload:int;
-				for each (var item:ComponentVO in model.components.array)
-				{
-					if ((item.isAlreadyDownloaded || item.isDownloaded ||
-							item.isDownloading || item.isSelectedToDownload ||
-							!item.isDownloadable) && !item.downloadVariants)
-					{
-						continue;
-					}
-
-					if (item.downloadVariants &&
-							!item.downloadVariants.get(item.selectedVariantIndex).isReDownloadAvailable)
-					{
-						continue;
-					}
-
-					tmpCountLeftToDownload++;
-				}
-
-				if (tmpCountLeftToDownload == 0)
-				{
-					Alert.show("All item(s) either downloading or being downloaded.", "Note!");
-					return;
-				}
-
 				var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView , true));
 				licenses.width = this.width * .9;
 				licenses.height = this.height * .8;
@@ -217,6 +190,7 @@
 					switch (item.type)
 					{
 						case ComponentTypes.TYPE_FLEX:
+						case ComponentTypes.TYPE_FLEX_HARMAN:
 							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Flex_SDK");
 							break;
 						case ComponentTypes.TYPE_ROYALE:
@@ -287,6 +261,13 @@
 						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
 						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
+						INSTALLER_APACHE_FLEX.startInstallation();
+						break;
+					case ComponentTypes.TYPE_FLEX_HARMAN:
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_HARMAN_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX_HARMAN).version;
 						INSTALLER_APACHE_FLEX.startInstallation();
 						break;
 					case ComponentTypes.TYPE_FEATHERS:
@@ -474,6 +455,33 @@
 			
 			private function onDownloadAComponentRequested(event:HelperEvent):void
 			{
+				// give a check before opening license view
+				// in case all items are downloaded or downloading
+				var tmpCountLeftToDownload:int;
+				for each (var item:ComponentVO in model.components.array)
+				{
+					if ((item.isAlreadyDownloaded || item.isDownloaded ||
+							item.isDownloading || item.isSelectedToDownload ||
+							!item.isDownloadable) && !item.downloadVariants)
+					{
+						continue;
+					}
+
+					if (item.downloadVariants &&
+							!item.downloadVariants.get(item.selectedVariantIndex).isReDownloadAvailable)
+					{
+						continue;
+					}
+
+					tmpCountLeftToDownload++;
+				}
+
+				if (tmpCountLeftToDownload == 0)
+				{
+					Alert.show("All item(s) either downloading or being downloaded.", "Note!");
+					return;
+				}
+
 				(event.data as ComponentVO).isDownloading = true;
 				if ((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX)
 				{

@@ -32,7 +32,7 @@ class ApplicationMain
 
 		ManifestResources.init(config);
 
-		app.meta["build"] = "302";
+		app.meta["build"] = "304";
 		app.meta["company"] = "Prominic.NET";
 		app.meta["file"] = "MoonshineSDKInstallerGUICore";
 		app.meta["name"] = "MoonshineSDKInstallerGUICore";

@@ -168,7 +168,7 @@ package actionScripts.ui.views
 		private function onComponentLicenseViewRequest(event:HelperEvent):void
 		{
 			var stateData:ComponentVO = event.data as ComponentVO;
-			if (stateData.type == ComponentTypes.TYPE_FLEX ||
+			if (stateData.type == ComponentTypes.TYPE_FLEX || stateData.type == ComponentTypes.TYPE_FLEX_HARMAN ||
 				stateData.type == ComponentTypes.TYPE_SVN || 
 				(HelperConstants.IS_MACOS && stateData.type == ComponentTypes.TYPE_GIT)) 
 			{
