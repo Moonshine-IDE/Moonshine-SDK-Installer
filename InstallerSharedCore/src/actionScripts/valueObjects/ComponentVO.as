@@ -6,9 +6,10 @@ package actionScripts.valueObjects
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
 		
-	[Bindable("isUpdated")]
-	public class ComponentVO extends EventDispatcher
+	[Bindable] public class ComponentVO extends EventDispatcher
 	{
+		private static const EVENT_UPDATED:String = "isUpdated";
+
 		public var id:String;
 		public var title:String;
 		public var description:String;
@@ -51,7 +52,7 @@ package actionScripts.valueObjects
 			if (_isDownloading != value)
 			{
 				_isDownloading = value;
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 		}
 		public function get isDownloading():Boolean
@@ -65,7 +66,7 @@ package actionScripts.valueObjects
 			if (_isDownloaded != value)
 			{
 				_isDownloaded = value;
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 		}
 		public function get isDownloaded():Boolean
@@ -79,7 +80,7 @@ package actionScripts.valueObjects
 			if (_hasError != value)
 			{
 				_hasError = value;
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 		}
 		public function get hasError():String
@@ -93,7 +94,7 @@ package actionScripts.valueObjects
 			if (_hasWarning != value)
 			{
 				_hasWarning = value;
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 		}
 		public function get hasWarning():String
@@ -108,7 +109,7 @@ package actionScripts.valueObjects
 			{
 				_isAlreadyDownloaded = value;
 				createdOn = FileUtils.getCreationDateForPath(installToPath);
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 			//_isAlreadyDownloaded = value;
 			
@@ -124,7 +125,7 @@ package actionScripts.valueObjects
 			if (_isSelectedToDownload != value)
 			{
 				_isSelectedToDownload = value;
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 		}
 		public function get isSelectedToDownload():Boolean
@@ -208,7 +209,7 @@ package actionScripts.valueObjects
 			if (_createdOn != value)
 			{
 				_createdOn = value;
-				dispatchEvent(new Event("isUpdated"));
+				dispatchEvent(new Event(EVENT_UPDATED));
 			}
 		}
 	}
