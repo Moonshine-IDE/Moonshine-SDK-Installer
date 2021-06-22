@@ -331,6 +331,7 @@
 				INSTALLER_APACHE_FLEX.removeEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady);
 				viewResourceConstants = INSTALLER_APACHE_FLEX.viewResourceConstants;
 				HelperConstants.IS_INSTALLER_READY = true;
+				helperViewWrapper.setHelperReady();
 				// TODO: next ui settlements
 			}
 			

@@ -321,7 +321,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 			this.assetDownload.toolTip = this.stateData.hasError;
 			this.assetDownload.enabled = HelperConstants.IS_RUNNING_IN_MOON
 				|| (!HelperConstants.IS_RUNNING_IN_MOON && HelperConstants.IS_INSTALLER_READY);
-			this.assetDownload.alpha = this.assetDownload.enabled ? 1.0 : 0.8;
+			this.assetDownload.alpha = this.assetDownload.enabled ? 1.0 : 0.5;
 		} else {
 			this.assetDownload.visible = false;
 			this.assetDownload.includeInLayout = false;
@@ -338,7 +338,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 			this.assetReDownload.toolTip = this.stateData.hasError;
 			this.assetReDownload.enabled = HelperConstants.IS_RUNNING_IN_MOON
 				|| (!HelperConstants.IS_RUNNING_IN_MOON && HelperConstants.IS_INSTALLER_READY);
-			this.assetReDownload.alpha = this.assetReDownload.enabled ? 1.0 : 0.8;
+			this.assetReDownload.alpha = this.assetReDownload.enabled ? 1.0 : 0.5;
 		} else {
 			this.assetReDownload.visible = false;
 			this.assetReDownload.includeInLayout = false;

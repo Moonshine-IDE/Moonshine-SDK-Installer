@@ -91,7 +91,11 @@ package actionScripts.ui.views
 		//  PUBLIC API
 		//
 		//--------------------------------------------------------------------------
-		
+
+		public function setHelperReady():void
+		{
+			(this.feathersUIControl as HelperView).setHelperReady();
+		}
 		
 		//--------------------------------------------------------------------------
 		//

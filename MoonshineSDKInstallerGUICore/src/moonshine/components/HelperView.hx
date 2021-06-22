@@ -206,6 +206,15 @@ class HelperView extends LayoutGroup {
 		super.update();
 	}
 
+	public function setHelperReady():Void
+	{
+		if (this.itemsListView.dataProvider != null)
+		{
+			// update icon/button states once the installer is ready
+			cast(this.itemsListView.dataProvider, ArrayCollection<Dynamic>).updateAll();
+		}
+	}
+
 	private function onItemBeingUpdated(event:Event):Void
 	{
 		var tmpIndex = this.collectionBySoftware.indexOf(event.target);
