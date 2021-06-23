@@ -98,7 +98,7 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		this.lstDependencyTypes = new ListView();
 		this.lstDependencyTypes.variant = ListView.VARIANT_BORDERLESS;
 		this.lstDependencyTypes.itemRendererRecycler = this.packageDependencyRendererRecycler;
-		this.lstDependencyTypes.layoutData = new HorizontalLayoutData(null, null);
+		this.lstDependencyTypes.layoutData = new HorizontalLayoutData(100, null);
 		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 		this.addChild(this.lstDependencyTypes);
 
