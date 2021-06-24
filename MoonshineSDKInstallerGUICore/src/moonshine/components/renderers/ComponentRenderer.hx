@@ -129,14 +129,17 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		licenseAndCreatedOnContainer.layoutData = new HorizontalLayoutData(100, null);
 		titleDesContainer.addChild(licenseAndCreatedOnContainer);
 
-		var license = new Label();
-		license.text = "License Agreement";
-		license.buttonMode = true;
-		license.mouseChildren = false;
-		license.variant = SDKInstallerTheme.THEME_VARIANT_TEXT_LINK;
-		license.addEventListener(MouseEvent.CLICK, onLicenseViewRequested, false, 0, true);
-		licenseAndCreatedOnContainer.addChild(license);
-
+		if (!HelperConstants.IS_RUNNING_IN_MOON)
+		{
+			var license = new Label();
+			license.text = "License Agreement";
+			license.buttonMode = true;
+			license.mouseChildren = false;
+			license.variant = SDKInstallerTheme.THEME_VARIANT_TEXT_LINK;
+			license.addEventListener(MouseEvent.CLICK, onLicenseViewRequested, false, 0, true);
+			licenseAndCreatedOnContainer.addChild(license);
+		}
+		
 		this.lblCreatedOn = new Label();
 		licenseAndCreatedOnContainer.addChild(this.lblCreatedOn);
 
@@ -262,7 +265,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		if (this.stateData.isAlreadyDownloaded && (this.stateData.createdOn != null)) {
 			this.lblCreatedOn.includeInLayout = true;
 			this.lblCreatedOn.visible = true;
-			this.lblCreatedOn.text = " | Installed: " + this.stateData.createdOn.toString();
+			this.lblCreatedOn.text = (HelperConstants.IS_RUNNING_IN_MOON ? "" : " | ") + "Installed: " + this.stateData.createdOn.toString();
 		} else {
 			this.lblCreatedOn.includeInLayout = false;
 			this.lblCreatedOn.visible = false;
