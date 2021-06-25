@@ -272,8 +272,7 @@
 						INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
 						break;
 					case ComponentTypes.TYPE_GIT:
-					case ComponentTypes.TYPE_SVN:
-						if (HelperConstants.IS_MACOS) 
+						if (HelperConstants.IS_MACOS)
 						{
 							progressBar.visible = lblLastMessage.visible = false;
 							GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
@@ -538,15 +537,12 @@
 			private function onGitSVNInstallMacOS(value:String, type:String):void
 			{
 				var gitComponent:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
-				var svnComponent:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_SVN);
-				
 				if (type == HelperConstants.START)
 				{
 					// continue for other download in queue
 					// while external installer opened 
 					// by macos
 					gitComponent.isSelectedToDownload = true;
-					svnComponent.isSelectedToDownload = true;
 					flush();
 					return;
 				}
@@ -554,13 +550,12 @@
 				{
 					// TODO: show error somewhere
 					gitComponent.isAlreadyDownloaded = false;
-					svnComponent.isAlreadyDownloaded = false;
 				}
 				else if (type == HelperConstants.SUCCESS)
 				{
-					gitComponent.isAlreadyDownloaded = svnComponent.isAlreadyDownloaded = true;
-					gitComponent.isSelectedToDownload = svnComponent.isSelectedToDownload = false;
-					gitComponent.installToPath = svnComponent.installToPath = value;
+					gitComponent.isAlreadyDownloaded = true;
+					gitComponent.isSelectedToDownload = false;
+					gitComponent.installToPath = value;
 					moonshineNotifier.notifyMoonshineWithUpdate();
 				}
 				

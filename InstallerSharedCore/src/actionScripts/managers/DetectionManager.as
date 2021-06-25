@@ -213,6 +213,13 @@ package actionScripts.managers
 							item.isAlreadyDownloaded = true;
 						}
 						break;
+					case ComponentTypes.TYPE_SVN:
+						if (environmentUtil.environments.SVN_HOME)
+						{
+							item.installToPath = environmentUtil.environments.SVN_HOME.nativePath;
+							item.isAlreadyDownloaded = true;
+						}
+						break;
 					case ComponentTypes.TYPE_OPENJAVA:
 					case ComponentTypes.TYPE_OPENJAVA_V8:
 						if (environmentUtil.environments.JAVA_HOME) 
@@ -240,7 +247,6 @@ package actionScripts.managers
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_GIT:
-					case ComponentTypes.TYPE_SVN:
 						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
 						break;
 					case ComponentTypes.TYPE_NOTES:
@@ -277,8 +283,6 @@ package actionScripts.managers
 			if (value)
 			{
 				component = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
-				if (component) updateComponent();
-				component = HelperUtils.getComponentByType(ComponentTypes.TYPE_SVN);
 				if (component) updateComponent();
 			}
 			
