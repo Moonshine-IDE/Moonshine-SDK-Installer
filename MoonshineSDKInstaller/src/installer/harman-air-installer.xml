@@ -113,7 +113,7 @@
 			<replacefilter token="{playerglobalHome}/"
 						   value="libs/player/"/>
 			<replacefilter token="&lt;target-player&gt;27.0&lt;/target-player&gt;"
-						   value="&lt;target-player&gt;32.0&lt;/target-player&gt;"/>
+						   value="&lt;target-player&gt;33.1&lt;/target-player&gt;"/>
 			<replacefilter token="&lt;swf-version&gt;38&lt;/swf-version&gt;"
 						   value="&lt;swf-version&gt;44&lt;/swf-version&gt;"/>
 		</replace>
