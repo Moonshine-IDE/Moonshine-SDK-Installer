@@ -1,5 +1,7 @@
 package actionScripts.utils
 {
+	import actionScripts.valueObjects.ComponentTypes;
+
 	import flash.filesystem.File;
 	
 	import mx.utils.StringUtil;
@@ -146,6 +148,15 @@ package actionScripts.utils
 			var pathValidationFileName:String;
 			if (FileUtils.isPathExists(originPath))
 			{
+				// special test to not to validate by any sub-path
+				// on macOS where the path is not command-line-tools or
+				// xcode, since the path needs to be direct executable link
+				if ((type == ComponentTypes.TYPE_SVN || type == ComponentTypes.TYPE_GIT) &&
+					isGitSVNSpecialPathCheckPass(originPath))
+				{
+					return true;
+				}
+
 				// file-system check inside the named-sdk
 				if (validationPath && StringUtil.trim(validationPath).length != 0)
 				{
@@ -213,6 +224,17 @@ package actionScripts.utils
 			component.version = variant.version;
 			component.downloadURL = variant.downloadURL;
 			component.sizeInMb = variant.sizeInMb;
+		}
+
+		private static function isGitSVNSpecialPathCheckPass(pathValue:String):Boolean
+		{
+			if ((pathValue.toLowerCase().indexOf("commandlinetools") == -1) &&
+					(pathValue.toLowerCase().indexOf("xcode.app/contents") == -1))
+			{
+				return true;
+			}
+
+			return false;
 		}
 	}
 }
