@@ -347,7 +347,9 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 			this.assetReDownload.includeInLayout = false;
 		}
 
-		if (!this.stateData.isAlreadyDownloaded && HelperConstants.IS_RUNNING_IN_MOON) {
+		if ((!this.stateData.isAlreadyDownloaded && HelperConstants.IS_RUNNING_IN_MOON) || 
+			(this.stateData.hasWarning != null)) 
+		{
 			this.assetConfigure.visible = true;
 			this.assetConfigure.includeInLayout = true;
 		} else {
