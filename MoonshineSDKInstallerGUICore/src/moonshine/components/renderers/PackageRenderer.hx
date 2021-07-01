@@ -70,9 +70,9 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		var viewLayout = new HorizontalLayout();
 		viewLayout.horizontalAlign = JUSTIFY;
 		viewLayout.verticalAlign = MIDDLE;
-		viewLayout.paddingTop = 10.0;
+		viewLayout.paddingTop = 1.0;
 		viewLayout.paddingRight = 0.0;
-		viewLayout.paddingBottom = 4.0;
+		viewLayout.paddingBottom = 1.0;
 		viewLayout.paddingLeft = 10.0;
 		viewLayout.gap = 10.0;
 		this.layout = viewLayout;
@@ -90,7 +90,7 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		titleDesContainer.addChild(this.lblTitle);
 
 		this.lblDescription = new Label();
-		// this.lblDescription.variant = SDKInstallerTheme.THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION;
+		this.lblDescription.variant = SDKInstallerTheme.THEME_VARIANT_SMALLER_LABEL_12;
 		this.lblDescription.layoutData = new VerticalLayoutData(100, null);
 		this.lblDescription.wordWrap = true;
 		titleDesContainer.addChild(this.lblDescription);

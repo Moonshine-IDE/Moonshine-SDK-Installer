@@ -69,7 +69,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 	}
 
 	override private function initialize():Void {
-		this.height = 100;
+		this.minHeight = 100;
 		this.variant = SDKInstallerTheme.THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND;
 
 		var viewLayout = new HorizontalLayout();
@@ -119,7 +119,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		titleAndSizeContainer.addChild(this.lblSize);
 
 		this.lblDescription = new Label();
-		//this.lblDescription.variant = SDKInstallerTheme.THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION;
+		this.lblDescription.variant = SDKInstallerTheme.THEME_VARIANT_SMALLER_LABEL_12;
 		this.lblDescription.layoutData = new HorizontalLayoutData(100, null);
 		this.lblDescription.wordWrap = true;
 		titleDesContainer.addChild(this.lblDescription);
@@ -133,6 +133,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		{
 			var license = new Label();
 			license.text = "License Agreement";
+			license.variant = SDKInstallerTheme.THEME_VARIANT_SMALLER_LABEL_12;
 			license.buttonMode = true;
 			license.mouseChildren = false;
 			license.variant = SDKInstallerTheme.THEME_VARIANT_TEXT_LINK;
@@ -141,6 +142,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		}
 		
 		this.lblCreatedOn = new Label();
+		this.lblCreatedOn.variant = SDKInstallerTheme.THEME_VARIANT_SMALLER_LABEL_12;
 		licenseAndCreatedOnContainer.addChild(this.lblCreatedOn);
 
 		this.cmbVariants = new PopUpListView();

@@ -20,6 +20,7 @@
 
 package moonshine.theme;
 
+import actionScripts.valueObjects.HelperConstants;
 import feathers.controls.ListView;
 import feathers.graphics.LineStyle;
 import feathers.graphics.FillStyle;
@@ -79,6 +80,8 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		Theme.setTheme(_instance);
 	}
 
+	public static final THEME_VARIANT_SMALLER_LABEL_12:String = "msdki-label-smaller-sized-12";
+
 	public static final THEME_VARIANT_LIGHT_BUTTON:String = "moonshine-button--light";
 	public static final THEME_VARIANT_DARK_BUTTON:String = "moonshine-button--dark";
 	public static final THEME_VARIANT_LIGHT_LABEL:String = "moonshine-label--light";
@@ -111,10 +114,12 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-redownload-with-no-label";
 	public static final IMAGE_VARIANT_DOWNLOADING_ICON:String = "image-icon-downloading";
 
+	public static final DEFAULT_FONT_NAME:String = (HelperConstants.IS_MACOS) ? "System Font" : "Calibri";
+
 	public function new() {
 		super();
 
-		this.styleProvider.setStyleFunction(Button, null, setLightButtonStyles);
+		//this.styleProvider.setStyleFunction(Button, null, setLightButtonStyles);
 		this.styleProvider.setStyleFunction(Button, THEME_VARIANT_LIGHT_BUTTON, setLightButtonStyles);
 		this.styleProvider.setStyleFunction(Button, THEME_VARIANT_DARK_BUTTON, setDarkButtonStyles);
 
@@ -122,7 +127,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(Check, null, setCheckStyles);
 
-		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
+		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_SMALLER_LABEL_12, setSmaller12LabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
 
@@ -221,8 +226,8 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		focusRectSkin.cornerRadius = 5.0;
 		button.focusRectSkin = focusRectSkin;
 
-		// button.textFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		// button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x999999));
+		// button.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x555555);
+		// button.setTextFormatForState(DISABLED, new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999));
 		// button.embedFonts = true;
 
 		button.paddingTop = 8.0;
@@ -283,9 +288,9 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		focusRectSkin.cornerRadius = 5.0;
 		button.focusRectSkin = focusRectSkin;
 
-		button.textFormat = new TextFormat("DejaVuSansTF", 12, 0xBBBBBB);
-		button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x666666));
-		button.embedFonts = true;
+		button.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xBBBBBB);
+		button.setTextFormatForState(DISABLED, new TextFormat(DEFAULT_FONT_NAME, 12, 0x666666));
+		//button.embedFonts = true;
 
 		button.paddingTop = 8.0;
 		button.paddingRight = 8.0;
@@ -404,12 +409,12 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		check.focusPaddingBottom = 2.0;
 		check.focusPaddingLeft = 2.0;
 
-		// check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		// check.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		// check.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
+		// check.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999);
 		// check.embedFonts = true;
 
 		check.horizontalAlign = LEFT;
-		check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		check.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
 		check.gap = 4.0;
 	}
 
@@ -511,35 +516,35 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		radio.focusPaddingBottom = 2.0;
 		radio.focusPaddingLeft = 2.0;
 
-		// radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		// radio.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		// radio.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
+		// radio.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999);
 		// radio.embedFonts = true;
 
 		radio.horizontalAlign = LEFT;
-		radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		radio.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
 		radio.gap = 4.0;
 	}
 
-	private function setLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		label.embedFonts = true;
+	private function setSmaller12LabelStyles(label:Label):Void {
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
+		label.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999);
+		//label.embedFonts = true;
 	}
 
 	private function setLightLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xf3f3f3);
+		label.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x555555);
+		//label.embedFonts = true;
 	}
 
 	private function setItalicLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929, false, true);
-		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999, false, true);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929, false, true);
+		label.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999, false, true);
+		//label.embedFonts = true;
 	}
 
 	private function setTextLinkyLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x0000ff, false, false, true);
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x0000ff, false, false, true);
 	}
 
 	private function setPanelStyles(panel:Panel):Void {
@@ -577,25 +582,25 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	}
 
 	private function setBusyLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xffffff);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xffffff);
+		//label.embedFonts = true;
 	}
 
 	private function setComponentTitleLabelStyle(label:Label):Void
 	{
-		label.textFormat = new TextFormat("DejaVuSansTF", 16, 0x000000);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 16, 0x000000);
+		//label.embedFonts = true;
 	}
 
 	private function setComponentDescriptionLabelStyles(label:Label):Void 
 	{
-		label.textFormat = new TextFormat("DejaVuSansTF", 13, 0x444444);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 13, 0x444444);
+		//label.embedFonts = true;
 	}
 
 	private function setPluginLargeTitleStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 24, 0xe252d3);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 24, 0xe252d3);
+		//label.embedFonts = true;
 	}
 
 	private function setToolBarLayoutGroupStyles(group:LayoutGroup):Void {
@@ -640,10 +645,10 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		backgroundSkin.cornerRadius = 0.0;
 		textInput.backgroundSkin = backgroundSkin;
 
-		textInput.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		textInput.promptTextFormat = new TextFormat("DejaVuSansTF", 12, 0xa6a6a6);
-		textInput.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x555555));
-		textInput.embedFonts = true;
+		textInput.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xf3f3f3);
+		textInput.promptTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xa6a6a6);
+		textInput.setTextFormatForState(DISABLED, new TextFormat(DEFAULT_FONT_NAME, 12, 0x555555));
+		//textInput.embedFonts = true;
 
 		textInput.paddingTop = 5.0;
 		textInput.paddingRight = 5.0;
