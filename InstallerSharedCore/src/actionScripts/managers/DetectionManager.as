@@ -288,7 +288,10 @@ package actionScripts.managers
 			function updateComponent():void
 			{
 				component.isAlreadyDownloaded = true;
-				component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+				if (HelperConstants.IS_RUNNING_IN_MOON)
+				{
+					component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+				}
 				notifyMoonshineOnDetection(component);
 			}
 		}
