@@ -56,8 +56,14 @@ class HelperView extends LayoutGroup {
 	public static final EVENT_FILTER_TYPE_CHANGED = "eventFilterTypeChanged";
 	public static final EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED = "eventShowOnlyNeedsSetupChanged";
 
-	public function new() {
-		SDKInstallerTheme.initializeTheme();
+	public function new() 
+	{
+		if (!HelperConstants.IS_RUNNING_IN_MOON)
+		{
+			// in Moonshine the theme will be extended
+			SDKInstallerTheme.initializeTheme();
+		}
+		
 		super();
 
 		this.bySoftwareRecycler = DisplayObjectRecycler.withFunction(() -> {
