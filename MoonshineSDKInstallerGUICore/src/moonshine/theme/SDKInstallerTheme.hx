@@ -20,6 +20,7 @@
 
 package moonshine.theme;
 
+import actionScripts.valueObjects.HelperConstants;
 import feathers.controls.ListView;
 import feathers.graphics.LineStyle;
 import feathers.graphics.FillStyle;
@@ -79,20 +80,13 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		Theme.setTheme(_instance);
 	}
 
-	public static final THEME_VARIANT_LIGHT_BUTTON:String = "moonshine-button--light";
-	public static final THEME_VARIANT_DARK_BUTTON:String = "moonshine-button--dark";
-	public static final THEME_VARIANT_LIGHT_LABEL:String = "moonshine-label--light";
-	public static final THEME_VARIANT_ITALIC_LABEL:String = "moonshine-label--italic";
+	public static final THEME_VARIANT_SMALLER_LABEL_12:String = "msdki-label-smaller-sized-12";
 	public static final THEME_VARIANT_TITLE_WINDOW_CONTROL_BAR = "moonshine-title-window-control-bar";
 	public static final THEME_VARIANT_WARNING_BAR:String = "moonshine-warning-bar";
-	public static final THEME_VARIANT_BUSY_LABEL:String = "moonshine-label-busy-status-light";
-	public static final THEME_VARIANT_PLUGIN_LARGE_TITLE:String = "moonshine-plugin-large-title";
 	public static final THEME_VARIANT_BODY_WITH_GREY_BACKGROUND:String = "moonshine-layoutgroup-grey-background";
-	public static final THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND:String = "moonshine-layoutgroup-white-background";
 	public static final THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND = "moonshine-layoutgroup-rowItem-white-background";
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
 	public static final THEME_VARIANT_LABEL_COMPONENT_TITLE:String = "moonshine-label-item-title";
-	public static final THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION:String = "moonshine-label-item-description";
 	public static final THEME_VARIANT_RENDERER_PACKAGE_DEPENDENCY:String = "msdki-package-dependency-renderer";
 	
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
@@ -111,42 +105,26 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-redownload-with-no-label";
 	public static final IMAGE_VARIANT_DOWNLOADING_ICON:String = "image-icon-downloading";
 
+	public static final DEFAULT_FONT_NAME:String = (HelperConstants.IS_MACOS) ? "System Font" : "Calibri";
+
 	public function new() {
 		super();
 
-		this.styleProvider.setStyleFunction(Button, null, setLightButtonStyles);
-		this.styleProvider.setStyleFunction(Button, THEME_VARIANT_LIGHT_BUTTON, setLightButtonStyles);
-		this.styleProvider.setStyleFunction(Button, THEME_VARIANT_DARK_BUTTON, setDarkButtonStyles);
-
 		this.styleProvider.setStyleFunction(Callout, null, setCalloutStyles);
-
 		this.styleProvider.setStyleFunction(Check, null, setCheckStyles);
 
-		this.styleProvider.setStyleFunction(Label, null, setLabelStyles);
-		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LIGHT_LABEL, setLightLabelStyles);
-		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
+		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_SMALLER_LABEL_12, setSmaller12LabelStyles);
 
-		this.styleProvider.setStyleFunction(LayoutGroup, LayoutGroup.VARIANT_TOOL_BAR, setToolBarLayoutGroupStyles);
-		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_WARNING_BAR, setWarningBarLayoutGroupStyles);
-
-		this.styleProvider.setStyleFunction(Panel, null, setPanelStyles);
-
-		this.styleProvider.setStyleFunction(Radio, null, setRadioStyles);
-
-		this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewWithoutFixScrollStyles);
+		this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewStyles);
 
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
-		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_WHITE_BACKGROUND, setBodyWithWhiteBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND, setRowItemBodyWithWhiteBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_RENDERER_PACKAGE_DEPENDENCY, setRowPackageDependencyViewStyle);
 
 		this.styleProvider.setStyleFunction(TextInput, null, setTextInputStyles);
 
-		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_BUSY_LABEL, setBusyLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LABEL_COMPONENT_TITLE, setComponentTitleLabelStyle);
-		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LABEL_COMPONENT_DESCRIPTION, setComponentDescriptionLabelStyles);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_TEXT_LINK, setTextLinkyLabelStyles);
-		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_PLUGIN_LARGE_TITLE, setPluginLargeTitleStyles);
 
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, setImageDownloadWithLabelStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL, setImageDownloadWithoutLabelStyles);
@@ -163,135 +141,6 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADING_ICON, setImageDownloadingStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL, setImageRedownloadWithLabelStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, setImageRedownloadWithoutLabelStyles);
-	}
-
-	private function setLightButtonStyles(button:Button):Void {
-		var backgroundSkin = new MoonshineButtonSkin();
-		backgroundSkin.outerBorderFill = SolidColor(0xFCFCFC);
-		backgroundSkin.outerBorderSize = 3.0;
-		backgroundSkin.outerBorderRadius = 6.0;
-		backgroundSkin.innerBorderFill = SolidColor(0xD3D3D3);
-		backgroundSkin.innerBorderSize = 1.0;
-		backgroundSkin.innerBorderRadius = 4.0;
-		backgroundSkin.fill = Gradient(LINEAR, [0xF9F9F7, 0xF9F9F7, 0xEFEFED, 0xEFEFED], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		backgroundSkin.borderRadius = 4.0;
-		backgroundSkin.filters = [new GlowFilter(0xE5E5E5, 1.0, 2.0, 2.0, 3.0)];
-		button.backgroundSkin = backgroundSkin;
-
-		var hoverSkin = new MoonshineButtonSkin();
-		hoverSkin.outerBorderFill = SolidColor(0xFCFCFC);
-		hoverSkin.outerBorderSize = 3.0;
-		hoverSkin.outerBorderRadius = 6.0;
-		hoverSkin.innerBorderFill = SolidColor(0xD3D3D3);
-		hoverSkin.innerBorderSize = 1.0;
-		hoverSkin.innerBorderRadius = 4.0;
-		hoverSkin.fill = Gradient(LINEAR, [0xF9F9F7, 0xF9F9F7, 0xEAEAE8, 0xEAEAE8], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		hoverSkin.borderRadius = 4.0;
-		hoverSkin.filters = [new GlowFilter(0xE5E5E5, 1.0, 2.0, 2.0, 3.0)];
-		button.setSkinForState(HOVER, hoverSkin);
-
-		var downSkin = new MoonshineButtonSkin();
-		downSkin.outerBorderFill = SolidColor(0xFCFCFC);
-		downSkin.outerBorderSize = 3.0;
-		downSkin.outerBorderRadius = 6.0;
-		downSkin.innerBorderFill = SolidColor(0xD3D3D3);
-		downSkin.innerBorderSize = 1.0;
-		downSkin.innerBorderRadius = 4.0;
-		downSkin.fill = Gradient(LINEAR, [0xF1F1F1, 0xF1F1F1, 0xE7E7E7, 0xE7E7E7], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		downSkin.borderRadius = 4.0;
-		downSkin.filters = [new GlowFilter(0xDDDDDD, 1.0, 2.0, 2.0, 3.0)];
-		button.setSkinForState(DOWN, downSkin);
-
-		var disabledSkin = new MoonshineButtonSkin();
-		disabledSkin.outerBorderFill = SolidColor(0xCCCCCC);
-		disabledSkin.outerBorderSize = 3.0;
-		disabledSkin.outerBorderRadius = 6.0;
-		disabledSkin.innerBorderFill = SolidColor(0xFFFFFF);
-		disabledSkin.innerBorderSize = 1.0;
-		disabledSkin.innerBorderRadius = 4.0;
-		disabledSkin.fill = Gradient(LINEAR, [0xE1E1E1, 0xE1E1E1, 0xD6D6D6, 0xD6D6D6], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		disabledSkin.borderRadius = 4.0;
-		disabledSkin.alpha = 0.5;
-		disabledSkin.filters = [new GlowFilter(0xE5E5E5, 1.0, 2.0, 2.0, 3.0)];
-		button.setSkinForState(DISABLED, disabledSkin);
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		focusRectSkin.cornerRadius = 5.0;
-		button.focusRectSkin = focusRectSkin;
-
-		// button.textFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		// button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x999999));
-		// button.embedFonts = true;
-
-		button.paddingTop = 8.0;
-		button.paddingRight = 16.0;
-		button.paddingBottom = 8.0;
-		button.paddingLeft = 16.0;
-		button.gap = 4.0;
-	}
-
-	private function setDarkButtonStyles(button:Button):Void {
-		var backgroundSkin = new MoonshineButtonSkin();
-		backgroundSkin.outerBorderFill = SolidColor(0x292929);
-		backgroundSkin.outerBorderSize = 3.0;
-		backgroundSkin.outerBorderRadius = 6.0;
-		backgroundSkin.innerBorderFill = SolidColor(0x4C4C4C);
-		backgroundSkin.innerBorderSize = 1.0;
-		backgroundSkin.innerBorderRadius = 4.0;
-		backgroundSkin.fill = Gradient(LINEAR, [0x444444, 0x444444, 0x404040, 0x404040], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		backgroundSkin.borderRadius = 4.0;
-		button.backgroundSkin = backgroundSkin;
-
-		var hoverSkin = new MoonshineButtonSkin();
-		hoverSkin.outerBorderFill = SolidColor(0x292929);
-		hoverSkin.outerBorderSize = 3.0;
-		hoverSkin.outerBorderRadius = 6.0;
-		hoverSkin.innerBorderFill = SolidColor(0x4C4C4C);
-		hoverSkin.innerBorderSize = 1.0;
-		hoverSkin.innerBorderRadius = 4.0;
-		hoverSkin.fill = Gradient(LINEAR, [0x444444, 0x444444, 0x3E3E3E, 0x3E3E3E], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		hoverSkin.borderRadius = 4.0;
-		button.setSkinForState(HOVER, hoverSkin);
-
-		var downSkin = new MoonshineButtonSkin();
-		downSkin.outerBorderFill = SolidColor(0x292929);
-		downSkin.outerBorderSize = 3.0;
-		downSkin.outerBorderRadius = 6.0;
-		downSkin.innerBorderFill = SolidColor(0x474747);
-		downSkin.innerBorderSize = 1.0;
-		downSkin.innerBorderRadius = 4.0;
-		downSkin.fill = Gradient(LINEAR, [0x3F3F3F, 0x3F3F3F, 0x3C3C3C, 0x3C3C3C], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		downSkin.borderRadius = 4.0;
-		button.setSkinForState(DOWN, downSkin);
-
-		var disabledSkin = new MoonshineButtonSkin();
-		disabledSkin.outerBorderFill = SolidColor(0x292929);
-		disabledSkin.outerBorderSize = 3.0;
-		disabledSkin.outerBorderRadius = 6.0;
-		disabledSkin.innerBorderFill = SolidColor(0x4C4C4C);
-		disabledSkin.innerBorderSize = 1.0;
-		disabledSkin.innerBorderRadius = 4.0;
-		disabledSkin.fill = Gradient(LINEAR, [0x444444, 0x444444, 0x404040, 0x404040], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		disabledSkin.alpha = 0.5;
-		button.setSkinForState(DISABLED, disabledSkin);
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		focusRectSkin.cornerRadius = 5.0;
-		button.focusRectSkin = focusRectSkin;
-
-		button.textFormat = new TextFormat("DejaVuSansTF", 12, 0xBBBBBB);
-		button.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x666666));
-		button.embedFonts = true;
-
-		button.paddingTop = 8.0;
-		button.paddingRight = 8.0;
-		button.paddingBottom = 8.0;
-		button.paddingLeft = 8.0;
-		button.gap = 4.0;
 	}
 
 	private function setCalloutStyles(callout:Callout):Void {
@@ -404,163 +253,28 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		check.focusPaddingBottom = 2.0;
 		check.focusPaddingLeft = 2.0;
 
-		// check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		// check.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
+		// check.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
+		// check.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999);
 		// check.embedFonts = true;
 
 		check.horizontalAlign = LEFT;
-		check.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
+		check.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
 		check.gap = 4.0;
 	}
 
-	private function setRadioStyles(radio:Radio):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x000000, 0.0);
-		backgroundSkin.border = null;
-		radio.backgroundSkin = backgroundSkin;
-
-		var icon = new MoonshineButtonSkin();
-		icon.outerBorderFill = SolidColor(0x666666);
-		icon.outerBorderSize = 2.0;
-		icon.outerBorderRadius = 10.0;
-		icon.innerBorderFill = SolidColor(0xFFFFFF);
-		icon.innerBorderSize = 1.0;
-		icon.innerBorderRadius = 8.0;
-		icon.fill = Gradient(LINEAR, [0xE1E1E1, 0xE1E1E1, 0xD6D6D6, 0xD6D6D6], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		icon.borderRadius = 8.0;
-		icon.width = 20.0;
-		icon.height = 20.0;
-		radio.icon = icon;
-
-		var disabledIcon = new MoonshineButtonSkin();
-		disabledIcon.outerBorderFill = SolidColor(0xCCCCCC);
-		disabledIcon.outerBorderSize = 2.0;
-		disabledIcon.outerBorderRadius = 10.0;
-		disabledIcon.innerBorderFill = SolidColor(0xFFFFFF);
-		disabledIcon.innerBorderSize = 1.0;
-		disabledIcon.innerBorderRadius = 8.0;
-		disabledIcon.fill = Gradient(LINEAR, [0xE1E1E1, 0xE1E1E1, 0xD6D6D6, 0xD6D6D6], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		disabledIcon.borderRadius = 8.0;
-		disabledIcon.alpha = 0.5;
-		disabledIcon.width = 20.0;
-		disabledIcon.height = 20.0;
-		radio.disabledIcon = disabledIcon;
-
-		var downIcon = new MoonshineButtonSkin();
-		downIcon.outerBorderFill = SolidColor(0x666666);
-		downIcon.outerBorderSize = 2.0;
-		downIcon.outerBorderRadius = 10.0;
-		downIcon.innerBorderFill = SolidColor(0xFFFFFF);
-		downIcon.innerBorderSize = 1.0;
-		downIcon.innerBorderRadius = 8.0;
-		downIcon.fill = Gradient(LINEAR, [0xD6D6D6, 0xD6D6D6, 0xDFDFDF, 0xDFDFDF], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		downIcon.borderRadius = 8.0;
-		downIcon.alpha = 0.5;
-		downIcon.width = 20.0;
-		downIcon.height = 20.0;
-		radio.setIconForState(DOWN(false), downIcon);
-
-		var selectedIcon = new MoonshineButtonSkin();
-		selectedIcon.outerBorderFill = SolidColor(0x666666);
-		selectedIcon.outerBorderSize = 2.0;
-		selectedIcon.outerBorderRadius = 10.0;
-		selectedIcon.innerBorderFill = SolidColor(0xFFFFFF);
-		selectedIcon.innerBorderSize = 1.0;
-		selectedIcon.innerBorderRadius = 8.0;
-		selectedIcon.fill = Gradient(LINEAR, [0xE1E1E1, 0xE1E1E1, 0xD6D6D6, 0xD6D6D6], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		selectedIcon.borderRadius = 8.0;
-		selectedIcon.width = 20.0;
-		selectedIcon.height = 20.0;
-		radio.selectedIcon = selectedIcon;
-		var symbol = new Shape();
-		symbol.graphics.beginFill(0x292929);
-		symbol.graphics.drawCircle(4.0, 4.0, 4.0);
-		symbol.graphics.endFill();
-		symbol.x = 6.0;
-		symbol.y = 6.0;
-		selectedIcon.addChild(symbol);
-
-		var selectedDownIcon = new MoonshineButtonSkin();
-		selectedDownIcon.outerBorderFill = SolidColor(0x666666);
-		selectedDownIcon.outerBorderSize = 2.0;
-		selectedDownIcon.outerBorderRadius = 10.0;
-		selectedDownIcon.innerBorderFill = SolidColor(0xFFFFFF);
-		selectedDownIcon.innerBorderSize = 1.0;
-		selectedDownIcon.innerBorderRadius = 8.0;
-		selectedDownIcon.fill = Gradient(LINEAR, [0xD6D6D6, 0xD6D6D6, 0xDFDFDF, 0xDFDFDF], [1.0, 1.0, 1.0, 1.0], [0x00, 0x7F, 0x80, 0xFF], Math.PI / 2.0);
-		selectedDownIcon.borderRadius = 8.0;
-		selectedDownIcon.alpha = 0.5;
-		selectedDownIcon.width = 20.0;
-		selectedDownIcon.height = 20.0;
-		radio.setIconForState(DOWN(true), selectedDownIcon);
-		var downSymbol = new Shape();
-		downSymbol.graphics.beginFill(0x292929);
-		downSymbol.graphics.drawCircle(4.0, 4.0, 4.0);
-		downSymbol.graphics.endFill();
-		downSymbol.x = 6.0;
-		downSymbol.y = 6.0;
-		selectedDownIcon.addChild(downSymbol);
-
-		var focusRectSkin = new RectangleSkin();
-		focusRectSkin.fill = null;
-		focusRectSkin.border = SolidColor(1.0, 0xC165B8);
-		focusRectSkin.cornerRadius = 4.0;
-		radio.focusRectSkin = focusRectSkin;
-		radio.focusPaddingTop = 2.0;
-		radio.focusPaddingRight = 2.0;
-		radio.focusPaddingBottom = 2.0;
-		radio.focusPaddingLeft = 2.0;
-
-		// radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		// radio.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		// radio.embedFonts = true;
-
-		radio.horizontalAlign = LEFT;
-		radio.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		radio.gap = 4.0;
-	}
-
-	private function setLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929);
-		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999);
-		label.embedFonts = true;
-	}
-
-	private function setLightLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x555555);
-		label.embedFonts = true;
-	}
-
-	private function setItalicLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x292929, false, true);
-		label.disabledTextFormat = new TextFormat("DejaVuSansTF", 12, 0x999999, false, true);
-		label.embedFonts = true;
+	private function setSmaller12LabelStyles(label:Label):Void {
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x292929);
+		label.disabledTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x999999);
+		//label.embedFonts = true;
 	}
 
 	private function setTextLinkyLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0x0000ff, false, false, true);
-	}
-
-	private function setPanelStyles(panel:Panel):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0xA0A0A0);
-		backgroundSkin.border = null;
-		backgroundSkin.cornerRadius = 7.0;
-		panel.backgroundSkin = backgroundSkin;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x0000ff, false, false, true);
 	}
 
 	private function setBodyWithGreyBackgroundViewStyles(view:LayoutGroup):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0xf5f5f5);
-		//backgroundSkin.fill = SolidColor(0xffff00);
-		backgroundSkin.cornerRadius = 0.0;
-		view.backgroundSkin = backgroundSkin;
-	}
-
-	private function setBodyWithWhiteBackgroundViewStyles(view:LayoutGroup):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0xffffff);
 		backgroundSkin.cornerRadius = 0.0;
 		view.backgroundSkin = backgroundSkin;
 	}
@@ -576,63 +290,13 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		layout.backgroundSkin = new UnderlineSkin(Gradient(LINEAR, [0xffffff, 0xe4e4e4], [1.0, 1.0], [0, 255]), SolidColor(1.0, 0xf4f4f4));
 	}
 
-	private function setBusyLabelStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 12, 0xffffff);
-		label.embedFonts = true;
-	}
-
 	private function setComponentTitleLabelStyle(label:Label):Void
 	{
-		label.textFormat = new TextFormat("DejaVuSansTF", 16, 0x000000);
-		label.embedFonts = true;
+		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 16, 0x000000);
+		//label.embedFonts = true;
 	}
 
-	private function setComponentDescriptionLabelStyles(label:Label):Void 
-	{
-		label.textFormat = new TextFormat("DejaVuSansTF", 13, 0x444444);
-		label.embedFonts = true;
-	}
-
-	private function setPluginLargeTitleStyles(label:Label):Void {
-		label.textFormat = new TextFormat("DejaVuSansTF", 24, 0xe252d3);
-		label.embedFonts = true;
-	}
-
-	private function setToolBarLayoutGroupStyles(group:LayoutGroup):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0x444444);
-		backgroundSkin.cornerRadius = 7.0;
-		group.backgroundSkin = backgroundSkin;
-
-		var layout = new HorizontalLayout();
-		layout.horizontalAlign = RIGHT;
-		layout.verticalAlign = MIDDLE;
-		layout.paddingTop = 10.0;
-		layout.paddingRight = 10.0;
-		layout.paddingBottom = 10.0;
-		layout.paddingLeft = 10.0;
-		layout.gap = 4.0;
-		group.layout = layout;
-	}
-
-	private function setWarningBarLayoutGroupStyles(group:LayoutGroup):Void {
-		var backgroundSkin = new RectangleSkin();
-		backgroundSkin.fill = SolidColor(0xffffcc);
-		backgroundSkin.cornerRadius = 4.0;
-		group.backgroundSkin = backgroundSkin;
-
-		var layout = new HorizontalLayout();
-		layout.horizontalAlign = LEFT;
-		layout.verticalAlign = MIDDLE;
-		layout.paddingTop = 10.0;
-		layout.paddingRight = 10.0;
-		layout.paddingBottom = 10.0;
-		layout.paddingLeft = 10.0;
-		layout.gap = 4.0;
-		group.layout = layout;
-	}
-
-	private function setTextInputStyles(textInput:TextInput):Void {
+	public function setTextInputStyles(textInput:TextInput):Void {
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = SolidColor(0x464646);
 		backgroundSkin.border = SolidColor(1.0, 0x666666);
@@ -640,10 +304,10 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		backgroundSkin.cornerRadius = 0.0;
 		textInput.backgroundSkin = backgroundSkin;
 
-		textInput.textFormat = new TextFormat("DejaVuSansTF", 12, 0xf3f3f3);
-		textInput.promptTextFormat = new TextFormat("DejaVuSansTF", 12, 0xa6a6a6);
-		textInput.setTextFormatForState(DISABLED, new TextFormat("DejaVuSansTF", 12, 0x555555));
-		textInput.embedFonts = true;
+		textInput.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xf3f3f3);
+		textInput.promptTextFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0xa6a6a6);
+		textInput.setTextFormatForState(DISABLED, new TextFormat(DEFAULT_FONT_NAME, 12, 0x555555));
+		//textInput.embedFonts = true;
 
 		textInput.paddingTop = 5.0;
 		textInput.paddingRight = 5.0;
@@ -651,7 +315,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		textInput.paddingLeft = 5.0;
 	}
 
-	private function setBorderlessListViewWithoutFixScrollStyles(listView:ListView):Void 
+	public function setBorderlessListViewStyles(listView:ListView):Void 
 	{
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = null;

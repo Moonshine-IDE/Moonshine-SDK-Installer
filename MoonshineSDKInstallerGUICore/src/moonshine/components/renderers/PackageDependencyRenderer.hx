@@ -126,9 +126,10 @@ class PackageDependencyRenderer extends LayoutGroup implements IDataRenderer {
 		stateImageContainer.addChild(this.assetDownload);
 
 		this.assetReDownload = this.getNewAssetButtonForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
-		this.assetReDownload.width = 42;
+		this.assetReDownload.width = 41;
 		this.assetReDownload.height = 32;
 		this.assetReDownload.addEventListener(TriggerEvent.TRIGGER, this.onDownloadButtonClicked, false, 0, true);
+		this.assetReDownload.toolTip = "Re-download";
 		stateImageContainer.addChild(this.assetReDownload);
 
 		this.assetQueued = this.getNewAssetLayoutForStateIcons(SDKInstallerTheme.IMAGE_VARIANT_QUEUED_ICON_WITH_NO_LABEL, assetLoaderLayoutData);
