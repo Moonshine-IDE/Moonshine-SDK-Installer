@@ -88,6 +88,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final THEME_VARIANT_TEXT_LINK:String = "moonshine-standard-text-link";
 	public static final THEME_VARIANT_LABEL_COMPONENT_TITLE:String = "moonshine-label-item-title";
 	public static final THEME_VARIANT_RENDERER_PACKAGE_DEPENDENCY:String = "msdki-package-dependency-renderer";
+	public static final THEME_VARIANT_ITALIC_LABEL:String = "moonshine-label--italic";
 	
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL:String = "image-icon-download-with-label";
 	public static final IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-download-with-no-label";
@@ -115,7 +116,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_SMALLER_LABEL_12, setSmaller12LabelStyles);
 
-		this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewStyles);
+		//this.styleProvider.setStyleFunction(ListView, ListView.VARIANT_BORDERLESS, setBorderlessListViewStyles);
 
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_BODY_WITH_GREY_BACKGROUND, setBodyWithGreyBackgroundViewStyles);
 		this.styleProvider.setStyleFunction(LayoutGroup, THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND, setRowItemBodyWithWhiteBackgroundViewStyles);
@@ -125,6 +126,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_LABEL_COMPONENT_TITLE, setComponentTitleLabelStyle);
 		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_TEXT_LINK, setTextLinkyLabelStyles);
+		this.styleProvider.setStyleFunction(Label, THEME_VARIANT_ITALIC_LABEL, setItalicLabelStyles);
 
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_LABEL, setImageDownloadWithLabelStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_DOWNLOAD_ICON_WITH_NO_LABEL, setImageDownloadWithoutLabelStyles);
@@ -270,6 +272,12 @@ class SDKInstallerTheme extends ClassVariantTheme {
 
 	private function setTextLinkyLabelStyles(label:Label):Void {
 		label.textFormat = new TextFormat(DEFAULT_FONT_NAME, 12, 0x0000ff, false, false, true);
+	}
+
+	public function setItalicLabelStyles(label:Label):Void {
+		label.textFormat = new TextFormat("Helvetica Neue", 12, 0x292929, false, true);
+		label.disabledTextFormat = new TextFormat("Helvetica Neue", 12, 0x999999, false, true);
+		//label.embedFonts = true;
 	}
 
 	private function setBodyWithGreyBackgroundViewStyles(view:LayoutGroup):Void {
