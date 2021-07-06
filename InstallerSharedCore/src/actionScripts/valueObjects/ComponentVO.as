@@ -35,6 +35,16 @@ package actionScripts.valueObjects
 		{
 			_version = value;
 		}
+
+		private var _displayVersion:String;
+		public function get displayVersion():String
+		{
+			return _displayVersion;
+		}
+		public function set displayVersion(value:String):void
+		{
+			_displayVersion = value;
+		}
 		
 		private var _isDownloadable:Boolean = true;
 		public function get isDownloadable():Boolean

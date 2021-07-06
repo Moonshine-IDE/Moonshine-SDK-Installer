@@ -19,6 +19,9 @@ extern class ComponentVO
 	
 	@:flash.property
 	public var version(default, default):String;
+
+	@:flash.property
+	public var displayVersion(default, default):String;
 	
 	@:flash.property
 	public var isDownloadable(default, default):Bool;

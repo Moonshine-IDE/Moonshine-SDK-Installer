@@ -10,6 +10,7 @@ extern class ComponentVariantVO
 	
 	public var title:String;
 	public var version:String;
+	public var displayVersion:String;
 	public var downloadURL:String;
 	public var sizeInMb:Int;
 	

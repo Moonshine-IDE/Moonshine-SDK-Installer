@@ -249,7 +249,6 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 
 	private function updateFields():Void {
 		this.lblTitle.text = this.stateData.title;
-		this.lblSize.text = "(v"+ this.stateData.version +", "+ HelperUtils.getSizeFix(this.stateData.sizeInMb) +")";
 		this.lblDescription.text = this.stateData.description;
 		this.assetLogo.source = this.stateData.imagePath;
 
@@ -262,6 +261,16 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 			this.cmbVariants.dataProvider = null;
 			this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;
 			this.cmbVariants.removeEventListener(Event.CHANGE, onVariantChange);
+		}
+
+		if (this.stateData.variantCount != 1)
+		{
+			this.lblSize.text = "("+ this.stateData.downloadVariants.get(this.stateData.selectedVariantIndex).displayVersion + 
+				", "+ HelperUtils.getSizeFix(this.stateData.sizeInMb) +")";
+		}
+		else
+		{
+			this.lblSize.text = "("+ this.stateData.displayVersion +", "+ HelperUtils.getSizeFix(this.stateData.sizeInMb) +")";
 		}
 
 		if (this.stateData.isAlreadyDownloaded && (this.stateData.createdOn != null)) {

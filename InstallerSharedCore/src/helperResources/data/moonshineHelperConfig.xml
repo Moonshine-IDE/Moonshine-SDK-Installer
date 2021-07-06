@@ -155,13 +155,13 @@
 						<mac>983</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="4.16.1">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v32.0">
 			                <path></path>
 			                <file></file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="4.16.1">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v32.0">
 			                <path></path>
 			                <file></file>
 			            </version>
@@ -189,13 +189,13 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="4.16.1">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1">
 			            	<path>https://downloads.apache.org/flex/4.16.1/binaries/</path>
 		              		<file>apache-flex-sdk-4.16.1-bin.zip</file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="4.16.1">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1">
 		                	<path>https://downloads.apache.org/flex/4.16.1/binaries/</path>
 		              		<file>apache-flex-sdk-4.16.1-bin.tar.gz</file>
 		             </version>
@@ -223,13 +223,13 @@
 						<mac>179</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.7" displayVersion="0.9.7">
+						<version version="0.9.7" displayVersion="v0.9.7">
 			                <path>https://mirrors.estointernet.in/apache/royale/0.9.7/binaries/</path>
 			                <file>apache-royale-0.9.7-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.7" displayVersion="0.9.7">
+						<version version="0.9.7" displayVersion="v0.9.7">
 			                <path>https://mirrors.estointernet.in/apache/royale/0.9.7/binaries/</path>
 			                <file>apache-royale-0.9.7-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -242,13 +242,13 @@
 						<mac>149</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.8" displayVersion="0.9.8">
+						<version version="0.9.8" displayVersion="v0.9.8">
 			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
 			                <file>apache-royale-0.9.8-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.8" displayVersion="0.9.8">
+						<version version="0.9.8" displayVersion="v0.9.8">
 			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
 			                <file>apache-royale-0.9.8-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -279,13 +279,13 @@
 						<mac>186</mac>
 					</diskMBusage>
 					<windows>
-						<version version="11.0.10" displayVersion="11.0.10">
+						<version version="11.0.10" displayVersion="v11.0.10">
 			                <path>https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/</path>
 			                <file>OpenJDK11U-jdk_x64_windows_hotspot_11.0.10_9.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="11.0.10" displayVersion="11.0.10">
+						<version version="11.0.10" displayVersion="v11.0.10">
 			                <path>https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
 			                <file>OpenJDK11U-jdk_x64_mac_hotspot_11.0.10_9.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -316,13 +316,13 @@
 						<mac>194</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="1.8.0" displayVersion="1.8.0u201">
+						<version version="1.8.0" displayVersion="v1.8.0u201">
 			                <path>https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path>
 			                <file>OpenJDK8U-jdk_x64_windows_hotspot_8u202b08.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="1.8.0" displayVersion="1.8.0u201">
+						<version version="1.8.0" displayVersion="v1.8.0u201">
 			                <path>https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u202-b08/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
 			                <file>OpenJDK8U-jdk_x64_mac_hotspot_8u202b08.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -353,13 +353,13 @@
 						<mac>40</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="1.10.1" displayVersion="1.10.1">
+						<version version="1.10.1" displayVersion="v1.10.1">
 			                <path>https://moonshine-ide.com/downloads/ant/</path>
 			                <file>apache-ant-1.10.1-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="1.10.1" displayVersion="1.10.1">
+						<version version="1.10.1" displayVersion="v1.10.1">
 			                <path>https://moonshine-ide.com/downloads/ant/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
 			                <file>apache-ant-1.10.1-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -390,13 +390,13 @@
 						<mac>10</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="3.6.0" displayVersion="3.6.0">
+						<version version="3.6.0" displayVersion="v3.6.0">
 			                <path>https://moonshine-ide.com/downloads/maven/</path>
 			                <file>apache-maven-3.6.0-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="3.6.0" displayVersion="3.6.0">
+						<version version="3.6.0" displayVersion="v3.6.0">
 			                <path>https://moonshine-ide.com/downloads/maven/</path>
 			                <file>apache-maven-3.6.0-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -427,13 +427,13 @@
 				</diskMBusage>
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<windows>
-						<version version="5.4.1" displayVersion="5.4.1">
+						<version version="5.4.1" displayVersion="v5.4.1">
 			                <path>https://services.gradle.org/distributions/</path>
 			                <file>gradle-5.4.1-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="5.4.1" displayVersion="5.4.1">
+						<version version="5.4.1" displayVersion="v5.4.1">
 			                <path>https://services.gradle.org/distributions/</path>
 			                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -464,13 +464,13 @@
 						<mac>104</mac>
 					</diskMBusage>
 					<windows>
-						<version version="3.3.10" displayVersion="3.3.10">
+						<version version="3.3.10" displayVersion="v3.3.10">
 			                <path>https://github.com/grails/grails-core/releases/download/v3.3.10/</path>
 			                <file>grails-3.3.10.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="3.3.10" displayVersion="3.3.10">
+						<version version="3.3.10" displayVersion="v3.3.10">
 			                <path>https://github.com/grails/grails-core/releases/download/v3.3.10/</path>
 			                <file>grails-3.3.10.zip</file> <!-- flexSDK.tar.gz -->
 			            </version>
@@ -498,13 +498,13 @@
 						<mac>925</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="4.0.0" displayVersion="4.0.0">
+						<version version="4.0.0" displayVersion="v4.0.0">
 			            	<path>https://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
 		              		<file>feathers-sdk-4.0.0-bin.zip</file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.0.0" displayVersion="4.0.0">
+						<version version="4.0.0" displayVersion="v4.0.0">
 		                	<path>https://github.com/BowlerHatLLC/feathers-sdk/releases/download/v4.0.0/</path>
 		              		<file>feathers-sdk-4.0.0-bin.tar.gz</file>
 		             </version>
@@ -542,7 +542,7 @@
 						<mac>279</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="1.9.7" displayVersion="1.9.7">
+						<version version="1.9.7" displayVersion="v1.9.7">
 			            	<path>https://moonshine-ide.com/downloads/sliksvn/</path>
 		              		<file>SlikSvn-1.9.7.zip</file>
 		            	</version>
@@ -586,7 +586,7 @@
 						<mac>279</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="2.30.1" displayVersion="2.30.1">
+						<version version="2.30.1" displayVersion="v2.30.1">
 			            	<path>https://moonshine-ide.com/downloads/git/</path>
 		              		<file>git-2.30.1.zip</file>
 		            	</version>
@@ -623,13 +623,13 @@
 						<mac>80</mac>
 					</diskMBusage>
 					<windows>
-						<version version="12.15.0" displayVersion="12.15.0">
+						<version version="12.15.0" displayVersion="v12.15.0">
 			            	<path>https://nodejs.org/dist/v12.15.0/</path>
 		              		<file>node-v12.15.0-win-x64.zip</file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="12.15.0" displayVersion="12.15.0">
+						<version version="12.15.0" displayVersion="v12.15.0">
 		                	<path>https://nodejs.org/dist/v12.15.0/</path>
 		              		<file>node-v12.15.0-darwin-x64.tar.gz</file>
 		             	</version>
@@ -667,13 +667,13 @@
 						<mac>1270</mac>	
 					</diskMBusage>
 					<windows>
-						<version version="11.0.0" displayVersion="11.0.0">
+						<version version="11.0.0" displayVersion="v11.0.0">
 			            	<path></path>
 		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="11.0.0" displayVersion="11.0.0">
+						<version version="11.0.0" displayVersion="v11.0.0">
 		                	<path></path>
 		              		<file></file>
 		             	</version>

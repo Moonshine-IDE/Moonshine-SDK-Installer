@@ -161,6 +161,7 @@ package actionScripts.utils
 				if (variantCount == 1)
 				{
 					tmpComponent.version = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
+					tmpComponent.displayVersion = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
 					tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() 
 						+ comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version);
@@ -176,6 +177,7 @@ package actionScripts.utils
 					{
 						tmpVariant = new ComponentVariantVO();
 						tmpVariant.version = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
+						tmpVariant.displayVersion = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
 						tmpVariant.title = String(variant.title) +" - "+ tmpVariant.version;
 						tmpVariant.downloadURL = variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 						tmpVariant.sizeInMb = int(variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
