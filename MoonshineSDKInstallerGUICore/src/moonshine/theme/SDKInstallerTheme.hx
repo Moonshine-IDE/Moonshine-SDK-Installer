@@ -106,7 +106,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-redownload-with-no-label";
 	public static final IMAGE_VARIANT_DOWNLOADING_ICON:String = "image-icon-downloading";
 
-	public static final DEFAULT_FONT_NAME:String = (HelperConstants.IS_MACOS) ? "System Font" : "Calibri";
+	public static final DEFAULT_FONT_NAME:String = (HelperConstants.IS_MACOS) ? "System Font" : "Segoe UI";
 
 	public function new() {
 		super();
