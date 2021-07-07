@@ -31,6 +31,7 @@ package actionScripts.ui.views
 		public var dependencyCheckUtil:IHelperMoonshineBridge;
 		public var environmentUtil:EnvironmentUtils;
 		public var isRunningInsideMoonshine:Boolean;
+		public var itemsManager:InstallerItemsManager = InstallerItemsManager.getInstance();
 		
 		public function get isConfigurationLoaded():Boolean
 		{
@@ -38,7 +39,6 @@ package actionScripts.ui.views
 		}
 		
 		private var model:HelperModel = HelperModel.getInstance();
-		private var itemsManager:InstallerItemsManager = InstallerItemsManager.getInstance();
 		
 		//--------------------------------------------------------------------------
 		//
@@ -95,6 +95,14 @@ package actionScripts.ui.views
 		public function setHelperReady():void
 		{
 			(this.feathersUIControl as HelperView).setHelperReady();
+		}
+
+		public function checkForUpdate():void
+		{
+			if (model.components && !HelperConstants.IS_DETECTION_IN_PROCESS)
+			{
+				itemsManager.detectOnly();
+			}
 		}
 		
 		//--------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 package actionScripts.managers
 {
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
@@ -16,6 +17,9 @@ package actionScripts.managers
 
 	public class DetectionManager extends EventDispatcher
 	{
+		public static const EVENT_DETECTION_BEGINS:String = "eventDetectionBegins";
+		public static const EVENT_DETECTION_ENDS:String = "eventDetectionEnds";
+
 		public var environmentUtil:EnvironmentUtils;
 		
 		private var model:HelperModel = HelperModel.getInstance();
@@ -39,6 +43,7 @@ package actionScripts.managers
 		{
 			itemTestCount = -1;
 			HelperConstants.IS_DETECTION_IN_PROCESS = true;
+			dispatchEvent(new Event(EVENT_DETECTION_BEGINS));
 			if (!HelperConstants.IS_MACOS && !environmentUtil)
 			{
 				environmentUtil = new EnvironmentUtils();
@@ -74,6 +79,7 @@ package actionScripts.managers
 			
 			var timeoutValue:uint = setTimeout(function():void{
 				HelperConstants.IS_DETECTION_IN_PROCESS = false;
+				dispatchEvent(new Event(EVENT_DETECTION_ENDS));
 				clearTimeout(timeoutValue);
 			}, 3000);
 

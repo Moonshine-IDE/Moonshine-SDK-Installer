@@ -30,10 +30,10 @@ package actionScripts.valueObjects
 		public static var CONFIG_HARMAN_AIR_FILE:String;
 		public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 		public static var INSTALLER_UPDATE_CHECK_URL:String;
-		public static var IS_DETECTION_IN_PROCESS:Boolean;
 		public static var CUSTOM_PATH_SDK_WINDOWS:String;
 		public static var IS_CUSTOM_WINDOWS_PATH:Boolean;
 		public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Boolean;
+		public static var IS_DETECTION_IN_PROCESS:Boolean;
 		
 		public static function get HELPER_STORAGE():File
 		{
