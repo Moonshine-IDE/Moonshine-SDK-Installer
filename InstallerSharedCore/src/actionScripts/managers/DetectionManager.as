@@ -29,7 +29,7 @@ package actionScripts.managers
 		private function set itemTestCount(value:int):void
 		{
 			_itemTestCount = value;
-			if (_itemTestCount == model.components.length)
+			if (_itemTestCount == (model.components.length - 1))
 			{
 				this.dispatchEvent(new HelperEvent(HelperEvent.ALL_COMPONENTS_TESTED, null));
 			}
@@ -311,7 +311,7 @@ package actionScripts.managers
 				this.dispatchEvent(new HelperEvent(HelperEvent.COMPONENT_NOT_DOWNLOADED, value));
 			}
 			
-			itemTestCount = itemTestCount + 1;
+			itemTestCount++;
 		}
 		
 		private function addJavaVersionReaderEvents(reader:JavaVersionReader):void
