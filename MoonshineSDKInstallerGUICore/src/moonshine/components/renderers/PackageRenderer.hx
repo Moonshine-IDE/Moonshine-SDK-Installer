@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import openfl.events.Event;
 import feathers.controls.dataRenderers.IDataRenderer;
 import moonshine.events.HelperEvent;
 import openfl.display.DisplayObject;
@@ -44,11 +45,6 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		return stateData;
 	}
 
-	private var packageDependencyRendererUpdateFn = (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> 
-	{
-		
-	};
-
 	public function new() {
 		super();
 
@@ -56,11 +52,14 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 			var itemRenderer = new PackageDependencyRenderer();
 			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
 			return itemRenderer;
-		}, this.packageDependencyRendererUpdateFn,
-			(itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> {
-				itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
-				itemRenderer.resetFields();
-			});
+		}, (itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> {
+			state.data.addEventListener("isUpdated", this.onItemBeingUpdated, false, 0, true);
+		},
+		(itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> {
+			state.data.removeEventListener("isUpdated", this.onItemBeingUpdated);
+			itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
+			itemRenderer.resetFields();
+		});
 	}
 
 	override private function initialize():Void {
@@ -162,6 +161,12 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 			this.lstDependencyTypes.dataProvider = null;
 			this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 		}
+	}
+
+	private function onItemBeingUpdated(event:Event):Void
+	{
+		var tmpIndex = this.stateData.dependencyTypes.indexOf(event.target);
+		this.stateData.dependencyTypes.updateAt(tmpIndex);
 	}
 
 	private function onDownloadVariantChanged(event:HelperEvent):Void {
