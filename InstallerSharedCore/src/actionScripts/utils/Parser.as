@@ -275,6 +275,17 @@ package actionScripts.utils
 					needsAIR: true, needsFlash: true, devBuild: false, icon: feathers.imagePath
 			};
 		}
+
+		public static function getHarmanAIRObjectForApacheInstaller():Object
+		{
+			return {
+				file: HelperConstants.CONFIG_HARMAN_AIR_FILE,
+				label: "AIR 33.1",
+				path: HelperConstants.CONFIG_HARMAN_AIR_SERVER,
+				version: "33.1",
+				versionID: "33.1"
+			};
+		}
 		
 		public static function getInstallDirectoryPath(type:String, version:String):String
 		{

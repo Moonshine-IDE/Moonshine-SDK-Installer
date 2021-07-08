@@ -261,7 +261,15 @@
 						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
 						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
 						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
-						INSTALLER_APACHE_FLEX.startInstallation();
+						//INSTALLER_APACHE_FLEX.startInstallation();
+						INSTALLER_APACHE_FLEX.startInstallationHarman(Parser.getHarmanAIRObjectForApacheInstaller());
+						break;
+					case ComponentTypes.TYPE_FLEX_HARMAN:
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_HARMAN_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
+						INSTALLER_APACHE_FLEX.startInstallationHarman(Parser.getHarmanAIRObjectForApacheInstaller());
 						break;
 					case ComponentTypes.TYPE_FEATHERS:
 						var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();

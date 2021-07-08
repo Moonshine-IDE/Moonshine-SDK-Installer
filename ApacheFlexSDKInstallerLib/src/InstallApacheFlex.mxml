@@ -440,6 +440,7 @@ variables are not required because the locations of these pieces are known.
 		{
 			reset();
 			setXMLVariables();
+			updatePaths();
 			
 			var req:URLRequest = new URLRequest(APACHE_FLEX_BIN_INSTALLER_URL);
 			loader = new ApacheURLLoader();
@@ -449,6 +450,12 @@ variables are not required because the locations of these pieces are known.
 			loader.addEventListener(IOErrorEvent.IO_ERROR, handleInstallerXMLError);
 			
 			loader.load(req);
+		}
+
+		public function startInstallationHarman(value:Object):void
+		{
+			_airVersionSelected = value;
+			startInstallation();
 		}
 		
 		public function writeFileToDirectoryMASH(file:File, data:ByteArray):void
@@ -515,7 +522,7 @@ variables are not required because the locations of these pieces are known.
 			resetInstallStepsActivity();
 			addOptionalComponentsToInstallSteps();
 			updatePaths();
-			install();
+			//install();
 		}
 		
 		//--------------------------------------------------------------------------
@@ -535,12 +542,12 @@ variables are not required because the locations of these pieces are known.
 		
 		public function setButtonWidths():void
 		{
-			var calc:CalcButtonWidth = new CalcButtonWidth(hiddenButton);
+			/*var calc:CalcButtonWidth = new CalcButtonWidth(hiddenButton);
 			
 			calc.buttonWidth(installLogBtn);
 			calc.buttonWidth(openApacheFlexFolderBtn);
 			
-			_standardButtonWidth = calc.maxButtonWidth([installBtn, browseBtn, closeBtn, nextBtn, firstStepBackBtn, secondStepBackBtn]);
+			_standardButtonWidth = calc.maxButtonWidth([installBtn, browseBtn, closeBtn, nextBtn, firstStepBackBtn, secondStepBackBtn]);*/
 		}
 		
 		private function parseArgs(event:InvokeEvent):void
@@ -1957,7 +1964,8 @@ variables are not required because the locations of these pieces are known.
 			resetInstallStepsActivity();
 			addOptionalComponentsToInstallSteps();
 			updatePaths();
-			install();
+			//install();
+			trace(ADOBE_AIR_SDK_WIN_FILE, ADOBE_AIR_SDK_WIN_URL, APACHE_FLEX_BIN_INSTALLER_URL);
 		}
 		
 		protected function browseForSDK(event:MouseEvent):void
