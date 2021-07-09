@@ -279,7 +279,7 @@ package actionScripts.utils
 		public static function getHarmanAIRObjectForApacheInstaller():Object
 		{
 			return {
-				file: HelperConstants.CONFIG_HARMAN_AIR_FILE,
+				file: HelperConstants.CONFIG_HARMAN_AIR_FILE + "?license=accepted",
 				label: "AIR 33.1",
 				path: HelperConstants.CONFIG_HARMAN_AIR_SERVER,
 				version: "33.1",

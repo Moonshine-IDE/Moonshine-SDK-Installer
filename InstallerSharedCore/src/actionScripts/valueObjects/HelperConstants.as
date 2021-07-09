@@ -18,7 +18,7 @@ package actionScripts.valueObjects
 		public static const START:String = "start";
 		public static const MOONSHINE_NOTIFIER_FILE_NAME:String = ".MoonshineHelperNewUpdate.xml";
 		public static const INSTALLER_COOKIE:String = "moonshine-installer-local";
-		public static const DEFAULT_SDK_FOLDER_NAME:String = "MoonshineSDKs";
+		public static const DEFAULT_SDK_FOLDER_NAME:String = "MoonshineSDKss";
 		
 		public static var IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
 		public static var IS_RUNNING_IN_MOON:Boolean;
