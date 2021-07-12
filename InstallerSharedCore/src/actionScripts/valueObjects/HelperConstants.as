@@ -26,8 +26,7 @@ package actionScripts.valueObjects
 		public static var DEFAULT_INSTALLATION_PATH:File;
 		public static var CONFIG_ADOBE_AIR_VERSION:String;
 		public static var CONFIG_HARMAN_AIR_VERSION:String;
-		public static var CONFIG_HARMAN_AIR_SERVER:String;
-		public static var CONFIG_HARMAN_AIR_FILE:String;
+		public static var CONFIG_HARMAN_AIR_OBJECT:Object;
 		public static var WINDOWS_64BIT_DOWNLOAD_DIRECTORY:String;
 		public static var INSTALLER_UPDATE_CHECK_URL:String;
 		public static var CUSTOM_PATH_SDK_WINDOWS:String;

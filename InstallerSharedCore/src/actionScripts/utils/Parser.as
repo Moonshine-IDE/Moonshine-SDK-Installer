@@ -125,9 +125,15 @@ package actionScripts.utils
 			// store AIR version
 			HelperConstants.CONFIG_ADOBE_AIR_VERSION = xmlData.airAdobe.@version.toString();
 			HelperConstants.CONFIG_HARMAN_AIR_VERSION = xmlData.airHarman.@version.toString();
-			HelperConstants.CONFIG_HARMAN_AIR_SERVER = String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path);
-			HelperConstants.CONFIG_HARMAN_AIR_FILE = String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file);
-			
+			HelperConstants.CONFIG_HARMAN_AIR_OBJECT = {
+				server: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.server),
+				folder: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.folder),
+				file: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file) +"?license=accepted",
+				label: "AIR "+ HelperConstants.CONFIG_HARMAN_AIR_VERSION,
+				version: HelperConstants.CONFIG_HARMAN_AIR_VERSION,
+				versionID: HelperConstants.CONFIG_HARMAN_AIR_VERSION
+			};
+
 			// store 64-bit windows url
 			if (!HelperConstants.IS_MACOS)
 			{
@@ -279,7 +285,7 @@ package actionScripts.utils
 		public static function getHarmanAIRObjectForApacheInstaller():Object
 		{
 			return {
-				file: HelperConstants.CONFIG_HARMAN_AIR_FILE + "?license=accepted",
+				/*file: HelperConstants.CONFIG_HARMAN_AIR_FILE + "?license=accepted",*/
 				label: "AIR 33.1",
 				server: "https://airsdk.harman.com"/*HelperConstants.CONFIG_HARMAN_AIR_SERVER*/,
 				folder: "api/versions/33.1.1.533/sdks",
