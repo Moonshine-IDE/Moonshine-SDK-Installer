@@ -193,15 +193,15 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1">
-			            	<path>https://downloads.apache.org/flex/4.16.1/binaries/</path>
-		              		<file>apache-flex-sdk-4.16.1-bin.zip</file>
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.533">
+			            	<path></path>
+		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1">
-		                	<path>https://downloads.apache.org/flex/4.16.1/binaries/</path>
-		              		<file>apache-flex-sdk-4.16.1-bin.tar.gz</file>
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.533">
+		                	<path></path>
+		              		<file></file>
 		             </version>
 					</mac>
 				</variant>

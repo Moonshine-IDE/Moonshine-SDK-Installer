@@ -115,6 +115,7 @@
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_PROGRESS, onInstallProgress, false, 0, true);
 				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_FINISH, onInstallationFinished, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(InstallApacheFlex.EVENT_READY_TO_RUN_INSTALLER_SCRIPT, onReadyBeforeRunningInstallerScript, false, 0, true);
 				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
 				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
 				
@@ -324,6 +325,62 @@
 			//  LISTENERS API
 			//
 			//--------------------------------------------------------------------------
+
+			private function onReadyBeforeRunningInstallerScript(event:Event):void
+			{
+				// necessary installation requisite fix for Harman
+				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
+				{
+					// custom sdk-installer-config with harman download information
+					var installFolder:File = new File(itemDownloading.installToPath);
+					FileUtils.copyFile(
+							File.applicationDirectory.resolvePath("installer/sdk-installer-config-4.0.xml"),
+							(installFolder.resolvePath("sdk-installer-config-4.0.xml"))
+					);
+
+					// modify installer.xml to use custom sdk-installer-config
+					var installer:File = installFolder.resolvePath("installer.xml");
+					var installerContent:String = FileUtils.readFromFile(installer) as String;
+					installerContent = installerContent.replace(
+							'<property name="xml.properties" value="http://flex.apache.org/installer/sdk-installer-config-4.0.xml?ts=${ts}" />',
+							'<property name="xml.properties" value="${basedir}/sdk-installer-config-4.0.xml" />'
+					);
+					installerContent = installerContent.replace(
+							'<get src="${xml.properties}" dest="${basedir}/sdk-installer-config-4.0.xml" />',
+							''
+					);
+					installerContent = installerContent.replace(
+							'<matches pattern="tbz2" string="${air.sdk.url.file}"/>',
+							'<matches pattern="(tbz2|zip)" string="${air.sdk.url.file}"/>'
+					);
+
+					// for an unknown reason irrespective of ${shouldUnzip} value
+					// installer.xml always triggering mountDMG on macOS
+					installerContent = installerContent.replace(
+							'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK,mountAIRSDK,copyFromMount,unmountAIRSDK">',
+							'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK">'
+					);
+
+					// we also need to normalize the downloaded zip file
+					// name to properly unzip with using tar
+					// eg. from AIRSDK_Flex_*.zip?license=accepted to AIRSDK_Flex_*.zip
+					var tmpFileName:String = HelperConstants.CONFIG_HARMAN_AIR_OBJECT.file.replace("?license=accepted", "");
+					installerContent = installerContent.replace(
+							'<move file="${download.dir}/${air.sdk.url.file}" todir="${download.dir}/airsdk" />',
+							'<move file="${download.dir}/${air.sdk.url.file}" todir="${download.dir}/airsdk" />' +
+							'<move file="${download.dir}/airsdk/${air.sdk.url.file}" tofile="${download.dir}/airsdk/'+ tmpFileName +'" />' +
+							'<property name="${air.sdk.url.file}" value="'+ tmpFileName +'" />' +
+							'<echo>${air.sdk.url.file}</echo>'
+					);
+
+					installerContent = installerContent.replace('<target name="unzipAIRSDK" if="${shouldUnzip}">', '<target name="unzipAIRSDK">');
+
+					// re-write installer.xml
+					FileUtils.writeToFile(installer, installerContent);
+				}
+
+				INSTALLER_APACHE_FLEX.continueToRunInstallerScript();
+			}
 			
 			private function onInstallerIsReady(event:GenericEvent):void
 			{
@@ -373,7 +430,7 @@
 					}
 				}
 				
-				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
+				/*if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
 				{
 					isHarmanAIRDownloading = true;
 					itemDownloading.isDownloaded = false;
@@ -402,7 +459,7 @@
 					);
 
 					return;
-				}
+				}*/
 				
 				// sometime distributed zip/tar creates an additional
 				// folder to the target directory which became complicated
@@ -483,7 +540,8 @@
 				}
 
 				(event.data as ComponentVO).isDownloading = true;
-				if ((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX)
+				if (((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX) ||
+						(event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX_HARMAN)
 				{
 					new LinkVerifier((event.data as ComponentVO), 
 						onDownloadLinkVerified, 

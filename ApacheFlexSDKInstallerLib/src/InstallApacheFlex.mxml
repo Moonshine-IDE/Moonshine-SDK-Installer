@@ -157,6 +157,8 @@ variables are not required because the locations of these pieces are known.
 		
 		import ws.tink.spark.controls.StepItem;
 		import ws.tink.spark.skins.controls.InstallApacheFlexSkin;
+
+		public static const EVENT_READY_TO_RUN_INSTALLER_SCRIPT:String = "eventReadyBeforeRunningInstallerScript";
 		
 		// embed us strings so we can always have them if we can't get to the locale files
 		[Embed(source="properties/en_US.properties", mimeType="application/octet-stream")]
@@ -2282,8 +2284,7 @@ variables are not required because the locations of these pieces are known.
 					
 					// @devsena
 					// MASH
-					if (flexVersionSelected.prefix == "apache-flex-sdk-") runInstallerScript();
-					else if (flexVersionSelected.prefix == "feathers-sdk-") runInstallerScriptFeathers();
+					dispatchEvent(new Event(EVENT_READY_TO_RUN_INSTALLER_SCRIPT));
 				}
 				else
 				{
@@ -2297,6 +2298,12 @@ variables are not required because the locations of these pieces are known.
 					}
 				}
 			}
+		}
+
+		public function continueToRunInstallerScript():void
+		{
+			if (flexVersionSelected.prefix == "apache-flex-sdk-") runInstallerScript();
+			else if (flexVersionSelected.prefix == "feathers-sdk-") runInstallerScriptFeathers();
 		}
 		
 		// @devsena
