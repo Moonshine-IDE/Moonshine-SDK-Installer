@@ -281,7 +281,8 @@ package actionScripts.utils
 			return {
 				file: HelperConstants.CONFIG_HARMAN_AIR_FILE + "?license=accepted",
 				label: "AIR 33.1",
-				path: HelperConstants.CONFIG_HARMAN_AIR_SERVER,
+				server: "https://airsdk.harman.com"/*HelperConstants.CONFIG_HARMAN_AIR_SERVER*/,
+				folder: "api/versions/33.1.1.533/sdks",
 				version: "33.1",
 				versionID: "33.1"
 			};

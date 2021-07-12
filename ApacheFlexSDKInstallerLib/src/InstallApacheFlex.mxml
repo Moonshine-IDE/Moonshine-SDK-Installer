@@ -455,6 +455,7 @@ variables are not required because the locations of these pieces are known.
 		public function startInstallationHarman(value:Object):void
 		{
 			_airVersionSelected = value;
+			AIR_VERSION = value.version;
 			startInstallation();
 		}
 		
@@ -1069,6 +1070,8 @@ variables are not required because the locations of these pieces are known.
 						var airFile:String = airVersion.file.toString();
 						AIR_VERSIONS.addItem({
 							label: "AIR " + displayVersion, version: versionString, versionID: versionID,
+							server: airVersion.server.toString(),
+							folder: airVersion.folder.toString(),
 							path: airPath, file: airFile
 						});
 						
@@ -2407,8 +2410,9 @@ variables are not required because the locations of these pieces are known.
 			{
 				context["air.sdk.versionID"] = tmpAIRversion.versionID;
 			}
-			context["air.sdk.url.server"] = tmpAIRversion.path;
+			context["air.sdk.url.server"] = tmpAIRversion.server;
 			context["air.sdk.url.path"] = tmpAIRversion.path;
+			context["air.sdk.url.folder"] = tmpAIRversion.folder;
 			context["air.sdk.url.file"] = tmpAIRversion.file;
 			context["flash.sdk.version"] = FLASH_PLAYER_VERSION;
 			if (tmpFlashPlayerVersion.versionID)

@@ -576,6 +576,13 @@ limitations under the License.
                     <file id="air.sdk.file.mac.32.0">AdobeAIRSDK.dmg</file>
                     <md5 id="air.sdk.md5.mac.32.0">5b3565b83f4b8c0301b46724417b0744</md5>
                 </versionAG>
+                <versionAH id="air.sdk.version.mac.33.1" version="33.1" displayVersion="33.1" versionID="33.1" cacheID="13feb1ba-586117cd4023b" cacheID2="d16a2ff-5324155c7d928">
+                    <server id="air.sdk.server.mac.33.1">https://airsdk.harman.com</server>
+                    <folder id="air.sdk.folder.mac.33.1">api/versions/33.1.1.533/sdks</folder>
+                    <path id="air.sdk.path.mac.33.1">https://airsdk.harman.com</path>
+                    <file id="air.sdk.file.mac.33.1">AIRSDK_Flex_MacOS.zip</file>
+                    <md5 id="air.sdk.md5.mac.33.1">5b3565b83f4b8c0301b46724417b0744</md5>
+                </versionAH>
                 <!-- <versionAD id="air.sdk.version.mac.29.0b" version="29.0" displayVersion="29 Beta" versionID="29.0b" cacheID="1a142854-558f5fdff6019" cacheID2="d16a2ff-5304155c7d928">
                     <server id="air.sdk.server.mac.29.0b">https://fpdownload.macromedia.com</server>
                     <folder id="air.sdk.folder.mac.29.0b">pub/labs/flashruntimes/air/</folder>
@@ -918,12 +925,12 @@ limitations under the License.
                 <projectorWin id="flash.sdk.projector.win.31.0">https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flashplayer_31_sa_debug.exe</projectorWin>
                 <projectorMac id="flash.sdk.projector.mac.31.0">https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flashplayer_31_sa_debug.dmg</projectorMac>
             </versionAF>
-            <versionAG id="flash.sdk.version.32.0" version="32.0" displayVersion="32.0" versionID="32.0" cacheID="734e4-58d37b2546025" cacheID2="72fca-54b4e03495e86">
+            <versionAG id="flash.sdk.version.32.0" version="32.0" displayVersion="32.0" versionID="32.0" cacheID="73519-5a56bd20f421f" cacheID2="734ff-5a339e03a096e">
                 <server id="flash.sdk.server.32.0">https://fpdownload.macromedia.com</server>
                 <folder id="flash.sdk.folder.32.0">get/flashplayer/updaters/32/</folder>
                 <path id="flash.sdk.path.32.0">https://fpdownload.macromedia.com/get/flashplayer/updaters/32/</path>
                 <file id="flash.sdk.file.32.0">playerglobal32_0.swc</file>
-                <md5 id="flash.sdk.md5.32.0">33a611dd4564ce108ad61167dc44a416</md5>
+                <md5 id="flash.sdk.md5.32.0">513a4f254444e43b94bb0758398ea23c</md5>
                 <swfversion id="flash.sdk.swfversion.32.0">43</swfversion>
                 <projectorWin id="flash.sdk.projector.win.32.0">https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flashplayer_32_sa_debug.exe</projectorWin>
                 <projectorMac id="flash.sdk.projector.mac.32.0">https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flashplayer_32_sa_debug.dmg</projectorMac>
