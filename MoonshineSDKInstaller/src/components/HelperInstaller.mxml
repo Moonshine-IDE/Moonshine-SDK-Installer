@@ -349,17 +349,21 @@
 							'<get src="${xml.properties}" dest="${basedir}/sdk-installer-config-4.0.xml" />',
 							''
 					);
-					installerContent = installerContent.replace(
-							'<matches pattern="tbz2" string="${air.sdk.url.file}"/>',
-							'<matches pattern="(tbz2|zip)" string="${air.sdk.url.file}"/>'
-					);
 
-					// for an unknown reason irrespective of ${shouldUnzip} value
-					// installer.xml always triggering mountDMG on macOS
-					installerContent = installerContent.replace(
-							'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK,mountAIRSDK,copyFromMount,unmountAIRSDK">',
-							'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK">'
-					);
+					if (HelperConstants.IS_MACOS)
+					{
+						installerContent = installerContent.replace(
+								'<matches pattern="tbz2" string="${air.sdk.url.file}"/>',
+								'<matches pattern="(tbz2|zip)" string="${air.sdk.url.file}"/>'
+						);
+
+						// for an unknown reason irrespective of ${shouldUnzip} value
+						// installer.xml always triggering mountDMG on macOS
+						installerContent = installerContent.replace(
+								'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK,mountAIRSDK,copyFromMount,unmountAIRSDK">',
+								'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK2">'
+						);
+					}
 
 					// we also need to normalize the downloaded zip file
 					// name to properly unzip with using tar
@@ -368,12 +372,14 @@
 					installerContent = installerContent.replace(
 							'<move file="${download.dir}/${air.sdk.url.file}" todir="${download.dir}/airsdk" />',
 							'<move file="${download.dir}/${air.sdk.url.file}" todir="${download.dir}/airsdk" />' +
-							'<move file="${download.dir}/airsdk/${air.sdk.url.file}" tofile="${download.dir}/airsdk/'+ tmpFileName +'" />' +
-							'<property name="${air.sdk.url.file}" value="'+ tmpFileName +'" />' +
-							'<echo>${air.sdk.url.file}</echo>'
+							'<move file="${download.dir}/airsdk/${air.sdk.url.file}" tofile="${download.dir}/airsdk/'+ tmpFileName +'" />'
 					);
 
-					installerContent = installerContent.replace('<target name="unzipAIRSDK" if="${shouldUnzip}">', '<target name="unzipAIRSDK">');
+					installerContent = installerContent.replace(
+							'<target name="unzipAIRSDK" if="${shouldUnzip}">',
+							'<target name="unzipAIRSDK2"><echo>Unzipping ${download.dir}/airsdk/${air.sdk.url.file}</echo><exec executable="tar" dir="${basedir}"><arg value="-xvf" /><arg value="${download.dir}/airsdk/${air.sdk.url.file}" /></exec></target><target name="unzipAIRSDK" if="${shouldUnzip}">');
+
+					installerContent = installerContent.replace(/\${air.sdk.url.file}/g, tmpFileName);
 
 					// re-write installer.xml
 					FileUtils.writeToFile(installer, installerContent);
@@ -428,6 +434,18 @@
 							}
 						}, 1000);
 					}
+				}
+
+				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
+				{
+					var installFolder:File = new File(itemDownloading.installToPath);
+
+					// fixing flex-config
+					var flexConfig:File = installFolder.resolvePath("frameworks/flex-config.xml");
+					var flexConfigContent:String = FileUtils.readFromFile(flexConfig) as String;
+					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>33.1</target-player>");
+					flexConfigContent = flexConfigContent.replace(/<swf-version>43<\/swf-version>/g, "<swf-version>44</swf-version>");
+					FileUtils.writeToFile(flexConfig, flexConfigContent);
 				}
 				
 				/*if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
