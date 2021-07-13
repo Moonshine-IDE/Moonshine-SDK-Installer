@@ -331,6 +331,8 @@
 				// necessary installation requisite fix for Harman
 				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
 				{
+					var tmpFileName:String = HelperConstants.CONFIG_HARMAN_AIR_OBJECT.file.replace("?license=accepted", "");
+
 					// custom sdk-installer-config with harman download information
 					var installFolder:File = new File(itemDownloading.installToPath);
 					FileUtils.copyFile(
@@ -368,7 +370,6 @@
 					// we also need to normalize the downloaded zip file
 					// name to properly unzip with using tar
 					// eg. from AIRSDK_Flex_*.zip?license=accepted to AIRSDK_Flex_*.zip
-					var tmpFileName:String = HelperConstants.CONFIG_HARMAN_AIR_OBJECT.file.replace("?license=accepted", "");
 					installerContent = installerContent.replace(
 							'<move file="${download.dir}/${air.sdk.url.file}" todir="${download.dir}/airsdk" />',
 							'<move file="${download.dir}/${air.sdk.url.file}" todir="${download.dir}/airsdk" />' +
@@ -377,9 +378,7 @@
 
 					installerContent = installerContent.replace(
 							'<target name="unzipAIRSDK" if="${shouldUnzip}">',
-							'<target name="unzipAIRSDK2"><echo>Unzipping ${download.dir}/airsdk/${air.sdk.url.file}</echo><exec executable="tar" dir="${basedir}"><arg value="-xvf" /><arg value="${download.dir}/airsdk/${air.sdk.url.file}" /></exec></target><target name="unzipAIRSDK" if="${shouldUnzip}">');
-
-					installerContent = installerContent.replace(/\${air.sdk.url.file}/g, tmpFileName);
+							'<target name="unzipAIRSDK2"><echo>Unzipping ${download.dir}/airsdk/'+ tmpFileName +'</echo><exec executable="tar" dir="${basedir}"><arg value="-xvf" /><arg value="${download.dir}/airsdk/'+ tmpFileName +'" /></exec></target><target name="unzipAIRSDK" if="${shouldUnzip}">');
 
 					// re-write installer.xml
 					FileUtils.writeToFile(installer, installerContent);
