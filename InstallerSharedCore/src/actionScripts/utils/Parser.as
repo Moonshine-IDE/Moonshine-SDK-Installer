@@ -129,6 +129,7 @@ package actionScripts.utils
 				server: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.server),
 				folder: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.folder),
 				file: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file) +"?license=accepted",
+				path: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path),
 				label: "AIR "+ HelperConstants.CONFIG_HARMAN_AIR_VERSION,
 				version: HelperConstants.CONFIG_HARMAN_AIR_VERSION,
 				versionID: HelperConstants.CONFIG_HARMAN_AIR_VERSION
