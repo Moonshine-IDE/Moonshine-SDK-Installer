@@ -326,11 +326,12 @@ package actionScripts.ui
 
 		protected function feathersUIWrapper_focusOutHandler(event:FocusEvent):void
 		{
-			if(this.stage != null && this.stage.focus != null && this.contains(this.stage.focus)) {
+			if(this.stage != null && this.stage.focus != null && (this.stage.focus == this || this.contains(this.stage.focus))) {
 				return;
 			}
-			this._feathersUIFocusManager.focus = null;
-			this._feathersUIFocusManager.enabled = false;
+			if(this._feathersUIFocusManager) {
+				this._feathersUIFocusManager.enabled = false;
+			}
 		}
 	}
 }
