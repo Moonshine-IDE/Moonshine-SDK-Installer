@@ -578,8 +578,8 @@ limitations under the License.
                 </versionAG>
                 <versionAH id="air.sdk.version.mac.33.1" version="33.1" displayVersion="33.1" versionID="33.1" cacheID="13feb1ba-586117cd4023b" cacheID2="d16a2ff-5324155c7d928">
                     <server id="air.sdk.server.mac.33.1">https://airsdk.harman.com</server>
-                    <folder id="air.sdk.folder.mac.33.1">api/versions/33.1.1.533/sdks/</folder>
-                    <path id="air.sdk.path.mac.33.1">https://airsdk.harman.com/api/versions/33.1.1.533/sdks/</path>
+                    <folder id="air.sdk.folder.mac.33.1">api/versions/33.1.1.554/sdks/</folder>
+                    <path id="air.sdk.path.mac.33.1">https://airsdk.harman.com/api/versions/33.1.1.554/sdks/</path>
                     <file id="air.sdk.file.mac.33.1">AIRSDK_Flex_MacOS.zip</file>
                     <md5 id="air.sdk.md5.mac.33.1">5b3565b83f4b8c0301b46724417b0744</md5>
                 </versionAH>

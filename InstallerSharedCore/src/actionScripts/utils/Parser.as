@@ -298,7 +298,7 @@ package actionScripts.utils
 				/*file: HelperConstants.CONFIG_HARMAN_AIR_FILE + "?license=accepted",*/
 				label: "AIR 33.1",
 				server: "https://airsdk.harman.com"/*HelperConstants.CONFIG_HARMAN_AIR_SERVER*/,
-				folder: "api/versions/33.1.1.533/sdks",
+				folder: "api/versions/33.1.1.554/sdks",
 				version: "33.1",
 				versionID: "33.1"
 			};
