@@ -41,11 +41,11 @@ package actionScripts.utils
 				// installer.xml always triggering mountDMG on macOS
 				installerContent = installerContent.replace(
 					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK,mountAIRSDK,copyFromMount,unmountAIRSDK">',
-					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK2,copyFromMount">'
+					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK2">'
 				);
 
 				// modify to `copyFromMount` to work correctly
-				installerContent = installerContent.replace(
+				/*installerContent = installerContent.replace(
 						'<target name="copyFromMount" unless="${shouldUnzip}">',
 						'<target name="copyFromMount">'
 				);
@@ -56,7 +56,7 @@ package actionScripts.utils
 				installerContent = installerContent.replace(
 						'<arg value="${download.dir}/airsdk" />',
 						'<arg value="${basedir}"/>'
-				);
+				);*/
 				
 				// we also need to normalize the downloaded zip file
 				// name to properly unzip with using tar
@@ -75,8 +75,7 @@ package actionScripts.utils
 					'<target name="unzipAIRSDK" if="${shouldUnzip}">',
 					'<target name="unzipAIRSDK2">' +
 						'<echo>Unzipping ${download.dir}/airsdk/'+ tmpFileName +'</echo>' +
-						'<unzip src="${download.dir}/airsdk/'+ tmpFileName +'" dest="${download.dir}/airsdk" overwrite="true" />' +
-						'<delete file="${download.dir}/airsdk/'+ tmpFileName +'" />' +
+						'<exec executable="tar" dir="${basedir}"><arg value="-xvf" /><arg value="${download.dir}/airsdk/'+ tmpFileName +'" /></exec>' +
 						'</target>' +
 						'<target name="unzipAIRSDK" if="${shouldUnzip}">'
 				);
