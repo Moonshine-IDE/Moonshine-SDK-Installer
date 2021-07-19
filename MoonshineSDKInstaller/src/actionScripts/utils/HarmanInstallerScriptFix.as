@@ -41,7 +41,21 @@ package actionScripts.utils
 				// installer.xml always triggering mountDMG on macOS
 				installerContent = installerContent.replace(
 					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK,mountAIRSDK,copyFromMount,unmountAIRSDK">',
-					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK2">'
+					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK2,copyFromMount">'
+				);
+
+				// modify to `copyFromMount` to work correctly
+				installerContent = installerContent.replace(
+						'<target name="copyFromMount" unless="${shouldUnzip}">',
+						'<target name="copyFromMount">'
+				);
+				installerContent = installerContent.replace(
+						'<arg value="/Volumes/AIR SDK/"/>',
+						'<arg value="${download.dir}/airsdk/."/>'
+				);
+				installerContent = installerContent.replace(
+						'<arg value="${download.dir}/airsdk" />',
+						'<arg value="${basedir}"/>'
 				);
 				
 				// we also need to normalize the downloaded zip file
@@ -59,7 +73,15 @@ package actionScripts.utils
 				// 3. individual copying resource list in installer.xml is outdated against harman sdk
 				installerContent = installerContent.replace(
 					'<target name="unzipAIRSDK" if="${shouldUnzip}">',
-					'<target name="unzipAIRSDK2"><echo>Unzipping ${download.dir}/airsdk/'+ tmpFileName +'</echo><exec executable="tar" dir="${basedir}"><arg value="-xvf" /><arg value="${download.dir}/airsdk/'+ tmpFileName +'" /></exec></target><target name="unzipAIRSDK" if="${shouldUnzip}">'
+					'<target name="unzipAIRSDK2">' +
+						'<echo>Unzipping ${download.dir}/airsdk/'+ tmpFileName +'</echo>' +
+						'<exec executable="tar" dir="${download.dir}/airsdk">' +
+						'<arg value="-xvf" />' +
+						'<arg value="${download.dir}/airsdk/'+ tmpFileName +'" />' +
+						'</exec>' +
+						'<delete file="${download.dir}/airsdk/'+ tmpFileName +'" />' +
+						'</target>' +
+						'<target name="unzipAIRSDK" if="${shouldUnzip}">'
 				);
 			}
 			else

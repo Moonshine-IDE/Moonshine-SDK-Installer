@@ -2,8 +2,8 @@
 --macro lime._internal.macros.DefineMacro.run()
 -cp /usr/local/lib/haxe/lib/lime/7,9,0/src
 -D lime=7.9.0
--cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,3/src
--D feathersui=1.0.0-beta.3
+-cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,4/src
+-D feathersui=1.0.0-beta.4
 -cp /usr/local/lib/haxe/lib/actuate/1,8,9/src
 -D actuate=1.8.9
 -cp /usr/local/lib/haxe/lib/hxargs/3,0,2

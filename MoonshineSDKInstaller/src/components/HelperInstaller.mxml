@@ -390,9 +390,15 @@
 				{
 					var installFolder:File = new File(itemDownloading.installToPath);
 
-					// fixing flex-config
+					// fixing flex-configs
 					var flexConfig:File = installFolder.resolvePath("frameworks/flex-config.xml");
 					var flexConfigContent:String = FileUtils.readFromFile(flexConfig) as String;
+					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>33.1</target-player>");
+					flexConfigContent = flexConfigContent.replace(/<swf-version>43<\/swf-version>/g, "<swf-version>44</swf-version>");
+					FileUtils.writeToFile(flexConfig, flexConfigContent);
+
+					flexConfig = installFolder.resolvePath("frameworks/air-config.xml");
+					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
 					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>33.1</target-player>");
 					flexConfigContent = flexConfigContent.replace(/<swf-version>43<\/swf-version>/g, "<swf-version>44</swf-version>");
 					FileUtils.writeToFile(flexConfig, flexConfigContent);
