@@ -75,10 +75,7 @@ package actionScripts.utils
 					'<target name="unzipAIRSDK" if="${shouldUnzip}">',
 					'<target name="unzipAIRSDK2">' +
 						'<echo>Unzipping ${download.dir}/airsdk/'+ tmpFileName +'</echo>' +
-						'<exec executable="tar" dir="${download.dir}/airsdk">' +
-						'<arg value="-xvf" />' +
-						'<arg value="${download.dir}/airsdk/'+ tmpFileName +'" />' +
-						'</exec>' +
+						'<unzip src="${download.dir}/airsdk/'+ tmpFileName +'" dest="${download.dir}/airsdk" overwrite="true" />' +
 						'<delete file="${download.dir}/airsdk/'+ tmpFileName +'" />' +
 						'</target>' +
 						'<target name="unzipAIRSDK" if="${shouldUnzip}">'
