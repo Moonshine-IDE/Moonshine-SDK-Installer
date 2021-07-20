@@ -5,20 +5,28 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## Moonshine SDK Installer [3.9.0]
 
+### Summary
+
+Fixed errors for Apache Flex SDK (Harman AIR) install.  Improved the logic to make the errors less likely to trigger in the future.
+
+The UI was updated to Haxe.  It should generally look similar, but there we made several other small changes to the UI while we worked on this.
+
 ### Added
-* Display full version of Harman Air downloaded with installer ([#63](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/63))
 
 ### Fixed
+* Fixed download error for Apache Flex SDK with Harman AIR ([#62](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/62))
+* Fixed hang when downloading Harman Air ([#60](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/60))
+* Display full version of Harman Air ([#63](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/63))
 * Fixed message on warning icon for SVN and Git ([#51](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/51))
-* Fixed non working download button till moving scroll ([#57](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/57))
-* Fixed issue where clicking on Harman Air license agreement opened wrong link ([#58](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/58))
-* Fixed hang of downloading Harman Air ([#60](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/60))
+* Fixed cases where download button didn't work until the window was scrolled ([#57](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/57))
+* Fixed issue where Harman Air license agreement link opened wrong page ([#58](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/58))
 
 ### Changed
-* Update HCL Notes to version 12.0 ([#52](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/52))
-* Improvement for displaying date of installation ([#54](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/54))
-* Decouple installation logic of SVN and Git on Mac OSX ([#61](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/61))
-* Dynamic mirror Apache Flex SDK download selection ([#62](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/62))
+* Updated main UI to Haxe
+* Improved mirror selection logic for Apache Flex SDK with Harman AIR ([#62](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/62))
+* macOS:  Decouple installation logic of SVN and Git on Mac OSX ([#61](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/61))
+* Updated HCL Notes to version 12.0 ([#52](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/52))
+* Updated format for installation date. ([#54](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/54))
 
 ## Moonshine SDK Installer [3.8.1]
 
