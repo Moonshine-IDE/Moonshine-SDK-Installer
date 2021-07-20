@@ -10,9 +10,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 * Fixed message on warning icon for SVN and Git ([#51](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/51))
-* 
+* Fixed non working download button till moving scroll ([#57](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/57))
+* Fixed issue where clicking on Harman Air license agreement opened wrong link ([#58](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/58))
+* Fixed hang of downloading Harman Air ([#60](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/60))
+
 ### Changed
 * Update HCL Notes to version 12.0 ([#52](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/52))
+* Improvement for displaying date of installation ([#54](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/54))
 * Decouple installation logic of SVN and Git on Mac OSX ([#61](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/61))
 * Dynamic mirror Apache Flex SDK download selection ([#62](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/62))
 
