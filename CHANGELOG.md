@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [3.9.0]
+
+### Added
+* Display full version of Harman Air downloaded with installer ([#63](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/63))
+
+### Fixed
+* Fixed message on warning icon for SVN and Git ([#51](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/51))
+* 
+### Changed
+* Update HCL Notes to version 12.0 ([#52](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/52))
+* Decouple installation logic of SVN and Git on Mac OSX ([#61](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/61))
+* Dynamic mirror Apache Flex SDK download selection ([#62](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/62))
+
 ## Moonshine SDK Installer [3.8.1]
 
 ### Fixed
