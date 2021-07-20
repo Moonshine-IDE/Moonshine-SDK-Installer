@@ -43,20 +43,6 @@ package actionScripts.utils
 					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK,mountAIRSDK,copyFromMount,unmountAIRSDK">',
 					'<target name="air-setup-mac" depends="unzipOrMountDMG,unzipAIRSDK2">'
 				);
-
-				// modify to `copyFromMount` to work correctly
-				/*installerContent = installerContent.replace(
-						'<target name="copyFromMount" unless="${shouldUnzip}">',
-						'<target name="copyFromMount">'
-				);
-				installerContent = installerContent.replace(
-						'<arg value="/Volumes/AIR SDK/"/>',
-						'<arg value="${download.dir}/airsdk/."/>'
-				);
-				installerContent = installerContent.replace(
-						'<arg value="${download.dir}/airsdk" />',
-						'<arg value="${basedir}"/>'
-				);*/
 				
 				// we also need to normalize the downloaded zip file
 				// name to properly unzip with using tar

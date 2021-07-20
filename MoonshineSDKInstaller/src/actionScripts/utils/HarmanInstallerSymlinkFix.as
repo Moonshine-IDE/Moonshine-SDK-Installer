@@ -8,33 +8,67 @@ package actionScripts.utils
     import flash.events.NativeProcessExitEvent;
     import flash.events.ProgressEvent;
     import flash.filesystem.File;
-    import flash.utils.Dictionary;
     import flash.utils.IDataInput;
 
     public class HarmanInstallerSymlinkFix extends EventDispatcher
 	{
         public static const EVENT_ANT_SCRIPT_GENERATED:String = "eventAntScriptFileGenerated";
 
-        private static const LIST_STATIC_SYMLINKS:String = "runtimes/air-captive/mac/Adobe AIR.framework/Adobe AIR -> Versions/Current/Adobe AIR\n" +
-                "runtimes/air-captive/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64 -> Adobe AIR\n" +
-                "runtimes/air-captive/mac/Adobe AIR.framework/Versions/Current -> 1.0\n" +
-                "runtimes/air-captive/mac/Adobe AIR.framework/Resources -> Versions/Current/Resources\n" +
-                "runtimes/air/mac/Adobe AIR.framework/Adobe AIR -> Versions/Current/Adobe AIR\n" +
-                "runtimes/air/mac/Adobe AIR.framework/Versions/1.0/Adobe AIR_64 -> Adobe AIR\n" +
-                "runtimes/air/mac/Adobe AIR.framework/Versions/Current -> 1.0\n" +
-                "runtimes/air/mac/Adobe AIR.framework/Headers -> Versions/Current/Headers\n" +
-                "runtimes/air/mac/Adobe AIR.framework/Resources -> Versions/Current/Resources";
+        // @note
+        // in a broken symlink directory we never get a list of symlinks
+        // we need to retrieve the list from an working directory
+        // save the list here, update the list time to time
+        private static const LIST_STATIC_SYMLINKS:Object = [
+            {
+                workingDirectory: "runtimes/air-captive/mac/Adobe AIR.framework",
+                resources: "Versions/Current/Adobe AIR",
+                link: "Adobe AIR"
+            },
+            {
+                workingDirectory: "runtimes/air-captive/mac/Adobe AIR.framework/Versions/1.0",
+                resources: "Adobe AIR",
+                link: "Adobe AIR_64"
+            },
+            {
+                workingDirectory: "runtimes/air-captive/mac/Adobe AIR.framework/Versions",
+                resources: "1.0",
+                link: "Current"
+            },
+            {
+                workingDirectory: "runtimes/air-captive/mac/Adobe AIR.framework",
+                resources: "Versions/Current/Resources",
+                link: "Resources"
+            },
+            {
+                workingDirectory: "runtimes/air/mac/Adobe AIR.framework",
+                resources: "Versions/Current/Adobe AIR",
+                link: "Adobe AIR"
+            },
+            {
+                workingDirectory: "runtimes/air/mac/Adobe AIR.framework/Versions/1.0",
+                resources: "Adobe AIR",
+                link: "Adobe AIR_64"
+            },
+            {
+                workingDirectory: "runtimes/air/mac/Adobe AIR.framework/Versions",
+                resources: "1.0",
+                link: "Current"
+            },
+            {
+                workingDirectory: "runtimes/air/mac/Adobe AIR.framework",
+                resources: "Versions/Current/Headers",
+                link: "Headers"
+            },
+            {
+                workingDirectory: "runtimes/air/mac/Adobe AIR.framework",
+                resources: "Versions/Current/Resources",
+                link: "Resources"
+            }
+        ];
 
         private var baseDirectory:File;
         private var customProcess:NativeProcess;
-        private var symlinkPairs:Dictionary;
-        private var queue:Vector.<String> = new Vector.<String>();
-
-        private var _antScriptPath:File;
-        public function get antScriptPath():File
-        {
-            return _antScriptPath;
-        }
+        private var listIndex:int = -1;
 
 		public function HarmanInstallerSymlinkFix()
 		{
@@ -43,31 +77,28 @@ package actionScripts.utils
         public function runCheck(baseDirectory:File):void
         {
             this.baseDirectory = baseDirectory;
-            symlinkPairs = new Dictionary();
-
-            var tmpLines:Array = LIST_STATIC_SYMLINKS.split("\n");
-            var tmpLine:Array;
-            for each (var line:String in tmpLines)
-            {
-                tmpLine = line.split(" -> ");
-                if (tmpLine.length > 1)
-                {
-                    symlinkPairs[tmpLine[0]] = tmpLine[1];
-                }
-            }
-
-            generateNewSymlinkFiles();
+            listIndex = -1;
+            flush();
         }
 
         private function flush():void
         {
-            if (queue.length == 0) return;
+            listIndex++;
+            if (listIndex == LIST_STATIC_SYMLINKS.length)
+            {
+                dispatchEvent(new Event(EVENT_ANT_SCRIPT_GENERATED));
+                return;
+            }
 
+            var symlinkObject:Object = LIST_STATIC_SYMLINKS[listIndex];
             var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
             npInfo.executable = File.documentsDirectory.resolvePath("/bin/bash");
 
-            npInfo.arguments = Vector.<String>(["-c", queue.shift()]);
-            npInfo.workingDirectory = this.baseDirectory;
+            var command1:String = "rm "+ symlinkObject.link;
+            var command2:String = "ln -s "+ symlinkObject.resources +" "+ symlinkObject.link;
+
+            npInfo.arguments = Vector.<String>(["-c", command1 +";"+ command2]);
+            npInfo.workingDirectory = this.baseDirectory.resolvePath(symlinkObject.workingDirectory);
 
             startShell(true);
             customProcess.start(npInfo);
@@ -126,22 +157,6 @@ package actionScripts.utils
         {
             startShell(false);
             flush();
-        }
-
-        private function generateNewSymlinkFiles():void
-        {
-            var symlinkFilePath:File;
-            for (var key:String in symlinkPairs)
-            {
-                symlinkFilePath = baseDirectory.resolvePath(key);
-                // delete existing symlink
-                queue.push('rm "'+ symlinkFilePath.nativePath +'"');
-                // generate new symlink
-                queue.push('ln -s "'+ symlinkFilePath.parent.resolvePath(symlinkPairs[key]).nativePath +'" "'+ symlinkFilePath.nativePath +'"');
-            }
-
-            flush();
-            dispatchEvent(new Event(EVENT_ANT_SCRIPT_GENERATED));
         }
 	}
 }
