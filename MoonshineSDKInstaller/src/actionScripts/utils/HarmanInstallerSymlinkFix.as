@@ -94,8 +94,8 @@ package actionScripts.utils
             var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
             npInfo.executable = File.documentsDirectory.resolvePath("/bin/bash");
 
-            var command1:String = "rm "+ symlinkObject.link;
-            var command2:String = "ln -s "+ symlinkObject.resources +" "+ symlinkObject.link;
+            var command1:String = 'rm "'+ symlinkObject.link +'"';
+            var command2:String = 'ln -s "'+ symlinkObject.resources +'" "'+ symlinkObject.link +'"';
 
             npInfo.arguments = Vector.<String>(["-c", command1 +";"+ command2]);
             npInfo.workingDirectory = this.baseDirectory.resolvePath(symlinkObject.workingDirectory);
