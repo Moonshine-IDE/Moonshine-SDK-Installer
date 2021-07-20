@@ -7,7 +7,9 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
-			import flash.utils.clearTimeout;
+		import actionScripts.utils.HarmanInstallerSymlinkFix;
+
+		import flash.utils.clearTimeout;
 			import flash.utils.setTimeout;
 			
 			import mx.events.FlexEvent;
@@ -397,11 +399,23 @@
 					flexConfigContent = flexConfigContent.replace(/<swf-version>43<\/swf-version>/g, "<swf-version>44</swf-version>");
 					FileUtils.writeToFile(flexConfig, flexConfigContent);
 
-					flexConfig = installFolder.resolvePath("frameworks/air-config.xml");
-					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
-					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>33.1</target-player>");
-					flexConfigContent = flexConfigContent.replace(/<swf-version>43<\/swf-version>/g, "<swf-version>44</swf-version>");
-					FileUtils.writeToFile(flexConfig, flexConfigContent);
+					if (HelperConstants.IS_MACOS && !isHarmanAIRDownloading)
+					{
+						isHarmanAIRDownloading = true;
+						itemDownloading.isDownloaded = false;
+						itemDownloading.isDownloading = true;
+
+						var symLinkFix:HarmanInstallerSymlinkFix = new HarmanInstallerSymlinkFix();
+						symLinkFix.addEventListener(HarmanInstallerSymlinkFix.EVENT_ANT_SCRIPT_GENERATED, onAntScriptFileGenerated);
+						symLinkFix.runCheck(installFolder);
+
+						function onAntScriptFileGenerated(symLinkEvent:Event):void
+						{
+							symLinkEvent.target.removeEventListener(HarmanInstallerSymlinkFix.EVENT_ANT_SCRIPT_GENERATED, onAntScriptFileGenerated);
+							flushDownloadQueue();
+						}
+						return;
+					}
 				}
 				
 				/*if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)

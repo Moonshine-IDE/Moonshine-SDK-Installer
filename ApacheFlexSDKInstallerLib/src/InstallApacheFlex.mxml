@@ -2587,7 +2587,7 @@ variables are not required because the locations of these pieces are known.
 				completeHandler(null);
 			}
 		}
-		
+
 		private function progressEventHandler(event:ProgressEvent):void
 		{
 			if (logProgressEvents)
