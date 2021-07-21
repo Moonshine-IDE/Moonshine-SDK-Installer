@@ -395,8 +395,13 @@
 					// fixing flex-configs
 					var flexConfig:File = installFolder.resolvePath("frameworks/flex-config.xml");
 					var flexConfigContent:String = FileUtils.readFromFile(flexConfig) as String;
-					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>33.1</target-player>");
-					flexConfigContent = flexConfigContent.replace(/<swf-version>43<\/swf-version>/g, "<swf-version>44</swf-version>");
+					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>32.0</target-player>");
+					FileUtils.writeToFile(flexConfig, flexConfigContent);
+
+					// fixing air-config
+					flexConfig = installFolder.resolvePath("frameworks/air-config.xml");
+					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
+					flexConfigContent = flexConfigContent.replace(/<target-player>28.0<\/target-player>/g, "<target-player>32.0</target-player>");
 					FileUtils.writeToFile(flexConfig, flexConfigContent);
 
 					if (HelperConstants.IS_MACOS && !isHarmanAIRDownloading)
@@ -406,12 +411,12 @@
 						itemDownloading.isDownloading = true;
 
 						var symLinkFix:HarmanInstallerSymlinkFix = new HarmanInstallerSymlinkFix();
-						symLinkFix.addEventListener(HarmanInstallerSymlinkFix.EVENT_ANT_SCRIPT_GENERATED, onAntScriptFileGenerated);
+						symLinkFix.addEventListener(HarmanInstallerSymlinkFix.EVENT_SYMLINK_FIXED, onAntScriptFileGenerated);
 						symLinkFix.runCheck(installFolder);
 
 						function onAntScriptFileGenerated(symLinkEvent:Event):void
 						{
-							symLinkEvent.target.removeEventListener(HarmanInstallerSymlinkFix.EVENT_ANT_SCRIPT_GENERATED, onAntScriptFileGenerated);
+							symLinkEvent.target.removeEventListener(HarmanInstallerSymlinkFix.EVENT_SYMLINK_FIXED, onAntScriptFileGenerated);
 							flushDownloadQueue();
 						}
 						return;

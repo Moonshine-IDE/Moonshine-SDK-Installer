@@ -12,7 +12,7 @@ package actionScripts.utils
 
     public class HarmanInstallerSymlinkFix extends EventDispatcher
 	{
-        public static const EVENT_ANT_SCRIPT_GENERATED:String = "eventAntScriptFileGenerated";
+        public static const EVENT_SYMLINK_FIXED:String = "eventAntScriptFileGenerated";
 
         // @note
         // in a broken symlink directory we never get a list of symlinks
@@ -86,7 +86,7 @@ package actionScripts.utils
             listIndex++;
             if (listIndex == LIST_STATIC_SYMLINKS.length)
             {
-                dispatchEvent(new Event(EVENT_ANT_SCRIPT_GENERATED));
+                dispatchEvent(new Event(EVENT_SYMLINK_FIXED));
                 return;
             }
 
