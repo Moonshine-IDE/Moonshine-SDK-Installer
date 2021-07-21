@@ -11,8 +11,6 @@ Fixed errors for Apache Flex SDK (Harman AIR) install.  Improved the logic to ma
 
 The UI was updated to Haxe.  It should generally look similar, but there we made several other small changes to the UI while we worked on this.
 
-### Added
-
 ### Fixed
 * Fixed download error for Apache Flex SDK with Harman AIR ([#62](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/62))
 * Fixed hang when downloading Harman Air ([#60](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/60))
