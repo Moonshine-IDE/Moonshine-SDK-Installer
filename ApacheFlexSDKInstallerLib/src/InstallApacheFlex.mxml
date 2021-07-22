@@ -1969,8 +1969,7 @@ variables are not required because the locations of these pieces are known.
 			resetInstallStepsActivity();
 			addOptionalComponentsToInstallSteps();
 			updatePaths();
-			//install();
-			trace(ADOBE_AIR_SDK_WIN_FILE, ADOBE_AIR_SDK_WIN_URL, APACHE_FLEX_BIN_INSTALLER_URL);
+			install();
 		}
 		
 		protected function browseForSDK(event:MouseEvent):void
