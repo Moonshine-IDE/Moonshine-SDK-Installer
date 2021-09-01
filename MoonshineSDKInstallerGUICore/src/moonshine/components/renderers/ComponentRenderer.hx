@@ -73,7 +73,6 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		this.variant = SDKInstallerTheme.THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND;
 
 		var viewLayout = new HorizontalLayout();
-		viewLayout.horizontalAlign = JUSTIFY;
 		viewLayout.verticalAlign = MIDDLE;
 		viewLayout.paddingTop = 10.0;
 		viewLayout.paddingRight = 10.0;
@@ -401,6 +400,6 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		this.stateData.createdOn = FileUtils.getCreationDateForPath(installToPath);
 
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED,
-			{ComponentVariantVO: this.cmbVariants.selectedItem, ComponentVO: this.stateData, newIndex: this.cmbVariants.selectedIndex}));
+			{ComponentVariantVO: tmpVariant, ComponentVO: this.stateData, newIndex: this.stateData.selectedVariantIndex}));
 	}
 }

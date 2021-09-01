@@ -228,13 +228,13 @@
 					</diskMBusage>
 					<windows>
 						<version version="0.9.8" displayVersion="v0.9.8">
-			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.8/binaries/</path>
+			                <path>https://mirrors.estointernet.in/apache/royale/0.9.8/binaries/</path>
 			                <file>apache-royale-0.9.8-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
 						<version version="0.9.8" displayVersion="v0.9.8">
-			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.8/binaries/</path>
+			                <path>https://mirrors.estointernet.in/apache/royale/0.9.8/binaries/</path>
 			                <file>apache-royale-0.9.8-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>

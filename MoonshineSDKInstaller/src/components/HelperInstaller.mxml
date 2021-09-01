@@ -525,7 +525,8 @@
 					}
 
 					if (item.downloadVariants &&
-							!item.downloadVariants.get(item.selectedVariantIndex).isReDownloadAvailable)
+							!item.downloadVariants.get(item.selectedVariantIndex).isReDownloadAvailable &&
+							item.isAlreadyDownloaded)
 					{
 						continue;
 					}

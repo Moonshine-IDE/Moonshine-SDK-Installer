@@ -67,7 +67,6 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		this.variant = SDKInstallerTheme.THEME_VARIANT_ROW_ITEM_BODY_WITH_WHITE_BACKGROUND;
 
 		var viewLayout = new HorizontalLayout();
-		viewLayout.horizontalAlign = JUSTIFY;
 		viewLayout.verticalAlign = MIDDLE;
 		viewLayout.paddingTop = 1.0;
 		viewLayout.paddingRight = 0.0;
