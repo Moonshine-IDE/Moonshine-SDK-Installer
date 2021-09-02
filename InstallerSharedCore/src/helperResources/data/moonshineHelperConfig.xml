@@ -223,8 +223,8 @@
 				<variant isSelected="true">
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>161</windows>
-						<mac>179</mac>
+						<windows>162</windows>
+						<mac>180</mac>
 					</diskMBusage>
 					<windows>
 						<version version="0.9.8" displayVersion="v0.9.8">
@@ -242,8 +242,8 @@
 				<variant isRedownload="true">
 					<title>Nightly</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>144</windows>
-						<mac>149</mac>
+						<windows>176</windows>
+						<mac>181</mac>
 					</diskMBusage>
 					<windows>
 						<version version="0.9.9" displayVersion="v0.9.9">
