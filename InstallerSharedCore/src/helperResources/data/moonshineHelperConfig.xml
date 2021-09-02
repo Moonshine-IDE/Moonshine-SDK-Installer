@@ -5,18 +5,18 @@
 	<airHarman version="33.1">
 		<download>
 			<windows>
-				<version version="33.1.1.554" displayVersion="33.1.1.554">
+				<version version="33.1.1.575" displayVersion="33.1.1.575">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.554/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.554/sdks/</path>
+					<folder>api/versions/33.1.1.575/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.575/sdks/</path>
 					<file>AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
-				<version version="33.1.1.554" displayVersion="33.1.1.554">
+				<version version="33.1.1.575" displayVersion="33.1.1.575">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.554/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.554/sdks/</path>
+					<folder>api/versions/33.1.1.575/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.575/sdks/</path>
 					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
@@ -193,13 +193,13 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.554">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.575">
 			            	<path></path>
 		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.554">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.575">
 		                	<path></path>
 		              		<file></file>
 		             </version>
@@ -247,14 +247,14 @@
 					</diskMBusage>
 					<windows>
 						<version version="0.9.9" displayVersion="v0.9.9">
-			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
-			                <file>apache-royale-0.9.9-bin-js.zip</file>
+			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
+			                <file>apache-royale-0.9.9-SNAPSHOT-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
 						<version version="0.9.9" displayVersion="v0.9.9">
-			                <path>http://apacheroyaleci2.westus2.cloudapp.azure.com:8080/job/royale-asjs_jsonly/lastSuccessfulBuild/artifact/out/</path>
-			                <file>apache-royale-0.9.9-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
+			                <file>apache-royale-0.9.9-SNAPSHOT-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
