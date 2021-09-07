@@ -105,6 +105,11 @@ package actionScripts.ui
 			return false;
 		}
 
+		override public function setFocus():void
+		{
+			this.assignFocus("top");
+		}
+
 		public function assignFocus(direction:String):void
 		{
 			if(!this._feathersUIFocusManager)
@@ -329,7 +334,6 @@ package actionScripts.ui
 			if(this.stage != null && this.stage.focus != null && (this.stage.focus == this || this.contains(this.stage.focus))) {
 				return;
 			}
-
 			if(this._feathersUIFocusManager) {
 				this._feathersUIFocusManager.enabled = false;
 			}
