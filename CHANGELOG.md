@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Summary
 
+This release updates Apache Royale to newest version 0.9.8 and nightly build 0.9.9.
+
+### Changed
+* Update Harman Air to version 33.1.1.575.
+* Update Apache Royale to version 0.9.8.
+* Update nightly build of Apache Royale to version 0.9.9.
+
+## Moonshine SDK Installer [3.9.0]
+
+### Summary
+
 Fixed errors for Apache Flex SDK (Harman AIR) install.  Improved the logic to make the errors less likely to trigger in the future.
 
 The UI was updated to Haxe.  It should generally look similar, but there we made several other small changes to the UI while we worked on this.
