@@ -153,12 +153,12 @@ package actionScripts.valueObjects
 			return _isSelectionChangeAllowed;
 		}
 		
-		private var _pathValidation:String;
-		public function set pathValidation(value:String):void
+		private var _pathValidation:Array;
+		public function set pathValidation(value:Array):void
 		{
 			_pathValidation = value;			
 		}
-		public function get pathValidation():String
+		public function get pathValidation():Array
 		{
 			return _pathValidation;
 		}

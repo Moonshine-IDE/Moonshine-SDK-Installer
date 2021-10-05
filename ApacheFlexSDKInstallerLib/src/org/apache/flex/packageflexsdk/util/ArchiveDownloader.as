@@ -23,7 +23,9 @@ package org.apache.flex.packageflexsdk.util
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
-	
+
+	import mx.utils.StringUtil;
+
 	import org.apache.flex.packageflexsdk.model.OS;
 	import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
 	import org.apache.flex.packageflexsdk.view.events.GenericEvent;
@@ -60,12 +62,20 @@ package org.apache.flex.packageflexsdk.util
 			if (!sdkHome.exists) sdkHome.createDirectory();
 			else if (sdkHome.exists && versionSelected.pathValidation)
 			{
-				sdkHome = sdkHome.resolvePath(versionSelected.pathValidation as String);
-				if (sdkHome.exists)
+				var isAlreadyDownloaded:Boolean = (versionSelected.pathValidation as Array).some(function (path:String, index:int, arr:Array):Boolean {
+					sdkHome = sdkHome.resolvePath(StringUtil.trim(path));
+					if (sdkHome.exists)
+					{
+						// we take this as the particular ant varsiion already downloaded
+						versionSelected.isAlreadyDownloaded = true;
+						//installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
+						return true;
+					}
+					return  false;
+				});
+
+				if (isAlreadyDownloaded)
 				{
-					// we take this as the particular ant varsiion already downloaded
-					versionSelected.isAlreadyDownloaded = true;
-					//installerApacheFlexInstance.dispatchEvent(new GenericEvent(GenericEvent.INSTALL_FINISH));
 					return;
 				}
 			}

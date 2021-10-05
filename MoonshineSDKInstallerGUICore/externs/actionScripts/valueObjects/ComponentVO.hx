@@ -48,7 +48,7 @@ extern class ComponentVO
 	public var isSelectionChangeAllowed(default, default):Bool;
 	
 	@:flash.property
-	public var pathValidation(default, default):String;
+	public var pathValidation(default, default):Array<String>;
 	
 	@:flash.property
 	public var downloadURL(default, default):String;

@@ -635,7 +635,7 @@
 				// to the sdk folder on Windows
 				if (item.type == ComponentTypes.TYPE_GIT || item.type == ComponentTypes.TYPE_SVN)
 				{
-					item.installToPath += File.separator + item.pathValidation;
+					item.installToPath += File.separator + item.pathValidation[0];
 				}
 			}
 			

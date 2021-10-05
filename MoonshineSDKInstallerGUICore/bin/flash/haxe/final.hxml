@@ -2,8 +2,8 @@
 --macro lime._internal.macros.DefineMacro.run()
 -cp /usr/local/lib/haxe/lib/lime/7,9,0/src
 -D lime=7.9.0
--cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,5/src
--D feathersui=1.0.0-beta.5
+-cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,6/src
+-D feathersui=1.0.0-beta.6
 -cp /usr/local/lib/haxe/lib/actuate/1,8,9/src
 -D actuate=1.8.9
 -cp /usr/local/lib/haxe/lib/hxargs/3,0,2
@@ -20,8 +20,6 @@
 -D flash-use-stage
 -D no-compilation
 -D openfl-flash
--D fdb
--D openfl-disable-handle-error
 -D web
 --macro include('moonshine')
 --macro include('feathers')

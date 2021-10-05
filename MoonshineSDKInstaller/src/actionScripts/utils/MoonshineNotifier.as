@@ -60,7 +60,7 @@ package actionScripts.utils
 					pathXML.appendChild(item.installToPath);
 					
 					var validationXML:XML = new XML(<pathValidation/>);
-					if (item.pathValidation) validationXML.appendChild(item.pathValidation);
+					if (item.pathValidation) validationXML.appendChild(item.pathValidation.join(","));
 					
 					itemXml.appendChild(pathXML);
 					itemXml.appendChild(validationXML);

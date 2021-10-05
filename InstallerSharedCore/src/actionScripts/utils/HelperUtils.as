@@ -122,17 +122,22 @@ package actionScripts.utils
 			return HelperConstants.DEFAULT_INSTALLATION_PATH;
 		}
 		
-		public static function isValidSDKDirectoryBy(type:String, originPath:String, validationPath:String=null):Boolean
+		public static function isValidSDKDirectoryBy(type:String, originPath:String, validationPath:Array=null):Boolean
 		{
 			if (FileUtils.isPathExists(originPath))
 			{
 				// file-system check inside the named-sdk
-				if (validationPath && StringUtil.trim(validationPath).length != 0)
+				if (validationPath)
 				{
-					if (FileUtils.isPathExists(originPath + File.separator + validationPath))
+					var isValidPath:Boolean = validationPath.some(function (path:String, index:int, arr:Array):Boolean
 					{
-						return true;
-					}
+						if (FileUtils.isPathExists(originPath + File.separator + StringUtil.trim(path)))
+						{
+							return true;
+						}
+						return false;
+					});
+					return isValidPath;
 				}
 				else
 				{

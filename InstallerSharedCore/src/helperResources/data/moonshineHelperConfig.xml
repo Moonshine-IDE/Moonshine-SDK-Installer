@@ -211,7 +211,7 @@
 			<title>Apache Royale</title>
 			<description><![CDATA[Required for: Royale Project Compilation, Editor Essentials]]></description>
 			<image>/helperResources/images/logoRoyale.png</image>
-			<pathValidation>royale-asjs/royale-sdk-description.xml</pathValidation>
+			<pathValidation>royale-asjs/royale-sdk-description.xml,royale-sdk-description.xml</pathValidation>
 			<sdkType>royale</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://royale.apache.org</website>
 			<license>

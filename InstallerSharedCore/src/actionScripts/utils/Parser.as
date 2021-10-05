@@ -213,11 +213,11 @@ package actionScripts.utils
 				// con contain platform specific or global values
 				if (comp.pathValidation.hasOwnProperty('windows'))
 				{
-					tmpComponent.pathValidation = String(comp.pathValidation[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+					tmpComponent.pathValidation = String(comp.pathValidation[HelperConstants.IS_MACOS ? "mac" : "windows"]).split(",");
 				}
 				else
 				{
-					tmpComponent.pathValidation = String(comp.pathValidation);
+					tmpComponent.pathValidation = String(comp.pathValidation).split(",");
 				}
 				
 				// parse license
