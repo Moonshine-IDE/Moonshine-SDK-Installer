@@ -122,8 +122,8 @@
 				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
 				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
 				
-				/*sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS : 
-					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;*/
+				sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS : 
+					HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;
 			}
 			
 			private function attachHelperViewWrapper():void
