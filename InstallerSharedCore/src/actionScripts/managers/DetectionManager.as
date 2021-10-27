@@ -121,9 +121,7 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_OPENJAVA:
 						if (model.moonshineBridge.isJavaPresent() && model.moonshineBridge.javaVersionForTypeahead)
 						{
-							item.isAlreadyDownloaded =
-								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionForTypeahead, "11.0.10") != 1) ? 
-								true : false;
+							item.isAlreadyDownloaded = (model.moonshineBridge.javaVersionForTypeahead != "1.8.0") ? true : false;
 						}
 						else
 						{
