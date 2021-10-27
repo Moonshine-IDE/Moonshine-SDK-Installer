@@ -6,8 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ## Moonshine SDK Installer [4.1.0]
 
 ### Changed
-* Switch url for downloading Apache Royale nightly build to use Apache Foundation servers. ([#46](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/46))
-* Update Harman Air to version 33.1.1.633. ([#74](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/74))
+* Switched download URL for Apache Royale nightly build to use Apache Foundation servers. ([#46](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/46))
+* Updated Harman Air to version 33.1.1.633. ([#74](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/74))
 
 ### Fixed
 * Windows: Fixed issue where path to SDK folder location wasn't displayed. ([#72](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/72))
