@@ -121,7 +121,18 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_OPENJAVA:
 						if (model.moonshineBridge.isJavaPresent() && model.moonshineBridge.javaVersionForTypeahead)
 						{
-							item.isAlreadyDownloaded = (model.moonshineBridge.javaVersionForTypeahead != "1.8.0") ? true : false;
+							if ((model.moonshineBridge.javaVersionForTypeahead != "1.8.0"))
+							{
+								item.isAlreadyDownloaded = true;
+							}
+							else if (model.moonshineBridge.javaVersionForTypeahead == "1.8.0" && model.moonshineBridge.isJava8Present())
+							{
+								item.isAlreadyDownloaded = true;
+							}
+							else
+							{
+								item.isAlreadyDownloaded = false;
+							}
 						}
 						else
 						{
