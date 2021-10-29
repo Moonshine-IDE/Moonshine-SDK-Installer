@@ -1,32 +1,24 @@
 package actionScripts.utils
 {
 	import flash.desktop.NativeProcess;
-	import flash.desktop.NativeProcessStartupInfo;
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
-	import flash.events.NativeProcessExitEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.filesystem.File;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
-	import flash.utils.IDataInput;
 
-	import spark.components.Alert;
-	
 	import actionScripts.valueObjects.ComponentVO;
-	import actionScripts.valueObjects.HelperConstants;
-	
+
 	public class LinkVerifierAS extends NativeProcess
 	{
 		private var loader:URLLoader;
 		private var resultHandler:Function;
 		private var component:ComponentVO;
-		private var isSuccessOrError:Boolean;
-		
+
 		/**
 		 * resultHandler --> BOOL, ComponentVO
 		 * Example,
@@ -63,44 +55,62 @@ package actionScripts.utils
 			dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 		}
 
+		private function removeListeners(dispatcher:IEventDispatcher):void
+		{
+			dispatcher.removeEventListener(Event.COMPLETE, completeHandler);
+			dispatcher.removeEventListener(Event.OPEN, openHandler);
+			dispatcher.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
+			dispatcher.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+			dispatcher.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+			dispatcher.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+		}
+
 		private function completeHandler(event:Event):void
 		{
-			var loader:URLLoader = URLLoader(event.target);
-			Alert.show("completeHandler: " + loader.data);
+			relayResult(true);
 		}
 
-		private function openHandler(event:Event):void {
-			Alert.show("openHandler: " + event);
+		private function openHandler(event:Event):void
+		{
+			trace("openHandler: " + event);
 		}
 
-		private function progressHandler(event:ProgressEvent):void {
+		private function progressHandler(event:ProgressEvent):void
+		{
 			trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
 		}
 
-		private function securityErrorHandler(event:SecurityErrorEvent):void {
-			Alert.show("securityErrorHandler: " + event.text);
+		private function securityErrorHandler(event:SecurityErrorEvent):void
+		{
+			trace("securityErrorHandler: " + event.text);
+			relayResult(false);
 		}
 
-		private function httpStatusHandler(event:HTTPStatusEvent):void {
-			Alert.show("httpStatusHandler: " + event.status);
+		private function httpStatusHandler(event:HTTPStatusEvent):void
+		{
+			trace("httpStatusHandler: " + event.status);
 		}
 
-		private function ioErrorHandler(event:IOErrorEvent):void {
-			Alert.show("ioErrorHandler: " + event.text);
+		private function ioErrorHandler(event:IOErrorEvent):void
+		{
+			trace("ioErrorHandler: " + event.text);
+			relayResult(false);
 		}
 		
 		private function relayResult(value:Boolean):void
 		{
 			if (resultHandler != null) 
 				resultHandler(value, component);
+
+			dispose();
 		}
 		
 		private function dispose():void
 		{
-
+			removeListeners(loader);
 			resultHandler = null;
 			component = null;
-			isSuccessOrError = true;
+			loader = null;
 		}
 	}
 }
