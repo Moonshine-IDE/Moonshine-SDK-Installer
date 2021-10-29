@@ -68,7 +68,7 @@ package actionScripts.utils
 				if (!customProcess) return;
 				if (customProcess.running) customProcess.exit();
 				customProcess.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, shellData);
-				customProcess.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA, shellData);
+				customProcess.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA, shellError);
 				customProcess.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR, shellError);
 				customProcess.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, shellError);
 				customProcess.removeEventListener(NativeProcessExitEvent.EXIT, shellExit);
@@ -117,6 +117,14 @@ package actionScripts.utils
 		{
 			if (customProcess) 
 			{
+				var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
+				if (output != null)
+				{
+					var data:String = output.readUTFBytes(output.bytesAvailable);
+					Alert.show("EXIT:\n"+ data);
+				}
+
+
 				Alert.show("EXIT:");
 				// in case of invalid link process doesn't 
 				// returns anything either as data or error.
