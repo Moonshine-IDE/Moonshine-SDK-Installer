@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 		import actionScripts.utils.HarmanInstallerSymlinkFix;
+		import actionScripts.utils.LinkVerifierAS;
 
 		import flash.utils.clearTimeout;
 			import flash.utils.setTimeout;
@@ -544,13 +545,13 @@
 				if (((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX) ||
 						(event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX_HARMAN)
 				{
-					new LinkVerifier((event.data as ComponentVO), 
+					new LinkVerifierAS((event.data as ComponentVO),
 						onDownloadLinkVerified, 
 						INSTALLER_APACHE_FLEX.apacheFlexDownloadURL);
 				}
 				else
 				{
-					new LinkVerifier((event.data as ComponentVO), onDownloadLinkVerified);
+					new LinkVerifierAS((event.data as ComponentVO), onDownloadLinkVerified);
 				}
 			}
 			
