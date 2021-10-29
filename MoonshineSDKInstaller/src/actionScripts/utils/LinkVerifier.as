@@ -98,7 +98,7 @@ package actionScripts.utils
 				isSuccessOrError = true;
 				Alert.show("ERROR:\n" + data);
 
-				if (data.match(/certificate/))
+				/*if (data.match(/certificate/))
 				{
 					// any certificate related error treat that as Okay
 					relayResult(true);
@@ -107,7 +107,7 @@ package actionScripts.utils
 				{
 					Alert.show("Link verification failed:\n"+ data, "Error!");
 					relayResult(false);
-				}
+				}*/
 
 				dispose();
 			}
@@ -117,14 +117,6 @@ package actionScripts.utils
 		{
 			if (customProcess) 
 			{
-				var output:IDataInput = (customProcess.standardOutput && customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
-				if (output != null)
-				{
-					var data:String = output.readUTFBytes(output.bytesAvailable);
-					Alert.show("EXIT:\n"+ data);
-				}
-
-
 				Alert.show("EXIT:");
 				// in case of invalid link process doesn't 
 				// returns anything either as data or error.
