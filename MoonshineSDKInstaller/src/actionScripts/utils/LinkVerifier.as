@@ -117,7 +117,7 @@ package actionScripts.utils
 		{
 			if (customProcess) 
 			{
-				var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
+				var output:IDataInput = (customProcess.standardOutput && customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
 				if (output != null)
 				{
 					var data:String = output.readUTFBytes(output.bytesAvailable);
