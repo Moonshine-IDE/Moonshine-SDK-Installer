@@ -39,7 +39,7 @@ package actionScripts.utils
 				File.documentsDirectory.resolvePath("/bin/bash") : 
 				new File("c:\\Windows\\System32\\cmd.exe");
 			
-			var command:String = "curl --head --silent --fail "+ (directURL ? directURL : component.downloadURL);
+			var command:String = "curl --head --fail "+ (directURL ? directURL : component.downloadURL);
 			if (HelperConstants.IS_MACOS)
 			{
 				npInfo.arguments = Vector.<String>(["-c", command]);
@@ -94,9 +94,18 @@ package actionScripts.utils
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
 				
 				isSuccessOrError = true;
-				
-				Alert.show("Link verification failed:\n"+ data, "Error!");
-				relayResult(false);
+
+				if (data.match(/certificate/))
+				{
+					// any certificate related error treat that as Okay
+					relayResult(true);
+				}
+				else
+				{
+					Alert.show("Link verification failed:\n"+ data, "Error!");
+					relayResult(false);
+				}
+
 				dispose();
 			}
 		}
