@@ -12,6 +12,7 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
 	import flash.utils.IDataInput;
 
 	import spark.components.Alert;
@@ -44,6 +45,7 @@ package actionScripts.utils
 			configureListeners(loader);
 
 			var request:URLRequest = new URLRequest(directURL ? directURL : component.downloadURL);
+			request.method = URLRequestMethod.HEAD;
 			try {
 				loader.load(request);
 			} catch (error:Error) {
@@ -76,15 +78,15 @@ package actionScripts.utils
 		}
 
 		private function securityErrorHandler(event:SecurityErrorEvent):void {
-			Alert.show("securityErrorHandler: " + event);
+			Alert.show("securityErrorHandler: " + event.text);
 		}
 
 		private function httpStatusHandler(event:HTTPStatusEvent):void {
-			Alert.show("httpStatusHandler: " + event);
+			Alert.show("httpStatusHandler: " + event.status);
 		}
 
 		private function ioErrorHandler(event:IOErrorEvent):void {
-			Alert.show("ioErrorHandler: " + event);
+			Alert.show("ioErrorHandler: " + event.text);
 		}
 		
 		private function relayResult(value:Boolean):void
