@@ -82,6 +82,8 @@ package actionScripts.utils
 			var data:String = output.readUTFBytes(output.bytesAvailable);
 			
 			isSuccessOrError = true;
+
+			Alert.show("DATA:\n" + data);
 			
 			relayResult(true);
 		}
@@ -94,6 +96,7 @@ package actionScripts.utils
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
 				
 				isSuccessOrError = true;
+				Alert.show("ERROR:\n" + data);
 
 				if (data.match(/certificate/))
 				{
@@ -114,6 +117,7 @@ package actionScripts.utils
 		{
 			if (customProcess) 
 			{
+				Alert.show("EXIT:");
 				// in case of invalid link process doesn't 
 				// returns anything either as data or error.
 				// testing by a flag help to understand to
