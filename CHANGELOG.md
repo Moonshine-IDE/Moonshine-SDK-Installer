@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [4.1.1]
+
+### Changed
+* Update Harman Air to version 33.1.1.633. ([#75](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/75))
+
+### Fixed
+* Windows: Fixed problem with detecting accessibility of url, which caused problems with downloading SDK ([#71](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/71))
+
 ## Moonshine SDK Installer [4.1.0]
 
 ### Changed
