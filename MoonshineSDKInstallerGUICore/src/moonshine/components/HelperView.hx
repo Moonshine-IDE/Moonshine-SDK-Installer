@@ -233,13 +233,15 @@ class HelperView extends LayoutGroup {
 	override private function update():Void {
 		var dataInvalid = this.isInvalid(InvalidationFlag.DATA);
 
-		if (dataInvalid) {
+		if (dataInvalid) 
+		{
 			if (this._filterTypeIndex == 0) {
 				this.itemsListView.dataProvider = this.collectionByFeature;
 			} else {
 				this.itemsListView.dataProvider = this.collectionBySoftware;
 			}
 
+			this.updateAllSuccessMessageVisibility();
 			this.updateShowNeedsInstallVisibility();
 		}
 
@@ -283,21 +285,26 @@ class HelperView extends LayoutGroup {
 			this._checkShowOnlyNeedsSetup = check.selected;
 			dispatchEvent(new Event(EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED));
 
-			if (this._checkShowOnlyNeedsSetup && (this.collectionBySoftware.length == 0))
-			{
-				this.itemsListView.includeInLayout = this.itemsListView.visible = false;
-				this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = true;
-			}
-			else if (!this.itemsListView.includeInLayout)
-			{
-				this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = false;
-				this.itemsListView.includeInLayout = this.itemsListView.visible = true;
-			}
+			this.updateAllSuccessMessageVisibility();
 		}
 	}
 
 	private function updateShowNeedsInstallVisibility():Void {
 		this.checkShowFeaturesNeedsSetup.visible = (this._filterTypeIndex == 1);
+	}
+
+	private function updateAllSuccessMessageVisibility():Void
+	{
+		if ((this._filterTypeIndex == 1) && this._checkShowOnlyNeedsSetup && (this.collectionBySoftware.length == 0))
+		{
+			this.itemsListView.includeInLayout = this.itemsListView.visible = false;
+			this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = true;
+		}
+		else if (!this.itemsListView.includeInLayout)
+		{
+			this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = false;
+			this.itemsListView.includeInLayout = this.itemsListView.visible = true;
+		}	
 	}
 
 	private function onLicenseViewRequested(event:HelperEvent):Void {
