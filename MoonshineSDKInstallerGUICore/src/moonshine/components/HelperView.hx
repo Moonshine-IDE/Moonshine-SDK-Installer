@@ -20,6 +20,7 @@
 
 package moonshine.components;
 
+import feathers.text.TextFormat;
 import actionScripts.valueObjects.HelperConstants;
 import openfl.display.DisplayObject;
 import moonshine.events.HelperEvent;
@@ -129,6 +130,7 @@ class HelperView extends LayoutGroup {
 	}
 
 	private var itemsListView:ListView;
+	private var allDownloadedLayout:LayoutGroup;
 	private var downloadThirdPartyButton:Button;
 	private var sdkInstallerInstallationMessageLabel:Label;
 	private var checkShowFeaturesNeedsSetup:Check;
@@ -193,6 +195,38 @@ class HelperView extends LayoutGroup {
 		this.itemsListView.layoutData = new VerticalLayoutData(100, 100);
 		this.addChild(this.itemsListView);
 
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = SolidColor(0xffffff);
+		backgroundSkin.border = SolidColor(1.0, 0x999999);
+
+		var allDownloadedLayoutLayout = new VerticalLayout();
+		allDownloadedLayoutLayout.horizontalAlign = CENTER;
+		allDownloadedLayoutLayout.verticalAlign = MIDDLE;
+		allDownloadedLayoutLayout.gap = 4.0;
+
+		this.allDownloadedLayout = new LayoutGroup();
+		this.allDownloadedLayout.layout = allDownloadedLayoutLayout;
+		this.allDownloadedLayout.backgroundSkin = backgroundSkin;
+		this.allDownloadedLayout.layoutData = new VerticalLayoutData(100, 100);
+		this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = false;
+		this.addChild(this.allDownloadedLayout);
+
+		var lblCongratulation = new Label("Congratulations!");
+		lblCongratulation.textFormat = new TextFormat(SDKInstallerTheme.DEFAULT_FONT_NAME, 16, 0xe252d3, true, true);
+		this.allDownloadedLayout.addChild(lblCongratulation);
+
+		var lblSecond = new Label("You have all features installed!");
+		this.allDownloadedLayout.addChild(lblSecond);
+
+		var successIcon = new LayoutGroup();
+		successIcon.variant = SDKInstallerTheme.IMAGE_VARIANT_SUCCESS_TICK;
+		successIcon.width = 53;
+		successIcon.height = 50;
+		this.allDownloadedLayout.addChild(successIcon);
+
+		var lblThird = new Label("Time to go coding!");
+		this.allDownloadedLayout.addChild(lblThird);
+
 		super.initialize();
 	}
 
@@ -248,6 +282,17 @@ class HelperView extends LayoutGroup {
 		if (this._checkShowOnlyNeedsSetup != check.selected) {
 			this._checkShowOnlyNeedsSetup = check.selected;
 			dispatchEvent(new Event(EVENT_SHOW_ONLY_NEEDS_SETUP_CHANGED));
+
+			if (this._checkShowOnlyNeedsSetup && (this.collectionBySoftware.length == 0))
+			{
+				this.itemsListView.includeInLayout = this.itemsListView.visible = false;
+				this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = true;
+			}
+			else if (!this.itemsListView.includeInLayout)
+			{
+				this.allDownloadedLayout.includeInLayout = this.allDownloadedLayout.visible = false;
+				this.itemsListView.includeInLayout = this.itemsListView.visible = true;
+			}
 		}
 	}
 

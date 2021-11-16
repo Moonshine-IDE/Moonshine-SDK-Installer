@@ -68,6 +68,7 @@ import moonshine.theme.assets.QueuedIconWithoutLabel;
 import moonshine.theme.assets.RedownloadIconWithLabel;
 import moonshine.theme.assets.RedownloadIconWithoutLabel;
 import moonshine.theme.assets.DownloadingIcon;
+import moonshine.theme.assets.SuccessTickIcon;
 
 class SDKInstallerTheme extends ClassVariantTheme {
 	private static var _instance:SDKInstallerTheme;
@@ -105,6 +106,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL:String = "image-icon-redownload-with-label";
 	public static final IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL:String = "image-icon-redownload-with-no-label";
 	public static final IMAGE_VARIANT_DOWNLOADING_ICON:String = "image-icon-downloading";
+	public static final IMAGE_VARIANT_SUCCESS_TICK:String = "image-success-tick";
 
 	public static final DEFAULT_FONT_NAME:String = (HelperConstants.IS_MACOS) ? "System Font" : "Segoe UI";
 
@@ -143,6 +145,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_DOWNLOADING_ICON, setImageDownloadingStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_LABEL, setImageRedownloadWithLabelStyles);
 		this.styleProvider.setStyleFunction(Button, IMAGE_VARIANT_REDOWNLOAD_ICON_WITH_NO_LABEL, setImageRedownloadWithoutLabelStyles);
+		this.styleProvider.setStyleFunction(LayoutGroup, IMAGE_VARIANT_SUCCESS_TICK, setImageSuccessTickStyles);
 	}
 
 	private function setCalloutStyles(callout:Callout):Void {
@@ -471,6 +474,17 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	private function setImageDownloadingStyles(layout:LayoutGroup):Void 
 	{
 		var downloadIconBitmap = new DownloadingIcon(cast(layout.width, Int), cast(layout.height, Int));
+		var backgroundSkin = new RectangleSkin();
+		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
+		backgroundSkin.width = layout.width;
+		backgroundSkin.height = layout.height;
+
+		layout.backgroundSkin = backgroundSkin;
+	}
+
+	private function setImageSuccessTickStyles(layout:LayoutGroup):Void 
+	{
+		var downloadIconBitmap = new SuccessTickIcon(cast(layout.width, Int), cast(layout.height, Int));
 		var backgroundSkin = new RectangleSkin();
 		backgroundSkin.fill = Bitmap(downloadIconBitmap, new Matrix(), false);
 		backgroundSkin.width = layout.width;
