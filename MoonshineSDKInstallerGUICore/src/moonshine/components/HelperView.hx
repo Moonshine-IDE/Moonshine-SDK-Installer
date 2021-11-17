@@ -241,11 +241,19 @@ class HelperView extends LayoutGroup {
 				this.itemsListView.dataProvider = this.collectionBySoftware;
 			}
 
-			this.updateAllSuccessMessageVisibility();
 			this.updateShowNeedsInstallVisibility();
 		}
 
 		super.update();
+	}
+
+	public function refreshFilteredDataProvider():Void
+	{
+		if ((this._filterTypeIndex == 1) && this._checkShowOnlyNeedsSetup)
+		{
+			cast(this.itemsListView.dataProvider, ArrayCollection<Dynamic>).refresh();
+			this.updateAllSuccessMessageVisibility();
+		}
 	}
 
 	public function setHelperReady():Void
@@ -260,7 +268,12 @@ class HelperView extends LayoutGroup {
 	private function onItemBeingUpdated(event:Event):Void
 	{
 		var tmpIndex = this.collectionBySoftware.indexOf(event.target);
-		this.collectionBySoftware.updateAt(tmpIndex);
+		if (tmpIndex != -1)
+		{
+			this.collectionBySoftware.updateAt(tmpIndex);
+		}
+
+		this.refreshFilteredDataProvider();
 	}
 
 	private function itemsListView_changeHandler(event:Event):Void {

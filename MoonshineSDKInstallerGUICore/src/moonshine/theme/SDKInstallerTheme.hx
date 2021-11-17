@@ -108,7 +108,7 @@ class SDKInstallerTheme extends ClassVariantTheme {
 	public static final IMAGE_VARIANT_DOWNLOADING_ICON:String = "image-icon-downloading";
 	public static final IMAGE_VARIANT_SUCCESS_TICK:String = "image-success-tick";
 
-	public static final DEFAULT_FONT_NAME:String = (HelperConstants.IS_MACOS) ? "System Font" : "Segoe UI";
+	public static final DEFAULT_FONT_NAME:String = "_sans";
 
 	public function new() {
 		super();

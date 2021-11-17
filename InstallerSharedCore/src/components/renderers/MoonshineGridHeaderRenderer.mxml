@@ -132,7 +132,7 @@ and <code>sortIndicator</code> properties.</p>
             verticalCenter="1" left="0" right="0" top="0" bottom="0"
             textAlign="start" color="0xe0e0e0"
             verticalAlign="middle"
-            maxDisplayedLines="1" fontFamily="DejaVuSans" fontSize="11"
+            maxDisplayedLines="1" fontSize="11"
             showTruncationTip="true" creationComplete="onLabelCompletion(event)"/>
     </fx:Declarations>
     
