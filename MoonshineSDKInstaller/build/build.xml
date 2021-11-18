@@ -382,7 +382,7 @@
 	
 	<!-- Compile .pkg to distribute through app store -->
 	<target name="buildAppStorePKG" depends="compile app project" if="${Is.Keychain.Certificate.Defined}">
-		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="${basedir}/moonshineASHIcons.icns" overwrite="true"/>
+		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="${basedir}/images/moonshineASHIcons.icns" overwrite="true"/>
 		<replace file="${desktopBinaryFilename}/Contents/Info.plist">
 				<replacetoken><![CDATA[<string>Icon.icns</string>]]></replacetoken>
 				<replacevalue><![CDATA[<string>Icon.icns</string>
