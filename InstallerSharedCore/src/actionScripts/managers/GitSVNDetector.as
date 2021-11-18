@@ -66,7 +66,7 @@ package actionScripts.managers
 		public function installXCodeCommandLine(onCompletion:Function=null):void
 		{
 			this.onCompletion = onCompletion;
-			Alert.show("Moonshine SDK Installer will now install Command Line Tools for Git and SVN support. This will open an external installer.", "Confirm!", Alert.OK|Alert.CANCEL, null, onConfirmationInstall);
+			Alert.show("Moonshine SDK Installer will now install Command Line Tools for Git support. This will open an external installer.", "Confirm!", Alert.OK|Alert.CANCEL, null, onConfirmationInstall);
 			
 			/*
 			 * @local
