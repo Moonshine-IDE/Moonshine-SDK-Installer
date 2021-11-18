@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ## Moonshine SDK Installer [4.1.1]
 
 ### Changed
+* Updated icon to match Moonshine-IDE ([#77](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/77))
 * Moonshine SDK Installer is now built with Harman Air 33.1.1.633. ([#75](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/75))
 
 ### Fixed
