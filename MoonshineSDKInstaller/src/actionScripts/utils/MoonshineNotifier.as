@@ -111,15 +111,20 @@ package actionScripts.utils
 		private function shellData(event:ProgressEvent):void 
 		{
 			var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
-			var data:String = output.readUTFBytes(output.bytesAvailable);
+			var data:String = StringUtil.trim(output.readUTFBytes(output.bytesAvailable));
+			data = data.replace(/^\s*[\r\n]/gm, "");
+			var paths:Array = data.split("\r");
 			
 			var searchString:String = "executablepath=";
-			var pathIndex:int = data.toLowerCase().indexOf(searchString);
-			if (pathIndex != -1)
-			{
-				data = StringUtil.trim(data.substr(pathIndex + searchString.length, data.indexOf("\r", pathIndex)));
-				sendUpdateNotificationToMoonshine(data);
-			}
+			var pathIndex:int;
+			paths.forEach(function(path:String, index:int, arr:Array):void {
+				pathIndex = path.toLowerCase().indexOf(searchString);
+				if (pathIndex != -1)
+				{
+					data = StringUtil.trim(path.substr(pathIndex + searchString.length, path.length));
+					sendUpdateNotificationToMoonshine(data);
+				}
+			});
 		}
 		
 		private function shellError(event:ProgressEvent):void
