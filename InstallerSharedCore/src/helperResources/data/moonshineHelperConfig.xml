@@ -90,6 +90,12 @@
 			<componentDependencyIDs>feathers,openjava</componentDependencyIDs>
 		</item>
 		<item integrated="false">
+			<title>Haxe/OpenFl Compilation</title>
+			<description><![CDATA[Compile and launch Haxe/Feathers/OpenFl projects]]></description>
+			<image></image>
+			<componentDependencyIDs>haxe</componentDependencyIDs>
+		</item>
+		<item integrated="false">
 			<title>Apache Ant Integration</title>
 			<description><![CDATA[Run scripts to automate builds and packaging]]></description>
 			<image></image>
@@ -256,6 +262,43 @@
 			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
 			                <file>apache-royale-0.9.9-SNAPSHOT-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
+					</mac>
+				</variant>
+			</download>
+		</item>
+		<item id="haxe">
+			<title>Haxe</title>
+			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
+			<image>/helperResources/images/logoOpenJDK.png</image>
+			<pathValidation>
+				<windows>bin/haxe.exe</windows>
+				<mac>bin/haxe</mac>
+			</pathValidation>
+			<sdkType>haxe</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://haxe.org/</website>
+			<license>
+				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+				<title>The Apache License Version 2.0</title>
+				<description>The Apache License Version 2.0 applies to all releases of OpenJDK</description>
+			</license>
+			<download>
+				<variant>
+					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
+					<diskMBusage>
+						<windows>196</windows>
+						<mac>186</mac>
+					</diskMBusage>
+					<windows>
+						<version version="4.2.4" displayVersion="v4.2.4">
+							<path>https://github.com/HaxeFoundation/haxe/releases/download/4.2.4/</path>
+							<file>haxe-4.2.4-win.zip</file>
+						</version>
+					</windows>
+					<mac>
+						<version version="4.2.4" displayVersion="v4.2.4">
+							<path>https://github.com/HaxeFoundation/haxe/releases/download/4.2.4/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
+							<file>haxe-4.2.4-osx.tar.gz</file> <!-- flexSDK.tar.gz -->
+						</version>
 					</mac>
 				</variant>
 			</download>

@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!--
+
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<project name="sdk_harman_ide_install" default="check-OS" basedir=".">
+
+	<!--
+	//==========================================================================
+	//
+	//  PROPERTIES
+	//
+	//==========================================================================
+	-->
+	
+    <property name="haxe.version" value="${HAXE.VERSION}"/>
+	<property name="haxe.download.server" value="${HAXE.DOWNLOAD.SERVER}"/>
+	<property name="haxe.download.file" value="${HAXE.DOWNLOAD.FILE}"/>
+	<property name="haxe.temp.folder" value="HAXE/TEMP"/>
+
+	<condition property="isMac" value="mac">
+		<os family="mac" />
+	</condition>
+	<condition property="isWindows" value="windows">
+		<os family="windows" />
+	</condition>
+	<condition property="isLinux" value="linux">
+		<os family="unix" />
+	</condition>
+	
+<!--
+	//==========================================================================
+	//
+	//  TASKS
+	//
+	//==========================================================================
+	-->
+	
+	<!-- OS Check and decision on opening Task -->
+	<target name="check-OS" depends="runWindows,runMacOS">
+	</target>
+
+	<target name="runWindows" if="isWindows">
+		<antcall target="dispose-temp-windows" />
+	</target>
+
+	<target name="runMacOS" if="isMac">
+		<antcall target="dispose-temp-UNIX" />
+	</target>
+	
+	<target name="get-haxe-sdk">
+		<mkdir dir="${basedir}/${haxe.temp.folder}" />
+		<echo>Downloading Haxe SDK v.${haxe.download.version}</echo>
+        <get src="${haxe.download.server}${haxe.download.file}" dest="${basedir}"/>
+	</target>
+	
+	<target name="unzip-haxe-sdk">
+		<echo>Starting to unzip: ${basedir}/${haxe.download.file}</echo>
+        <unzip overwrite="true" src="${basedir}/${haxe.download.file}" dest="${basedir}"/>
+		<echo>Completed unzip Haxe SDK</echo>
+	</target>
+	
+	<target name="untar-haxe-sdk">
+		<echo>Starting to untar: ${basedir}/${haxe.download.file}</echo>
+		<exec executable="tar" dir="${basedir}/${haxe.temp.folder}">
+            <arg value="-xvf" />
+            <arg value="${basedir}/${haxe.download.file}" />
+			<arg value="--strip-components"/>
+			<arg value="1"/>
+        </exec>
+		<echo>Completed untar Haxe SDK</echo>
+	</target>
+
+	<target name="run-mac-haxelib-setup">
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg value='"${basedir}/${haxe.temp.folder}"/haxelib setup'/>
+			<arg value="--always"/>
+			<arg value="/usr/local/lib/haxe/lib"/>
+		</exec>
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg value='haxelib run openfl setup'/>
+		</exec>
+	</target>
+	
+	<target name="mac-copy-flex-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
+        <echo>Moving files to SDK directory</echo>
+        <exec executable="rsync" dir="${basedir}">
+            <arg value="--archive" />
+            <arg value="--ignore-existing" />
+            <arg value="--force" />
+            <arg value="${basedir}/${flex.unzipped.folder}/."/>
+            <arg value="${basedir}" />
+        </exec>
+		<antcall target="fixup-flex-config-file" />
+		<delete dir="${basedir}/${flex.unzipped.folder}" />
+    </target>
+	
+	<target name="fixup-air-config-file">
+		<echo>Fixing AIR configuration file</echo>
+        <replace file="${basedir}/frameworks/air-config.xml">
+            <replacefilter token="{airHome}/frameworks/"
+                            value=""/>
+        </replace>
+    </target>
+
+	<target name="fixup-flex-config-file">
+		<echo>Fixing Flex configuration file</echo>
+		<replace file="${basedir}/frameworks/flex-config.xml">
+			<replacefilter token="{playerglobalHome}/"
+						   value="libs/player/"/>
+			<replacefilter token="&lt;target-player&gt;27.0&lt;/target-player&gt;"
+						   value="&lt;target-player&gt;33.1&lt;/target-player&gt;"/>
+			<replacefilter token="&lt;swf-version&gt;38&lt;/swf-version&gt;"
+						   value="&lt;swf-version&gt;44&lt;/swf-version&gt;"/>
+		</replace>
+		<replace file="${basedir}/flex-sdk-description.xml">
+			<replacefilter token="FP27.0"
+						   value="FP33.1"/>
+			<replacefilter token="AIR27.0"
+						   value="AIR33.1"/>
+		</replace>
+	</target>
+	
+	<!-- Deletes temporary files for Windows -->
+	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk">
+		<delete dir="${basedir}/TEMP" />
+		<echo>Deleted temp files.</echo>
+	</target>
+	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,run-mac-haxelib-setup">
+		<delete dir="${basedir}/TEMP" />
+		<echo>Deleted temp files.</echo>
+	</target>
+</project>
