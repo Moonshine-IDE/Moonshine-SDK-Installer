@@ -290,6 +290,21 @@
 							GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
 							return;
 						}
+						break;
+					case ComponentTypes.TYPE_HAXE:
+						var targetAntFile:File = File.applicationStorageDirectory.resolvePath("haxe-installer.xml");
+						FileUtils.copyFile(
+								File.applicationDirectory.resolvePath("installer/haxe-installer.xml"),
+								targetAntFile,
+								true
+						);
+						INSTALLER_APACHE_FLEX.runHaxeInstallerScript(
+								targetAntFile,
+								item.downloadURL,
+								item.version,
+								item.installToPath
+						);
+						break;
 					default:
 						archiveDownloader = new ArchiveDownloader(item);
 						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;

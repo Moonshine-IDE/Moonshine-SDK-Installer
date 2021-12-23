@@ -339,6 +339,8 @@ package actionScripts.utils
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"NodeJS"+ File.separator +"node-v"+ version;
 				case ComponentTypes.TYPE_NOTES:
 					return "";
+				case ComponentTypes.TYPE_HAXE:
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Haxe";
 				default:
 					throw new Error("Unknown Component Type");
 			}

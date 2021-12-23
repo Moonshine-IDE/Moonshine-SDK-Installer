@@ -27,11 +27,12 @@
 	//
 	//==========================================================================
 	-->
-	
+
     <property name="haxe.version" value="${HAXE.VERSION}"/>
 	<property name="haxe.download.server" value="${HAXE.DOWNLOAD.SERVER}"/>
 	<property name="haxe.download.file" value="${HAXE.DOWNLOAD.FILE}"/>
-	<property name="haxe.temp.folder" value="HAXE/TEMP"/>
+	<property name="haxe.temp.folder" value="temp/haxe"/>
+	<property name="haxe.moonshine.directory" value="${HAXE.MOONSHINE.DIRECTORY}"/>
 
 	<condition property="isMac" value="mac">
 		<os family="mac" />
@@ -87,29 +88,54 @@
 	</target>
 
 	<target name="run-mac-haxelib-setup">
+		<echo>Installing Haxelib</echo>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='"${basedir}/${haxe.temp.folder}"/haxelib setup'/>
-			<arg value="--always"/>
-			<arg value="/usr/local/lib/haxe/lib"/>
+			<arg value="echo '${haxe.moonshine.directory}/lib' | '${basedir}/${haxe.temp.folder}'/haxelib setup"/>
 		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='haxelib run openfl setup'/>
+		<echo>Completed Haxelib setup</echo>
+		<echo>Downloading and installing FeathersUI library</echo>
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
+			<arg value="install"/>
+			<arg value="feathersui"/>
+			<arg value="--quiet"/>
 		</exec>
+		<echo>Completed FeathersUI setup</echo>
+		<echo>Downloading and installing OpenFl library</echo>
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
+			<arg value="install"/>
+			<arg value="openfl"/>
+			<arg value="--quiet"/>
+		</exec>
+		<echo>Completed OpenFl setup</echo>
+		<echo>Downloading and installing Actuate library</echo>
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
+			<arg value="install"/>
+			<arg value="actuate"/>
+			<arg value="--quiet"/>
+		</exec>
+		<echo>Completed Actuate setup</echo>
+		<echo>Downloading and installing Lime library</echo>
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
+			<arg value="install"/>
+			<arg value="lime"/>
+			<arg value="--quiet"/>
+		</exec>
+		<echo>Completed Lime setup</echo>
 	</target>
 	
-	<target name="mac-copy-flex-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo>Moving files to SDK directory</echo>
+	<target name="mac-copy-haxe-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
+        <echo>Moving files to SDK directory ${haxe.moonshine.directory}</echo>
+		<mkdir dir="${haxe.moonshine.directory}"/>
         <exec executable="rsync" dir="${basedir}">
             <arg value="--archive" />
             <arg value="--ignore-existing" />
             <arg value="--force" />
-            <arg value="${basedir}/${flex.unzipped.folder}/."/>
-            <arg value="${basedir}" />
+            <arg value="${basedir}/${haxe.temp.folder}/."/>
+            <arg value="${haxe.moonshine.directory}" />
         </exec>
-		<antcall target="fixup-flex-config-file" />
-		<delete dir="${basedir}/${flex.unzipped.folder}" />
+		<!--antcall target="fixup-flex-config-file" /-->
+		<!--delete dir="${basedir}/${flex.unzipped.folder}" /-->
     </target>
 	
 	<target name="fixup-air-config-file">
@@ -140,11 +166,12 @@
 	
 	<!-- Deletes temporary files for Windows -->
 	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk">
-		<delete dir="${basedir}/TEMP" />
+		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,run-mac-haxelib-setup">
-		<delete dir="${basedir}/TEMP" />
+	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-mac-haxelib-setup">
+		<delete dir="${basedir}/${haxe.temp.folder}" />
+		<delete file="${basedir}/${haxe.download.file}" />
 		<echo>Deleted temp files.</echo>
 	</target>
 </project>

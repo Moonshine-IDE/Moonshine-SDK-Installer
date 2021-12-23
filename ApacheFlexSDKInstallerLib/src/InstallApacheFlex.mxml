@@ -2557,23 +2557,23 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 
-		public function runInstallerScriptHarmanAIR(antPath:File, server:String, fileName:String, suffix:String, versionNumber:String, flexUnzippedFolderName:String):void
+		public function runHaxeInstallerScript(antPath:File, downloadFrom:String, versionNumber:String, installTo:String):void
 		{
 			ant = new Ant();
 			ant.output = output;
 			cleanedUp = false;
 			_flexTempDir = null;
 
+			var downloadURLSplit:Array = downloadFrom.split(File.separator);
 			var file:File = antPath;
 			addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 			var context:Object = {installer: true};
 			// @devsena
 			// MASH
-			context["air.download.server"] = server;
-			context["air.download.file"] = fileName;
-			context["air.download.suffix"] = suffix;
-			context["flex.unzipped.folder"] = flexUnzippedFolderName;
-			context["air.download.version"] = versionNumber;
+			context["haxe.download.file"] = downloadURLSplit.pop();
+			context["haxe.download.server"] = downloadURLSplit.join(File.separator) + File.separator;
+			context["haxe.moonshine.directory"] = installTo;
+			context["haxe.version"] = versionNumber;
 			context["verbose"] = true;
 
 			if (file.exists && !ant.processXMLFile(file, context, true))
