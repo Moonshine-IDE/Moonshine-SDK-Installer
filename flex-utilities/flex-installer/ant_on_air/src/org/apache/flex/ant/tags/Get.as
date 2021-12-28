@@ -175,7 +175,7 @@ package org.apache.flex.ant.tags
                     }
                     ant.output(ant.formatOutput("get", "Redirected to: " + newlocation));
 
-                    if (Capabilities.os.indexOf("Win") != -1 && !isSourceForge)
+                    /*if (Capabilities.os.indexOf("Win") != -1 && !isSourceForge)
                     {
                         var destination:String = getDestFile().nativePath;
                         powerShellFileDownloader = new PowerShellFileDownloader();
@@ -186,7 +186,7 @@ package org.apache.flex.ant.tags
                         powerShellFileDownloader.download(newlocation, destination);
                     }
                     else
-                    {
+                    {*/
                          var urlRequest:URLRequest = new URLRequest(newlocation);
                          var refHeader:URLRequestHeader = new URLRequestHeader("Referer", src);
                          urlRequest.requestHeaders.push(refHeader);
@@ -201,7 +201,7 @@ package org.apache.flex.ant.tags
                          urlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
                          urlLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorEventHandler);
                          urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-                    }
+                    //}
                 }
             }
         }

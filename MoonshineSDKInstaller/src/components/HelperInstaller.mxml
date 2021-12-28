@@ -214,6 +214,9 @@
 						case ComponentTypes.TYPE_NODEJS:
 							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("NodeJs");
 							break;
+						case ComponentTypes.TYPE_HAXE:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Haxe");
+							break;
 					}
 					
 					// create the sub-directory if not exists
@@ -483,8 +486,8 @@
 				// in that case we should make sure everything place in 
 				// the folder that SDK Installer selects
 				var installedPath:File = new File(itemDownloading.installToPath);
-				var files:Array = installedPath.getDirectoryListing();
-				if (files.length == 1)
+				var files:Array = installedPath.exists ? installedPath.getDirectoryListing() : null;
+				if (files && (files.length == 1))
 				{
 					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,
 						((itemDownloading.type == ComponentTypes.TYPE_OPENJAVA || itemDownloading.type == ComponentTypes.TYPE_OPENJAVA_V8) && HelperConstants.IS_MACOS) ?

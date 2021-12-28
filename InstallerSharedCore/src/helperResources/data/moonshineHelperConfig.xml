@@ -291,7 +291,7 @@
 					<windows>
 						<version version="4.2.4" displayVersion="v4.2.4">
 							<path>https://github.com/HaxeFoundation/haxe/releases/download/4.2.4/</path>
-							<file>haxe-4.2.4-win.zip</file>
+							<file>haxe-4.2.4-win64.zip</file>
 						</version>
 					</windows>
 					<mac>
