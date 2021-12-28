@@ -2564,14 +2564,14 @@ variables are not required because the locations of these pieces are known.
 			cleanedUp = false;
 			_flexTempDir = null;
 
-			var downloadURLSplit:Array = downloadFrom.split(File.separator);
+			var downloadURLSplit:Array = downloadFrom.split("/");
 			var file:File = antPath;
 			addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 			var context:Object = {installer: true};
 			// @devsena
 			// MASH
 			context["haxe.download.file"] = downloadURLSplit.pop();
-			context["haxe.download.server"] = downloadURLSplit.join(File.separator) + File.separator;
+			context["haxe.download.server"] = downloadURLSplit.join("/") + "/";
 			context["haxe.moonshine.directory"] = installTo;
 			context["haxe.version"] = versionNumber;
 			context["verbose"] = true;
