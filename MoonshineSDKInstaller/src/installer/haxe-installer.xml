@@ -88,13 +88,26 @@
 		<echo>Completed untar Haxe SDK</echo>
 	</target>
 
-	<target name="run-mac-haxelib-setup">
+	<target name="run-mac-haxelib-setup" if="isMac">
 		<echo>Installing Haxelib</echo>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value="echo '${haxe.moonshine.directory}/lib' | '${basedir}/${haxe.temp.folder}'/haxelib setup"/>
+			<arg value="echo '${haxe.moonshine.directory}/lib' | '${haxe.moonshine.directory}'/haxelib setup"/>
 		</exec>
 		<echo>Completed Haxelib setup</echo>
+	</target>
+	
+	<target name="run-win-haxelib-setup" if="isWindows">
+		<echo>Installing Haxelib</echo>
+		<exec executable="${haxe.moonshine.directory}/haxelib">
+			<arg value="setup"/>
+			<arg value="--always"/>
+			<arg value="${haxe.moonshine.directory}"/>
+		</exec>
+		<echo>Completed Haxelib setup</echo>
+	</target>
+	
+	<target name="run-additional-setup" depends="run-mac-haxelib-setup,run-win-haxelib-setup">
 		<echo>Downloading and installing FeathersUI library</echo>
 		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
@@ -138,22 +151,23 @@
     </target>
 	
 	<target name="win-copy-haxe-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo>Moving files to SDK directory ${haxe.moonshine.directory} ${basedir}/${haxe.temp.folder}/haxe_20211022152000_ab0c054</echo>
+        <echo>Moving files to SDK directory ${haxe.moonshine.directory}</echo>
 		<mkdir dir="${haxe.moonshine.directory}"/>
         <copy todir="${haxe.moonshine.directory}" overwrite="true">
-        	<fileset dir="${basedir}/${haxe.temp.folder}">
-        		<include name="haxe_**/**" />
+        	<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
+        	<fileset dir="${basedir}/${haxe.temp.folder}/haxe_20211022152000_ab0c054">
+        		<include name="**"/>
         	</fileset>
 		</copy>
 		<echo>Files moved into ${haxe.moonshine.directory}</echo>
     </target>
 		
 	<!-- Deletes temporary files for Windows -->
-	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir">
+	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir,run-additional-setup">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-mac-haxelib-setup">
+	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-additional-setup">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<delete file="${basedir}/${haxe.download.file}" />
 		<echo>Deleted temp files.</echo>
