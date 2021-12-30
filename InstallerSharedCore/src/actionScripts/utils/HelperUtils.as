@@ -149,7 +149,7 @@ package actionScripts.utils
 			return false;
 		}
 		
-		public static function isValidExecutableBy(type:String, originPath:String, validationPath:String=null):Boolean
+		public static function isValidExecutableBy(type:String, originPath:String, validationPath:Array=null):Boolean
 		{
 			var pathValidationFileName:String;
 			if (FileUtils.isPathExists(originPath))
@@ -164,13 +164,19 @@ package actionScripts.utils
 				}
 
 				// file-system check inside the named-sdk
-				if (validationPath && StringUtil.trim(validationPath).length != 0)
+				if (validationPath)
 				{
-					originPath = FileUtils.normalizePath(originPath);
-					pathValidationFileName = FileUtils.normalizePath(validationPath);
-					if (originPath.indexOf(pathValidationFileName) != -1)
+					for each (var path:String in validationPath)
 					{
-						return true;
+						if (StringUtil.trim(path).length != 0)
+						{
+							originPath = FileUtils.normalizePath(originPath);
+							pathValidationFileName = FileUtils.normalizePath(path);
+							if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+							{
+								return true;
+							}
+						}
 					}
 				}
 				else

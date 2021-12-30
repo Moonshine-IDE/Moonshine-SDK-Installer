@@ -137,6 +137,12 @@
 			<image></image>
 			<componentDependencyIDs>notes,openjava8</componentDependencyIDs>
 		</item>
+		<item integrated="false">
+			<title>Vagrant Support</title>
+			<description><![CDATA[Use Vagrantfile executions]]></description>
+			<image></image>
+			<componentDependencyIDs>vagrant</componentDependencyIDs>
+		</item>
 	</packages>
 	<components>
 		<item id="flex">
@@ -681,6 +687,50 @@
 		                	<path></path>
 		              		<file></file>
 		             	</version>
+					</mac>
+				</variant>
+			</download>
+		</item>
+		<item id="vagrant" isDownloadable="false">
+			<title>Vagrant</title>
+			<description><![CDATA[]]></description>
+			<image>/helperResources/images/logoNotes.png</image>
+			<pathValidation>
+				<windows>vagrant.exe,bin/vagrant.exe</windows>
+				<mac>vagrant,bin/vagrant</mac>
+			</pathValidation>
+			<sdkType>vagrant</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
+			<website>https://www.vagrantup.com</website>
+			<license>
+				<windows>
+					<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
+					<title>GNU General Public License version 2</title>
+					<description>Git is licensed under the GNU General Public License version 2.</description>
+				</windows>
+				<mac>
+					<url></url>
+					<title>MAC SDK AND XCODE AGREEMENT</title>
+					<description licenseFile="CommandLineToolsLicenseAgreement.txt"/>
+				</mac>
+			</license>
+			<download>
+				<variant>
+					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
+					<diskMBusage>
+						<windows>979</windows>
+						<mac>1270</mac>
+					</diskMBusage>
+					<windows>
+						<version version="2.2.19" displayVersion="v2.2.19">
+							<path></path>
+							<file></file>
+						</version>
+					</windows>
+					<mac>
+						<version version="2.2.19" displayVersion="v2.2.19">
+							<path></path>
+							<file></file>
+						</version>
 					</mac>
 				</variant>
 			</download>
