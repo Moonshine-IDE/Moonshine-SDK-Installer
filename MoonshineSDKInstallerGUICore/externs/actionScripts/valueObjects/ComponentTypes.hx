@@ -15,4 +15,5 @@ extern class ComponentTypes
 	public static final TYPE_OPENJAVA:String;
 	public static final TYPE_NODEJS:String;
 	public static final TYPE_NOTES:String;
+	public static final TYPE_VAGRANT:String;
 }
