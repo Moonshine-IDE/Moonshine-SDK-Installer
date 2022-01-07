@@ -339,6 +339,7 @@ package actionScripts.utils
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"NodeJS"+ File.separator +"node-v"+ version;
 				case ComponentTypes.TYPE_NOTES:
 				case ComponentTypes.TYPE_VAGRANT:
+				case ComponentTypes.TYPE_MACPORTS:
 					return "";
 				default:
 					throw new Error("Unknown Component Type");

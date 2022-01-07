@@ -18,5 +18,6 @@ package actionScripts.valueObjects
 		public static const TYPE_NODEJS:String = "nodejs";
 		public static const TYPE_NOTES:String = "notes";
 		public static const TYPE_VAGRANT:String = "vagrant";
+		public static const TYPE_MACPORTS:String = "macports";
 	}
 }
