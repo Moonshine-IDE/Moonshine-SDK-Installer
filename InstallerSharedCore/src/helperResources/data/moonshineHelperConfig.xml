@@ -147,6 +147,7 @@
 			<title>MacPorts</title>
 			<description><![CDATA[Install software using MacPorts]]></description>
 			<image></image>
+			<availableIn>mac</availableIn>
 			<componentDependencyIDs>macports</componentDependencyIDs>
 		</item>
 	</packages>
@@ -701,8 +702,9 @@
 			<title>MacPorts</title>
 			<description><![CDATA[]]></description>
 			<image>/helperResources/images/logoMacPorts.png</image>
+			<availableIn>mac</availableIn>
 			<pathValidation>
-				<windows>port.exe,bin/port.exe</windows>
+				<windows></windows>
 				<mac>port,bin/port</mac>
 			</pathValidation>
 			<sdkType>macports</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->

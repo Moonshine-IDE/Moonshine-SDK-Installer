@@ -121,6 +121,7 @@ package actionScripts.utils
 			var model:HelperModel = HelperModel.getInstance();
 			var descriptionCalculator:Dictionary = new Dictionary();
 			var staticRequiredText:String = "Required for: ";
+			var availableInOS:String;
 			
 			// store AIR version
 			HelperConstants.CONFIG_ADOBE_AIR_VERSION = xmlData.airAdobe.@version.toString();
@@ -147,6 +148,19 @@ package actionScripts.utils
 			var tmpComponent:ComponentVO;
 			for each (var comp:XML in xmlData.components.item)
 			{
+				if (comp.hasOwnProperty('availableIn'))
+				{
+					availableInOS = String(comp.availableIn);
+					if (HelperConstants.IS_MACOS && (availableInOS.indexOf("mac") == -1))
+					{
+						continue;
+					}
+					else if (!HelperConstants.IS_MACOS && (availableInOS.indexOf("win") == -1))
+					{
+						continue;
+					}
+				}
+				
 				tmpComponent = new ComponentVO();
 				tmpComponent.id = String(comp.@id);
 				tmpComponent.title = String(comp.title);
@@ -252,6 +266,19 @@ package actionScripts.utils
 			var tmpPackage:PackageVO;
 			for each (var pkg:XML in xmlData.packages.item)
 			{
+				if (pkg.hasOwnProperty('availableIn'))
+				{
+					availableInOS = String(pkg.availableIn);
+					if (HelperConstants.IS_MACOS && (availableInOS.indexOf("mac") == -1))
+					{
+						continue;
+					}
+					else if (!HelperConstants.IS_MACOS && (availableInOS.indexOf("win") == -1))
+					{
+						continue;
+					}
+				}
+				
 				tmpPackage = new PackageVO();
 				tmpPackage.title = String(pkg.title);
 				tmpPackage.description = String(pkg.description);
@@ -265,8 +292,11 @@ package actionScripts.utils
 					for each (var id:String in dependencyIDs)
 					{
 						tmpComponent = HelperUtils.getComponentById(id);
-						tmpComponent.description += ((tmpComponent.description == staticRequiredText) ? tmpPackage.title : ", "+ tmpPackage.title);
-						tmpPackage.dependencyTypes.add(tmpComponent);
+						if (tmpComponent)
+						{
+							tmpComponent.description += ((tmpComponent.description == staticRequiredText) ? tmpPackage.title : ", "+ tmpPackage.title);
+							tmpPackage.dependencyTypes.add(tmpComponent);	
+						}
 					}
 				}
 				
