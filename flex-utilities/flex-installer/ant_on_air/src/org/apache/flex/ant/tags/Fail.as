@@ -18,15 +18,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
 {
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.TaskHandler;
     
     [Mixin]
     public class Fail extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["fail"] = Fail;
         }

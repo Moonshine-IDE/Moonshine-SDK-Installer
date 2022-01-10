@@ -18,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
 {
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.filesetClasses.SelectorUtils;
     import org.apache.flex.ant.tags.filesetClasses.exceptions.BuildException;
@@ -29,7 +27,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class PatternSet extends ParentTagHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["patternset"] = PatternSet;
         }

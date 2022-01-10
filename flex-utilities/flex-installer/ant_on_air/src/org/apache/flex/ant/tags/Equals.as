@@ -18,7 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
 {
-    import mx.core.IFlexModuleFactory;
     import mx.utils.StringUtil;
     
     import org.apache.flex.ant.Ant;
@@ -28,7 +27,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class Equals extends TagHandler implements IValueTagHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["equals"] = Equals;
         }

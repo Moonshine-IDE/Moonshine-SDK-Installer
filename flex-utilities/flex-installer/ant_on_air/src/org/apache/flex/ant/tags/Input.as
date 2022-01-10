@@ -22,15 +22,13 @@ package org.apache.flex.ant.tags
     import flash.events.KeyboardEvent;
     import flash.ui.Keyboard;
     
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.TaskHandler;
     
     [Mixin]
     public class Input extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["input"] = Input;
         }

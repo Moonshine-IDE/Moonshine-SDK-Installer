@@ -20,7 +20,6 @@ package org.apache.flex.ant.tags
 {
     import flash.events.Event;
     
-    import mx.core.IFlexModuleFactory;
     import mx.utils.StringUtil;
     
     import org.apache.flex.ant.Ant;
@@ -42,7 +41,7 @@ package org.apache.flex.ant.tags
         /** Message priority of &quot;debug&quot;. */
         public static const MSG_DEBUG:int = 4;
         
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["project"] = Project;
         }

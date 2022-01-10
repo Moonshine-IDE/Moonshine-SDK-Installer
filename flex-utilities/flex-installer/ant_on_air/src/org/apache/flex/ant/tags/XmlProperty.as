@@ -22,15 +22,13 @@ package org.apache.flex.ant.tags
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
     
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.TaskHandler;
     
     [Mixin]
     public class XmlProperty extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["xmlproperty"] = XmlProperty;
         }

@@ -29,7 +29,6 @@ package org.apache.flex.ant.tags
     import flash.system.Capabilities;
     import flash.utils.IDataInput;
     
-    import mx.core.IFlexModuleFactory;
     import mx.utils.StringUtil;
     
     import org.apache.flex.ant.Ant;
@@ -38,7 +37,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class Property extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["property"] = Property;
         }

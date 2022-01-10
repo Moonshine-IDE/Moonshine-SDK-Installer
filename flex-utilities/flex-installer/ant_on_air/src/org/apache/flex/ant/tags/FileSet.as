@@ -18,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
 {
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.filesetClasses.DirectoryScanner;
     import org.apache.flex.ant.tags.filesetClasses.exceptions.BuildException;
@@ -30,7 +28,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class FileSet extends ParentTagHandler implements IValueTagHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["fileset"] = FileSet;
         }

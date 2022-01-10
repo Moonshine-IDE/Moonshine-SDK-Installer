@@ -27,7 +27,6 @@ package org.apache.flex.ant.tags
     import flash.filesystem.FileStream;
     import flash.utils.ByteArray;
     
-    import mx.core.IFlexModuleFactory;
     import mx.utils.StringUtil;
     
     import org.apache.flex.ant.Ant;
@@ -38,7 +37,7 @@ package org.apache.flex.ant.tags
     {
 		private static var DEFAULT_READBUFFER_SIZE:int = 2 * 1024 * 1024;
 		
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["checksum"] = Checksum;
         }

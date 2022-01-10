@@ -22,7 +22,6 @@ package org.apache.flex.ant.tags
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
     
-    import mx.core.IFlexModuleFactory;
     import mx.resources.ResourceManager;
     
     import org.apache.flex.ant.Ant;
@@ -32,7 +31,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class Touch extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["touch"] = Touch;
         }

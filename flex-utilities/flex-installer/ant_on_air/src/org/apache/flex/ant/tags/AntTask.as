@@ -23,15 +23,13 @@ package org.apache.flex.ant.tags
     import flash.events.ProgressEvent;
     import flash.filesystem.File;
     
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.TaskHandler;
     
     [Mixin]
     public class AntTask extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["ant"] = AntTask;
         }

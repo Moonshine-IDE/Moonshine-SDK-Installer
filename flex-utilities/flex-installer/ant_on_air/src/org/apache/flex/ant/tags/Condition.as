@@ -18,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
 {
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.IValueTagHandler;
     import org.apache.flex.ant.tags.supportClasses.TaskHandler;
@@ -28,7 +26,7 @@ package org.apache.flex.ant.tags
 
     public class Condition extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["condition"] = Condition;
         }

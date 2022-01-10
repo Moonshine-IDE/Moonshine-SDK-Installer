@@ -22,8 +22,6 @@ package org.apache.flex.ant.tags
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
     
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.TaskHandler;
     import org.apache.flex.xml.ITextTagHandler;
@@ -31,7 +29,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class Echo extends TaskHandler implements ITextTagHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["echo"] = Echo;
         }

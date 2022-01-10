@@ -20,8 +20,6 @@ package org.apache.flex.ant.tags
 {
     import flash.system.Capabilities;
     
-    import mx.core.IFlexModuleFactory;
-    
     import org.apache.flex.ant.Ant;
     import org.apache.flex.ant.tags.supportClasses.IValueTagHandler;
     import org.apache.flex.ant.tags.supportClasses.TagHandler;
@@ -29,7 +27,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class OS extends TagHandler implements IValueTagHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["os"] = OS;
         }

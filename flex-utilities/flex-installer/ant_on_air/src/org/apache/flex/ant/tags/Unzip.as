@@ -18,19 +18,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
 {
-    import flash.desktop.NativeProcess;
-    import flash.desktop.NativeProcessStartupInfo;
     import flash.events.ErrorEvent;
     import flash.events.Event;
-    import flash.events.NativeProcessExitEvent;
-    import flash.events.ProgressEvent;
     import flash.filesystem.File;
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
-    import flash.system.Capabilities;
     import flash.utils.ByteArray;
     
-    import mx.core.IFlexModuleFactory;
     import mx.resources.ResourceManager;
     
     import org.apache.flex.ant.Ant;
@@ -39,12 +33,17 @@ package org.apache.flex.ant.tags
     import org.as3commons.zip.Zip;
     import org.as3commons.zip.ZipEvent;
     import org.as3commons.zip.ZipFile;
+    import flash.system.Capabilities;
+    import flash.desktop.NativeProcess;
+    import flash.events.ProgressEvent;
+    import flash.events.NativeProcessExitEvent;
+    import flash.desktop.NativeProcessStartupInfo;
     
     [ResourceBundle("ant")]
     [Mixin]
     public class Unzip extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["unzip"] = Unzip;
         }
@@ -135,13 +134,8 @@ package org.apache.flex.ant.tags
         
         private function dounzip():void
         {
-            if (Capabilities.os.indexOf("Win") != -1 && srcFile.extension == "zip")
+            if (unzip(srcFile))
             {
-                winUnzip(srcFile);
-            }
-            else
-            {
-                unzip(srcFile);
                 dispatchEvent(new Event(Event.COMPLETE));
             }
         }
@@ -149,33 +143,45 @@ package org.apache.flex.ant.tags
         private function winUnzip(source:File):void {
             var executable:File = new File("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe");
             var startupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-            var arguments:Vector.<String> = new Vector.<String>();
+            var arguments:Vector.<String> = new <String>["-NoProfile"];
 
-            var command:String = "& {";
-            command += "Param([string]$zipPath,[string]$outPath)$shell = New-Object -ComObject shell.application;$zip = $shell.NameSpace($zipPath);New-Item -path $outPath -type directory -force;$shell.NameSpace($outPath).CopyHere($zip.items(), 4 + 16);[Environment]::Exit(0);";
-            command += "}";
-            command += " ";
-            command += "\"";
-            command += source.nativePath;
-            command += "\"";
-            command += " ";
-            command += "\"";
-            command += destFile.nativePath;
-            command += "\"";
-            arguments.push("-Command");
-            arguments.push(command);
-
+			var command:String = "& {";
+			command += "Param([string]$zipPath,[string]$outPath)"
+            //newer versions of PowerShell support the Expand-Archive cmdlet
+            command += "if (Get-Command Expand-Archive -errorAction SilentlyContinue) {";
+            command += "Expand-Archive -Path \"" + source.nativePath + "\" -DestinationPath \"" + destFile.nativePath + "\" -Force;";
+            //older versions of PowerShell must fall back to COM object APIs
+            command += "} else {"
+            command += "$shell = New-Object -ComObject shell.application;$zip = $shell.NameSpace($zipPath);New-Item -path $outPath -type directory -force;$shell.NameSpace($outPath).CopyHere($zip.items(), 4 + 16);[Environment]::Exit(0);";
+            command += "}" //end else
+			command += "}"; //end $ {
+			command += " ";
+			command += "\"";
+			command += source.nativePath;
+			command += "\"";
+			command += " ";
+			command += "\"";
+			command += destFile.nativePath;
+			command += "\"";
+			arguments.push("-Command");
+			arguments.push(command);
+            
             startupInfo.executable = executable;
             startupInfo.arguments = arguments;
 
             _process = new NativeProcess();
-            _process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, onUnzipWinFileProgress);
-            _process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onUnzipWinError);
-            _process.addEventListener(NativeProcessExitEvent.EXIT, onUnzipWinComplete);
+            _process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, unzipFileProgress);
+            _process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, unzipError);
+            _process.addEventListener(NativeProcessExitEvent.EXIT, unzipComplete);
             _process.start(startupInfo);
         }
-
-        private function unzip(fileToUnzip:File):void {
+        
+        private function unzip(fileToUnzip:File):Boolean {
+            if (Capabilities.os.indexOf("Win") != -1)
+            {
+                winUnzip(fileToUnzip);
+                return false;
+            }
             var zipFileBytes:ByteArray = new ByteArray();
             var fs:FileStream = new FileStream();
             var fzip:Zip = new Zip();
@@ -190,6 +196,7 @@ package org.apache.flex.ant.tags
             
             // synchronous, so no progress events
             fzip.loadBytes(zipFileBytes);
+            return true;
         }
         
         private function isDirectory(f:ZipFile):Boolean {
@@ -252,24 +259,24 @@ package org.apache.flex.ant.tags
 				ant.project.status = false;
 			}
         }
-
-        private function onUnzipWinError(event:Event):void {
+        
+        private function unzipError(event:Event):void {
             var output:String = _process.standardError.readUTFBytes(_process.standardError.bytesAvailable);
             ant.output(output);
-            if (failonerror)
-            {
-                ant.project.failureMessage = output;
-                ant.project.status = false;
-            }
+			if (failonerror)
+			{
+				ant.project.failureMessage = output;
+				ant.project.status = false;
+			}
             dispatchEvent(new Event(Event.COMPLETE));
         }
-
-        private function onUnzipWinFileProgress(event:Event):void {
+        
+        private function unzipFileProgress(event:Event):void {
             var output:String = _process.standardOutput.readUTFBytes(_process.standardOutput.bytesAvailable);
             ant.output(output);
         }
-
-        private function onUnzipWinComplete(event:NativeProcessExitEvent):void {
+        
+        private function unzipComplete(event:NativeProcessExitEvent):void {
             _process.closeInput();
             _process.exit(true);
             _process = null;

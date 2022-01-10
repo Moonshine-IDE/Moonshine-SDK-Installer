@@ -29,7 +29,6 @@ package org.apache.flex.ant.tags
     import flash.filesystem.File;
     import flash.system.Capabilities;
     
-    import mx.core.IFlexModuleFactory;
     import mx.resources.ResourceManager;
     
     import org.apache.flex.ant.Ant;
@@ -39,7 +38,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class Untar extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["untar"] = Untar;
         }

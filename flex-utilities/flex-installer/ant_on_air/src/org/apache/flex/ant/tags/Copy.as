@@ -21,7 +21,6 @@ package org.apache.flex.ant.tags
     import flash.events.Event;
     import flash.filesystem.File;
     
-    import mx.core.IFlexModuleFactory;
     import mx.resources.ResourceManager;
     
     import org.apache.flex.ant.Ant;
@@ -32,7 +31,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class Copy extends FileSetTaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["copy"] = Copy;
         }

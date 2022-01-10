@@ -17,8 +17,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 package org.apache.flex.ant.tags
-{    
-    import mx.core.IFlexModuleFactory;
+{
     import mx.resources.ResourceManager;
     
     import flash.globalization.DateTimeFormatter;
@@ -31,7 +30,7 @@ package org.apache.flex.ant.tags
     [Mixin]
     public class TStamp extends TaskHandler
     {
-        public static function init(mf:IFlexModuleFactory):void
+        public static function init(mf:Object):void
         {
             Ant.antTagProcessors["tstamp"] = TStamp;
         }
