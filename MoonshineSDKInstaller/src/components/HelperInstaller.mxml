@@ -295,6 +295,7 @@
 						}
 						break;
 					case ComponentTypes.TYPE_HAXE:
+						var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
 						var targetAntFile:File = File.applicationStorageDirectory.resolvePath("haxe-installer.xml");
 						FileUtils.copyFile(
 								File.applicationDirectory.resolvePath("installer/haxe-installer.xml"),
@@ -303,9 +304,8 @@
 						);
 						INSTALLER_APACHE_FLEX.runHaxeInstallerScript(
 								targetAntFile,
-								item.downloadURL,
-								item.version,
-								item.installToPath
+								item,
+								neko
 						);
 						break;
 					default:

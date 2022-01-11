@@ -2557,14 +2557,14 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 
-		public function runHaxeInstallerScript(antPath:File, downloadFrom:String, versionNumber:String, installTo:String):void
+		public function runHaxeInstallerScript(antPath:File, haxe:Object, neko:Object):void
 		{
 			ant = new Ant();
 			ant.output = output;
 			cleanedUp = false;
 			_flexTempDir = null;
 
-			var downloadURLSplit:Array = downloadFrom.split("/");
+			var downloadURLSplit:Array = haxe.downloadURL.split("/");
 			var file:File = antPath;
 			addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 			var context:Object = {installer: true};
@@ -2572,9 +2572,15 @@ variables are not required because the locations of these pieces are known.
 			// MASH
 			context["haxe.download.file"] = downloadURLSplit.pop();
 			context["haxe.download.server"] = downloadURLSplit.join("/") + "/";
-			context["haxe.moonshine.directory"] = installTo;
-			context["haxe.version"] = versionNumber;
+			context["haxe.moonshine.directory"] = haxe.installToPath;
+			context["haxe.version"] = haxe.version;
 			context["verbose"] = true;
+
+			downloadURLSplit = neko.downloadURL.split("/");
+			context["neko.download.file"] = downloadURLSplit.pop();
+			context["neko.download.server"] = downloadURLSplit.join("/") + "/";
+			context["neko.moonshine.directory"] = neko.installToPath;
+			context["neko.version"] = neko.version;
 
 			if (file.exists && !ant.processXMLFile(file, context, true))
 			{

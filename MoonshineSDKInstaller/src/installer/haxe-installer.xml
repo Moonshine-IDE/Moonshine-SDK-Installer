@@ -31,6 +31,10 @@
     <property name="haxe.version" value="${HAXE.VERSION}"/>
 	<property name="haxe.download.server" value="${HAXE.DOWNLOAD.SERVER}"/>
 	<property name="haxe.download.file" value="${HAXE.DOWNLOAD.FILE}"/>
+	<property name="neko.version" value="${NEKO.VERSION}"/>
+	<property name="neko.download.server" value="${NEKO.DOWNLOAD.SERVER}"/>
+	<property name="neko.download.file" value="${NEKO.DOWNLOAD.FILE}"/>
+	<property name="neko.moonshine.directory" value="${NEKO.MOONSHINE.DIRECTORY}"/>
 	<property name="haxe.temp.folder" value="temp/haxe"/>
 	<property name="haxe.moonshine.directory" value="${HAXE.MOONSHINE.DIRECTORY}"/>
 	<property name="haxe.windows.binary.unzip.folder" value="${HAXE.WINDOWS.UNZIPPED.FOLDER}" />
@@ -70,11 +74,24 @@
 		<echo>Downloading Haxe SDK v.${haxe.download.version}</echo>
         <get src="${haxe.download.server}${haxe.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
 	</target>
+
+	<target name="get-neko-sdk">
+		<delete dir="${basedir}/${haxe.temp.folder}" />
+		<mkdir dir="${basedir}/${haxe.temp.folder}" />
+		<echo>Downloading Haxe SDK v.${haxe.download.version}</echo>
+		<get src="${neko.download.server}${neko.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
+	</target>
 	
 	<target name="unzip-haxe-sdk">
 		<echo>Starting to unzip: ${basedir}/${haxe.download.file}</echo>
         <unzip src="${basedir}/${haxe.download.file}" dest="${basedir}/${haxe.temp.folder}"/>
 		<echo>Completed unzipping Haxe SDK</echo>
+	</target>
+
+	<target name="unzip-neko-sdk">
+		<echo>Starting to unzip: ${basedir}/${neko.download.file}</echo>
+		<unzip src="${basedir}/${neko.download.file}" dest="${basedir}/${haxe.temp.folder}"/>
+		<echo>Completed unzipping Neko SDK</echo>
 	</target>
 	
 	<target name="untar-haxe-sdk">
@@ -85,6 +102,17 @@
 			<arg value="--strip-components"/>
 			<arg value="1"/>
         </exec>
+		<echo>Completed untar Haxe SDK</echo>
+	</target>
+
+	<target name="untar-neko-sdk">
+		<echo>Starting to untar: ${basedir}/${neko.download.file}</echo>
+		<exec executable="tar" dir="${basedir}/${haxe.temp.folder}">
+			<arg value="-xvf" />
+			<arg value="${basedir}/${neko.download.file}" />
+			<arg value="--strip-components"/>
+			<arg value="1"/>
+		</exec>
 		<echo>Completed untar Haxe SDK</echo>
 	</target>
 
@@ -149,6 +177,18 @@
             <arg value="${haxe.moonshine.directory}" />
         </exec>
     </target>
+
+	<target name="mac-copy-neko-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
+		<echo>Moving files to SDK directory ${neko.moonshine.directory}</echo>
+		<mkdir dir="${neko.moonshine.directory}"/>
+		<exec executable="rsync" dir="${basedir}">
+			<arg value="--archive" />
+			<arg value="--ignore-existing" />
+			<arg value="--force" />
+			<arg value="${basedir}/${haxe.temp.folder}/."/>
+			<arg value="${neko.moonshine.directory}" />
+		</exec>
+	</target>
 	
 	<target name="win-copy-haxe-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
         <echo>Moving files to SDK directory ${haxe.moonshine.directory}</echo>
@@ -161,15 +201,28 @@
 		</copy>
 		<echo>Files moved into ${haxe.moonshine.directory}</echo>
     </target>
+
+	<target name="win-copy-neko-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
+		<echo>Moving files to SDK directory ${neko.moonshine.directory}</echo>
+		<mkdir dir="${neko.moonshine.directory}"/>
+		<copy todir="${neko.moonshine.directory}" overwrite="true">
+			<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
+			<fileset dir="${basedir}/${haxe.temp.folder}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<echo>Files moved into ${neko.moonshine.directory}</echo>
+	</target>
 		
 	<!-- Deletes temporary files for Windows -->
-	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir,run-additional-setup">
+	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir,run-additional-setup,get-neko-sdk,unzip-neko-sdk,win-copy-neko-dir">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-additional-setup">
+	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-additional-setup,get-neko-sdk,untar-neko-sdk,mac-copy-neko-dir">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<delete file="${basedir}/${haxe.download.file}" />
+		<delete file="${basedir}/${neko.download.file}" />
 		<echo>Deleted temp files.</echo>
 	</target>
 </project>
