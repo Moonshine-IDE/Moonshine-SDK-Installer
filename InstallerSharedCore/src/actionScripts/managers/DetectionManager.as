@@ -164,6 +164,12 @@ package actionScripts.managers
 						item.hasWarning = null;
 						item.isAlreadyDownloaded = model.moonshineBridge.isNotesDominoPresent();
 						break;
+					case ComponentTypes.TYPE_VAGRANT:
+						item.isAlreadyDownloaded = model.moonshineBridge.isVagrantAvailable();
+						break;
+					case ComponentTypes.TYPE_MACPORTS:
+						item.isAlreadyDownloaded = model.moonshineBridge.isMacPortsAvailable();
+						break;
 				}
 			}
 			
