@@ -2577,6 +2577,10 @@ variables are not required because the locations of these pieces are known.
 			context["verbose"] = true;
 
 			downloadURLSplit = neko.downloadURL.split("/");
+			var nameOnlySplit:Array = downloadURLSplit[downloadURLSplit.length - 1].split(".");
+			nameOnlySplit.pop();
+			
+			context["neko.download.file.name.only"] = nameOnlySplit.join(".");
 			context["neko.download.file"] = downloadURLSplit.pop();
 			context["neko.download.server"] = downloadURLSplit.join("/") + "/";
 			context["neko.moonshine.directory"] = neko.installToPath;
