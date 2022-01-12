@@ -176,6 +176,13 @@ package actionScripts.utils
 					tmpComponent.isDownloadable = (String(comp.@isDownloadable) == "false") ? false : true;
 					tmpComponent.hasWarning = !tmpComponent.isDownloadable ? "This item may require to install manually." : null;
 				}
+
+				// manual adjustment
+				if (HelperConstants.IS_RUNNING_IN_MOON && (tmpComponent.type == ComponentTypes.TYPE_VAGRANT ||
+						tmpComponent.type == ComponentTypes.TYPE_MACPORTS))
+				{
+					tmpComponent.hasWarning = null;
+				}
 				
 				// variants
 				var variantCount:int = XMLList(comp.download.variant).length();
