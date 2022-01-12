@@ -267,6 +267,20 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_NOTES:
 						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
+					case ComponentTypes.TYPE_HAXE:
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+								item.type,
+								HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\haxe",
+								item.pathValidation
+						);
+						break;
+					case ComponentTypes.TYPE_NEKO:
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+								item.type,
+								HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\neko", 
+								item.pathValidation
+						);
+						break;
 				}
 			}
 			
