@@ -164,6 +164,18 @@ package actionScripts.managers
 						item.hasWarning = null;
 						item.isAlreadyDownloaded = model.moonshineBridge.isNotesDominoPresent();
 						break;
+					case ComponentTypes.TYPE_VAGRANT:
+						item.isAlreadyDownloaded = model.moonshineBridge.isVagrantAvailable();
+						break;
+					case ComponentTypes.TYPE_MACPORTS:
+						item.isAlreadyDownloaded = model.moonshineBridge.isMacPortsAvailable();
+						break;
+					case ComponentTypes.TYPE_HAXE:
+						item.isAlreadyDownloaded = model.moonshineBridge.isHaxeAvailable();
+						break;
+					case ComponentTypes.TYPE_NEKO:
+						item.isAlreadyDownloaded = model.moonshineBridge.isNekoAvailable();
+						break;
 				}
 			}
 			
@@ -268,18 +280,40 @@ package actionScripts.managers
 						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
 					case ComponentTypes.TYPE_HAXE:
+						var haxeDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\haxe";
 						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
-								HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\haxe",
+								haxeDefaultPath,
 								item.pathValidation
 						);
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = haxeDefaultPath;
+						}
 						break;
 					case ComponentTypes.TYPE_NEKO:
+						var nekoDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\neko";
 						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
-								HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\neko", 
+								nekoDefaultPath,
 								item.pathValidation
 						);
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = nekoDefaultPath;
+						}
+						break;
+					case ComponentTypes.TYPE_VAGRANT:
+						var vagrantDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "C:\\HashiCorp\\Vagrant";
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+								item.type,
+								vagrantDefaultPath,
+								item.pathValidation
+						);
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = vagrantDefaultPath;
+						}
 						break;
 				}
 			}

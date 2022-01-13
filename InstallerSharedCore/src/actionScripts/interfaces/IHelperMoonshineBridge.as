@@ -18,6 +18,10 @@ package actionScripts.interfaces
 		function isGitPresent():Boolean;
 		function isNodeJsPresent():Boolean;
 		function isNotesDominoPresent():Boolean;
+		function isVagrantAvailable():Boolean;
+		function isMacPortsAvailable():Boolean;
+		function isHaxeAvailable():Boolean;
+		function isNekoAvailable():Boolean;
 		function runOrDownloadSDKInstaller():void;
 
 		function get playerglobalExists():Boolean;
