@@ -324,6 +324,7 @@
 				<windows>neko.exe</windows>
 				<mac>neko</mac>
 			</pathValidation>
+			<availableIn>none</availableIn>
 			<sdkType>neko</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
 			<website>https://haxe.org/</website>
 			<license>
