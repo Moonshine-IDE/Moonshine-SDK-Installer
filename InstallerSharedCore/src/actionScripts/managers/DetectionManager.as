@@ -273,6 +273,18 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_NOTES:
 						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
+					case ComponentTypes.TYPE_VAGRANT:
+						var vagrantDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "C:\\HashiCorp\\Vagrant";
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+								item.type,
+								vagrantDefaultPath,
+								item.pathValidation
+						);
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = vagrantDefaultPath;
+						}
+						break;
 				}
 			}
 			
