@@ -315,6 +315,21 @@ package actionScripts.managers
 							item.installToPath = vagrantDefaultPath;
 						}
 						break;
+					case ComponentTypes.TYPE_MACPORTS:
+						if (HelperConstants.IS_MACOS)
+						{
+							var macPortsDefaultPath:String = "/opt/local/bin";
+							item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+									item.type,
+									macPortsDefaultPath,
+									item.pathValidation
+							);
+							if (item.isAlreadyDownloaded)
+							{
+								item.installToPath = macPortsDefaultPath;
+							}
+						}
+						break;
 				}
 			}
 			
