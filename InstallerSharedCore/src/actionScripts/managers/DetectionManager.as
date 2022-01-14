@@ -1,7 +1,5 @@
 package actionScripts.managers
 {
-	import actionScripts.valueObjects.ConstantsCoreVO;
-
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.clearTimeout;
@@ -288,7 +286,7 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_MACPORTS:
-						if (ConstantsCoreVO.IS_MACOS)
+						if (HelperConstants.IS_MACOS)
 						{
 							var macPortsDefaultPath:String = "/opt/local/bin";
 							item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
