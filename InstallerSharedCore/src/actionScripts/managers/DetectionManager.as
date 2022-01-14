@@ -1,5 +1,7 @@
 package actionScripts.managers
 {
+	import actionScripts.valueObjects.ConstantsCoreVO;
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.clearTimeout;
@@ -283,6 +285,21 @@ package actionScripts.managers
 						if (item.isAlreadyDownloaded)
 						{
 							item.installToPath = vagrantDefaultPath;
+						}
+						break;
+					case ComponentTypes.TYPE_MACPORTS:
+						if (ConstantsCoreVO.IS_MACOS)
+						{
+							var macPortsDefaultPath:String = "/opt/local/bin";
+							item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+									item.type,
+									macPortsDefaultPath,
+									item.pathValidation
+							);
+							if (item.isAlreadyDownloaded)
+							{
+								item.installToPath = macPortsDefaultPath;
+							}
 						}
 						break;
 				}
