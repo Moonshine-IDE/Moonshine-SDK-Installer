@@ -298,8 +298,8 @@
 				<variant>
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>196</windows>
-						<mac>186</mac>
+						<windows>10</windows>
+						<mac>7.3</mac>
 					</diskMBusage>
 					<windows>
 						<version version="4.2.4" displayVersion="v4.2.4">
@@ -316,37 +316,36 @@
 				</variant>
 			</download>
 		</item>
-		<item id="neko">
+		<item id="neko" isDownloadable="false">
 			<title>Neko</title>
 			<description><![CDATA[Required for: Flex/ActionScript Compilation, Editor Essentials]]></description>
-			<image>/helperResources/images/logoHaxe.png</image>
+			<image>/helperResources/images/logoNeko.png</image>
 			<pathValidation>
 				<windows>neko.exe</windows>
 				<mac>neko</mac>
 			</pathValidation>
-			<availableIn>none</availableIn>
 			<sdkType>neko</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
-			<website>https://haxe.org/</website>
+			<website>https://nekovm.org</website>
 			<license>
 				<url>https://www.apache.org/licenses/LICENSE-2.0</url>
-				<title>The Haxe Standard Library MIT License</title>
-				<description>The Haxe Manual by Haxe Foundation is licensed under a Creative Commons Attribution 4.0 International License</description>
+				<title>The Neko Standard Library MIT License</title>
+				<description>Neko by Haxe Foundation is licensed under a Creative Commons Attribution 4.0 International License</description>
 			</license>
 			<download>
 				<variant>
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>196</windows>
-						<mac>186</mac>
+						<windows>1.7</windows>
+						<mac>1.8</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.2.4" displayVersion="v4.2.4">
+						<version version="2.3.0" displayVersion="v2.3.0">
 							<path>https://github.com/HaxeFoundation/neko/releases/download/v2-3-0/</path>
 							<file>neko-2.3.0-win64.zip</file>
 						</version>
 					</windows>
 					<mac>
-						<version version="4.2.4" displayVersion="v4.2.4">
+						<version version="2.3.0" displayVersion="v2.3.0">
 							<path>https://github.com/HaxeFoundation/neko/releases/download/v2-3-0/</path>
 							<file>neko-2.3.0-osx64.tar.gz</file> <!-- flexSDK.tar.gz -->
 						</version>

@@ -218,6 +218,8 @@
 	<!-- Deletes temporary files for Windows -->
 	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir,run-additional-setup,get-neko-sdk,unzip-neko-sdk,win-copy-neko-dir">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
+		<delete file="${basedir}/${haxe.download.file}" />
+		<delete file="${basedir}/${neko.download.file}" />
 		<echo>Deleted temp files.</echo>
 	</target>
 	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-additional-setup,get-neko-sdk,untar-neko-sdk,mac-copy-neko-dir">

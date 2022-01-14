@@ -296,6 +296,10 @@
 						break;
 					case ComponentTypes.TYPE_HAXE:
 						var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
+						if (!neko.isAlreadyDownloaded)
+						{
+							neko.isSelectedToDownload = true;
+						}
 						var targetAntFile:File = File.applicationStorageDirectory.resolvePath("haxe-installer.xml");
 						FileUtils.copyFile(
 								File.applicationDirectory.resolvePath("installer/haxe-installer.xml"),
@@ -405,6 +409,15 @@
 							}
 						}, 1000);
 					}
+				}
+
+				if (itemDownloading.type == ComponentTypes.TYPE_HAXE)
+				{
+					var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
+					neko.isDownloading = false;
+					neko.isDownloaded = true;
+					neko.isSelectedToDownload = false;
+					neko.isAlreadyDownloaded = true;
 				}
 
 				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)

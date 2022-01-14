@@ -177,11 +177,15 @@ package actionScripts.utils
 					tmpComponent.hasWarning = !tmpComponent.isDownloadable ? "This item may require to install manually." : null;
 				}
 
-				// manual adjustment
+				// manual adjustment for specific-sdks
 				if (HelperConstants.IS_RUNNING_IN_MOON && (tmpComponent.type == ComponentTypes.TYPE_VAGRANT ||
 						tmpComponent.type == ComponentTypes.TYPE_MACPORTS))
 				{
 					tmpComponent.hasWarning = null;
+				}
+				if (tmpComponent.type == ComponentTypes.TYPE_NEKO)
+				{
+					tmpComponent.hasWarning = "This item installs as part of Haxe.";
 				}
 				
 				// variants

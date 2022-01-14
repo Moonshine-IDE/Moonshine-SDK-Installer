@@ -6,7 +6,9 @@
 			   close="onWindowClose(event)">
 	<fx:Script>
 		<![CDATA[
-			import flash.net.navigateToURL;
+		import actionScripts.utils.HelperUtils;
+
+		import flash.net.navigateToURL;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.CloseEvent;
@@ -158,23 +160,29 @@
 			
 			private function addLocalLicenseDetails(byType:String=""):void
 			{
-				var tmpChildrens:ArrayCollection;
-				var installComponent:InstallerComponentVO;
-				for each (var item:ComponentVO in model.components.array)
+				var item:ComponentVO = HelperUtils.getComponentByType(byType);
+				if (item)
 				{
-					if (byType == "" || byType == item.type)
-					{
-						tmpChildrens = new ArrayCollection();
-						installComponent = new InstallerComponentVO(item.installToPath.split(File.separator).pop(),
+					var tmpChildrens:ArrayCollection = new ArrayCollection();
+					var installComponent:InstallerComponentVO = new InstallerComponentVO(item.installToPath.split(File.separator).pop(),
 							item.licenseSmallDescription, item.licenseTitle,
 							item.licenseUrl, "", true);
-						tmpChildrens.addItem(installComponent);
-						copyrightComponentsDataProvider.addItem({label:item.title, children:tmpChildrens});
-						updateTreeView();
-						this.callLater(removeBusyCursorIfAppropriates);
-						
-						if (byType != "") break;
+					tmpChildrens.addItem(installComponent);
+
+					// for Haxe/Neko where Noko installs as part of Haxe installation entry
+					if (byType == ComponentTypes.TYPE_HAXE)
+					{
+						var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
+						tmpChildrens.addItem(
+								new InstallerComponentVO(neko.title,
+										neko.licenseSmallDescription, neko.licenseTitle,
+										neko.licenseUrl, "", true)
+						);
 					}
+
+					copyrightComponentsDataProvider.addItem({label:item.title, children:tmpChildrens});
+					updateTreeView();
+					this.callLater(removeBusyCursorIfAppropriates);
 				}
 			}
 
