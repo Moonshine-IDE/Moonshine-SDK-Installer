@@ -298,8 +298,9 @@
 						var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
 						if (!neko.isAlreadyDownloaded)
 						{
-							neko.isSelectedToDownload = true;
+							neko.isDownloading = true;
 						}
+						item.isDownloading = true;
 						var targetAntFile:File = File.applicationStorageDirectory.resolvePath("haxe-installer.xml");
 						FileUtils.copyFile(
 								File.applicationDirectory.resolvePath("installer/haxe-installer.xml"),

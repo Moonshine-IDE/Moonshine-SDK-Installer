@@ -2564,12 +2564,24 @@ variables are not required because the locations of these pieces are known.
 			cleanedUp = false;
 			_flexTempDir = null;
 
-			var downloadURLSplit:Array = haxe.downloadURL.split("/");
 			var file:File = antPath;
 			addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 			var context:Object = {installer: true};
 			// @devsena
 			// MASH
+
+			var downloadURLSplit:Array = haxe.downloadURL.split("/");
+			var nameOnlySplit:Array = downloadURLSplit[downloadURLSplit.length - 1].split(".");
+			if (_os.isMac())
+			{
+				nameOnlySplit.splice(nameOnlySplit.length-2, 2);
+			}
+			else
+			{
+				nameOnlySplit.pop();
+			}
+
+			context["haxe.download.file.name.only"] = nameOnlySplit.join(".");
 			context["haxe.download.file"] = downloadURLSplit.pop();
 			context["haxe.download.server"] = downloadURLSplit.join("/") + "/";
 			context["haxe.moonshine.directory"] = haxe.installToPath;
@@ -2577,8 +2589,15 @@ variables are not required because the locations of these pieces are known.
 			context["verbose"] = true;
 
 			downloadURLSplit = neko.downloadURL.split("/");
-			var nameOnlySplit:Array = downloadURLSplit[downloadURLSplit.length - 1].split(".");
-			nameOnlySplit.pop();
+			nameOnlySplit = downloadURLSplit[downloadURLSplit.length - 1].split(".");
+			if (_os.isMac())
+			{
+				nameOnlySplit.splice(nameOnlySplit.length-2, 2);
+			}
+			else
+			{
+				nameOnlySplit.pop();
+			}
 			
 			context["neko.download.file.name.only"] = nameOnlySplit.join(".");
 			context["neko.download.file"] = downloadURLSplit.pop();
