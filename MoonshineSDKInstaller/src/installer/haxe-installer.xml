@@ -72,12 +72,14 @@
 	</target>
 	
 	<target name="get-haxe-sdk">
+		<property name="haxe.sdk.directory" value="haxe-${haxe.version}"/>
 		<mkdir dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Downloading Haxe SDK v.${haxe.version}</echo>
         <get src="${haxe.download.server}${haxe.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
 	</target>
 
 	<target name="get-neko-sdk">
+		<property name="neko.sdk.directory" value="neko-${neko.version}"/>
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<mkdir dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Downloading Neko SDK v.${neko.download.file.version}</echo>
@@ -122,45 +124,45 @@
 		<echo>Installing Haxelib</echo>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value="echo '${haxe.moonshine.directory}/${haxe.download.file.name.only}/lib' | '${haxe.moonshine.directory}/${haxe.download.file.name.only}'/haxelib setup"/>
+			<arg value="echo '${haxe.moonshine.directory}/lib' | '${haxe.moonshine.directory}/${haxe.sdk.directory}'/haxelib setup"/>
 		</exec>
 		<echo>Completed Haxelib setup</echo>
 	</target>
 	
 	<target name="run-win-haxelib-setup" if="isWindows">
 		<echo>Installing Haxelib</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.download.file.name.only}/haxelib">
+		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib">
 			<arg value="setup"/>
 			<arg value="--always"/>
-			<arg value="${haxe.moonshine.directory}/${haxe.download.file.name.only}/lib"/>
+			<arg value="${haxe.moonshine.directory}/lib"/>
 		</exec>
 		<echo>Completed Haxelib setup</echo>
 	</target>
 	
 	<target name="run-additional-setup" depends="run-mac-haxelib-setup,run-win-haxelib-setup">
 		<echo>Downloading and installing FeathersUI library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.download.file.name.only}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="feathersui"/>
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed FeathersUI setup</echo>
 		<echo>Downloading and installing OpenFl library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.download.file.name.only}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="openfl"/>
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed OpenFl setup</echo>
 		<echo>Downloading and installing Actuate library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.download.file.name.only}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="actuate"/>
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed Actuate setup</echo>
 		<echo>Downloading and installing Lime library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.download.file.name.only}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="lime"/>
 			<arg value="--quiet"/>
@@ -169,49 +171,49 @@
 	</target>
 	
 	<target name="mac-copy-haxe-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo>Moving files to SDK directory ${haxe.moonshine.directory}/${haxe.download.file.name.only}</echo>
-		<mkdir dir="${haxe.moonshine.directory}/${haxe.download.file.name.only}"/>
+        <echo>Moving files to SDK directory ${haxe.moonshine.directory}/${haxe.sdk.directory}</echo>
+		<mkdir dir="${haxe.moonshine.directory}/${haxe.sdk.directory}"/>
         <exec executable="rsync" dir="${basedir}">
             <arg value="--archive" />
             <arg value="--ignore-existing" />
             <arg value="--force" />
             <arg value="${basedir}/${haxe.temp.folder}/."/>
-            <arg value="${haxe.moonshine.directory}/${haxe.download.file.name.only}" />
+            <arg value="${haxe.moonshine.directory}/${haxe.sdk.directory}" />
         </exec>
     </target>
 
 	<target name="mac-copy-neko-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
-		<echo>Moving files to SDK directory ${neko.moonshine.directory}/${neko.download.file.name.only}</echo>
-		<mkdir dir="${neko.moonshine.directory}/${neko.download.file.name.only}"/>
+		<echo>Moving files to SDK directory ${neko.moonshine.directory}/${neko.sdk.directory}</echo>
+		<mkdir dir="${neko.moonshine.directory}/${neko.sdk.directory}"/>
 		<exec executable="rsync" dir="${basedir}">
 			<arg value="--archive" />
 			<arg value="--ignore-existing" />
 			<arg value="--force" />
 			<arg value="${basedir}/${haxe.temp.folder}/."/>
-			<arg value="${neko.moonshine.directory}/${neko.download.file.name.only}" />
+			<arg value="${neko.moonshine.directory}/${neko.sdk.directory}" />
 		</exec>
 	</target>
 	
 	<target name="win-copy-haxe-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo>Moving files to SDK directory ${haxe.moonshine.directory}/${haxe.download.file.name.only}</echo>
-		<mkdir dir="${haxe.moonshine.directory}/${haxe.download.file.name.only}"/>
-        <copy todir="${haxe.moonshine.directory}/${haxe.download.file.name.only}" overwrite="true">
+        <echo>Moving files to SDK directory ${haxe.moonshine.directory}/${haxe.sdk.directory}</echo>
+		<mkdir dir="${haxe.moonshine.directory}/${haxe.sdk.directory}"/>
+        <copy todir="${haxe.moonshine.directory}/${haxe.sdk.directory}" overwrite="true">
         	<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
         	<fileset dir="${basedir}/${haxe.temp.folder}/haxe_20211022152000_ab0c054">
         		<include name="**"/>
         	</fileset>
 		</copy>
-		<echo>Files moved into ${haxe.moonshine.directory}/${haxe.download.file.name.only}</echo>
+		<echo>Files moved into ${haxe.moonshine.directory}/${haxe.sdk.directory}</echo>
     </target>
 
 	<target name="win-copy-neko-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
-		<echo>Moving files to SDK directory ${neko.moonshine.directory}/${neko.download.file.name.only}</echo>
-		<mkdir dir="${neko.moonshine.directory}/${neko.download.file.name.only}"/>
-		<copy todir="${neko.moonshine.directory}/${neko.download.file.name.only}" overwrite="true">
+		<echo>Moving files to SDK directory ${neko.moonshine.directory}/${neko.sdk.directory}</echo>
+		<mkdir dir="${neko.moonshine.directory}/${neko.sdk.directory}"/>
+		<copy todir="${neko.moonshine.directory}/${neko.sdk.directory}" overwrite="true">
 			<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
 			<fileset dir="${basedir}/${haxe.temp.folder}/${neko.download.file.name.only}"/>
 		</copy>
-		<echo>Files moved into ${neko.moonshine.directory}/${neko.download.file.name.only}</echo>
+		<echo>Files moved into ${neko.moonshine.directory}/${neko.sdk.directory}</echo>
 	</target>
 		
 	<!-- Deletes temporary files for Windows -->
