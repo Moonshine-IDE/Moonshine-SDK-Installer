@@ -157,10 +157,9 @@ package actionScripts.utils
 				// special test to not to validate by any sub-path
 				// on macOS where the path is not command-line-tools or
 				// xcode, since the path needs to be direct executable link
-				if ((type == ComponentTypes.TYPE_SVN || type == ComponentTypes.TYPE_GIT) &&
-					isGitSVNSpecialPathCheckPass(originPath))
+				if ((type == ComponentTypes.TYPE_GIT) && !isGitSVNSpecialPathCheckPass(originPath))
 				{
-					return true;
+					return false;
 				}
 
 				// file-system check inside the named-sdk
@@ -172,9 +171,21 @@ package actionScripts.utils
 						{
 							originPath = FileUtils.normalizePath(originPath);
 							pathValidationFileName = FileUtils.normalizePath(path);
-							if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+
+							// SDKs which validates based on *_HOME way
+							if (type != ComponentTypes.TYPE_GIT)
 							{
-								return true;
+								if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+								{
+									return true;
+								}
+							}
+							else
+							{
+								if (originPath.toLowerCase().indexOf(pathValidationFileName.toLowerCase()) != -1)
+								{
+									return true;
+								}
 							}
 						}
 					}
@@ -240,8 +251,8 @@ package actionScripts.utils
 
 		private static function isGitSVNSpecialPathCheckPass(pathValue:String):Boolean
 		{
-			if ((pathValue.toLowerCase().indexOf("commandlinetools") == -1) &&
-					(pathValue.toLowerCase().indexOf("xcode.app/contents") == -1))
+			if ((pathValue.toLowerCase().indexOf("commandlinetools") != -1) ||
+					(pathValue.toLowerCase().indexOf("xcode.app/contents") != -1))
 			{
 				return true;
 			}
