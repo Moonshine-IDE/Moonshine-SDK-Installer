@@ -582,7 +582,7 @@
 				<mac>usr/bin/git</mac>
 			</pathValidation>
 			<sdkType>git</sdkType> <!-- flex, flexjs, royale, ant, openjava, maven, feathers -->
-			<website>https://feathersui.com</website>
+			<website>https://github.com</website>
 			<license>
 				<windows>
 					<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
