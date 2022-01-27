@@ -26,6 +26,7 @@ package actionScripts.utils
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.system.Capabilities;
 	import flash.utils.ByteArray;
 	import flash.utils.clearInterval;
 	import flash.utils.setTimeout;
@@ -35,7 +36,9 @@ package actionScripts.utils
 		public static const DATA_FORMAT_STRING:String = "dataAsString";
 		public static const DATA_FORMAT_BYTEARRAY:String = "dataAsByteArray";
 		public static const IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
-		
+
+		private static const WINDOWS_INSTALL_DIRECTORIES:Array = ["Program files", "Program Files (x86)"];
+
 		private static var pathCheckingFile:File;
 		
 		/**
@@ -506,6 +509,41 @@ package actionScripts.utils
 			}
 			
 			return file.name;
+		}
+
+		/**
+		 * Tries to evaluate a given program path based on
+		 * Windows 32/64 bit installation architecture
+		 *
+		 * @param path
+		 * @param is32BitOnly
+		 * @return
+		 */
+		public static function getValidOrPossibleWindowsInstallation(path:String, is32BitOnly:Boolean=false):String
+		{
+			var tmpPath:String;
+			if (Capabilities.supports64BitProcesses)
+			{
+				// for the application which is 32-bit only
+				if (is32BitOnly)
+				{
+					return ("C:/"+ WINDOWS_INSTALL_DIRECTORIES[1] +"/"+ path);
+				}
+				else
+				{
+					for each (var i:String in WINDOWS_INSTALL_DIRECTORIES)
+					{
+						tmpPath = "C:/"+ i +"/"+ path;
+						if (isPathExists(tmpPath))
+						{
+							return tmpPath;
+						}
+					}
+				}
+
+			}
+
+			return "C:/"+ WINDOWS_INSTALL_DIRECTORIES[0] +"/"+ path;
 		}
 		
 		private static function convertToFile(path:String):File

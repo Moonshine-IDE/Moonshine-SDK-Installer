@@ -590,6 +590,16 @@
 			private function onDownloadLinkVerified(isSuccess:Boolean, component:ComponentVO):void
 			{
 				component.isDownloading = false;
+
+				// special handling for Git/macOS
+				// where we run special shell-script to download
+				// git on macOS
+				if ((component.type == ComponentTypes.TYPE_GIT) &&
+						HelperConstants.IS_MACOS)
+				{
+					isSuccess = true;
+				}
+
 				if (isSuccess)
 				{
 					openLicenseView(singleInstallConfirmHandler, component);
