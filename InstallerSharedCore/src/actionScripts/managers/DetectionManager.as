@@ -280,7 +280,7 @@ package actionScripts.managers
 						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
 					case ComponentTypes.TYPE_HAXE:
-						var haxeDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\haxe";
+						var haxeDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/lib/haxe" : "c:\\HaxeToolkit\\haxe";
 						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
 								haxeDefaultPath,
@@ -292,7 +292,7 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_NEKO:
-						/*var nekoDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "c:\\HaxeToolkit\\neko";
+						var nekoDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/lib/neko" : "c:\\HaxeToolkit\\neko";
 						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
 								nekoDefaultPath,
@@ -301,7 +301,7 @@ package actionScripts.managers
 						if (item.isAlreadyDownloaded)
 						{
 							item.installToPath = nekoDefaultPath;
-						}*/
+						}
 						break;
 					case ComponentTypes.TYPE_VAGRANT:
 						var vagrantDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "C:\\HashiCorp\\Vagrant";
