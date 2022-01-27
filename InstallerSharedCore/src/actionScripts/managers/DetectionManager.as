@@ -191,7 +191,7 @@ package actionScripts.managers
 		
 		private function stepB_checkDefaultInstallLocation(item:ComponentVO):void
 		{
-			// 1. named-sdk folder check
+			// 1. named-sdk folder check under MoonshineSDKs
 			item.isAlreadyDownloaded = HelperUtils.isValidSDKDirectoryBy(item.type, item.installToPath, item.pathValidation);
 			
 			// 2. Windows-only env.variable check

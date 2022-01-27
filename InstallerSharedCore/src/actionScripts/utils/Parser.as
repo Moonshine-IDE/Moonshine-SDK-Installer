@@ -383,8 +383,9 @@ package actionScripts.utils
 				case ComponentTypes.TYPE_MACPORTS:
 					return "";
 				case ComponentTypes.TYPE_HAXE:
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Haxe"+ File.separator +"haxe-"+ version;
 				case ComponentTypes.TYPE_NEKO:
-					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Haxe";
+					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Haxe"+ File.separator +"neko-"+ version;
 				default:
 					throw new Error("Unknown Component Type");
 			}
