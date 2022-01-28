@@ -39,6 +39,7 @@
 	<property name="neko.moonshine.directory" value="${NEKO.MOONSHINE.DIRECTORY}"/>
 	<property name="haxe.temp.folder" value="temp/haxe"/>
 	<property name="haxe.moonshine.directory" value="${HAXE.MOONSHINE.DIRECTORY}"/>
+	<property name="haxe.moonshine.directory.root" value="${HAXE.MOONSHINE.DIRECTORY.ROOT}"/>
 	<property name="haxe.windows.binary.unzip.folder" value="${HAXE.WINDOWS.UNZIPPED.FOLDER}" />
 
 	<condition property="isMac" value="mac">
@@ -72,17 +73,15 @@
 	</target>
 	
 	<target name="get-haxe-sdk">
-		<property name="haxe.sdk.directory" value="haxe-${haxe.version}"/>
 		<mkdir dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Downloading Haxe SDK v.${haxe.version}</echo>
         <get src="${haxe.download.server}${haxe.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
 	</target>
 
 	<target name="get-neko-sdk">
-		<property name="neko.sdk.directory" value="neko-${neko.version}"/>
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<mkdir dir="${basedir}/${haxe.temp.folder}" />
-		<echo>Downloading Neko SDK v.${neko.download.file.version}</echo>
+		<echo>Downloading Neko SDK v.${neko.version}</echo>
 		<get src="${neko.download.server}${neko.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
 	</target>
 	
@@ -121,48 +120,48 @@
 	</target>
 
 	<target name="run-mac-haxelib-setup" if="isMac">
-		<echo>Installing Haxelib</echo>
+		<echo>Installing Haxelib: ${haxe.moonshine.directory.root}/lib</echo>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value="echo '${haxe.moonshine.directory}/lib' | '${haxe.moonshine.directory}/${haxe.sdk.directory}'/haxelib setup"/>
+			<arg value="echo '${haxe.moonshine.directory.root}/lib' | '${haxe.moonshine.directory}'/haxelib setup"/>
 		</exec>
 		<echo>Completed Haxelib setup</echo>
 	</target>
 	
 	<target name="run-win-haxelib-setup" if="isWindows">
 		<echo>Installing Haxelib</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib">
+		<exec executable="${haxe.moonshine.directory}/haxelib">
 			<arg value="setup"/>
 			<arg value="--always"/>
-			<arg value="${haxe.moonshine.directory}/lib"/>
+			<arg value="${haxe.moonshine.directory.root}/lib"/>
 		</exec>
 		<echo>Completed Haxelib setup</echo>
 	</target>
 	
 	<target name="run-additional-setup" depends="run-mac-haxelib-setup,run-win-haxelib-setup">
-		<echo>Downloading and installing FeathersUI library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
+		<echo>Downloading and installing FeathersUI library: ${haxe.moonshine.directory}/haxelib</echo>
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="feathersui"/>
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed FeathersUI setup</echo>
 		<echo>Downloading and installing OpenFl library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="openfl"/>
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed OpenFl setup</echo>
 		<echo>Downloading and installing Actuate library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="actuate"/>
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed Actuate setup</echo>
 		<echo>Downloading and installing Lime library</echo>
-		<exec executable="${haxe.moonshine.directory}/${haxe.sdk.directory}/haxelib" failonerror="true">
+		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
 			<arg value="lime"/>
 			<arg value="--quiet"/>
@@ -171,49 +170,56 @@
 	</target>
 	
 	<target name="mac-copy-haxe-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo>Moving files to SDK directory ${haxe.moonshine.directory}/${haxe.sdk.directory}</echo>
-		<mkdir dir="${haxe.moonshine.directory}/${haxe.sdk.directory}"/>
+        <echo>Moving files to SDK directory ${haxe.moonshine.directory}</echo>
+		<mkdir dir="${haxe.moonshine.directory}"/>
         <exec executable="rsync" dir="${basedir}">
             <arg value="--archive" />
             <arg value="--ignore-existing" />
             <arg value="--force" />
             <arg value="${basedir}/${haxe.temp.folder}/."/>
-            <arg value="${haxe.moonshine.directory}/${haxe.sdk.directory}" />
+            <arg value="${haxe.moonshine.directory}" />
         </exec>
     </target>
 
 	<target name="mac-copy-neko-dir" if="isMac" description="copies a directory using exec and rsync so that symbolic links are preserved">
-		<echo>Moving files to SDK directory ${neko.moonshine.directory}/${neko.sdk.directory}</echo>
-		<mkdir dir="${neko.moonshine.directory}/${neko.sdk.directory}"/>
+		<echo>Moving files to SDK directory ${neko.moonshine.directory}</echo>
+		<mkdir dir="${neko.moonshine.directory}"/>
 		<exec executable="rsync" dir="${basedir}">
 			<arg value="--archive" />
 			<arg value="--ignore-existing" />
 			<arg value="--force" />
 			<arg value="${basedir}/${haxe.temp.folder}/."/>
-			<arg value="${neko.moonshine.directory}/${neko.sdk.directory}" />
+			<arg value="${neko.moonshine.directory}" />
+		</exec>
+		<!-- We need to set an environment vairable to point Neko to overcome haxe execution error
+		 as discussed here:
+		 https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/13#issuecomment-1023609257 -->
+		<exec executable="/bin/bash" failonerror="true">
+			<arg value="-c"/>
+			<arg value="export DYLD_LIBRARY_PATH=${neko.moonshine.directory};export PATH=$DYLD_LIBRARY_PATH:$PATH;echo $DYLD_LIBRARY_PATH"/>
 		</exec>
 	</target>
 	
 	<target name="win-copy-haxe-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
-        <echo>Moving files to SDK directory ${haxe.moonshine.directory}/${haxe.sdk.directory}</echo>
-		<mkdir dir="${haxe.moonshine.directory}/${haxe.sdk.directory}"/>
-        <copy todir="${haxe.moonshine.directory}/${haxe.sdk.directory}" overwrite="true">
+        <echo>Moving files to SDK directory ${haxe.moonshine.directory}</echo>
+		<mkdir dir="${haxe.moonshine.directory}"/>
+        <copy todir="${haxe.moonshine.directory}" overwrite="true">
         	<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
         	<fileset dir="${basedir}/${haxe.temp.folder}/haxe_20211022152000_ab0c054">
         		<include name="**"/>
         	</fileset>
 		</copy>
-		<echo>Files moved into ${haxe.moonshine.directory}/${haxe.sdk.directory}</echo>
+		<echo>Files moved into ${haxe.moonshine.directory}</echo>
     </target>
 
 	<target name="win-copy-neko-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
-		<echo>Moving files to SDK directory ${neko.moonshine.directory}/${neko.sdk.directory}</echo>
-		<mkdir dir="${neko.moonshine.directory}/${neko.sdk.directory}"/>
-		<copy todir="${neko.moonshine.directory}/${neko.sdk.directory}" overwrite="true">
+		<echo>Moving files to SDK directory ${neko.moonshine.directory}</echo>
+		<mkdir dir="${neko.moonshine.directory}"/>
+		<copy todir="${neko.moonshine.directory}" overwrite="true">
 			<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
 			<fileset dir="${basedir}/${haxe.temp.folder}/${neko.download.file.name.only}"/>
 		</copy>
-		<echo>Files moved into ${neko.moonshine.directory}/${neko.sdk.directory}</echo>
+		<echo>Files moved into ${neko.moonshine.directory}</echo>
 	</target>
 		
 	<!-- Deletes temporary files for Windows -->
@@ -223,7 +229,7 @@
 		<delete file="${basedir}/${neko.download.file}" />
 		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,run-additional-setup,get-neko-sdk,untar-neko-sdk,mac-copy-neko-dir">
+	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,get-neko-sdk,untar-neko-sdk,mac-copy-neko-dir,run-additional-setup">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<delete file="${basedir}/${haxe.download.file}" />
 		<delete file="${basedir}/${neko.download.file}" />

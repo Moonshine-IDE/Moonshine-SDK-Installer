@@ -7,10 +7,10 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
-		import actionScripts.utils.HarmanInstallerSymlinkFix;
-		import actionScripts.utils.LinkVerifierAS;
+			import actionScripts.utils.HarmanInstallerSymlinkFix;
+			import actionScripts.utils.LinkVerifierAS;
 
-		import flash.utils.clearTimeout;
+			import flash.utils.clearTimeout;
 			import flash.utils.setTimeout;
 			
 			import mx.events.FlexEvent;
@@ -308,10 +308,11 @@
 								true
 						);
 						INSTALLER_APACHE_FLEX.runHaxeInstallerScript(
-								targetAntFile,
-								item,
-								neko
-						);
+									targetAntFile,
+									item,
+									neko,
+									HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Haxe"
+							);
 						break;
 					default:
 						archiveDownloader = new ArchiveDownloader(item);

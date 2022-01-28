@@ -2557,7 +2557,7 @@ variables are not required because the locations of these pieces are known.
 			}
 		}
 
-		public function runHaxeInstallerScript(antPath:File, haxe:Object, neko:Object):void
+		public function runHaxeInstallerScript(antPath:File, haxe:Object, neko:Object, haxeDirectoryRoot:String):void
 		{
 			ant = new Ant();
 			ant.output = output;
@@ -2604,6 +2604,8 @@ variables are not required because the locations of these pieces are known.
 			context["neko.download.server"] = downloadURLSplit.join("/") + "/";
 			context["neko.moonshine.directory"] = neko.installToPath;
 			context["neko.version"] = neko.version;
+
+			context["haxe.moonshine.directory.root"] = haxeDirectoryRoot;
 
 			if (file.exists && !ant.processXMLFile(file, context, true))
 			{
