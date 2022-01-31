@@ -217,13 +217,15 @@
 		<mkdir dir="${neko.moonshine.directory}"/>
 		<copy todir="${neko.moonshine.directory}" overwrite="true">
 			<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
-			<fileset dir="${basedir}/${haxe.temp.folder}/${neko.download.file.name.only}"/>
+			<fileset dir="${basedir}/${haxe.temp.folder}/${neko.download.file.name.only}">
+				<include name="**"/>
+			</fileset>
 		</copy>
 		<echo>Files moved into ${neko.moonshine.directory}</echo>
 	</target>
 		
 	<!-- Deletes temporary files for Windows -->
-	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir,run-additional-setup,get-neko-sdk,unzip-neko-sdk,win-copy-neko-dir">
+	<target name="dispose-temp-windows" depends="get-haxe-sdk,unzip-haxe-sdk,win-copy-haxe-dir,get-neko-sdk,unzip-neko-sdk,win-copy-neko-dir">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<delete file="${basedir}/${haxe.download.file}" />
 		<delete file="${basedir}/${neko.download.file}" />

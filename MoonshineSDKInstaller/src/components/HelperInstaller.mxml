@@ -7,9 +7,6 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
-			import actionScripts.utils.HarmanInstallerSymlinkFix;
-			import actionScripts.utils.LinkVerifierAS;
-
 			import flash.utils.clearTimeout;
 			import flash.utils.setTimeout;
 			
@@ -19,14 +16,17 @@
 			
 			import spark.components.Alert;
 			
+			import actionScripts.events.GeneralEvent;
 			import actionScripts.locator.HelperModel;
 			import actionScripts.managers.CookieManager;
 			import actionScripts.managers.GitSVNDetector;
 			import actionScripts.ui.views.HelperViewWrapper;
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HarmanInstallerScriptFix;
+			import actionScripts.utils.HarmanInstallerSymlinkFix;
+			import actionScripts.utils.HaxeWindowsInstallHelper;
 			import actionScripts.utils.HelperUtils;
-			import actionScripts.utils.LinkVerifier;
+			import actionScripts.utils.LinkVerifierAS;
 			import actionScripts.utils.MoonshineNotifier;
 			import actionScripts.utils.Parser;
 			import actionScripts.valueObjects.ComponentTypes;
@@ -70,6 +70,8 @@
 			private var itemDownloading:ComponentVO;
 			private var helperViewWrapper:HelperViewWrapper;
 			private var isHarmanAIRDownloading:Boolean;
+			private var haxeWindowsInstallHelper:HaxeWindowsInstallHelper;
+			private var isHaxeWindowsInstalled:Boolean;
 
 			private var _moonshineNotifier:MoonshineNotifier;
 			private function get moonshineNotifier():MoonshineNotifier
@@ -415,6 +417,20 @@
 
 				if (itemDownloading.type == ComponentTypes.TYPE_HAXE)
 				{
+					// because of the environment-setup problem through
+					// Ant build script on Windows 
+					// (https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/13#issuecomment-1024126730)
+					// we chose to split the process in two - Ant and AS3 on Windows run.
+					// macOS process remain in one Ant file. 
+					if (!HelperConstants.IS_MACOS && !isHaxeWindowsInstalled)
+					{
+						itemDownloading.isDownloaded = false;
+						itemDownloading.isDownloading = true;
+						
+						initHaxeWindowsInstallHelper();
+						return;
+					}
+					
 					var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
 					neko.isDownloading = false;
 					neko.isDownloaded = true;
@@ -703,6 +719,41 @@
 					event.target.removeEventListener(Event.SELECT, onSelectHandler);
 					event.target.removeEventListener(Event.CANCEL, onCancelHandler);
 				}
+			}
+			
+			private function initHaxeWindowsInstallHelper():void
+			{
+				haxeWindowsInstallHelper = new HaxeWindowsInstallHelper();
+				haxeWindowsInstallHelper.addEventListener(HaxeWindowsInstallHelper.EVENT_INSTALL_COMPLETES, onHaxeWindowsInstallCompletes, false, 0, true);
+				haxeWindowsInstallHelper.addEventListener(HaxeWindowsInstallHelper.EVENT_INSTALL_OUTPUT, onHaxeWindowsInstallOutput, false, 0, true);
+				haxeWindowsInstallHelper.addEventListener(HaxeWindowsInstallHelper.EVENT_INSTALL_ERROR, onHaxeWindowsInstallError, false, 0, true);
+				haxeWindowsInstallHelper.execute();
+			}
+			
+			private function disposeHaxeWindowsInstallHelper():void
+			{
+				haxeWindowsInstallHelper.removeEventListener(HaxeWindowsInstallHelper.EVENT_INSTALL_COMPLETES, onHaxeWindowsInstallCompletes);
+				haxeWindowsInstallHelper.removeEventListener(HaxeWindowsInstallHelper.EVENT_INSTALL_OUTPUT, onHaxeWindowsInstallOutput);
+				haxeWindowsInstallHelper.removeEventListener(HaxeWindowsInstallHelper.EVENT_INSTALL_ERROR, onHaxeWindowsInstallError);
+				haxeWindowsInstallHelper = null;
+			}
+			
+			private function onHaxeWindowsInstallCompletes(event:GeneralEvent):void
+			{
+				disposeHaxeWindowsInstallHelper();
+				isHaxeWindowsInstalled = true;
+				onInstallationFinished(null);
+			}
+			
+			private function onHaxeWindowsInstallOutput(event:GeneralEvent):void
+			{
+				lblLastMessage.text = (event.value as String);
+			}
+			
+			private function onHaxeWindowsInstallError(event:GeneralEvent):void
+			{
+				disposeHaxeWindowsInstallHelper();
+				onInstallAborted(new GenericEvent(GenericEvent.INSTALL_ABORTED, event.value));
 			}
 			
 		]]>
