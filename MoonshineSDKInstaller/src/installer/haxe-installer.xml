@@ -231,7 +231,7 @@
 		<delete file="${basedir}/${neko.download.file}" />
 		<echo>Deleted temp files.</echo>
 	</target>
-	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,get-neko-sdk,untar-neko-sdk,mac-copy-neko-dir,run-additional-setup">
+	<target name="dispose-temp-UNIX" depends="get-haxe-sdk,untar-haxe-sdk,mac-copy-haxe-dir,get-neko-sdk,untar-neko-sdk,mac-copy-neko-dir">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<delete file="${basedir}/${haxe.download.file}" />
 		<delete file="${basedir}/${neko.download.file}" />

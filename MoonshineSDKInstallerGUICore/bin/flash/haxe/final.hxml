@@ -1,19 +1,19 @@
 
 --macro lime._internal.macros.DefineMacro.run()
--cp /usr/local/lib/haxe/lib/lime/7,9,0/src
+-cp /Users/santanu/Downloads/MoonshineSDKs/Haxe/lib/lime/7,9,0/src
 -D lime=7.9.0
--cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,8/src
+-cp /Users/santanu/Downloads/MoonshineSDKs/Haxe/lib/feathersui/1,0,0-beta,8/src
 -D feathersui=1.0.0-beta.8
--cp /usr/local/lib/haxe/lib/actuate/1,8,9/src
+-cp /Users/santanu/Downloads/MoonshineSDKs/Haxe/lib/actuate/1,8,9/src
 -D actuate=1.8.9
--cp /usr/local/lib/haxe/lib/hxargs/3,0,2
+-cp /Users/santanu/Downloads/MoonshineSDKs/Haxe/lib/hxargs/3,0,2
 -D hxargs=3.0.2
 --macro openfl.utils._internal.ExtraParamsMacro.include()
--cp /usr/local/lib/haxe/lib/openfl/9,1,0/src
+-cp /Users/santanu/Downloads/MoonshineSDKs/Haxe/lib/openfl/9,1,0/src
 -D openfl=9.1.0
 -cp src
 -cp externs
--cp /usr/local/lib/haxe/lib/openfl/9,1,0/lib/flash-externs/src
+-cp /Users/santanu/Downloads/MoonshineSDKs/Haxe/lib/openfl/9,1,0/lib/flash-externs/src
 -D MAC_USE_CURRENT_SDK=1
 -D native-trace
 -D tools=7.9.0
