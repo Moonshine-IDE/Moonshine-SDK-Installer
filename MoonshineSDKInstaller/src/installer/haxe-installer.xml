@@ -194,10 +194,10 @@
 		<!-- We need to set an environment vairable to point Neko to overcome haxe execution error
 		 as discussed here:
 		 https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/13#issuecomment-1023609257 -->
-		<exec executable="/bin/bash" failonerror="true">
+		<!--exec executable="/bin/bash" failonerror="true">
 			<arg value="-c"/>
 			<arg value="export DYLD_LIBRARY_PATH=${neko.moonshine.directory};export PATH=$DYLD_LIBRARY_PATH:$PATH;echo $DYLD_LIBRARY_PATH"/>
-		</exec>
+		</exec-->
 	</target>
 	
 	<target name="win-copy-haxe-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">

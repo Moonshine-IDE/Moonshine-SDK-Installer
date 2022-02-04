@@ -30,15 +30,23 @@ package actionScripts.utils
 		
 		public function HaxeInstallHelper()
 		{
+			var haxe:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_HAXE);
 			var haxeLibPath:String = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Haxe").nativePath +
 					File.separator + "lib";
 			haxeSetupCommands = [
-				"haxelib setup --always "+ haxeLibPath,
 				"haxelib install feathersui --quiet",
 				"haxelib install openfl --quiet",
 				"haxelib install actuate --quiet",
 				"haxelib install lime --quiet"
 			];
+			if (HelperConstants.IS_MACOS)
+			{
+				haxeSetupCommands.insertAt(0, "echo \""+ haxeLibPath +"\" | haxelib setup");
+			}
+			else
+			{
+				haxeSetupCommands.insertAt(0, "haxelib setup --always "+ haxeLibPath);
+			}
 		}
 		
 		public function execute():void
