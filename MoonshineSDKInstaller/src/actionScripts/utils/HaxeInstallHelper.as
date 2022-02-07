@@ -31,7 +31,6 @@ package actionScripts.utils
 		
 		public function HaxeInstallHelper()
 		{
-			var haxe:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_HAXE);
 			var haxeLibPath:String = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Haxe").nativePath +
 					File.separator + "lib";
 			haxeSetupCommands = [
@@ -43,19 +42,6 @@ package actionScripts.utils
 			if (HelperConstants.IS_MACOS)
 			{
 				haxeSetupCommands.insertAt(0, "echo \""+ haxeLibPath +"\" | haxelib setup");
-				haxeSetupCommands.push("ln -s ../libneko.dylib");
-				haxeSetupCommands.push("ln -s ../libneko.2.dylib");
-				haxeSetupCommands.push("ln -s ../libneko.2.3.0.dylib");
-				haxeSetupCommands.push("ln -s ../std.ndll");
-				haxeSetupCommands.push("ln -s ../mod_neko2.ndll");
-				haxeSetupCommands.push("ln -s ../mysql.ndll");
-				haxeSetupCommands.push("ln -s ../regexp.ndll");
-				haxeSetupCommands.push("ln -s ../mysql5.ndll");
-				haxeSetupCommands.push("ln -s ../zlib.ndll");
-				haxeSetupCommands.push("ln -s ../sqlite.ndll");
-				haxeSetupCommands.push("ln -s ../mod_tora2.ndll");
-				haxeSetupCommands.push("ln -s ../ui.ndll");
-				haxeSetupCommands.push("ln -s ../ssl.ndll");
 			}
 			else
 			{
@@ -117,8 +103,8 @@ package actionScripts.utils
 			
 			if (FileUtils.isPathExists(neko.installToPath))
 			{
-				setCommand += getSetExportWithoutQuote("NEKO_HOME", neko.installToPath);
-				setPathCommand += (HelperConstants.IS_MACOS ? "$NEKO_HOME:" : "%NEKO_HOME%;");
+				setCommand += getSetExportWithoutQuote("DYLD_LIBRARY_PATH", neko.installToPath);
+				setPathCommand += (HelperConstants.IS_MACOS ? "$DYLD_LIBRARY_PATH:" : "%DYLD_LIBRARY_PATH%;");
 				isValidToExecute = true;
 			}
 			
