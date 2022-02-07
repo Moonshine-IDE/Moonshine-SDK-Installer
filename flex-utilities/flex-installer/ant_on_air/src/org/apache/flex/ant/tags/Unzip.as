@@ -177,7 +177,8 @@ package org.apache.flex.ant.tags
         }
         
         private function unzip(fileToUnzip:File):Boolean {
-            if (Capabilities.os.indexOf("Win") != -1)
+            if ((fileToUnzip.extension.toLowerCase() == "zip") &&
+                    (Capabilities.os.indexOf("Win") != -1))
             {
                 winUnzip(fileToUnzip);
                 return false;
