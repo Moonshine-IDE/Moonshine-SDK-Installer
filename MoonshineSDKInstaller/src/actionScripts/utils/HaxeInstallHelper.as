@@ -7,6 +7,7 @@ package actionScripts.utils
 	import flash.events.NativeProcessExitEvent;
 	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
+	import flash.filesystem.File;
 	import flash.utils.IDataInput;
 	
 	import mx.controls.Alert;
@@ -190,7 +191,7 @@ package actionScripts.utils
 
 			customInfo.arguments = Vector.<String>([HelperConstants.IS_MACOS ? "-c" : "/c", command]);
 			customProcess = new NativeProcess();
-			customInfo.workingDirectory = haxe.installToPath;
+			customInfo.workingDirectory = new File(haxe.installToPath);
 			startShell(true);
 			customProcess.start(customInfo);
 		}
