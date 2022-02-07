@@ -42,6 +42,19 @@ package actionScripts.utils
 			if (HelperConstants.IS_MACOS)
 			{
 				haxeSetupCommands.insertAt(0, "echo \""+ haxeLibPath +"\" | haxelib setup");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/libneko.dylib $HAXE_HOME/libneko.dylib");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/libneko.2.dylib $HAXE_HOME/libneko.2.dylib");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/libneko.2.3.0.dylib $HAXE_HOME/libneko.2.3.0.dylib");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/std.ndll $HAXE_HOME/std.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/mod_neko2.ndll $HAXE_HOME/mod_neko2.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/mysql.ndll $HAXE_HOME/mysql.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/regexp.ndll $HAXE_HOME/regexp.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/mysql5.ndll $HAXE_HOME/mysql5.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/zlib.ndll $HAXE_HOME/zlib.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/sqlite.ndll $HAXE_HOME/sqlite.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/mod_tora2.ndll $HAXE_HOME/mod_tora2.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/ui.ndll $HAXE_HOME/ui.ndll");
+				haxeSetupCommands.push("ln -s $NEKO_HOME/ssl.ndll $HAXE_HOME/ssl.ndll");
 			}
 			else
 			{
