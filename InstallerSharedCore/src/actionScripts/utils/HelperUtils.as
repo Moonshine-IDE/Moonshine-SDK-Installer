@@ -1,12 +1,11 @@
 package actionScripts.utils
 {
-	import actionScripts.valueObjects.ComponentTypes;
-
 	import flash.filesystem.File;
 	
 	import mx.utils.StringUtil;
 	
 	import actionScripts.locator.HelperModel;
+	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.ComponentVariantVO;
 	import actionScripts.valueObjects.HelperConstants;
@@ -157,7 +156,9 @@ package actionScripts.utils
 				// special test to not to validate by any sub-path
 				// on macOS where the path is not command-line-tools or
 				// xcode, since the path needs to be direct executable link
-				if ((type == ComponentTypes.TYPE_GIT) && !isGitSVNSpecialPathCheckPass(originPath))
+				if (HelperConstants.IS_MACOS && 
+					(type == ComponentTypes.TYPE_GIT) && 
+					!isGitSVNSpecialPathCheckPass(originPath))
 				{
 					return false;
 				}
