@@ -3,6 +3,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+
+## Moonshine SDK Installer [4.2.0]
+
+### Summary
+
+The main updates for version 4.2.0 are Haxe and Neko installation.  This will also setup the haxelib library and expand some libraries used by Moonshine-IDE.
+
+### Added
+* Haxe and Neko SDK installation ([#13](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/13))
+
+### Changed
+* Update Harman AIR Version for Flex SDK install to 33.1.1.743 ([#86](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/86))
+* Notify both Moonshine and Moonshine Development on SDK installation ([#78](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/78))
+
+### Fixed
+* Flex SDK install fails ith Expand-Archive error ([#87](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/87))
+* Git install failed on macOS ([#85](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/85))
+
+
 ## Moonshine SDK Installer [4.1.1]
 
 ### Changed
