@@ -289,14 +289,6 @@
                     INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
                     INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
                     break;
-                case ComponentTypes.TYPE_GIT:
-                    if (HelperConstants.IS_MACOS)
-                    {
-                        progressBar.visible = lblLastMessage.visible = false;
-                        GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
-                        return;
-                    }
-                    break;
                 case ComponentTypes.TYPE_HAXE:
                     var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
                     if (!neko.isAlreadyDownloaded)
@@ -317,6 +309,16 @@
                             HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator + "Haxe"
                     );
                     break;
+				case ComponentTypes.TYPE_GIT:
+					// **IMPORTANT**
+					// we should keep TYPE_GIT as last case so for Windows the
+					// process automatically shifts into 'default' case
+					if (HelperConstants.IS_MACOS)
+					{
+						progressBar.visible = lblLastMessage.visible = false;
+						GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
+						break;
+					}
                 default:
                     archiveDownloader = new ArchiveDownloader(item);
                     archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
