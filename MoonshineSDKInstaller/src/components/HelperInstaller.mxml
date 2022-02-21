@@ -7,7 +7,9 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
-        import flash.utils.clearTimeout;
+		import actionScripts.utils.SVNMacPortsInstaller;
+
+		import flash.utils.clearTimeout;
         import flash.utils.setTimeout;
 
         import mx.events.FlexEvent;
@@ -221,6 +223,9 @@
                     case ComponentTypes.TYPE_HAXE:
                         sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Haxe");
                         break;
+					case ComponentTypes.TYPE_SVN:
+						sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("SVN");
+						break;
                 }
 
                 // create the sub-directory if not exists
@@ -309,6 +314,10 @@
                             HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator + "Haxe"
                     );
                     break;
+				case ComponentTypes.TYPE_SVN:
+					var svnMacInstaller:SVNMacPortsInstaller = new SVNMacPortsInstaller();
+					svnMacInstaller.execute();
+					break;
 				case ComponentTypes.TYPE_GIT:
 					// **IMPORTANT**
 					// we should keep TYPE_GIT as last case so for Windows the
@@ -604,6 +613,10 @@
                         onDownloadLinkVerified,
                         INSTALLER_APACHE_FLEX.apacheFlexDownloadURL);
             }
+			else if ((HelperConstants.IS_MACOS && (event.data as ComponentVO).type == ComponentTypes.TYPE_SVN))
+			{
+				onDownloadLinkVerified(true, (event.data as ComponentVO));
+			}
             else
             {
                 new LinkVerifierAS((event.data as ComponentVO), onDownloadLinkVerified);

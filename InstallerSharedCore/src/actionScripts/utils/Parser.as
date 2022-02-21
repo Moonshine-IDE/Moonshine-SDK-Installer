@@ -265,8 +265,8 @@ package actionScripts.utils
 				// Not to include Subversion download on macOS
 				if ((tmpComponent.type == ComponentTypes.TYPE_SVN) && HelperConstants.IS_MACOS)
 				{
-					tmpComponent.isDownloadable = false;
-					tmpComponent.hasWarning = "SVN installation is not currently available. You can install it through Homebrew with \"brew install svn\"";
+					tmpComponent.isDownloadable = true;
+					//tmpComponent.hasWarning = "SVN installation is not currently available. You can install it through Homebrew with \"brew install svn\"";
 				}
 				
 				model.components.add(tmpComponent);
