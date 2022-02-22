@@ -259,15 +259,6 @@ package actionScripts.utils
 					tmpComponent.licenseTitle = String(comp.license.title);
 					setDescriptionBy(comp.license.description, tmpComponent);
 				}
-
-				// temporary Fix for Subversion
-				// https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/31#issuecomment-880061856
-				// Not to include Subversion download on macOS
-				if ((tmpComponent.type == ComponentTypes.TYPE_SVN) && HelperConstants.IS_MACOS)
-				{
-					tmpComponent.isDownloadable = true;
-					//tmpComponent.hasWarning = "SVN installation is not currently available. You can install it through Homebrew with \"brew install svn\"";
-				}
 				
 				model.components.add(tmpComponent);
 			}
@@ -374,7 +365,7 @@ package actionScripts.utils
 					if (HelperConstants.IS_MACOS) return "Command Line Tools";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Git"+ File.separator +"git-"+ version;
 				case ComponentTypes.TYPE_SVN:
-					//if (HelperConstants.IS_MACOS) return "Command Line Tools";
+					if (HelperConstants.IS_MACOS) return "/opt/local/bin/Subversion";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"SVN"+ File.separator +"slik-svn-"+ version;
 				case ComponentTypes.TYPE_NODEJS:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"NodeJS"+ File.separator +"node-v"+ version;

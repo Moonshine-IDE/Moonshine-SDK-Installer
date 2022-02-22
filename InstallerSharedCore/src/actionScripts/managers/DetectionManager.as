@@ -23,7 +23,7 @@ package actionScripts.managers
 		public var environmentUtil:EnvironmentUtils;
 		
 		private var model:HelperModel = HelperModel.getInstance();
-		private var gitSvnDetector:GitSVNDetector = GitSVNDetector.getInstance();
+		private var macGitDetector:MacOSGitDetector = MacOSGitDetector.getInstance();
 		
 		private var _itemTestCount:int = -1;
 		private function get itemTestCount():int
@@ -274,7 +274,26 @@ package actionScripts.managers
 				switch (item.type)
 				{
 					case ComponentTypes.TYPE_GIT:
-						gitSvnDetector.testGitSVNmacOS(onXCodePathDetection);
+						macGitDetector.test(onXCodePathDetection);
+						break;
+					case ComponentTypes.TYPE_SVN:
+						if (HelperConstants.IS_MACOS)
+						{
+							var svnDefaultPaths:Array = ["/usr/local/bin", "/opt/local/bin"];
+							for each(var svnPath:String in svnDefaultPaths)
+							{
+								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+										item.type,
+										svnPath,
+										item.pathValidation
+								);
+								if (item.isAlreadyDownloaded)
+								{
+									item.installToPath = haxeDefaultPath;
+									break;
+								}
+							}
+						}
 						break;
 					case ComponentTypes.TYPE_NOTES:
 						new NotesDominoDetector(notifyMoonshineOnDetection);

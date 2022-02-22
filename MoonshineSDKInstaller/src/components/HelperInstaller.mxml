@@ -7,778 +7,819 @@
 		 horizontalAlign="center" gap="0">
 	<fx:Script>
 		<![CDATA[
-		import actionScripts.utils.SVNMacPortsInstaller;
-
-		import flash.utils.clearTimeout;
-        import flash.utils.setTimeout;
-
-        import mx.events.FlexEvent;
-        import mx.managers.CursorManager;
-        import mx.managers.PopUpManager;
-
-        import spark.components.Alert;
-
-        import actionScripts.events.GeneralEvent;
-        import actionScripts.locator.HelperModel;
-        import actionScripts.managers.CookieManager;
-        import actionScripts.managers.GitSVNDetector;
-        import actionScripts.ui.views.HelperViewWrapper;
-        import actionScripts.utils.FileUtils;
-        import actionScripts.utils.HarmanInstallerScriptFix;
-        import actionScripts.utils.HarmanInstallerSymlinkFix;
-        import actionScripts.utils.HaxeInstallHelper;
-        import actionScripts.utils.HelperUtils;
-        import actionScripts.utils.LinkVerifierAS;
-        import actionScripts.utils.MoonshineNotifier;
-        import actionScripts.utils.Parser;
-        import actionScripts.valueObjects.ComponentTypes;
-        import actionScripts.valueObjects.ComponentVO;
-        import actionScripts.valueObjects.ComponentVariantVO;
-        import actionScripts.valueObjects.HelperConstants;
-        import actionScripts.valueObjects.InstallerConstants;
-
-        import assets.skins.DarkButtonSkin;
-
-        import moonshine.components.HelperView;
-        import moonshine.events.HelperEvent;
-
-        import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
-        import org.apache.flex.packageflexsdk.util.ArchiveDownloader;
-        import org.apache.flex.packageflexsdk.view.events.GenericEvent;
-
-        //--------------------------------------------------------------------------
-        //
-        //  STATIC VARIABLES
-        //
-        //--------------------------------------------------------------------------
-
-        private static var INSTALLER_APACHE_FLEX:InstallApacheFlex;
-
-        //--------------------------------------------------------------------------
-        //
-        //  PRIVATE VARIABLES
-        //
-        //--------------------------------------------------------------------------
-
-        [Bindable]
-        private var sdkPathMessage:String;
-        [Bindable]
-        private var isDownloadInProgress:Boolean;
-        [Bindable]
-        private var allInstallButtonLabel:String = "INSTALL EVERYTHING NOW!";
-        [Bindable]
-        private var isDownloadedAll:Boolean;
-
-        private var model:HelperModel = HelperModel.getInstance();
-        private var packageLists:Array = [];
-        private var archiveDownloader:ArchiveDownloader;
-        private var viewResourceConstants:ViewResourceConstants;
-        private var itemDownloading:ComponentVO;
-        private var helperViewWrapper:HelperViewWrapper;
-        private var isHarmanAIRDownloading:Boolean;
-        private var haxeWindowsInstallHelper:HaxeInstallHelper;
-        private var isHaxeInstalled:Boolean;
-
-        private var _moonshineNotifier:MoonshineNotifier;
-        private function get moonshineNotifier():MoonshineNotifier
-        {
-            if (!_moonshineNotifier) _moonshineNotifier = new MoonshineNotifier();
-            return _moonshineNotifier;
-        }
-
-        private function get allInstallConfirmHandler():Function
-        {
-            return function ():void {
-                proceedAllInstallation();
-            };
-        }
-
-        private function get singleInstallConfirmHandler():Function
-        {
-            return function (item:ComponentVO):void {
-                item.isSelectedToDownload = true;
-                packageLists.push(item);
-                if (!isDownloadInProgress)
-                {
-                    flush();
-                }
-            };
-        }
-
-        //--------------------------------------------------------------------------
-        //
-        //  PRIVATE API
-        //
-        //--------------------------------------------------------------------------
-
-        private function onComplete(event:FlexEvent):void
-        {
-            attachHelperViewWrapper();
-
-            btnInstallAll.label = allInstallButtonLabel;
-
-            // initiate the original installer source
-            INSTALLER_APACHE_FLEX = new InstallApacheFlex();
-            INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
-            INSTALLER_APACHE_FLEX.moonshineFlexVersion = "4.16.1"; // default value irrespective of configuration XML
-            INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady, false, 0, true);
-            INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
-            INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_PROGRESS, onInstallProgress, false, 0, true);
-            INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_FINISH, onInstallationFinished, false, 0, true);
-            INSTALLER_APACHE_FLEX.addEventListener(InstallApacheFlex.EVENT_READY_TO_RUN_INSTALLER_SCRIPT, onReadyBeforeRunningInstallerScript, false, 0, true);
-            INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
-            INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
-
-            sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS :
-                    HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;
-        }
-
-        private function attachHelperViewWrapper():void
-        {
-            helperViewWrapper = new HelperViewWrapper(
-                    new moonshine.components.HelperView()
-            );
-
-            helperViewWrapper.percentWidth = 100;
-            helperViewWrapper.percentHeight = 100;
-            helperViewWrapper.minWidth = 0;
-            helperViewWrapper.minHeight = 0;
-
-            helperViewWrapper.isRunningInsideMoonshine = false;
-
-            grpListingArea.addElementAt(helperViewWrapper, 0);
-
-            helperViewWrapper.addEventListener(HelperEvent.DOWNLOAD_COMPONENT, onDownloadAComponentRequested, false, 0, true);
-            helperViewWrapper.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onOpenAComponentLicenseRequested, false, 0, true);
-            helperViewWrapper.addEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection, false, 0, true);
-            helperViewWrapper.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onEachComponentDownloaded, false, 0, true);
-        }
-
-        private function openLicenseView(completion:Function, singleViewItem:ComponentVO = null, showAsNonInstallView:Boolean = false):void
-        {
-            var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView, true));
-            licenses.width = this.width * .9;
-            licenses.height = this.height * .8;
-            licenses.confirmHandler = completion;
-            licenses.singleLicenseItem = singleViewItem;
-            licenses.showAsNonInstallView = showAsNonInstallView;
-            PopUpManager.centerPopUp(licenses);
-        }
-
-        private function proceedAllInstallation():void
-        {
-            // generate list of downloads
-            for each (var item:ComponentVO in model.components.array)
-            {
-                if (!item.isAlreadyDownloaded && item.isDownloadable)
-                {
-                    item.isSelectedToDownload = true;
-                    packageLists.push(item);
-                }
-            }
-
-            // start download process
-            flush();
-        }
-
-        private function prepareBeforeDownloads():void
-        {
-            // save custom path as necessary
-            if (!HelperConstants.IS_MACOS && HelperConstants.CUSTOM_PATH_SDK_WINDOWS)
-            {
-                CookieManager.getInstance().setWindowsCustomPath(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
-            }
-
-            // create root directory
-            if (!HelperConstants.DEFAULT_INSTALLATION_PATH.exists) HelperConstants.DEFAULT_INSTALLATION_PATH.createDirectory();
-
-            var sdkSubDir:File;
-            var sdkFolderName:String;
-
-            // generate sub-folders
-            for each (var item:ComponentVO in model.components.array)
-            {
-                switch (item.type)
-                {
-                    case ComponentTypes.TYPE_FLEX:
-                    case ComponentTypes.TYPE_FLEX_HARMAN:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Flex_SDK");
-                        break;
-                    case ComponentTypes.TYPE_ROYALE:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Royale_SDK");
-                        break;
-                    case ComponentTypes.TYPE_ANT:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Ant");
-                        break;
-                    case ComponentTypes.TYPE_MAVEN:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Maven");
-                        break;
-                    case ComponentTypes.TYPE_OPENJAVA:
-                    case ComponentTypes.TYPE_OPENJAVA_V8:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Java");
-                        break;
-                    case ComponentTypes.TYPE_NODEJS:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("NodeJs");
-                        break;
-                    case ComponentTypes.TYPE_HAXE:
-                        sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Haxe");
-                        break;
-					case ComponentTypes.TYPE_SVN:
-						sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("SVN");
-						break;
-                }
-
-                // create the sub-directory if not exists
-                if (!sdkSubDir.exists) sdkSubDir.createDirectory();
-            }
-        }
-
-        private function flush():void
-        {
-            updateAllInstallButtonLabel();
-            if (packageLists.length != 0 && !isDownloadInProgress)
-            {
-                prepareBeforeDownloads();
-            }
-
-            if (packageLists.length != 0)
-            {
-                isDownloadInProgress = true;
-                progressBar.visible = lblLastMessage.visible = true;
-                startSingleInstallation(packageLists.shift());
-            }
-            else
-            {
-                isDownloadInProgress = false;
-                progressBar.visible = false;
-                HelperConstants.IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH = false;
-            }
-        }
-
-        private function startSingleInstallation(item:ComponentVO):void
-        {
-            // remove existing folder before proceed
-            if (FileUtils.isPathExists(item.installToPath))
-            {
-                deleteExistingFolderBeforeDownload(item, function (item:ComponentVO):void {
-                    item.isAlreadyDownloaded = false;
-                    progressBar.visible = true;
-                    startSingleInstallation(item);
-                });
-                return;
-            }
-
-            itemDownloading = item;
-            itemDownloading.hasError = null;
-            switch (item.type)
-            {
-                case ComponentTypes.TYPE_FLEX:
-                    item.isDownloading = true;
-                    INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-                    INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
-                    INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
-                    INSTALLER_APACHE_FLEX.startInstallation();
-                    break;
-                case ComponentTypes.TYPE_FLEX_HARMAN:
-                    item.isDownloading = true;
-                    INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-                    INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_HARMAN_AIR_VERSION;
-                    INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
-                    INSTALLER_APACHE_FLEX.startInstallationHarman(HelperConstants.CONFIG_HARMAN_AIR_OBJECT);
-                    break;
-                case ComponentTypes.TYPE_FEATHERS:
-                    var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();
-                    item.isDownloading = true;
-                    INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
-                    INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
-                    INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
-                    INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
-                    break;
-                case ComponentTypes.TYPE_HAXE:
-                    var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
-                    if (!neko.isAlreadyDownloaded)
-                    {
-                        neko.isDownloading = true;
-                    }
-                    item.isDownloading = true;
-                    var targetAntFile:File = File.applicationStorageDirectory.resolvePath("haxe-installer.xml");
-                    FileUtils.copyFile(
-                            File.applicationDirectory.resolvePath("installer/haxe-installer.xml"),
-                            targetAntFile,
-                            true
-                    );
-                    INSTALLER_APACHE_FLEX.runHaxeInstallerScript(
-                            targetAntFile,
-                            item,
-                            neko,
-                            HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator + "Haxe"
-                    );
-                    break;
-				case ComponentTypes.TYPE_SVN:
-					var svnMacInstaller:SVNMacPortsInstaller = new SVNMacPortsInstaller();
-					svnMacInstaller.execute();
-					break;
-				case ComponentTypes.TYPE_GIT:
-					// **IMPORTANT**
-					// we should keep TYPE_GIT as last case so for Windows the
-					// process automatically shifts into 'default' case
-					if (HelperConstants.IS_MACOS)
-					{
-						progressBar.visible = lblLastMessage.visible = false;
-						GitSVNDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
-						break;
-					}
-                default:
-                    archiveDownloader = new ArchiveDownloader(item);
-                    archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
-                    archiveDownloader.viewResourceConstants = viewResourceConstants;
-                    archiveDownloader.startInstallation();
-                    break;
-            }
-        }
-
-        private function deleteExistingFolderBeforeDownload(item:ComponentVO, successFn:Function):void
-        {
-            lblLastMessage.setStyle("fontWeight", "bold");
-            lblLastMessage.text = "Attempting to remove existing \"" + item.title + "\" folder. This may take longer..";
-            progressBar.visible = false;
-            CursorManager.setBusyCursor();
-            FileUtils.deleteDirectoryAsync(new File(item.installToPath), onDeletionCompleted, onDeleteionError);
-
-            /*
-            * @local
-            */
-            function onDeletionCompleted():void
-            {
-                CursorManager.removeBusyCursor();
-                lblLastMessage.setStyle("fontWeight", "normal");
-                successFn(item);
-            }
-
-            function onDeleteionError(value:String):void
-            {
-                CursorManager.removeBusyCursor();
-                lblLastMessage.setStyle("fontWeight", "normal");
-                Alert.show(value, "Error!");
-            }
-        }
-
-        //--------------------------------------------------------------------------
-        //
-        //  LISTENERS API
-        //
-        //--------------------------------------------------------------------------
-
-        private function onReadyBeforeRunningInstallerScript(event:Event):void
-        {
-            // necessary installation requisite fix for Harman
-            if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
-            {
-                new HarmanInstallerScriptFix(itemDownloading);
-            }
-
-            INSTALLER_APACHE_FLEX.continueToRunInstallerScript();
-        }
-
-        private function onInstallerIsReady(event:GenericEvent):void
-        {
-            INSTALLER_APACHE_FLEX.removeEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady);
-            viewResourceConstants = INSTALLER_APACHE_FLEX.viewResourceConstants;
-            HelperConstants.IS_INSTALLER_READY = true;
-            helperViewWrapper.setHelperReady();
-            // TODO: next ui settlements
-        }
-
-        private function onInstallAborted(event:GenericEvent):void
-        {
-            if (itemDownloading)
-            {
-                itemDownloading.isDownloading = false;
-                itemDownloading.isSelectedToDownload = false;
-                itemDownloading.hasError = event.value ? event.value as String : null;
-                flush();
-            }
-        }
-
-        private function onInstallProgress(event:GenericEvent):void
-        {
-            progressBar.percent = event.value as Number;
-        }
-
-        private function onInstallationFinished(event:GenericEvent):void
-        {
-            // TEMPORARY PATCH-FIX
-            // https://github.com/prominic/Moonshine-SDK-Installer/issues/17
-            // should be removed when Apache introduce their own fix
-            if (itemDownloading.type == ComponentTypes.TYPE_ROYALE)
-            {
-                var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.get(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
-                if (variantVO.title.indexOf(ComponentVariantVO.TYPE_STABLE) != -1)
-                {
-                    var timeoutValue:uint = setTimeout(function ():void {
-                        clearTimeout(timeoutValue);
-                        var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
-                        if (fileToPatch.exists)
-                        {
-                            var fileToPatchWith:File = File.applicationDirectory.resolvePath("scripts/royale-config.xml");
-                            FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
-                        }
-                    }, 1000);
-                }
-            }
-
-            if (itemDownloading.type == ComponentTypes.TYPE_HAXE)
-            {
-                // because of the environment-setup problem through
-                // Ant build script on Windows
-                // (https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/13#issuecomment-1024126730)
-                // we chose to split the process in two - Ant and AS3 on Windows run.
-                // macOS process remain in one Ant file.
-                if (!isHaxeInstalled)
-                {
-                    itemDownloading.isDownloaded = false;
-                    itemDownloading.isDownloading = true;
-
-                    initHaxeWindowsInstallHelper();
-                    return;
-                }
-
-                var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
-                neko.isDownloading = false;
-                neko.isDownloaded = true;
-                neko.isSelectedToDownload = false;
-                neko.isAlreadyDownloaded = true;
-            }
-
-            if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
-            {
-                var installFolder:File = new File(itemDownloading.installToPath);
-
-                // fixing flex-configs
-                var flexConfig:File = installFolder.resolvePath("frameworks/flex-config.xml");
-                var flexConfigContent:String = FileUtils.readFromFile(flexConfig) as String;
-                flexConfigContent = flexConfigContent.replace(/<target-player>.*?<\/target-player>/g, "<target-player>32.0</target-player>");
-                FileUtils.writeToFile(flexConfig, flexConfigContent);
-
-                // fixing air-config
-                flexConfig = installFolder.resolvePath("frameworks/air-config.xml");
-                flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
-                flexConfigContent = flexConfigContent.replace(/<target-player>.*?<\/target-player>/g, "<target-player>32.0</target-player>");
-                FileUtils.writeToFile(flexConfig, flexConfigContent);
-
-                // fixing flex-sdk-description
-                flexConfig = installFolder.resolvePath("flex-sdk-description.xml");
-                flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
-                flexConfigContent = flexConfigContent.replace(/FP\d+.\d+/, "FP32.0");
-                flexConfigContent = flexConfigContent.replace(/AIR\d+.\d+/, "AIR33.1");
-                FileUtils.writeToFile(flexConfig, flexConfigContent);
-
-                if (HelperConstants.IS_MACOS && !isHarmanAIRDownloading)
-                {
-                    isHarmanAIRDownloading = true;
-                    itemDownloading.isDownloaded = false;
-                    itemDownloading.isDownloading = true;
-
-                    var symLinkFix:HarmanInstallerSymlinkFix = new HarmanInstallerSymlinkFix();
-                    symLinkFix.addEventListener(HarmanInstallerSymlinkFix.EVENT_SYMLINK_FIXED, onAntScriptFileGenerated);
-                    symLinkFix.runCheck(installFolder);
-
-                    function onAntScriptFileGenerated(symLinkEvent:Event):void
-                    {
-                        symLinkEvent.target.removeEventListener(HarmanInstallerSymlinkFix.EVENT_SYMLINK_FIXED, onAntScriptFileGenerated);
-                        flushDownloadQueue();
-                    }
-
-                    return;
-                }
-            }
-
-            /*if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
-            {
-                isHarmanAIRDownloading = true;
-                itemDownloading.isDownloaded = false;
-                itemDownloading.isDownloading = true;
-
-                var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
-                FileUtils.copyFile(
-                        File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
-                        targetAntFile,
-                        true
-                );
-
-                var tmpArr:Array = itemDownloading.downloadURL.split("/");
-                var packageFileName:String = tmpArr[tmpArr.length - 1];
-                packageFileName = HelperConstants.IS_MACOS ?
-                        packageFileName.replace(".tar.gz", "") :
-                        packageFileName.replace(".zip", "");
-
-                INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
-                        targetAntFile,
-                        HelperConstants.CONFIG_HARMAN_AIR_SERVER,
-                        HelperConstants.CONFIG_HARMAN_AIR_FILE,
-                        "?license=accepted",
-                        HelperConstants.CONFIG_HARMAN_AIR_VERSION,
-                        packageFileName
-                );
-
-                return;
-            }*/
-
-            // sometime distributed zip/tar creates an additional
-            // folder to the target directory which became complicated
-            // to determine a proper path to the sdk internally
-            // in that case we should make sure everything place in
-            // the folder that SDK Installer selects
-            var installedPath:File = new File(itemDownloading.installToPath);
-            var files:Array = installedPath.exists ? installedPath.getDirectoryListing() : null;
-            if (files && (files.length == 1))
-            {
-                FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,
-                        ((itemDownloading.type == ComponentTypes.TYPE_OPENJAVA || itemDownloading.type == ComponentTypes.TYPE_OPENJAVA_V8) && HelperConstants.IS_MACOS) ?
-                                "Contents/Home" : null);
-            }
-            else
-            {
-                flushDownloadQueue();
-            }
-
-            /*
-             * @local
-             */
-            function onFileFoldersMoved():void
-            {
-                flushDownloadQueue();
-            }
-
-            function onFileFoldersMoveError(error:String):void
-            {
-                trace(error);
-                // terminate by some means?
-            }
-
-            function flushDownloadQueue():void
-            {
-                itemDownloading.isDownloaded = true;
-                itemDownloading.isDownloading = false;
-                itemDownloading.isSelectedToDownload = false;
-                itemDownloading.isAlreadyDownloaded = true;
-
-                if (!HelperConstants.IS_MACOS) onGitSVNInstallWindows(itemDownloading);
-                moonshineNotifier.notifyMoonshineWithUpdate();
-
-                flush();
-            }
-        }
-
-        private function onMessageUpdates(event:Event):void
-        {
-            lblLastMessage.text = INSTALLER_APACHE_FLEX.lastFilteredPublicMessage;
-        }
-
-        private function onDownloadAComponentRequested(event:HelperEvent):void
-        {
-            // give a check before opening license view
-            // in case all items are downloaded or downloading
-            var tmpCountLeftToDownload:int;
-            for each (var item:ComponentVO in model.components.array)
-            {
-                if ((item.isAlreadyDownloaded || item.isDownloaded ||
-                        item.isDownloading || item.isSelectedToDownload ||
-                        !item.isDownloadable) && !item.downloadVariants)
-                {
-                    continue;
-                }
-
-                if (item.downloadVariants &&
-                        !item.downloadVariants.get(item.selectedVariantIndex).isReDownloadAvailable &&
-                        item.isAlreadyDownloaded)
-                {
-                    continue;
-                }
-
-                tmpCountLeftToDownload++;
-            }
-
-            if (tmpCountLeftToDownload == 0)
-            {
-                Alert.show("All item(s) either downloading or being downloaded.", "Note!");
-                return;
-            }
-
-            (event.data as ComponentVO).isDownloading = true;
-            if (((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX) ||
-                    (event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX_HARMAN)
-            {
-                new LinkVerifierAS((event.data as ComponentVO),
-                        onDownloadLinkVerified,
-                        INSTALLER_APACHE_FLEX.apacheFlexDownloadURL);
-            }
-			else if ((HelperConstants.IS_MACOS && (event.data as ComponentVO).type == ComponentTypes.TYPE_SVN))
+			import actionScripts.utils.SVNMacPortsInstaller;
+
+			import flash.utils.clearTimeout;
+			import flash.utils.setTimeout;
+
+			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
+
+			import spark.components.Alert;
+
+			import actionScripts.events.GeneralEvent;
+			import actionScripts.locator.HelperModel;
+			import actionScripts.managers.CookieManager;
+			import actionScripts.managers.MacOSGitDetector;
+			import actionScripts.ui.views.HelperViewWrapper;
+			import actionScripts.utils.FileUtils;
+			import actionScripts.utils.HarmanInstallerScriptFix;
+			import actionScripts.utils.HarmanInstallerSymlinkFix;
+			import actionScripts.utils.HaxeInstallHelper;
+			import actionScripts.utils.HelperUtils;
+			import actionScripts.utils.LinkVerifierAS;
+			import actionScripts.utils.MoonshineNotifier;
+			import actionScripts.utils.Parser;
+			import actionScripts.valueObjects.ComponentTypes;
+			import actionScripts.valueObjects.ComponentVO;
+			import actionScripts.valueObjects.ComponentVariantVO;
+			import actionScripts.valueObjects.HelperConstants;
+			import actionScripts.valueObjects.InstallerConstants;
+
+			import assets.skins.DarkButtonSkin;
+
+			import moonshine.components.HelperView;
+			import moonshine.events.HelperEvent;
+
+			import org.apache.flex.packageflexsdk.resource.ViewResourceConstants;
+			import org.apache.flex.packageflexsdk.util.ArchiveDownloader;
+			import org.apache.flex.packageflexsdk.view.events.GenericEvent;
+
+			//--------------------------------------------------------------------------
+			//
+			//  STATIC VARIABLES
+			//
+			//--------------------------------------------------------------------------
+
+			private static var INSTALLER_APACHE_FLEX:InstallApacheFlex;
+
+			//--------------------------------------------------------------------------
+			//
+			//  PRIVATE VARIABLES
+			//
+			//--------------------------------------------------------------------------
+
+			[Bindable]
+			private var sdkPathMessage:String;
+			[Bindable]
+			private var isDownloadInProgress:Boolean;
+			[Bindable]
+			private var allInstallButtonLabel:String = "INSTALL EVERYTHING NOW!";
+			[Bindable]
+			private var isDownloadedAll:Boolean;
+
+			private var model:HelperModel = HelperModel.getInstance();
+			private var packageLists:Array = [];
+			private var archiveDownloader:ArchiveDownloader;
+			private var viewResourceConstants:ViewResourceConstants;
+			private var itemDownloading:ComponentVO;
+			private var helperViewWrapper:HelperViewWrapper;
+			private var isHarmanAIRDownloading:Boolean;
+			private var haxeWindowsInstallHelper:HaxeInstallHelper;
+			private var svnMacPortsInstaller:SVNMacPortsInstaller;
+			private var isHaxeInstalled:Boolean;
+
+			private var _moonshineNotifier:MoonshineNotifier;
+			private function get moonshineNotifier():MoonshineNotifier
 			{
-				onDownloadLinkVerified(true, (event.data as ComponentVO));
+				if (!_moonshineNotifier) _moonshineNotifier = new MoonshineNotifier();
+				return _moonshineNotifier;
 			}
-            else
-            {
-                new LinkVerifierAS((event.data as ComponentVO), onDownloadLinkVerified);
-            }
-        }
 
-        private function onDownloadLinkVerified(isSuccess:Boolean, component:ComponentVO):void
-        {
-            component.isDownloading = false;
+			private function get allInstallConfirmHandler():Function
+			{
+				return function ():void {
+					proceedAllInstallation();
+				};
+			}
 
-            // special handling for Git/macOS
-            // where we run special shell-script to download
-            // git on macOS
-            if ((component.type == ComponentTypes.TYPE_GIT) &&
-                    HelperConstants.IS_MACOS)
-            {
-                isSuccess = true;
-            }
+			private function get singleInstallConfirmHandler():Function
+			{
+				return function (item:ComponentVO):void {
+					item.isSelectedToDownload = true;
+					packageLists.push(item);
+					if (!isDownloadInProgress)
+					{
+						flush();
+					}
+				};
+			}
 
-            if (isSuccess)
-            {
-                openLicenseView(singleInstallConfirmHandler, component);
-            }
-            else
-            {
-                Alert.show("Oops! " + component.title + " download is currently unavailable!\nPlease, contact the administrator, or try again later.", "Error!");
-            }
-        }
+			//--------------------------------------------------------------------------
+			//
+			//  PRIVATE API
+			//
+			//--------------------------------------------------------------------------
 
-        private function onOpenAComponentLicenseRequested(event:HelperEvent):void
-        {
-            openLicenseView(singleInstallConfirmHandler, (event.data as ComponentVO), true);
-        }
+			private function onComplete(event:FlexEvent):void
+			{
+				attachHelperViewWrapper();
 
-        private function onAllComponentsFinishDetection(event:HelperEvent):void
-        {
-            helperViewWrapper.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection);
+				btnInstallAll.label = allInstallButtonLabel;
 
-            // determine disk-usage for total pending
-            updateAllInstallButtonLabel();
+				// initiate the original installer source
+				INSTALLER_APACHE_FLEX = new InstallApacheFlex();
+				INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
+				INSTALLER_APACHE_FLEX.moonshineFlexVersion = "4.16.1"; // default value irrespective of configuration XML
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_ABORTED, onInstallAborted, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_PROGRESS, onInstallProgress, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(GenericEvent.INSTALL_FINISH, onInstallationFinished, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener(InstallApacheFlex.EVENT_READY_TO_RUN_INSTALLER_SCRIPT, onReadyBeforeRunningInstallerScript, false, 0, true);
+				INSTALLER_APACHE_FLEX.addEventListener("messageChanged", onMessageUpdates, false, 0, true);
+				INSTALLER_APACHE_FLEX.handleApplicationComplete(null);
 
-            helperViewWrapper.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onEachComponentDownloaded, false, 0, true);
-        }
+				sdkPathMessage = HelperConstants.IS_CUSTOM_WINDOWS_PATH ? HelperConstants.CUSTOM_PATH_SDK_WINDOWS :
+						HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath;
+			}
 
-        private function onEachComponentDownloaded(event:HelperEvent):void
-        {
-            // update total pending size after each downloads
-            updateAllInstallButtonLabel();
-        }
+			private function attachHelperViewWrapper():void
+			{
+				helperViewWrapper = new HelperViewWrapper(
+						new moonshine.components.HelperView()
+				);
 
-        private function updateAllInstallButtonLabel():void
-        {
-            var tmpSize:String = HelperUtils.getTotalDiskSizePendingItems();
-            btnInstallAll.label = allInstallButtonLabel + " (" + tmpSize + ")";
-            isDownloadedAll = (tmpSize == "0 MB");
-        }
+				helperViewWrapper.percentWidth = 100;
+				helperViewWrapper.percentHeight = 100;
+				helperViewWrapper.minWidth = 0;
+				helperViewWrapper.minHeight = 0;
 
-        private function onShowLog(event:MouseEvent):void
-        {
-            INSTALLER_APACHE_FLEX.showConsole(event);
-        }
+				helperViewWrapper.isRunningInsideMoonshine = false;
 
-        private function onGitSVNInstallMacOS(value:String, type:String):void
-        {
-            var gitComponent:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
-            if (type == HelperConstants.START)
-            {
-                // continue for other download in queue
-                // while external installer opened
-                // by macos
-                gitComponent.isSelectedToDownload = true;
-                flush();
-                return;
-            }
-            else if (type == HelperConstants.ERROR && value)
-            {
-                // TODO: show error somewhere
-                gitComponent.isAlreadyDownloaded = false;
-            }
-            else if (type == HelperConstants.SUCCESS)
-            {
-                gitComponent.isAlreadyDownloaded = true;
-                gitComponent.isSelectedToDownload = false;
-                gitComponent.installToPath = value;
-                moonshineNotifier.notifyMoonshineWithUpdate();
-            }
+				grpListingArea.addElementAt(helperViewWrapper, 0);
 
-            itemDownloading.isDownloading = false;
-            flush();
-        }
+				helperViewWrapper.addEventListener(HelperEvent.DOWNLOAD_COMPONENT, onDownloadAComponentRequested, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.OPEN_COMPONENT_LICENSE, onOpenAComponentLicenseRequested, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection, false, 0, true);
+				helperViewWrapper.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onEachComponentDownloaded, false, 0, true);
+			}
 
-        private function onGitSVNInstallWindows(item:ComponentVO):void
-        {
-            // git and svn requires binary path
-            // to the sdk folder on Windows
-            if (item.type == ComponentTypes.TYPE_GIT || item.type == ComponentTypes.TYPE_SVN)
-            {
-                item.installToPath += File.separator + item.pathValidation[0];
-            }
-        }
+			private function openLicenseView(completion:Function, singleViewItem:ComponentVO = null, showAsNonInstallView:Boolean = false):void
+			{
+				var licenses:AllLicenseView = AllLicenseView(PopUpManager.createPopUp(this, AllLicenseView, true));
+				licenses.width = this.width * .9;
+				licenses.height = this.height * .8;
+				licenses.confirmHandler = completion;
+				licenses.singleLicenseItem = singleViewItem;
+				licenses.showAsNonInstallView = showAsNonInstallView;
+				PopUpManager.centerPopUp(licenses);
+			}
 
-        protected function onWindowsCustomPathRequest(event:MouseEvent):void
-        {
-            var customPath:File = new File();
-            customPath.addEventListener(Event.SELECT, onSelectHandler);
-            customPath.addEventListener(Event.CANCEL, onCancelHandler);
-            customPath.browseForDirectory("Select SDK Location");
+			private function proceedAllInstallation():void
+			{
+				// generate list of downloads
+				for each (var item:ComponentVO in model.components.array)
+				{
+					if (!item.isAlreadyDownloaded && item.isDownloadable)
+					{
+						item.isSelectedToDownload = true;
+						packageLists.push(item);
+					}
+				}
 
-            /*
-            *@local
-            */
-            function onSelectHandler(event:Event):void
-            {
-                HelperUtils.updatePathWithCustomWindows(sdkPathMessage = (event.target as File).resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME).nativePath);
-                onCancelHandler(event);
-            }
+				// start download process
+				flush();
+			}
 
-            function onCancelHandler(event:Event):void
-            {
-                event.target.removeEventListener(Event.SELECT, onSelectHandler);
-                event.target.removeEventListener(Event.CANCEL, onCancelHandler);
-            }
-        }
+			private function prepareBeforeDownloads():void
+			{
+				// save custom path as necessary
+				if (!HelperConstants.IS_MACOS && HelperConstants.CUSTOM_PATH_SDK_WINDOWS)
+				{
+					CookieManager.getInstance().setWindowsCustomPath(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
+				}
 
-        private function initHaxeWindowsInstallHelper():void
-        {
-            haxeWindowsInstallHelper = new HaxeInstallHelper();
-            haxeWindowsInstallHelper.addEventListener(HaxeInstallHelper.EVENT_INSTALL_COMPLETES, onHaxeWindowsInstallCompletes, false, 0, true);
-            haxeWindowsInstallHelper.addEventListener(HaxeInstallHelper.EVENT_INSTALL_OUTPUT, onHaxeWindowsInstallOutput, false, 0, true);
-            haxeWindowsInstallHelper.addEventListener(HaxeInstallHelper.EVENT_INSTALL_ERROR, onHaxeWindowsInstallError, false, 0, true);
-			INSTALLER_APACHE_FLEX.logMASH("Now continues with Haxe/Neko setup");
-            haxeWindowsInstallHelper.execute();
-        }
+				// create root directory
+				if (!HelperConstants.DEFAULT_INSTALLATION_PATH.exists) HelperConstants.DEFAULT_INSTALLATION_PATH.createDirectory();
 
-        private function disposeHaxeWindowsInstallHelper():void
-        {
-            haxeWindowsInstallHelper.removeEventListener(HaxeInstallHelper.EVENT_INSTALL_COMPLETES, onHaxeWindowsInstallCompletes);
-            haxeWindowsInstallHelper.removeEventListener(HaxeInstallHelper.EVENT_INSTALL_OUTPUT, onHaxeWindowsInstallOutput);
-            haxeWindowsInstallHelper.removeEventListener(HaxeInstallHelper.EVENT_INSTALL_ERROR, onHaxeWindowsInstallError);
-            haxeWindowsInstallHelper = null;
-        }
+				var sdkSubDir:File;
+				var sdkFolderName:String;
 
-        private function onHaxeWindowsInstallCompletes(event:GeneralEvent):void
-        {
-            disposeHaxeWindowsInstallHelper();
-            isHaxeInstalled = true;
-			INSTALLER_APACHE_FLEX.logMASH("Setup completes for Haxe and Neko");
-            onInstallationFinished(null);
-        }
+				// generate sub-folders
+				for each (var item:ComponentVO in model.components.array)
+				{
+					switch (item.type)
+					{
+						case ComponentTypes.TYPE_FLEX:
+						case ComponentTypes.TYPE_FLEX_HARMAN:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Flex_SDK");
+							break;
+						case ComponentTypes.TYPE_ROYALE:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Royale_SDK");
+							break;
+						case ComponentTypes.TYPE_ANT:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Ant");
+							break;
+						case ComponentTypes.TYPE_MAVEN:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Maven");
+							break;
+						case ComponentTypes.TYPE_OPENJAVA:
+						case ComponentTypes.TYPE_OPENJAVA_V8:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Java");
+							break;
+						case ComponentTypes.TYPE_NODEJS:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("NodeJs");
+							break;
+						case ComponentTypes.TYPE_HAXE:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("Haxe");
+							break;
+						case ComponentTypes.TYPE_SVN:
+							sdkSubDir = HelperConstants.DEFAULT_INSTALLATION_PATH.resolvePath("SVN");
+							break;
+					}
 
-        private function onHaxeWindowsInstallOutput(event:GeneralEvent):void
-        {
-            lblLastMessage.text = (event.value as String);
-			INSTALLER_APACHE_FLEX.logMASH(event.value as String);
-        }
+					// create the sub-directory if not exists
+					if (!sdkSubDir.exists) sdkSubDir.createDirectory();
+				}
+			}
 
-        private function onHaxeWindowsInstallError(event:GeneralEvent):void
-        {
-            disposeHaxeWindowsInstallHelper();
-            onInstallAborted(new GenericEvent(GenericEvent.INSTALL_ABORTED, event.value));
-			INSTALLER_APACHE_FLEX.logMASH("Installation error: "+ (event.value as String));
-        }
+			private function flush():void
+			{
+				updateAllInstallButtonLabel();
+				if (packageLists.length != 0 && !isDownloadInProgress)
+				{
+					prepareBeforeDownloads();
+				}
+
+				if (packageLists.length != 0)
+				{
+					isDownloadInProgress = true;
+					progressBar.visible = lblLastMessage.visible = true;
+					startSingleInstallation(packageLists.shift());
+				}
+				else
+				{
+					isDownloadInProgress = false;
+					progressBar.visible = false;
+					HelperConstants.IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH = false;
+				}
+			}
+
+			private function startSingleInstallation(item:ComponentVO):void
+			{
+				// remove existing folder before proceed
+				if (FileUtils.isPathExists(item.installToPath))
+				{
+					deleteExistingFolderBeforeDownload(item, function (item:ComponentVO):void {
+						item.isAlreadyDownloaded = false;
+						progressBar.visible = true;
+						startSingleInstallation(item);
+					});
+					return;
+				}
+
+				itemDownloading = item;
+				itemDownloading.hasError = null;
+				switch (item.type)
+				{
+					case ComponentTypes.TYPE_FLEX:
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
+						INSTALLER_APACHE_FLEX.startInstallation();
+						break;
+					case ComponentTypes.TYPE_FLEX_HARMAN:
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_HARMAN_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = HelperUtils.getComponentByType(ComponentTypes.TYPE_FLEX).version;
+						INSTALLER_APACHE_FLEX.startInstallationHarman(HelperConstants.CONFIG_HARMAN_AIR_OBJECT);
+						break;
+					case ComponentTypes.TYPE_FEATHERS:
+						var feathersObjectForApacheInstaller:Object = Parser.getFeathersObjectForApacheInstaller();
+						item.isDownloading = true;
+						INSTALLER_APACHE_FLEX.setFlexPath(item.installToPath);
+						INSTALLER_APACHE_FLEX.moonshineAIRversion = HelperConstants.CONFIG_ADOBE_AIR_VERSION;
+						INSTALLER_APACHE_FLEX.moonshineFlexVersion = feathersObjectForApacheInstaller.version;
+						INSTALLER_APACHE_FLEX.startInstallationFeathers(feathersObjectForApacheInstaller);
+						break;
+					case ComponentTypes.TYPE_HAXE:
+						var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
+						if (!neko.isAlreadyDownloaded)
+						{
+							neko.isDownloading = true;
+						}
+						item.isDownloading = true;
+						var targetAntFile:File = File.applicationStorageDirectory.resolvePath("haxe-installer.xml");
+						FileUtils.copyFile(
+								File.applicationDirectory.resolvePath("installer/haxe-installer.xml"),
+								targetAntFile,
+								true
+						);
+						INSTALLER_APACHE_FLEX.runHaxeInstallerScript(
+								targetAntFile,
+								item,
+								neko,
+								HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator + "Haxe"
+						);
+						break;
+					case ComponentTypes.TYPE_SVN:
+						if (HelperConstants.IS_MACOS)
+						{
+							initSVNMacPortsInstallation();
+						}
+						break;
+					case ComponentTypes.TYPE_GIT:
+						// **IMPORTANT**
+						// we should keep TYPE_GIT as last case so for Windows the
+						// process automatically shifts into 'default' case
+						if (HelperConstants.IS_MACOS)
+						{
+							progressBar.visible = lblLastMessage.visible = false;
+							MacOSGitDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
+							break;
+						}
+					default:
+						archiveDownloader = new ArchiveDownloader(item);
+						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
+						archiveDownloader.viewResourceConstants = viewResourceConstants;
+						archiveDownloader.startInstallation();
+						break;
+				}
+			}
+
+			private function deleteExistingFolderBeforeDownload(item:ComponentVO, successFn:Function):void
+			{
+				lblLastMessage.setStyle("fontWeight", "bold");
+				lblLastMessage.text = "Attempting to remove existing \"" + item.title + "\" folder. This may take longer..";
+				progressBar.visible = false;
+				CursorManager.setBusyCursor();
+				FileUtils.deleteDirectoryAsync(new File(item.installToPath), onDeletionCompleted, onDeleteionError);
+
+				/*
+				* @local
+				*/
+				function onDeletionCompleted():void
+				{
+					CursorManager.removeBusyCursor();
+					lblLastMessage.setStyle("fontWeight", "normal");
+					successFn(item);
+				}
+
+				function onDeleteionError(value:String):void
+				{
+					CursorManager.removeBusyCursor();
+					lblLastMessage.setStyle("fontWeight", "normal");
+					Alert.show(value, "Error!");
+				}
+			}
+
+			//--------------------------------------------------------------------------
+			//
+			//  LISTENERS API
+			//
+			//--------------------------------------------------------------------------
+
+			private function onReadyBeforeRunningInstallerScript(event:Event):void
+			{
+				// necessary installation requisite fix for Harman
+				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
+				{
+					new HarmanInstallerScriptFix(itemDownloading);
+				}
+
+				INSTALLER_APACHE_FLEX.continueToRunInstallerScript();
+			}
+
+			private function onInstallerIsReady(event:GenericEvent):void
+			{
+				INSTALLER_APACHE_FLEX.removeEventListener(GenericEvent.INSTALLER_READY, onInstallerIsReady);
+				viewResourceConstants = INSTALLER_APACHE_FLEX.viewResourceConstants;
+				HelperConstants.IS_INSTALLER_READY = true;
+				helperViewWrapper.setHelperReady();
+				// TODO: next ui settlements
+			}
+
+			private function onInstallAborted(event:GenericEvent):void
+			{
+				if (itemDownloading)
+				{
+					itemDownloading.isDownloading = false;
+					itemDownloading.isSelectedToDownload = false;
+					itemDownloading.hasError = event.value ? event.value as String : null;
+					flush();
+				}
+			}
+
+			private function onInstallProgress(event:GenericEvent):void
+			{
+				progressBar.percent = event.value as Number;
+			}
+
+			private function onInstallationFinished(event:GenericEvent):void
+			{
+				// TEMPORARY PATCH-FIX
+				// https://github.com/prominic/Moonshine-SDK-Installer/issues/17
+				// should be removed when Apache introduce their own fix
+				if (itemDownloading.type == ComponentTypes.TYPE_ROYALE)
+				{
+					var variantVO:ComponentVariantVO = itemDownloading.downloadVariants.get(itemDownloading.selectedVariantIndex) as ComponentVariantVO;
+					if (variantVO.title.indexOf(ComponentVariantVO.TYPE_STABLE) != -1)
+					{
+						var timeoutValue:uint = setTimeout(function ():void {
+							clearTimeout(timeoutValue);
+							var fileToPatch:File = (new File(itemDownloading.installToPath)).resolvePath("royale-asjs/frameworks/royale-config.xml");
+							if (fileToPatch.exists)
+							{
+								var fileToPatchWith:File = File.applicationDirectory.resolvePath("scripts/royale-config.xml");
+								FileUtils.copyFile(fileToPatchWith, fileToPatch, true);
+							}
+						}, 1000);
+					}
+				}
+
+				if (itemDownloading.type == ComponentTypes.TYPE_HAXE)
+				{
+					// because of the environment-setup problem through
+					// Ant build script on Windows
+					// (https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/13#issuecomment-1024126730)
+					// we chose to split the process in two - Ant and AS3 on Windows run.
+					// macOS process remain in one Ant file.
+					if (!isHaxeInstalled)
+					{
+						itemDownloading.isDownloaded = false;
+						itemDownloading.isDownloading = true;
+
+						initHaxeWindowsInstallHelper();
+						return;
+					}
+
+					var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
+					neko.isDownloading = false;
+					neko.isDownloaded = true;
+					neko.isSelectedToDownload = false;
+					neko.isAlreadyDownloaded = true;
+				}
+
+				if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN)
+				{
+					var installFolder:File = new File(itemDownloading.installToPath);
+
+					// fixing flex-configs
+					var flexConfig:File = installFolder.resolvePath("frameworks/flex-config.xml");
+					var flexConfigContent:String = FileUtils.readFromFile(flexConfig) as String;
+					flexConfigContent = flexConfigContent.replace(/<target-player>.*?<\/target-player>/g, "<target-player>32.0</target-player>");
+					FileUtils.writeToFile(flexConfig, flexConfigContent);
+
+					// fixing air-config
+					flexConfig = installFolder.resolvePath("frameworks/air-config.xml");
+					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
+					flexConfigContent = flexConfigContent.replace(/<target-player>.*?<\/target-player>/g, "<target-player>32.0</target-player>");
+					FileUtils.writeToFile(flexConfig, flexConfigContent);
+
+					// fixing flex-sdk-description
+					flexConfig = installFolder.resolvePath("flex-sdk-description.xml");
+					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
+					flexConfigContent = flexConfigContent.replace(/FP\d+.\d+/, "FP32.0");
+					flexConfigContent = flexConfigContent.replace(/AIR\d+.\d+/, "AIR33.1");
+					FileUtils.writeToFile(flexConfig, flexConfigContent);
+
+					if (HelperConstants.IS_MACOS && !isHarmanAIRDownloading)
+					{
+						isHarmanAIRDownloading = true;
+						itemDownloading.isDownloaded = false;
+						itemDownloading.isDownloading = true;
+
+						var symLinkFix:HarmanInstallerSymlinkFix = new HarmanInstallerSymlinkFix();
+						symLinkFix.addEventListener(HarmanInstallerSymlinkFix.EVENT_SYMLINK_FIXED, onAntScriptFileGenerated);
+						symLinkFix.runCheck(installFolder);
+
+						function onAntScriptFileGenerated(symLinkEvent:Event):void
+						{
+							symLinkEvent.target.removeEventListener(HarmanInstallerSymlinkFix.EVENT_SYMLINK_FIXED, onAntScriptFileGenerated);
+							flushDownloadQueue();
+						}
+
+						return;
+					}
+				}
+
+				/*if (itemDownloading.type == ComponentTypes.TYPE_FLEX_HARMAN && !isHarmanAIRDownloading)
+				{
+					isHarmanAIRDownloading = true;
+					itemDownloading.isDownloaded = false;
+					itemDownloading.isDownloading = true;
+
+					var targetAntFile:File = (new File(itemDownloading.installToPath)).resolvePath("harman-air-installer.xml");
+					FileUtils.copyFile(
+							File.applicationDirectory.resolvePath("installer/harman-air-installer.xml"),
+							targetAntFile,
+							true
+					);
+
+					var tmpArr:Array = itemDownloading.downloadURL.split("/");
+					var packageFileName:String = tmpArr[tmpArr.length - 1];
+					packageFileName = HelperConstants.IS_MACOS ?
+							packageFileName.replace(".tar.gz", "") :
+							packageFileName.replace(".zip", "");
+
+					INSTALLER_APACHE_FLEX.runInstallerScriptHarmanAIR(
+							targetAntFile,
+							HelperConstants.CONFIG_HARMAN_AIR_SERVER,
+							HelperConstants.CONFIG_HARMAN_AIR_FILE,
+							"?license=accepted",
+							HelperConstants.CONFIG_HARMAN_AIR_VERSION,
+							packageFileName
+					);
+
+					return;
+				}*/
+
+				// sometime distributed zip/tar creates an additional
+				// folder to the target directory which became complicated
+				// to determine a proper path to the sdk internally
+				// in that case we should make sure everything place in
+				// the folder that SDK Installer selects
+				var installedPath:File = new File(itemDownloading.installToPath);
+				var files:Array = installedPath.exists ? installedPath.getDirectoryListing() : null;
+				if (files && (files.length == 1))
+				{
+					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,
+							((itemDownloading.type == ComponentTypes.TYPE_OPENJAVA || itemDownloading.type == ComponentTypes.TYPE_OPENJAVA_V8) && HelperConstants.IS_MACOS) ?
+									"Contents/Home" : null);
+				}
+				else
+				{
+					flushDownloadQueue();
+				}
+
+				/*
+				 * @local
+				 */
+				function onFileFoldersMoved():void
+				{
+					flushDownloadQueue();
+				}
+
+				function onFileFoldersMoveError(error:String):void
+				{
+					trace(error);
+					// terminate by some means?
+				}
+
+				function flushDownloadQueue():void
+				{
+					itemDownloading.isDownloaded = true;
+					itemDownloading.isDownloading = false;
+					itemDownloading.isSelectedToDownload = false;
+					itemDownloading.isAlreadyDownloaded = true;
+
+					if (!HelperConstants.IS_MACOS) onGitSVNInstallWindows(itemDownloading);
+					moonshineNotifier.notifyMoonshineWithUpdate();
+
+					flush();
+				}
+			}
+
+			private function onMessageUpdates(event:Event):void
+			{
+				lblLastMessage.text = INSTALLER_APACHE_FLEX.lastFilteredPublicMessage;
+			}
+
+			private function onDownloadAComponentRequested(event:HelperEvent):void
+			{
+				// give a check before opening license view
+				// in case all items are downloaded or downloading
+				var tmpCountLeftToDownload:int;
+				for each (var item:ComponentVO in model.components.array)
+				{
+					if ((item.isAlreadyDownloaded || item.isDownloaded ||
+							item.isDownloading || item.isSelectedToDownload ||
+							!item.isDownloadable) && !item.downloadVariants)
+					{
+						continue;
+					}
+
+					if (item.downloadVariants &&
+							!item.downloadVariants.get(item.selectedVariantIndex).isReDownloadAvailable &&
+							item.isAlreadyDownloaded)
+					{
+						continue;
+					}
+
+					tmpCountLeftToDownload++;
+				}
+
+				if (tmpCountLeftToDownload == 0)
+				{
+					Alert.show("All item(s) either downloading or being downloaded.", "Note!");
+					return;
+				}
+
+				(event.data as ComponentVO).isDownloading = true;
+				if (((event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX) ||
+						(event.data as ComponentVO).type == ComponentTypes.TYPE_FLEX_HARMAN)
+				{
+					new LinkVerifierAS((event.data as ComponentVO),
+							onDownloadLinkVerified,
+							INSTALLER_APACHE_FLEX.apacheFlexDownloadURL);
+				}
+				else if ((HelperConstants.IS_MACOS && (event.data as ComponentVO).type == ComponentTypes.TYPE_SVN))
+				{
+					onDownloadLinkVerified(true, (event.data as ComponentVO));
+				}
+				else
+				{
+					new LinkVerifierAS((event.data as ComponentVO), onDownloadLinkVerified);
+				}
+			}
+
+			private function onDownloadLinkVerified(isSuccess:Boolean, component:ComponentVO):void
+			{
+				component.isDownloading = false;
+
+				// special handling for Git/macOS
+				// where we run special shell-script to download
+				// git on macOS
+				if ((component.type == ComponentTypes.TYPE_GIT) &&
+						HelperConstants.IS_MACOS)
+				{
+					isSuccess = true;
+				}
+
+				if (isSuccess)
+				{
+					openLicenseView(singleInstallConfirmHandler, component);
+				}
+				else
+				{
+					Alert.show("Oops! " + component.title + " download is currently unavailable!\nPlease, contact the administrator, or try again later.", "Error!");
+				}
+			}
+
+			private function onOpenAComponentLicenseRequested(event:HelperEvent):void
+			{
+				openLicenseView(singleInstallConfirmHandler, (event.data as ComponentVO), true);
+			}
+
+			private function onAllComponentsFinishDetection(event:HelperEvent):void
+			{
+				helperViewWrapper.removeEventListener(HelperEvent.ALL_COMPONENTS_TESTED, onAllComponentsFinishDetection);
+
+				// determine disk-usage for total pending
+				updateAllInstallButtonLabel();
+
+				helperViewWrapper.addEventListener(HelperEvent.COMPONENT_DOWNLOADED, onEachComponentDownloaded, false, 0, true);
+			}
+
+			private function onEachComponentDownloaded(event:HelperEvent):void
+			{
+				// update total pending size after each downloads
+				updateAllInstallButtonLabel();
+			}
+
+			private function updateAllInstallButtonLabel():void
+			{
+				var tmpSize:String = HelperUtils.getTotalDiskSizePendingItems();
+				btnInstallAll.label = allInstallButtonLabel + " (" + tmpSize + ")";
+				isDownloadedAll = (tmpSize == "0 MB");
+			}
+
+			private function onShowLog(event:MouseEvent):void
+			{
+				INSTALLER_APACHE_FLEX.showConsole(event);
+			}
+
+			private function onGitSVNInstallMacOS(value:String, type:String):void
+			{
+				var gitComponent:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
+				if (type == HelperConstants.START)
+				{
+					// continue for other download in queue
+					// while external installer opened
+					// by macos
+					gitComponent.isSelectedToDownload = true;
+					flush();
+					return;
+				}
+				else if (type == HelperConstants.ERROR && value)
+				{
+					// TODO: show error somewhere
+					gitComponent.isAlreadyDownloaded = false;
+				}
+				else if (type == HelperConstants.SUCCESS)
+				{
+					gitComponent.isAlreadyDownloaded = true;
+					gitComponent.isSelectedToDownload = false;
+					gitComponent.installToPath = value;
+					moonshineNotifier.notifyMoonshineWithUpdate();
+				}
+
+				itemDownloading.isDownloading = false;
+				flush();
+			}
+
+			private function onGitSVNInstallWindows(item:ComponentVO):void
+			{
+				// git and svn requires binary path
+				// to the sdk folder on Windows
+				if (item.type == ComponentTypes.TYPE_GIT || item.type == ComponentTypes.TYPE_SVN)
+				{
+					item.installToPath += File.separator + item.pathValidation[0];
+				}
+			}
+
+			protected function onWindowsCustomPathRequest(event:MouseEvent):void
+			{
+				var customPath:File = new File();
+				customPath.addEventListener(Event.SELECT, onSelectHandler);
+				customPath.addEventListener(Event.CANCEL, onCancelHandler);
+				customPath.browseForDirectory("Select SDK Location");
+
+				/*
+				*@local
+				*/
+				function onSelectHandler(event:Event):void
+				{
+					HelperUtils.updatePathWithCustomWindows(sdkPathMessage = (event.target as File).resolvePath(HelperConstants.DEFAULT_SDK_FOLDER_NAME).nativePath);
+					onCancelHandler(event);
+				}
+
+				function onCancelHandler(event:Event):void
+				{
+					event.target.removeEventListener(Event.SELECT, onSelectHandler);
+					event.target.removeEventListener(Event.CANCEL, onCancelHandler);
+				}
+			}
+
+			private function initHaxeWindowsInstallHelper():void
+			{
+				haxeWindowsInstallHelper = new HaxeInstallHelper();
+				haxeWindowsInstallHelper.addEventListener(HaxeInstallHelper.EVENT_INSTALL_COMPLETES, onHaxeWindowsInstallCompletes, false, 0, true);
+				haxeWindowsInstallHelper.addEventListener(HaxeInstallHelper.EVENT_INSTALL_OUTPUT, onHaxeWindowsInstallOutput, false, 0, true);
+				haxeWindowsInstallHelper.addEventListener(HaxeInstallHelper.EVENT_INSTALL_ERROR, onHaxeWindowsInstallError, false, 0, true);
+				INSTALLER_APACHE_FLEX.logMASH("Now continues with Haxe/Neko setup");
+				haxeWindowsInstallHelper.execute();
+			}
+
+			private function disposeHaxeWindowsInstallHelper():void
+			{
+				haxeWindowsInstallHelper.removeEventListener(HaxeInstallHelper.EVENT_INSTALL_COMPLETES, onHaxeWindowsInstallCompletes);
+				haxeWindowsInstallHelper.removeEventListener(HaxeInstallHelper.EVENT_INSTALL_OUTPUT, onHaxeWindowsInstallOutput);
+				haxeWindowsInstallHelper.removeEventListener(HaxeInstallHelper.EVENT_INSTALL_ERROR, onHaxeWindowsInstallError);
+				haxeWindowsInstallHelper = null;
+			}
+
+			private function onHaxeWindowsInstallCompletes(event:GeneralEvent):void
+			{
+				disposeHaxeWindowsInstallHelper();
+				isHaxeInstalled = true;
+				INSTALLER_APACHE_FLEX.logMASH("Setup completes for Haxe and Neko");
+				onInstallationFinished(null);
+			}
+
+			private function onHaxeWindowsInstallOutput(event:GeneralEvent):void
+			{
+				lblLastMessage.text = (event.value as String);
+				INSTALLER_APACHE_FLEX.logMASH(event.value as String);
+			}
+
+			private function onHaxeWindowsInstallError(event:GeneralEvent):void
+			{
+				disposeHaxeWindowsInstallHelper();
+				onInstallAborted(new GenericEvent(GenericEvent.INSTALL_ABORTED, event.value));
+				INSTALLER_APACHE_FLEX.logMASH("Installation error: " + (event.value as String));
+			}
+
+			private function initSVNMacPortsInstallation():void
+			{
+				svnMacPortsInstaller = new SVNMacPortsInstaller();
+				svnMacPortsInstaller.addEventListener(SVNMacPortsInstaller.EVENT_INSTALL_PROGRESS, onSVNInstallationProgress, false, 0, true);
+				svnMacPortsInstaller.addEventListener(SVNMacPortsInstaller.EVENT_INSTALL_COMPLETE, onSVNInstallationCompletes, false, 0, true);
+				svnMacPortsInstaller.addEventListener(SVNMacPortsInstaller.EVENT_INSTALL_TERMINATES, onSVNInstallationTerminates, false, 0, true);
+				progressBar.percent = 100;
+				svnMacPortsInstaller.execute();
+			}
+
+			private function disposeSVNMacPortsInstallation():void
+			{
+				svnMacPortsInstaller.removeEventListener(SVNMacPortsInstaller.EVENT_INSTALL_PROGRESS, onSVNInstallationProgress);
+				svnMacPortsInstaller.removeEventListener(SVNMacPortsInstaller.EVENT_INSTALL_COMPLETE, onSVNInstallationCompletes);
+				svnMacPortsInstaller.removeEventListener(SVNMacPortsInstaller.EVENT_INSTALL_TERMINATES, onSVNInstallationTerminates);
+				svnMacPortsInstaller = null;
+			}
+
+			private function onSVNInstallationProgress(event:Event):void
+			{
+				lblLastMessage.text = svnMacPortsInstaller.message;
+				INSTALLER_APACHE_FLEX.logMASH(svnMacPortsInstaller.message);
+			}
+
+			private function onSVNInstallationCompletes(event:Event):void
+			{
+				disposeSVNMacPortsInstallation();
+				INSTALLER_APACHE_FLEX.logMASH("Setup completes for Subversion");
+				onInstallationFinished(null);
+			}
+
+			private function onSVNInstallationTerminates(event:Event):void
+			{
+				onInstallAborted(new GenericEvent(GenericEvent.INSTALL_ABORTED, svnMacPortsInstaller.message));
+				INSTALLER_APACHE_FLEX.logMASH("SVN installation error: " + svnMacPortsInstaller.message);
+				disposeSVNMacPortsInstallation();
+			}
         ]]>
 	</fx:Script>
 	

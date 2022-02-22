@@ -8,6 +8,7 @@ package actionScripts.utils
 	import flash.desktop.NativeProcess;
 
 	import flash.desktop.NativeProcessStartupInfo;
+	import flash.events.Event;
 
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -20,6 +21,16 @@ package actionScripts.utils
 
 	public class SVNMacPortsInstaller extends EventDispatcher
 	{
+		public static const EVENT_INSTALL_COMPLETE:String = "svnMacPortsInstallCompletes";
+		public static const EVENT_INSTALL_TERMINATES:String = "svnMacPortsInstallTerminates";
+		public static const EVENT_INSTALL_PROGRESS:String = "svnMacPortsInstallationProgress";
+
+		private var _message:String;
+		public function get message():String
+		{
+			return _message;
+		}
+
 		private var customInfo:NativeProcessStartupInfo;
 		private var customProcess:NativeProcess;
 
@@ -34,17 +45,22 @@ package actionScripts.utils
 
 			if (!HelperUtils.isValidSDKDirectoryBy(ComponentTypes.TYPE_MACPORTS, macPort.installToPath, macPort.pathValidation))
 			{
-				Alert.show("This requires MacPorts to be installed.\nPlease install MacPorts separately.\nInstallation terminates.", "!Error");
+				var errorMessage:String = "Subversion requires MacPorts to be installed.\nPlease install MacPorts separately.\nInstallation terminates.";
+				Alert.show(errorMessage, "!Error");
+				_message = errorMessage;
+				dispatchEvent(new Event(EVENT_INSTALL_TERMINATES));
 				return;
 			}
 
 			customInfo = new NativeProcessStartupInfo();
 			customInfo.executable = File.documentsDirectory.resolvePath("/usr/bin/osascript");
 
+			_message = "Subversion installation in-progress. Please wait.";
+			dispatchEvent(new Event(EVENT_INSTALL_PROGRESS));
+
 			var command:String = "do shell script \"sudo "+ macPort.installToPath +"/port -N install subversion\" with administrator privileges";
 			customInfo.arguments = Vector.<String>(["-e", command]);
 			customProcess = new NativeProcess();
-			//customInfo.workingDirectory = new File(svn.installToPath);
 			startShell(true);
 			customProcess.start(customInfo);
 		}
@@ -78,11 +94,10 @@ package actionScripts.utils
 			if (customProcess)
 			{
 				var output:IDataInput = customProcess.standardError;
-				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
+				_message = output.readUTFBytes(output.bytesAvailable).toLowerCase();
 
-				trace("stdError: "+ data);
 				startShell(false);
-				//dispatchEvent(new GeneralEvent(EVENT_INSTALL_ERROR, data));
+				dispatchEvent(new Event(EVENT_INSTALL_TERMINATES));
 			}
 		}
 
@@ -91,17 +106,17 @@ package actionScripts.utils
 			if (customProcess)
 			{
 				startShell(false);
-				//dispatchEvent(new GeneralEvent(EVENT_INSTALL_COMPLETES));
+				_message = "Subversion installation completed successfully.";
+				dispatchEvent(new Event(EVENT_INSTALL_COMPLETE));
 			}
 		}
 
 		private function shellData(event:ProgressEvent):void
 		{
 			var output:IDataInput = (customProcess.standardOutput.bytesAvailable != 0) ? customProcess.standardOutput : customProcess.standardError;
-			var data:String = output.readUTFBytes(output.bytesAvailable);
+			_message = output.readUTFBytes(output.bytesAvailable);
 
-			//dispatchEvent(new GeneralEvent(EVENT_INSTALL_OUTPUT, data));
-			trace("stdOut: "+ data);
+			dispatchEvent(new Event(EVENT_INSTALL_PROGRESS));
 		}
 	}
 }
