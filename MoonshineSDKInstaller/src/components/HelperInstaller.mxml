@@ -320,24 +320,34 @@
 						{
 							initSVNMacPortsInstallation();
 						}
+						else
+						{
+							startArchiveDownload(item);
+						}
 						break;
 					case ComponentTypes.TYPE_GIT:
-						// **IMPORTANT**
-						// we should keep TYPE_GIT as last case so for Windows the
-						// process automatically shifts into 'default' case
 						if (HelperConstants.IS_MACOS)
 						{
 							progressBar.visible = lblLastMessage.visible = false;
 							MacOSGitDetector.getInstance().installXCodeCommandLine(onGitSVNInstallMacOS);
-							break;
 						}
+						else
+						{
+							startArchiveDownload(item);
+						}
+						break;
 					default:
-						archiveDownloader = new ArchiveDownloader(item);
-						archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
-						archiveDownloader.viewResourceConstants = viewResourceConstants;
-						archiveDownloader.startInstallation();
+						startArchiveDownload(item);
 						break;
 				}
+			}
+
+			private function startArchiveDownload(item:ComponentVO):void
+			{
+				archiveDownloader = new ArchiveDownloader(item);
+				archiveDownloader.installerApacheFlexInstance = INSTALLER_APACHE_FLEX;
+				archiveDownloader.viewResourceConstants = viewResourceConstants;
+				archiveDownloader.startInstallation();
 			}
 
 			private function deleteExistingFolderBeforeDownload(item:ComponentVO, successFn:Function):void
