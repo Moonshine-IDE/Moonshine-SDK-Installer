@@ -45,8 +45,9 @@ package actionScripts.utils
 
 			if (!HelperUtils.isValidSDKDirectoryBy(ComponentTypes.TYPE_MACPORTS, macPort.installToPath, macPort.pathValidation))
 			{
-				var errorMessage:String = "Subversion requires MacPorts to be installed.\nPlease install MacPorts separately.\nInstallation terminates.";
-				Alert.show(errorMessage, "!Error");
+				var errorMessage:String = "Subversion requires MacPorts for installation.\nPlease install MacPorts separately.";
+				Alert.OK_LABEL = "OK";
+				Alert.show(errorMessage, "Error!");
 				_message = errorMessage;
 				dispatchEvent(new Event(EVENT_INSTALL_TERMINATES));
 				return;
@@ -58,7 +59,7 @@ package actionScripts.utils
 			_message = "Subversion installation in-progress. Please wait.";
 			dispatchEvent(new Event(EVENT_INSTALL_PROGRESS));
 
-			var command:String = "do shell script \"sudo "+ macPort.installToPath +"/port -N install subversion\" with administrator privileges";
+			var command:String = "do shell script \"sudo "+ macPort.installToPath +"/port -N install subversion\" with prompt \"Moonshine SDK Installer requires admin privileges to install Subversion with MacPorts.\" with administrator privileges";
 			customInfo.arguments = Vector.<String>(["-e", command]);
 			customProcess = new NativeProcess();
 			startShell(true);
