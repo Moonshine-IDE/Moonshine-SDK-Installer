@@ -148,7 +148,7 @@ package actionScripts.utils
 			return false;
 		}
 
-		public static function isValidExecutableBy(type:String, originPath:String, validationPath:Array=null):Boolean
+		public static function isValidExecutableBy(type:String, originPath:String, validationPath:Array=null):String
 		{
 			var pathValidationFileName:String;
 			if (FileUtils.isPathExists(originPath))
@@ -160,7 +160,7 @@ package actionScripts.utils
 					(type == ComponentTypes.TYPE_GIT) && 
 					!isGitSVNSpecialPathCheckPass(originPath))
 				{
-					return false;
+					return null;
 				}
 
 				// file-system check inside the named-sdk
@@ -174,18 +174,19 @@ package actionScripts.utils
 							pathValidationFileName = FileUtils.normalizePath(path);
 
 							// SDKs which validates based on *_HOME way
-							if (type != ComponentTypes.TYPE_GIT)
+							if ((type != ComponentTypes.TYPE_GIT) && (type != ComponentTypes.TYPE_SVN))
 							{
-								if (FileUtils.isPathExists(originPath + File.separator + pathValidationFileName))
+								var fullPath:String = originPath + File.separator + pathValidationFileName;
+								if (FileUtils.isPathExists(fullPath))
 								{
-									return true;
+									return fullPath;
 								}
 							}
 							else
 							{
 								if (originPath.toLowerCase().indexOf(pathValidationFileName.toLowerCase()) != -1)
 								{
-									return true;
+									return originPath;
 								}
 							}
 						}
@@ -193,11 +194,11 @@ package actionScripts.utils
 				}
 				else
 				{
-					return true;
+					return originPath;
 				}
 			}
 
-			return false;
+			return null;
 		}
 		
 		public static function updatePathWithCustomWindows(path:String):void
