@@ -543,7 +543,7 @@
 				// in that case we should make sure everything place in
 				// the folder that SDK Installer selects
 				var installedPath:File = new File(itemDownloading.installToPath);
-				var files:Array = installedPath.exists ? installedPath.getDirectoryListing() : null;
+				var files:Array = (installedPath.exists && installedPath.isDirectory) ? installedPath.getDirectoryListing() : null;
 				if (files && (files.length == 1))
 				{
 					FileUtils.moveFolderToDestinationFolderAsync(files[0], installedPath, onFileFoldersMoved, onFileFoldersMoveError,

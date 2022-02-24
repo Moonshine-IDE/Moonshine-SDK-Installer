@@ -365,7 +365,7 @@ package actionScripts.utils
 					if (HelperConstants.IS_MACOS) return "Command Line Tools";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"Git"+ File.separator +"git-"+ version;
 				case ComponentTypes.TYPE_SVN:
-					if (HelperConstants.IS_MACOS) return "/opt/local/bin/Subversion";
+					if (HelperConstants.IS_MACOS) return "/opt/local/bin/svn";
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"SVN"+ File.separator +"slik-svn-"+ version;
 				case ComponentTypes.TYPE_NODEJS:
 					return HelperConstants.DEFAULT_INSTALLATION_PATH.nativePath + File.separator +"NodeJS"+ File.separator +"node-v"+ version;
