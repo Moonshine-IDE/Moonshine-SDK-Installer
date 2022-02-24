@@ -279,17 +279,17 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_SVN:
 						if (HelperConstants.IS_MACOS)
 						{
-							var svnDefaultPaths:Array = ["/usr/local/bin", "/opt/local/bin"];
+							var svnDefaultPaths:Array = ["/usr/local/bin/svn", "/opt/local/bin/svn"];
 							for each(var svnPath:String in svnDefaultPaths)
 							{
-								item.installToPath = HelperUtils.isValidExecutableBy(
+								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 										item.type,
 										svnPath,
 										item.pathValidation
 								);
-								item.isAlreadyDownloaded = item.installToPath != null;
 								if (item.isAlreadyDownloaded)
 								{
+									item.installToPath = svnPath;
 									break;
 								}
 							}
@@ -300,41 +300,53 @@ package actionScripts.managers
 						break;
 					case ComponentTypes.TYPE_HAXE:
 						var haxeDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/lib/haxe" : "c:\\HaxeToolkit\\haxe";
-						item.installToPath = HelperUtils.isValidExecutableBy(
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
 								haxeDefaultPath,
 								item.pathValidation
 						);
-						item.isAlreadyDownloaded = item.installToPath != null;
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = haxeDefaultPath;
+						}
 						break;
 					case ComponentTypes.TYPE_NEKO:
 						var nekoDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/lib/neko" : "c:\\HaxeToolkit\\neko";
-						item.installToPath = HelperUtils.isValidExecutableBy(
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
 								nekoDefaultPath,
 								item.pathValidation
 						);
-						item.isAlreadyDownloaded = item.installToPath != null;
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = nekoDefaultPath;
+						}
 						break;
 					case ComponentTypes.TYPE_VAGRANT:
 						var vagrantDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "C:\\HashiCorp\\Vagrant";
-						item.installToPath = HelperUtils.isValidExecutableBy(
+						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
 								vagrantDefaultPath,
 								item.pathValidation
 						);
-						item.isAlreadyDownloaded = item.installToPath != null;
+						if (item.isAlreadyDownloaded)
+						{
+							item.installToPath = vagrantDefaultPath;
+						}
 						break;
 					case ComponentTypes.TYPE_MACPORTS:
 						if (HelperConstants.IS_MACOS)
 						{
 							var macPortsDefaultPath:String = "/opt/local/bin";
-							item.installToPath = HelperUtils.isValidExecutableBy(
+							item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 									item.type,
 									macPortsDefaultPath,
 									item.pathValidation
 							);
-							item.isAlreadyDownloaded = item.installToPath != null;
+							if (item.isAlreadyDownloaded)
+							{
+								item.installToPath = macPortsDefaultPath;
+							}
 						}
 						break;
 				}
