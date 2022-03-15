@@ -21,5 +21,6 @@ package actionScripts.valueObjects
 		public static const TYPE_NEKO:String = "neko";
 		public static const TYPE_VAGRANT:String = "vagrant";
 		public static const TYPE_MACPORTS:String = "macports";
+		public static const TYPE_VIRTUALBOX:String = "virtualbox";
 	}
 }
