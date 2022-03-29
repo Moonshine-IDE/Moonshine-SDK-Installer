@@ -5,18 +5,18 @@
 	<airHarman version="33.1">
 		<download>
 			<windows>
-				<version version="33.1.1.743" displayVersion="33.1.1.743">
+				<version version="33.1.1.795" displayVersion="33.1.1.795">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.743/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.743/sdks/</path>
+					<folder>api/versions/33.1.1.795/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.795/sdks/</path>
 					<file>AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
-				<version version="33.1.1.743" displayVersion="33.1.1.743">
+				<version version="33.1.1.795" displayVersion="33.1.1.795">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.743/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.743/sdks/</path>
+					<folder>api/versions/33.1.1.795/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.795/sdks/</path>
 					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
@@ -212,13 +212,13 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.743">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.795">
 			            	<path></path>
 		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.743">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.795">
 		                	<path></path>
 		              		<file></file>
 		             </version>
@@ -261,19 +261,19 @@
 				<variant isRedownload="true">
 					<title>Nightly</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>176</windows>
-						<mac>181</mac>
+						<windows>155</windows>
+						<mac>160</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.9" displayVersion="v0.9.9">
+						<version version="0.9.10" displayVersion="v0.9.10">
 			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
-			                <file>apache-royale-0.9.9-SNAPSHOT-bin.zip</file>
+			                <file>apache-royale-0.9.10-SNAPSHOT-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.9" displayVersion="v0.9.9">
+						<version version="0.9.10" displayVersion="v0.9.10">
 			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
-			                <file>apache-royale-0.9.9-SNAPSHOT-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+			                <file>apache-royale-0.9.10-SNAPSHOT-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
