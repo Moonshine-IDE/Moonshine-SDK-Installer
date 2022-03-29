@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-<meta title="MoonshineSDKInstallerGUICore" package="Moonshine" version="1.0.0" company="Prominic.NET" />
-<app file="MoonshineSDKInstallerGUICore" />
+	<meta title="MoonshineSDKInstallerGUICore" package="Moonshine" version="1.0.0" company="Prominic.NET" />
+	<app file="MoonshineSDKInstallerGUICore" />
 	
-<source path="src" />
-<source path="externs" />
+	<source path="src" />
+	<source path="externs" />
 	
-<haxelib name="openfl" />
-<haxelib name="actuate" />
-<haxelib name="feathersui" />
+	<haxelib name="openfl" />
+	<haxelib name="actuate" />
+	<haxelib name="feathersui" />
 
-<template path="templates" if="flash"/>
+	<template path="templates" if="flash"/>
 
-<haxeflag name="--macro" value="include('moonshine')"/>
-<haxeflag name="--macro" value="include('feathers')"/>
+	<haxeflag name="--macro" value="include('moonshine')"/>
+	<haxeflag name="--macro" value="include('feathers')"/>
+
+	<section if="flash">
+		<source path="build_macros/flash"/>
+		<haxeflag name="--macro" value="AddFlashPropertyMeta.find('feathers')"/>
+		<haxeflag name="--macro" value="AddFlashPropertyMeta.find('moonshine')"/>
+	</section>
 </project>

@@ -2,8 +2,8 @@
 --macro lime._internal.macros.DefineMacro.run()
 -cp /usr/local/lib/haxe/lib/lime/7,9,0/src
 -D lime=7.9.0
--cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,8/src
--D feathersui=1.0.0-beta.8
+-cp /usr/local/lib/haxe/lib/feathersui/1,0,0-beta,9/src
+-D feathersui=1.0.0-beta.9
 -cp /usr/local/lib/haxe/lib/actuate/1,8,9/src
 -D actuate=1.8.9
 -cp /usr/local/lib/haxe/lib/hxargs/3,0,2
@@ -14,6 +14,7 @@
 -cp src
 -cp externs
 -cp /usr/local/lib/haxe/lib/openfl/9,1,0/lib/flash-externs/src
+-cp build_macros/flash
 -D MAC_USE_CURRENT_SDK=1
 -D native-trace
 -D tools=7.9.0
@@ -23,6 +24,8 @@
 -D web
 --macro include('moonshine')
 --macro include('feathers')
+--macro AddFlashPropertyMeta.find('feathers')
+--macro AddFlashPropertyMeta.find('moonshine')
 -cp bin/flash
 -swf-lib obj/assets.swf
 -swf-version 17
