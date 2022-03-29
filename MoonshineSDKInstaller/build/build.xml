@@ -278,7 +278,7 @@
 			<arg line="-storetype pkcs12" />
 			<arg line="-keystore '${certSelfSigned}'" />
 			<arg line="-storepass '${certSelfSignedPassword}'" />
-			<arg line="-tsa 'http://timestamp.entrust.net/TSS/RFC3161sha2TS'" />
+			<arg line="-tsa 'http://timestamp.digicert.com'" />
 	   		<arg line="-target bundle"/>
 			<!--arg line="-target native"/-->
 	   		<arg line="${windowsBundleFilename}" />
@@ -333,7 +333,7 @@
 			<arg line="-storetype pkcs12" />
 			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
 			<arg line="-storepass '${certSelfSignedPassword}'" />
-			<arg line="-tsa 'http://timestamp.entrust.net/TSS/RFC3161sha2TS'" />
+			<arg line="-tsa 'http://timestamp.digicert.com'" />
 	   		<arg line="-target bundle"/>
 	   		<arg line="${windowsBundleFilename}" />
 	   		<arg line="'${desktopApplicationDescriptor}'" />
@@ -367,7 +367,7 @@
 			<arg line="-storetype pkcs12" />
 			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
 			<arg line="-storepass '${certSelfSignedPassword}'" />
-			<arg line=" -tsa 'http://timestamp.entrust.net/TSS/RFC3161sha2TS'" />
+			<arg line=" -tsa 'http://timestamp.digicert.com'" />
 			<arg line="-target bundle"/>
 			<arg line="'${desktopBinaryFilename}'" />
 			<arg line="'${desktopApplicationDescriptor}'" />
