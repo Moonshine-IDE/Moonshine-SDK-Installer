@@ -242,19 +242,19 @@
 				<variant isSelected="true">
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>162</windows>
-						<mac>180</mac>
+						<windows>176</windows>
+						<mac>181</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.8" displayVersion="v0.9.8">
-			                <path>https://mirrors.estointernet.in/apache/royale/0.9.8/binaries/</path>
-			                <file>apache-royale-0.9.8-bin-js.zip</file>
+						<version version="0.9.9" displayVersion="v0.9.9">
+			                <path>https://mirrors.estointernet.in/apache/royale/0.9.9/binaries/</path>
+			                <file>apache-royale-0.9.9-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.8" displayVersion="v0.9.8">
-			                <path>https://mirrors.estointernet.in/apache/royale/0.9.8/binaries/</path>
-			                <file>apache-royale-0.9.8-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+						<version version="0.9.9" displayVersion="v0.9.9">
+			                <path>https://mirrors.estointernet.in/apache/royale/0.9.9/binaries/</path>
+			                <file>apache-royale-0.9.9-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
