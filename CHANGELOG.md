@@ -8,11 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Summary
 
+Key Features:
+- Install SVN on macOS using MacPorts
+- Updates for Apache Royale 0.9.9 release
 
 ### Added
 
 
 ### Changed
+
+* Install SVN Using MacPorts ([#31](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/31))
+* Update Apache Royale 0.9.8 to 0.9.9 ([#91](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/91))
+* Update Apache Royale nightly build to 0.9.10 ([#89](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/89))
+* Update Harman Air to 33.1.1.795 ([#90](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/90))
 
 
 ### Fixed
