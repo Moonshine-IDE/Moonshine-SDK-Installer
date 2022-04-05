@@ -61,16 +61,28 @@
 				<isset property="APP_PROPERTIES.haxeLibDirectory"/>
 			</condition>
 			<!-- fall back to default Haxe install location, if available -->
-			<condition property="HAXE_LIB_DIRECTORY" value="c:/HaxeToolkit/haxe/haxelib.exe">
+			<condition property="HAXE_LIB_DIRECTORY" value="c:/HaxeToolkit/haxe">
 				<and>
 					<os family="windows" />
-					<available file="c:/HaxeToolkit/haxe" />
+					<available file="c:/HaxeToolkit/haxe/haxelib.exe" />
 				</and>
 			</condition>
 			<condition property="HAXE_LIB_DIRECTORY" value="/usr/local/lib/haxe">
 				<and>
 					<os family="mac" />
 					<available file="/usr/local/lib/haxe/haxelib" />
+				</and>
+			</condition>
+			<condition property="HAXE_LIB_DIRECTORY" value="${env.HAXE_STD_PATH}/..">
+				<and>
+					<os family="windows" />
+					<available file="${env.HAXE_STD_PATH}/../haxelib.exe" />
+				</and>
+			</condition>
+			<condition property="HAXE_LIB_DIRECTORY" value="${env.HAXE_STD_PATH}/..">
+				<and>
+					<os family="mac" />
+					<available file="${env.HAXE_STD_PATH}/../haxelib" />
 				</and>
 			</condition>
 		</then>
