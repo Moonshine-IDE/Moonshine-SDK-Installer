@@ -21,5 +21,8 @@ jobs:
     - uses: joshtynjala/setup-apache-flex-action@v1
       with:
         flex-version: "4.16.1"
+    - uses: krdlab/setup-haxe@v1
+      with:
+        haxe-version: 4.2.5
     - name: Build with Ant
       run: ant -noinput -buildfile 'MoonshineSDKInstaller\build\build.xml'
