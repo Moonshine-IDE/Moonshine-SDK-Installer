@@ -279,7 +279,7 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_SVN:
 						if (HelperConstants.IS_MACOS)
 						{
-							var svnDefaultPaths:Array = ["/usr/local/bin/svn", "/opt/local/bin/svn"];
+							var svnDefaultPaths:Array = ["/usr/local/bin/svn", "/opt/local/bin/svn", "/opt/homebrew/bin/svn"];
 							for each(var svnPath:String in svnDefaultPaths)
 							{
 								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
@@ -290,6 +290,44 @@ package actionScripts.managers
 								if (item.isAlreadyDownloaded)
 								{
 									item.installToPath = svnPath;
+									break;
+								}
+							}
+						}
+						break;
+					case ComponentTypes.TYPE_ANT:
+						if (HelperConstants.IS_MACOS)
+						{
+							var antDefaultPaths:Array = ["/opt/homebrew"];
+							for each(var antPath:String in antDefaultPaths)
+							{
+								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+										item.type,
+										antPath,
+										item.pathValidation
+								);
+								if (item.isAlreadyDownloaded)
+								{
+									item.installToPath = antPath;
+									break;
+								}
+							}
+						}
+						break;
+					case ComponentTypes.TYPE_MAVEN:
+						if (HelperConstants.IS_MACOS)
+						{
+							var mvnDefaultPaths:Array = ["/opt/homebrew"];
+							for each(var mvnPath:String in mvnDefaultPaths)
+							{
+								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+										item.type,
+										mvnPath,
+										item.pathValidation
+								);
+								if (item.isAlreadyDownloaded)
+								{
+									item.installToPath = mvnPath;
 									break;
 								}
 							}
