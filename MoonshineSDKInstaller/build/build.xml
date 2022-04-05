@@ -144,6 +144,7 @@
 	<echo>SDK : ${FLEX_HOME}</echo>
 	<echo>SIGNTOOL: ${SIGNTOOL_HOME}</echo>
 	<echo>NSIS: ${NSIS_HOME}</echo>
+	<echo>Haxe: ${HAXE_LIB_DIRECTORY}</echo>
 	
     <!-- Path to your Flex SDK with AIR 3.1 overlaid -->
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
