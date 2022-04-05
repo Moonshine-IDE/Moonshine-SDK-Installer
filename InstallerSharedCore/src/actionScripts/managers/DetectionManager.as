@@ -298,7 +298,7 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_ANT:
 						if (HelperConstants.IS_MACOS)
 						{
-							var antDefaultPaths:Array = ["/opt/homebrew"];
+							var antDefaultPaths:Array = ["/usr/local", "/opt/homebrew"];
 							for each(var antPath:String in antDefaultPaths)
 							{
 								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
@@ -317,7 +317,7 @@ package actionScripts.managers
 					case ComponentTypes.TYPE_MAVEN:
 						if (HelperConstants.IS_MACOS)
 						{
-							var mvnDefaultPaths:Array = ["/opt/homebrew"];
+							var mvnDefaultPaths:Array = ["/usr/local", "/opt/homebrew"];
 							for each(var mvnPath:String in mvnDefaultPaths)
 							{
 								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
