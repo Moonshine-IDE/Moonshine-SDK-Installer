@@ -6,7 +6,8 @@ Moonshine SDK Installer -- This was formerly known as Moonshine App Store Helper
 #### Prerequisite
 - Ant
 - Apache Flex SDK
-- Haxe
+- [Download Haxe](https://haxe.org/download/)
+- [Install FeathersUI](https://feathersui.com/learn/haxe-openfl/installation/)
 
 #### Steps
 
