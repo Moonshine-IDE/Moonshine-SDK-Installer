@@ -245,7 +245,14 @@ package org.apache.flex.ant.tags
         
         protected function doCopy():void
         {
-            srcFile.copyTo(destFile, overwrite);
+            try
+            {
+                srcFile.copyTo(destFile, overwrite);
+            } catch (e:Error)
+            {
+                ant.output("Copy problem: "+ srcFile.nativePath +" ("+ (srcFile.exists ? "exists" : "not-exist") +"), to: "+ destFile.nativePath +" ("+ (destFile.exists ? "exists" : "not-exist") +")\n"+ e.message);
+            }
+
             dispatchEvent(new Event(Event.COMPLETE));
         }
     }
