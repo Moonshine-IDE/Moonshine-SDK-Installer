@@ -6,6 +6,7 @@ Moonshine SDK Installer -- This was formerly known as Moonshine App Store Helper
 #### Prerequisite
 - Ant
 - Apache Flex SDK
+- OpenJDK 11 or greater
 - [Download Haxe](https://haxe.org/download/)
 - [Install FeathersUI](https://feathersui.com/learn/haxe-openfl/installation/)
 
@@ -13,7 +14,7 @@ Moonshine SDK Installer -- This was formerly known as Moonshine App Store Helper
 
 1. Checkout the Moonshine-SDK-Installer repository
 2. Open `MoonshineSDKInstaller/build/ApplicationProperties.xml` from your downloaded location
-3. Provide Apache Flex SDK path to `<winSDKPath>` or `<winSDKPath64>` if your platform is Windows, and to `<unixSDKPath>` if it's macOS
+3. Provide Apache Flex SDK path to `<winSDKPath>` or `<winSDKPath64>` if your platform is Windows, and to `<unixSDKPath>` if it's macOS. The path should go inside `<![CDATA[/path/to/sdk]]>`
 4. Make sure `<isSignedBuild>` value is `false` if you want a non-signed build. Keep all the followed-by tags' value blank in case of a non-signed build
 5. Open a Terminal or Command Prompt window
 6. Navigate into `MoonshineSDKInstaller/build` from Terminal or Command Prompt
