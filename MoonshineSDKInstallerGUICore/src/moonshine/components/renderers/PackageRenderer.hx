@@ -164,7 +164,6 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 
 	private function onItemBeingUpdated(event:Event):Void
 	{
-		if ( this.stateData == null || this.stateData.dependencyTypes == null ) return;
 		var tmpIndex = this.stateData.dependencyTypes.indexOf(event.target);
 		this.stateData.dependencyTypes.updateAt(tmpIndex);
 	}
