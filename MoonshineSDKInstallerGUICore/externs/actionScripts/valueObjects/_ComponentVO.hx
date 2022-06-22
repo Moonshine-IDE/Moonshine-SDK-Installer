@@ -3,7 +3,7 @@ package actionScripts.valueObjects;
 import feathers.data.ArrayCollection;
 import actionScripts.valueObjects.ComponentVariantVO;
 
-extern class ComponentVO 
+extern class _ComponentVO 
 {
 	public var id:String;
 	public var title:String;

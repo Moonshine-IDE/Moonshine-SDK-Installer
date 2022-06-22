@@ -1,6 +1,6 @@
 package actionScripts.valueObjects;
 
-extern class ComponentTypes
+extern class _ComponentTypes
 {
 	public static final TYPE_FLEX:String;
 	public static final TYPE_FLEXJS:String;
