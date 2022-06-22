@@ -6,7 +6,7 @@ package actionScripts.valueObjects
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
 		
-	[Bindable] public class _ComponentVO extends EventDispatcher
+	[Bindable] public class ComponentVO extends EventDispatcher
 	{
 		private static const EVENT_UPDATED:String = "isUpdated";
 
