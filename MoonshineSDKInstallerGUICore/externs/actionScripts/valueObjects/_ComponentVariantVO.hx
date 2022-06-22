@@ -1,5 +1,5 @@
 package actionScripts.valueObjects;
-extern class ComponentVariantVO
+extern class _ComponentVariantVO
 {
 	public static final TYPE_STABLE:String;
 	public static final TYPE_RELEASE_CANDIDATE:String;

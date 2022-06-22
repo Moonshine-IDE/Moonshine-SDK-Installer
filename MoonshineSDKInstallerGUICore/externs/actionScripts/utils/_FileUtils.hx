@@ -1,6 +1,6 @@
 package actionScripts.utils;
 
-extern class FileUtils 
+extern class _FileUtils 
 {
     public static function getCreationDateForPath(value:String):Date;
 }

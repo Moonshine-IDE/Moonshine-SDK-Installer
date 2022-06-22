@@ -1,7 +1,7 @@
 package actionScripts.valueObjects
 {
 	[Bindable]
-	public class ComponentVariantVO
+	public class _ComponentVariantVO
 	{
 		public static const TYPE_STABLE:String = "Stable";
 		public static const TYPE_RELEASE_CANDIDATE:String = "Release Candidate";
