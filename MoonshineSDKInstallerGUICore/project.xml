@@ -15,10 +15,12 @@
 
 	<haxeflag name="--macro" value="include('moonshine')"/>
 	<haxeflag name="--macro" value="include('feathers')"/>
+	<haxeflag name="--macro" value="include('actionScripts', true, null, null, true)"/>
 
 	<section if="flash">
 		<source path="build_macros/flash"/>
 		<haxeflag name="--macro" value="AddFlashPropertyMeta.find('feathers')"/>
 		<haxeflag name="--macro" value="AddFlashPropertyMeta.find('moonshine')"/>
+		<haxeflag name="--macro" value="AddFlashPropertyMeta.find('actionScripts')"/>
 	</section>
 </project>
