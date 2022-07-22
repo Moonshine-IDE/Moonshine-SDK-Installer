@@ -8,6 +8,7 @@ package actionScripts.utils
 	import actionScripts.valueObjects.ComponentTypes;
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.ComponentVariantVO;
+	import actionScripts.valueObjects.ConstantsCoreVO;
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
 
@@ -249,6 +250,51 @@ package actionScripts.utils
 			component.version = variant.version;
 			component.downloadURL = variant.downloadURL;
 			component.sizeInMb = variant.sizeInMb;
+		}
+		
+		public static function convertString(path:String):String
+		{
+			if (!HelperConstants.IS_MACOS)
+			{
+				path= path.split(" ").join("^ ");
+				path= path.split("(").join("^(");
+				path= path.split(")").join("^)");
+				path= path.split("&").join("^&");
+			}
+			else
+			{
+				path= path.split(" ").join("\\ ");
+				path= path.split("(").join("\\(");
+				path= path.split(")").join("\\)");
+				path= path.split("&").join("\\&");
+			}
+			return path;
+		}
+		
+		/**
+		 * Returns encoded string to run on Windows' shell
+		 */
+		public static function getEncodedForShell(value:String, forceOSXEncode:Boolean=false, forceWindowsEncode:Boolean=false):String
+		{
+			var tmpValue:String = "";
+			if (HelperConstants.IS_MACOS || forceOSXEncode)
+			{
+				// @note
+				// in case of /bash one should send the value surrounded by $''
+				// i.e. $' +encodedValue+ '
+				tmpValue = value.replace(/(\\)/g, '\\\\"');
+				tmpValue = value.replace(/(")/g, '\\"');
+				tmpValue = value.replace(/(')/g, "\\'");
+			}
+			else if (!HelperConstants.IS_MACOS || forceWindowsEncode)
+			{
+				for (var i:int; i < value.length; i++)
+				{
+					tmpValue += "^"+ value.charAt(i);
+				}
+			}
+			
+			return tmpValue;
 		}
 
 		private static function isGitSVNSpecialPathCheckPass(pathValue:String):Boolean
