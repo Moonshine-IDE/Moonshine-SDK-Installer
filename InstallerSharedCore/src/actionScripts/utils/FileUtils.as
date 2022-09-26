@@ -435,6 +435,49 @@ package actionScripts.utils
 				from.copyToAsync(to, overwrite);
 			}
 		}
+
+		/**
+		 * Copies file asynchronously
+		 * @required
+		 * from: File
+		 * to: File
+		 * successHandler: Function (attr:- none)
+		 * errorHandler: Function (attr:- 1. String)
+		 */
+		public static function copyFileAsync(from:File, to:File, overwrite:Boolean=false, successHandler:Function=null, errorHandler:Function=null):void
+		{
+			manageListeners(from, true);
+			from.copyToAsync(to, overwrite);
+
+			/*
+			 * @local
+			 */
+			function onIOErrorCopyFile(event:IOErrorEvent):void
+			{
+				manageListeners(event.target as File, false);
+				if (errorHandler != null) errorHandler(event.text);
+			}
+			function onCopyFileCompletes(event:Event):void
+			{
+				// this generally fires when a file has
+				// no content thus no progressEvent will fire
+				manageListeners(event.target as File, false);
+				if (successHandler != null) successHandler();
+			}
+			function manageListeners(origin:File, attach:Boolean):void
+			{
+				if (attach)
+				{
+					origin.addEventListener(IOErrorEvent.IO_ERROR, onIOErrorCopyFile);
+					origin.addEventListener(Event.COMPLETE, onCopyFileCompletes);
+				}
+				else
+				{
+					origin.removeEventListener(IOErrorEvent.IO_ERROR, onIOErrorCopyFile);
+					origin.removeEventListener(Event.COMPLETE, onCopyFileCompletes);
+				}
+			}
+		}
 		
 		/**
 		 * Replace all the backslash to front-slashes
