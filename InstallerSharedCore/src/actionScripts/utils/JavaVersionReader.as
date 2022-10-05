@@ -6,7 +6,7 @@ package actionScripts.utils
 	
 	import actionScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
-
+	
 	import moonshine.events.HelperEvent;
 
 	[Event(name="ENV_READ_COMPLETED", type="moonshine.events.HelperEvent")]
@@ -33,7 +33,7 @@ package actionScripts.utils
 			this.onComplete = onComplete;
 			
 			var tmpArgs:Vector.<String> = javaPath ? 
-				new <String>[javaPath +"/bin/java", "-version"] :
+				new <String>[HelperUtils.getEncodedForShell(javaPath +"/bin/java"), HelperUtils.getEncodedForShell("-version")] :
 				new <String>["java", "-version"];
 			start(tmpArgs);
 		}
