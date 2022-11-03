@@ -28,7 +28,8 @@
 //  exception statement from all source files in the program, then also delete
 //  it in the license file.
 //
-////////////////////////////////////////////////////////////////////////////////package actionScripts.utils;
+////////////////////////////////////////////////////////////////////////////////
+package actionScripts.utils;
 
 import moonshine.haxeScripts.valueObjects.ComponentVO;
 import moonshine.haxeScripts.valueObjects.ComponentVariantVO;

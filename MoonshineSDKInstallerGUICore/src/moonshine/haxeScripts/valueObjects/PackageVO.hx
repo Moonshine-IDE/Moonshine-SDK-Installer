@@ -28,7 +28,8 @@
 //  exception statement from all source files in the program, then also delete
 //  it in the license file.
 //
-////////////////////////////////////////////////////////////////////////////////package moonshine.haxeScripts.valueObjects;
+////////////////////////////////////////////////////////////////////////////////
+package moonshine.haxeScripts.valueObjects;
 
 import feathers.data.ArrayCollection;
 
