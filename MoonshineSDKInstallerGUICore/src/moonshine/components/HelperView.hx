@@ -20,6 +20,7 @@
 
 package moonshine.components;
 
+import moonshine.haxeScripts.valueObjects.PackageVO;
 import feathers.text.TextFormat;
 import actionScripts.valueObjects.HelperConstants;
 import openfl.display.DisplayObject;
@@ -28,10 +29,9 @@ import moonshine.components.renderers.PackageRenderer;
 import moonshine.components.renderers.ComponentRenderer;
 import feathers.layout.HorizontalLayoutData;
 import openfl.display.StageScaleMode;
-import actionScripts.valueObjects.PackageVO;
 import feathers.core.ToggleGroup;
 import feathers.skins.RectangleSkin;
-import actionScripts.valueObjects.ComponentVO;
+import moonshine.haxeScripts.valueObjects.ComponentVO;
 import feathers.data.ListViewItemState;
 import feathers.controls.AssetLoader;
 import feathers.controls.dataRenderers.LayoutGroupItemRenderer;

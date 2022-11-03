@@ -43,14 +43,14 @@ package actionScripts.ui.views
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.utils.HelperUtils;
 	import actionScripts.utils.Parser;
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
-	import actionScripts.valueObjects.ComponentVariantVO;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
 	import moonshine.components.HelperView;
 	import moonshine.events.HelperEvent;
-	
+	import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
+
 	public class HelperViewWrapper extends FeathersUIWrapper
 	{
 		//--------------------------------------------------------------------------

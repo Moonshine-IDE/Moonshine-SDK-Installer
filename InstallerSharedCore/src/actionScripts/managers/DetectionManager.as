@@ -40,8 +40,9 @@ package actionScripts.managers
 	import actionScripts.utils.EnvironmentUtils;
 	import actionScripts.utils.HelperUtils;
 	import actionScripts.utils.JavaVersionReader;
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
+
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
 	import moonshine.events.HelperEvent;

@@ -38,14 +38,15 @@
 				autoDrawBackground="false" height="40" width="100%">
 	<fx:Script>
 		<![CDATA[
-			import spark.components.BusyIndicator;
+		import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
+
+		import spark.components.BusyIndicator;
 			import spark.events.IndexChangeEvent;
 
 			import moonshine.events.HelperEvent;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
-			import actionScripts.valueObjects.ComponentVO;
-			import actionScripts.valueObjects.ComponentVariantVO;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
 			private var busyIndicator:BusyIndicator;

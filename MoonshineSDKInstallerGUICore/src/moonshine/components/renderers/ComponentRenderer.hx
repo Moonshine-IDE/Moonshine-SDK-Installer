@@ -1,5 +1,6 @@
 package moonshine.components.renderers;
 
+import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
 import feathers.controls.dataRenderers.IDataRenderer;
 import openfl.events.Event;
 import actionScripts.utils.Parser;
@@ -12,8 +13,7 @@ import actionScripts.valueObjects.HelperConstants;
 import actionScripts.utils.HelperUtils;
 import actionScripts.utils.FileUtils;
 import feathers.layout.HorizontalLayoutData;
-import actionScripts.valueObjects.ComponentVO;
-import actionScripts.valueObjects.ComponentVariantVO;
+import moonshine.haxeScripts.valueObjects.ComponentVO;
 import feathers.controls.Label;
 import feathers.layout.VerticalLayoutData;
 import feathers.layout.VerticalLayout;

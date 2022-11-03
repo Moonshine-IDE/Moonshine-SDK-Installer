@@ -35,16 +35,18 @@ package actionScripts.utils
 	import flash.utils.Dictionary;
 	
 	import actionScripts.locator.HelperModel;
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
-	import actionScripts.valueObjects.ComponentVariantVO;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.EnvironmentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
-	import actionScripts.valueObjects.PackageVO;
 	
 	import feathers.data.ArrayCollection;
-	
+
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
+import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
+import moonshine.haxeScripts.valueObjects.PackageVO;
+
 	public class Parser
 	{
 		public static function parseEnvironmentFrom(values:String, to:EnvironmentVO):void
@@ -232,7 +234,7 @@ package actionScripts.utils
 				}
 				else
 				{
-					tmpComponent.downloadVariants = new ArrayCollection()
+					tmpComponent.downloadVariants = new ArrayCollection();
 					
 					var tmpVariant:ComponentVariantVO;
 					var preSelectedVariant:ComponentVariantVO;

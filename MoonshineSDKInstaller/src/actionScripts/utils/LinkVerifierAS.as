@@ -42,7 +42,7 @@ package actionScripts.utils
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 
 	public class LinkVerifierAS extends NativeProcess
 	{

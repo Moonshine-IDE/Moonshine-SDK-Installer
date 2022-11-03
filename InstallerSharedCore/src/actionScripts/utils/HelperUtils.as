@@ -32,13 +32,15 @@
 package actionScripts.utils
 {
 	import flash.filesystem.File;
-	
-	import mx.utils.StringUtil;
+
+import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
+
+import mx.utils.StringUtil;
 	
 	import actionScripts.locator.HelperModel;
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
-	import actionScripts.valueObjects.ComponentVariantVO;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	import actionScripts.valueObjects.HelperSDKVO;
 
