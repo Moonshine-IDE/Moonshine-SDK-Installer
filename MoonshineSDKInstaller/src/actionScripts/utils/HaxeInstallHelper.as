@@ -14,8 +14,8 @@ package actionScripts.utils
 	import mx.utils.UIDUtil;
 	
 	import actionScripts.events.GeneralEvent;
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
 	public class HaxeInstallHelper extends EventDispatcher

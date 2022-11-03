@@ -12,6 +12,8 @@
 			import flash.utils.clearTimeout;
 			import flash.utils.setTimeout;
 
+			import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
+
 			import mx.events.FlexEvent;
 			import mx.managers.CursorManager;
 			import mx.managers.PopUpManager;
@@ -31,9 +33,9 @@
 			import actionScripts.utils.LinkVerifierAS;
 			import actionScripts.utils.MoonshineNotifier;
 			import actionScripts.utils.Parser;
-			import actionScripts.valueObjects.ComponentTypes;
-			import actionScripts.valueObjects.ComponentVO;
-			import actionScripts.valueObjects.ComponentVariantVO;
+			import moonshine.haxeScripts.valueObjects.ComponentTypes;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			import actionScripts.valueObjects.InstallerConstants;
 

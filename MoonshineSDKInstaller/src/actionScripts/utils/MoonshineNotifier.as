@@ -13,7 +13,7 @@ package actionScripts.utils
 	import spark.components.Alert;
 	
 	import actionScripts.locator.HelperModel;
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
 	public class MoonshineNotifier

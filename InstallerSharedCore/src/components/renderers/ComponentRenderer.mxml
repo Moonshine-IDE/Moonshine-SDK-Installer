@@ -6,7 +6,9 @@
 	<fx:Script>
 		<![CDATA[
 			import flash.net.navigateToURL;
-			
+
+			import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
+
 			import mx.formatters.DateFormatter;
 			
 			import spark.components.BusyIndicator;
@@ -15,9 +17,9 @@
 			import actionScripts.utils.FileUtils;
 			import actionScripts.utils.HelperUtils;
 			import actionScripts.utils.Parser;
-			import actionScripts.valueObjects.ComponentTypes;
-			import actionScripts.valueObjects.ComponentVO;
-			import actionScripts.valueObjects.ComponentVariantVO;
+			import moonshine.haxeScripts.valueObjects.ComponentTypes;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
 			import moonshine.events.HelperEvent;

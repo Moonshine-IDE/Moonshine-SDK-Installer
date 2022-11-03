@@ -4,7 +4,7 @@ package actionScripts.utils
 	import flash.events.ProgressEvent;
 	import flash.utils.IDataInput;
 	
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 	
 	import moonshine.events.HelperEvent;

@@ -2,7 +2,7 @@ package actionScripts.utils
 {
 	import flash.filesystem.File;
 	
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
 	public class HarmanInstallerScriptFix

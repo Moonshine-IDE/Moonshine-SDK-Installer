@@ -21,7 +21,7 @@
 			import actionScripts.managers.InstallerItemsManager;
 			import actionScripts.managers.StartupHelper;
 			import actionScripts.utils.EnvironmentUtils;
-			import actionScripts.valueObjects.ComponentVO;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
 			import actionScripts.valueObjects.HelperConstants;
 			
 			import components.renderers.ComponentRenderer;

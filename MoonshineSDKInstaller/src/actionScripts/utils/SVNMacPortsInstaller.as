@@ -1,7 +1,7 @@
 package actionScripts.utils
 {
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 
 	import components.HelperInstaller;
 

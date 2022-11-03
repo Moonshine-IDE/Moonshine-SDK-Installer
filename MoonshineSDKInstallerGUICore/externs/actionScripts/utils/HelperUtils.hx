@@ -1,7 +1,7 @@
 package actionScripts.utils;
 
-import actionScripts.valueObjects.ComponentVO;
-import actionScripts.valueObjects.ComponentVariantVO;
+import moonshine.haxeScripts.valueObjects.ComponentVO;
+import moonshine.haxeScripts.valueObjects.ComponentVariantVO;
 
 extern class HelperUtils 
 {

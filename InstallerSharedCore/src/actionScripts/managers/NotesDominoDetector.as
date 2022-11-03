@@ -1,8 +1,8 @@
 package actionScripts.managers
 {
 	import actionScripts.utils.HelperUtils;
-	import actionScripts.valueObjects.ComponentTypes;
-	import actionScripts.valueObjects.ComponentVO;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
+	import moonshine.haxeScripts.valueObjects.ComponentVO;
 	import actionScripts.valueObjects.HelperConstants;
 
 	public class NotesDominoDetector

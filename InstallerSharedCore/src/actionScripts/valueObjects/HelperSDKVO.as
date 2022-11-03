@@ -1,6 +1,7 @@
 package actionScripts.valueObjects
 {
 	import flash.filesystem.File;
+	import moonshine.haxeScripts.valueObjects.ComponentTypes;
 
 	public class HelperSDKVO
 	{

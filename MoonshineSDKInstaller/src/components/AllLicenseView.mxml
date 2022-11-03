@@ -16,8 +16,8 @@
 			import mx.managers.PopUpManager;
 			
 			import actionScripts.locator.HelperModel;
-			import actionScripts.valueObjects.ComponentTypes;
-			import actionScripts.valueObjects.ComponentVO;
+			import moonshine.haxeScripts.valueObjects.ComponentTypes;
+			import moonshine.haxeScripts.valueObjects.ComponentVO;
 			
 			import assets.skins.LightButtonSkin;
 			
