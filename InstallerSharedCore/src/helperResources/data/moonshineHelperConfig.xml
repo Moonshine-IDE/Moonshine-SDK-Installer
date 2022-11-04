@@ -5,18 +5,18 @@
 	<airHarman version="33.1">
 		<download>
 			<windows>
-				<version version="33.1.1.856" displayVersion="33.1.1.856">
+				<version version="33.1.1.935" displayVersion="33.1.1.935">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.856/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.856/sdks/</path>
+					<folder>api/versions/33.1.1.935/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.935/sdks/</path>
 					<file>AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
-				<version version="33.1.1.856" displayVersion="33.1.1.856">
+				<version version="33.1.1.935" displayVersion="33.1.1.935">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.856/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.856/sdks/</path>
+					<folder>api/versions/33.1.1.935/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/33.1.1.935/sdks/</path>
 					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
@@ -212,13 +212,13 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.856">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.935">
 			            	<path></path>
 		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.856">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.935">
 		                	<path></path>
 		              		<file></file>
 		             </version>
@@ -369,22 +369,41 @@
 				<description>The Apache License Version 2.0 applies to all releases of OpenJDK</description>
 			</license>
 			<download>
-				<variant>
-					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
+				<variant isSelected="true">
+					<title>Required</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>196</windows>
-						<mac>186</mac>
+						<windows>179</windows>
+						<mac>180</mac>
 					</diskMBusage>
 					<windows>
-						<version version="11.0.10" displayVersion="v11.0.10">
-			                <path>https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/</path>
-			                <file>OpenJDK11U-jdk_x64_windows_hotspot_11.0.10_9.zip</file>
-			            </version>
+						<version version="17.0.5" displayVersion="v17.0.5">
+							<path>https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.5%2B8/</path>
+							<file>OpenJDK17U-jdk_x64_windows_hotspot_17.0.5_8.zip</file>
+						</version>
 					</windows>
 					<mac>
-						<version version="11.0.10" displayVersion="v11.0.10">
-			                <path>https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/</path> <!-- http://moonshine-ide.com/wp-content/uploads/ -->
-			                <file>OpenJDK11U-jdk_x64_mac_hotspot_11.0.10_9.tar.gz</file> <!-- flexSDK.tar.gz -->
+						<version version="17.0.5" displayVersion="v17.0.5">
+							<path>https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.5%2B8/</path>
+							<file>OpenJDK17U-jdk_x64_mac_hotspot_17.0.5_8.tar.gz</file>
+						</version>
+					</mac>
+				</variant>
+				<variant>
+					<title>Optional</title> <!-- refer to ComponentVariantVO for type-spelling -->
+					<diskMBusage>
+						<windows>188</windows>
+						<mac>178</mac>
+					</diskMBusage>
+					<windows>
+						<version version="11.0.17" displayVersion="v11.0.17">
+							<path>https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/</path>
+							<file>OpenJDK11U-jdk_x64_windows_hotspot_11.0.17_8.zip</file>
+						</version>
+					</windows>
+					<mac>
+						<version version="11.0.17" displayVersion="v11.0.17">
+			                <path>https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/</path>
+			                <file>OpenJDK11U-jdk_x64_mac_hotspot_11.0.17_8.tar.gz</file>
 			            </version>
 					</mac>
 				</variant>
