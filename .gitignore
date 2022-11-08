@@ -1,5 +1,6 @@
 MoonshineSDKInstaller/bin-debug
 MoonshineSDKInstaller/obj/MoonshineSDKInstallerConfig.xml
+MoonshineSDKInstallerGUICore/bin/flash/haxe/
 InstallerSharedCore/bin
 .DS_Store
 .vscode/
