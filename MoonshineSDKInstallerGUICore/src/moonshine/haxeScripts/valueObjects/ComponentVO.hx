@@ -38,6 +38,8 @@ import openfl.events.EventDispatcher;
 
 @:bind
 class ComponentVO extends EventDispatcher {
+	
+	public static final GIT_ACCESS_PERMISSION_MISSING:String = "%GIT_ACCESS_PERMISSION_MISSING%";
 	public static final EVENT_UPDATED:String = "isUpdated";
 
 	@:bind public var createdOn(get, set):Date;
