@@ -227,16 +227,25 @@ package actionScripts.managers
 			
 			match = data.match(/fatal: .*/);
 			if (match) isFatal = true;
+			if (isFatal)
+			{
+				startShell(false);
+				return;
+			}
 			
 			switch(presentRunningQueue.type)
 			{
 				case XCODE_PATH_DECTECTION:
 				{
-					data = data.replace("\n", "");
-					if (new File(data + "/usr/bin/git").exists)
+					match = data.match(/error: .*/);
+					if (!match)
 					{
-						this.onCompletion(data);
-						return;
+						data = data.replace("\n", "");
+						if (new File(data + "/usr/bin/git").exists)
+						{
+							this.onCompletion(data);
+							return;
+						}
 					}
 					
 					// even if not found
@@ -255,12 +264,6 @@ package actionScripts.managers
 						startPolling();
 					}
 				}
-			}
-			
-			if (isFatal)
-			{
-				startShell(false);
-				return;
 			}
 		}
 		
