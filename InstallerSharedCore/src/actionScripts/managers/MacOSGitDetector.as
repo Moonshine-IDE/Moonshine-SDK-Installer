@@ -233,24 +233,10 @@ package actionScripts.managers
 				case XCODE_PATH_DECTECTION:
 				{
 					data = data.replace("\n", "");
-					match = data.toLowerCase().match(/xcode.app\/contents\/developer/);
-					if (match)
+					if (new File(data + "/usr/bin/git").exists)
 					{
-						if (new File(data).exists) 
-						{
-							this.onCompletion(data);
-							return;
-						}
-					}
-					
-					match = data.toLowerCase().match(/commandlinetools/);
-					if (match)
-					{
-						if (new File(data).exists) 
-						{
-							this.onCompletion(data);
-							return;
-						}
+						this.onCompletion(data);
+						return;
 					}
 					
 					// even if not found

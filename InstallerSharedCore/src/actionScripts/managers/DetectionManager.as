@@ -450,20 +450,15 @@ package actionScripts.managers
 			if (value)
 			{
 				component = HelperUtils.getComponentByType(ComponentTypes.TYPE_GIT);
-				if (component) updateComponent();
-			}
-			
-			/*
-			 * @local
-			 */
-			function updateComponent():void
-			{
-				component.isAlreadyDownloaded = true;
-				if (HelperConstants.IS_RUNNING_IN_MOON)
+				if (component)
 				{
-					component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+					component.isAlreadyDownloaded = true;
+					if (HelperConstants.IS_RUNNING_IN_MOON)
+					{
+						component.hasWarning = "Feature available. Click on Configure(icon) to allow permission.";
+					}
+					notifyMoonshineOnDetection(component);
 				}
-				notifyMoonshineOnDetection(component);
 			}
 		}
 		

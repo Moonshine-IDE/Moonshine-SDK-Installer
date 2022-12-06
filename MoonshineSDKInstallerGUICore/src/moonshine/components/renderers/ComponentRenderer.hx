@@ -277,7 +277,8 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 		return tmpAsset;
 	}
 
-	private function updateFields():Void {
+	private function updateFields():Void 
+	{
 		this.lblTitle.text = this.stateData.title;
 		this.lblDescription.text = this.stateData.description;
 		this.assetLogo.source = this.stateData.imagePath;
@@ -332,7 +333,7 @@ class ComponentRenderer extends LayoutGroup implements IDataRenderer
 			this.assetDownloaded.includeInLayout = false;
 		}
 
-		if ((this.stateData.oldInstalledVersion != null) || (!this.stateData.isAlreadyDownloaded && this.stateData.hasWarning != null)) {
+		if ((this.stateData.oldInstalledVersion != null) || (this.stateData.hasWarning != null)) {
 			this.assetNote.visible = true;
 			this.assetNote.includeInLayout = true;
 			this.assetNote.toolTip = (this.stateData.oldInstalledVersion != null) ? "Version Mismatch" : this.stateData.hasWarning;
