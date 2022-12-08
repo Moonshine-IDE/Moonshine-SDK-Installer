@@ -42,43 +42,20 @@ package actionScripts.utils
 	
 	[Event(name="ENV_READ_COMPLETED", type="moonshine.events.HelperEvent")]
 	[Event(name="ENV_READ_ERROR", type="moonshine.events.HelperEvent")]
-	public class EnvironmentUtils extends NativeProcessBase
+	public class SystemUtils extends NativeProcessBase
 	{
 		public static const ENV_READ_COMPLETED:String = "ENV_READ_COMPLETED";
 		public static const ENV_READ_ERROR:String = "ENV_READ_ERROR";
 		
 		private var errorCloseData:String;
-		private var environmentData:String;
 		
-		private var _environments:EnvironmentVO;
-		public function get environments():EnvironmentVO
+		public function SystemUtils() {}
+		
+		public function readArchitecture():void
 		{
-			return _environments;
-		}
-		
-		public function EnvironmentUtils() {}
-		
-		public function readValues():void
-		{
-			// since mapping an environment variable won't work
-			// in sandbox Moonshine unless the folder opened
-			// by file-browser dialog once, let's keep this
-			// for Windows only
-			if (!HelperConstants.IS_MACOS)
-			{
-				// it's possible that data returns in
-				// multiple standard_output_data
-				// we need a container to hold the breakups
-				environmentData = "";
-				
-				start(new <String>["set"]);
-			}
-			else
-			{
-				// in case of macOS we might require
-				// system-arch to provide more specific options
-				start(new <String>["arch"]);
-			}
+			// in case of macOS we might require
+			// system-arch to provide more specific options
+			start(new <String>["arch"]);
 		}
 
 		override protected function onNativeProcessStandardOutputData(event:ProgressEvent):void 
@@ -93,16 +70,7 @@ package actionScripts.utils
 			}
 			else if (data != "")
 			{
-				if (HelperConstants.IS_MACOS)
-				{
-					// gets Mac system arch
-					HelperConstants.SYSTEM_ARCH = data;
-				}
-				else
-				{
-					// gets Windows environment list
-					environmentData += data + "\r\n";
-				}
+				HelperConstants.SYSTEM_ARCH = data;
 			}
 		}
 		
@@ -132,20 +100,8 @@ package actionScripts.utils
 					this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, errorCloseData));
 					return;
 				}
-				
-				if (environmentData != "")
-				{
-					_environments = new EnvironmentVO();
-					try
-					{
-						Parser.parseEnvironmentFrom(environmentData, _environments);
-					} catch (e:Error)
-					{
-						environmentData += "\nParsing error:: "+ e.getStackTrace();
-					}
-				}
-				// pass completion
-				this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED, environmentData));
+
+				this.dispatchEvent(new HelperEvent(ENV_READ_COMPLETED));
 			}
 		}
 	}

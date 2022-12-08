@@ -382,10 +382,20 @@
 						</version>
 					</windows>
 					<mac>
-						<version version="17.0.5" displayVersion="v17.0.5">
-							<path>https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.5%2B8/</path>
-							<file>OpenJDK17U-jdk_x64_mac_hotspot_17.0.5_8.tar.gz</file>
-						</version>
+						<archs>
+							<arch name="i386">
+								<version version="17.0.5" displayVersion="v17.0.5_x64">
+									<path>https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.5%2B8/</path>
+									<file>OpenJDK17U-jdk_x64_mac_hotspot_17.0.5_8.tar.gz</file>
+								</version>
+							</arch>
+							<arch name="arm64">
+								<version version="17.0.5" displayVersion="v17.0.5_arm64">
+									<path>https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.5%2B8/</path>
+									<file>OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.5_8.pkg</file>
+								</version>
+							</arch>
+						</archs>
 					</mac>
 				</variant>
 				<variant>

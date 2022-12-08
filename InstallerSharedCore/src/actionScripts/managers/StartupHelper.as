@@ -31,7 +31,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 package actionScripts.managers
 {
-	import flash.events.EventDispatcher;
+import actionScripts.utils.SystemUtils;
+
+import flash.events.Event;
+
+import flash.events.EventDispatcher;
 	import flash.filesystem.File;
 	
 	import actionScripts.utils.FileUtils;
@@ -89,6 +93,17 @@ package actionScripts.managers
 		
 		public function loadMoonshineConfig():void
 		{
+			var systemUtils:SystemUtils = new SystemUtils();
+			systemUtils.addEventListener(SystemUtils.ENV_READ_COMPLETED, onSystemArchReadCompleted);
+			systemUtils.addEventListener(SystemUtils.ENV_READ_ERROR, onSystemArchReadCompleted);
+			systemUtils.readArchitecture();
+		}
+
+		private function onSystemArchReadCompleted(event:HelperEvent):void
+		{
+			event.target.removeEventListener(SystemUtils.ENV_READ_COMPLETED, onSystemArchReadCompleted);
+			event.target.removeEventListener(SystemUtils.ENV_READ_ERROR, onSystemArchReadCompleted);
+
 			var configFile:String = File.applicationDirectory.nativePath + "/helperResources/data/moonshineHelperConfig.xml";
 			FileUtils.readFromFileAsync(new File(configFile), FileUtils.DATA_FORMAT_STRING, onMoonshineConfigLoaded, onMoonshineConfigError);
 		}

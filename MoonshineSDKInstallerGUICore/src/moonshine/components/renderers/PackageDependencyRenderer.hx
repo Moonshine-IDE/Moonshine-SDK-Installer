@@ -225,7 +225,10 @@ class PackageDependencyRenderer extends LayoutGroup implements IDataRenderer {
 			this.cmbVariants.includeInLayout = this.cmbVariants.visible = true;
 			this.cmbVariants.dataProvider = this.stateData.downloadVariants;
 			this.cmbVariants.selectedIndex = this.stateData.selectedVariantIndex;
-			this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);
+			if (!this.cmbVariants.hasEventListener(Event.CHANGE))
+			{
+				this.cmbVariants.addEventListener(Event.CHANGE, onVariantChange, false, 0, true);
+			}
 		} else {
 			this.cmbVariants.dataProvider = null;
 			this.cmbVariants.includeInLayout = this.cmbVariants.visible = false;

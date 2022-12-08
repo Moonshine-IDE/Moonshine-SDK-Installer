@@ -225,26 +225,31 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 				var variantCount:int = XMLList(comp.download.variant).length();
 				if (variantCount == 1)
 				{
-					tmpComponent.version = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
-					tmpComponent.displayVersion = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
-					tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() 
-						+ comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
+					getDisplayVersionByArch(tmpComponent, comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+
+					//tmpComponent.version = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
+					//tmpComponent.displayVersion = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
+					//tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString()
+					//	+ comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version);
 					tmpComponent.sizeInMb = int(comp.download.variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
 				}
 				else
 				{
 					tmpComponent.downloadVariants = new ArrayCollection();
-					
+
 					var tmpVariant:ComponentVariantVO;
 					var preSelectedVariant:ComponentVariantVO;
 					for each (var variant:XML in comp.download.variant)
 					{
 						tmpVariant = new ComponentVariantVO();
-						tmpVariant.version = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
-						tmpVariant.displayVersion = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
+
+						getDisplayVersionByArch(tmpVariant, variant[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+
+						//tmpVariant.version = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
+						//tmpVariant.displayVersion = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
 						tmpVariant.title = String(variant.title) +" - "+ tmpVariant.version;
-						tmpVariant.downloadURL = variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
+						//tmpVariant.downloadURL = variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
 						tmpVariant.sizeInMb = int(variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
 						
 						tmpComponent.downloadVariants.add(tmpVariant);
@@ -415,6 +420,34 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 			}
 			
 			return null;
+		}
+
+		private static function getDisplayVersionByArch(component:Object, xml:XMLList):Object
+		{
+			if ((component is ComponentVO) || (component is ComponentVariantVO))
+			{
+				if (xml.hasOwnProperty('archs'))
+				{
+					for each (var arch:XML in xml.archs.arch)
+					{
+						if (arch.@name == HelperConstants.SYSTEM_ARCH)
+						{
+							component.version = String(arch.version.@version);
+							component.displayVersion = String(arch.version.@displayVersion);
+							component.downloadURL = arch.version.path.toString() + arch.version.file.toString();
+							return component;
+						}
+					}
+				}
+				else
+				{
+					component.version = String(xml.version.@version);
+					component.displayVersion = String(xml.version.@displayVersion);
+					component.downloadURL = xml.version.path.toString() + xml.version.file.toString();
+				}
+			}
+
+			return component;
 		}
 		
 		private static function setDescriptionBy(node:XMLList, to:ComponentVO):void

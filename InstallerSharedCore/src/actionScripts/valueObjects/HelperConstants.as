@@ -79,6 +79,7 @@ package actionScripts.valueObjects
 		public static var IS_CUSTOM_WINDOWS_PATH:Boolean;
 		public static var IS_ALLOWED_TO_CHOOSE_CUSTOM_PATH:Boolean;
 		public static var IS_DETECTION_IN_PROCESS:Boolean;
+		public static var SYSTEM_ARCH:String;
 		
 		public static function get HELPER_STORAGE():File
 		{
