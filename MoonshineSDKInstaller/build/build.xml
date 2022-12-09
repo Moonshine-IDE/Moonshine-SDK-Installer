@@ -58,7 +58,12 @@
 			<property name="certSignedMacOSKeychainPass" value="${APP_PROPERTIES.certSignedMacOSKeychainPass}" />
 			<property name="svn.revision" value="3913"/>
 			<condition property="HAXE_LIB_DIRECTORY" value="${APP_PROPERTIES.haxeLibDirectory}">
-				<isset property="APP_PROPERTIES.haxeLibDirectory"/>
+				<and>
+					<isset property="APP_PROPERTIES.haxeLibDirectory"/>
+					<not>
+						<equals arg1="${APP_PROPERTIES.haxeLibDirectory}" arg2=""/>
+					</not>
+				</and>
 			</condition>
 			<!-- fall back to default Haxe install location, if available -->
 			<condition property="HAXE_LIB_DIRECTORY" value="c:/HaxeToolkit/haxe">
