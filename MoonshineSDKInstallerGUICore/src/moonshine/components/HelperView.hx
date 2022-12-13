@@ -99,7 +99,9 @@ class HelperView extends LayoutGroup {
 			var itemRenderer = new PackageRenderer();
 			itemRenderer.addEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged, false, 0, true);
 			return itemRenderer;
-		}, this.byFeatureRecyclerUpdateFn,
+			}, (itemRenderer:PackageRenderer, state:ListViewItemState) -> {
+				
+			},
 			(itemRenderer:PackageRenderer, state:ListViewItemState) -> {
 				itemRenderer.resetFields();
 			}, 

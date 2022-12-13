@@ -426,7 +426,7 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 		{
 			if ((component is ComponentVO) || (component is ComponentVariantVO))
 			{
-				if (xml.hasOwnProperty('archs'))
+				if (xml.hasOwnProperty('archs') )
 				{
 					for each (var arch:XML in xml.archs.arch)
 					{

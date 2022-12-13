@@ -88,8 +88,10 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		},
 		(itemRenderer:PackageDependencyRenderer, state:ListViewItemState) -> {
 			state.data.removeEventListener("isUpdated", this.onItemBeingUpdated);
-			itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
 			itemRenderer.resetFields();
+		}, 
+		(itemRenderer:PackageDependencyRenderer) -> {
+			itemRenderer.removeEventListener(HelperEvent.DOWNLOAD_VARIANT_CHANGED, onDownloadVariantChanged);
 		});
 	}
 
@@ -172,7 +174,7 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		this.stateImageContainer.includeInLayout = false;
 		this.stateImageContainer.visible = false;
 
-		this.lstDependencyTypes.dataProvider = null;
+		//this.lstDependencyTypes.dataProvider = null;
 		this.lstDependencyTypes.visible = this.lstDependencyTypes.includeInLayout = false;
 	}
 
@@ -198,12 +200,11 @@ class PackageRenderer extends LayoutGroup implements IDataRenderer {
 		if (this.stateData != null)
 		{
 			var tmpIndex = this.stateData.dependencyTypes.indexOf(event.target);
-			this.stateData.dependencyTypes.updateAt(tmpIndex);	
-		}
-		else
-		{
-			trace(">>>>>>>>>>>>>>>>>>>>>");	
-		}		
+			if (tmpIndex != -1)
+			{
+				this.stateData.dependencyTypes.updateAt(tmpIndex);
+			}
+		}	
 	}
 
 	private function onDownloadVariantChanged(event:HelperEvent):Void {

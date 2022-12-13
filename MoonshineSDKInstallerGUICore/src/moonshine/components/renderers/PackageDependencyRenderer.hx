@@ -334,8 +334,8 @@ class PackageDependencyRenderer extends LayoutGroup implements IDataRenderer {
 
 	private function onVariantChange(event:Event):Void 
 	{
-		if (!this.cmbVariants.selectedItem) return;
-
+		if (this.cmbVariants.selectedItem == null) return;
+		
 		var tmpVariant = cast(this.cmbVariants.selectedItem, ComponentVariantVO);
 		var installToPath = Parser.getInstallDirectoryPath(this.stateData.type, tmpVariant.version);
 		this.stateData.selectedVariantIndex = this.cmbVariants.selectedIndex;
@@ -345,9 +345,7 @@ class PackageDependencyRenderer extends LayoutGroup implements IDataRenderer {
 		this.stateData.sizeInMb = tmpVariant.sizeInMb;
 		this.stateData.createdOn = FileUtils.getCreationDateForPath(installToPath);
 
-		this.setInvalid(InvalidationFlag.DATA);
-
 		this.dispatchEvent(new HelperEvent(HelperEvent.DOWNLOAD_VARIANT_CHANGED,
-			{ComponentVariantVO: this.cmbVariants.selectedItem, ComponentVO: this.stateData, newIndex: this.cmbVariants.selectedIndex}));
+			{ComponentVariantVO: tmpVariant, ComponentVO: this.stateData, newIndex: this.stateData.selectedVariantIndex}));
 	}
 }
