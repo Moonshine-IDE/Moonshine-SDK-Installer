@@ -519,20 +519,20 @@
 			<download>
 				<variant>
 				<diskMBusage>
-					<windows>95</windows>
-					<mac>95</mac>
+					<windows>116</windows>
+					<mac>116</mac>
 				</diskMBusage>
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<windows>
-						<version version="5.4.1" displayVersion="v5.4.1">
+						<version version="7.5.1" displayVersion="v7.5.1">
 			                <path>https://services.gradle.org/distributions/</path>
-			                <file>gradle-5.4.1-bin.zip</file>
+			                <file>gradle-7.5.1-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="5.4.1" displayVersion="v5.4.1">
+						<version version="7.5.1" displayVersion="v7.5.1">
 			                <path>https://services.gradle.org/distributions/</path>
-			                <file>gradle-5.4.1-bin.zip</file> <!-- flexSDK.tar.gz -->
+			                <file>gradle-7.5.1-bin.zip</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
