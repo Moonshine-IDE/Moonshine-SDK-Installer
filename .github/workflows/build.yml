@@ -23,4 +23,4 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
     - name: Build with Ant
-      run: ant -noinput -buildfile 'MoonshineSDKInstaller\build\build.xml'
+      run: ant -noinput -buildfile 'MoonshineSDKInstaller/build/build.xml'
