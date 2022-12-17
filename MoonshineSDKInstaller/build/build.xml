@@ -363,7 +363,7 @@
 			<arg line="shellScripts"/>
 	   		<!-- Add folders to be bundled in the AIR file here -->
 		</java>
-		<antcall target="zipCaptiveBundle"></antcall>
+		<!-- <antcall target="zipCaptiveBundle"></antcall> -->
 	 </target>
 	
 	<target name="zipCaptiveBundle">
