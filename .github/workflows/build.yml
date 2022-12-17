@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        runs-on: ["macos-latest"]
+        runs-on: ["windows-latest", "macos-latest"]
     runs-on: ${{ matrix.runs-on }}
     steps:
     - uses: actions/checkout@v3
