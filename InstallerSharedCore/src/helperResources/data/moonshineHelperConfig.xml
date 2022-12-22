@@ -369,8 +369,8 @@
 				<description>The Apache License Version 2.0 applies to all releases of OpenJDK</description>
 			</license>
 			<download>
-				<variant isSelected="true">
-					<title>Required</title> <!-- refer to ComponentVariantVO for type-spelling -->
+				<variant>
+					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
 						<windows>179</windows>
 						<mac>180</mac>
@@ -396,25 +396,6 @@
 								</version>
 							</arch>
 						</archs>
-					</mac>
-				</variant>
-				<variant>
-					<title>Optional</title> <!-- refer to ComponentVariantVO for type-spelling -->
-					<diskMBusage>
-						<windows>188</windows>
-						<mac>178</mac>
-					</diskMBusage>
-					<windows>
-						<version version="11.0.17" displayVersion="v11.0.17">
-							<path>https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/</path>
-							<file>OpenJDK11U-jdk_x64_windows_hotspot_11.0.17_8.zip</file>
-						</version>
-					</windows>
-					<mac>
-						<version version="11.0.17" displayVersion="v11.0.17">
-			                <path>https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.17%2B8/</path>
-			                <file>OpenJDK11U-jdk_x64_mac_hotspot_11.0.17_8.tar.gz</file>
-			            </version>
 					</mac>
 				</variant>
 			</download>
