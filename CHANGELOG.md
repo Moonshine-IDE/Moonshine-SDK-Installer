@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 * Update Gradle to 7.5.1 ([#99](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/99))
 * Update Harman AIR Version for Flex SDK install to 33.1.1.935 ([#97](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/97))
+* Changed license to SSPL ([#95](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/95))
 
 ### Fixed
 
