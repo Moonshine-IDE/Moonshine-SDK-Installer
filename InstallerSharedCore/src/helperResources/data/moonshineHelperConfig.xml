@@ -2,21 +2,21 @@
 <config>
 	<installerUpdateCheckUrl>https://moonshine-ide.com/downloads/msdki/MoonshineSDKInstaller_update_v2.xml</installerUpdateCheckUrl>
 	<airAdobe version="32.0"/>
-	<airHarman version="33.1">
+	<airHarman version="50.2">
 		<download>
 			<windows>
-				<version version="33.1.1.935" displayVersion="33.1.1.935">
+				<version version="50.2.1.1" displayVersion="50.2.1.1">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.935/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.935/sdks/</path>
+					<folder>api/versions/50.2.1.1/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/50.2.1.1/sdks/</path>
 					<file>AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
-				<version version="33.1.1.935" displayVersion="33.1.1.935">
+				<version version="50.2.1.1" displayVersion="50.2.1.1">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/33.1.1.935/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/33.1.1.935/sdks/</path>
+					<folder>api/versions/50.2.1.1/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/50.2.1.1/sdks/</path>
 					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
@@ -212,13 +212,13 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.935">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v50.2.1.1">
 			            	<path></path>
 		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v33.1.1.935">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v50.2.1.1">
 		                	<path></path>
 		              		<file></file>
 		             </version>
