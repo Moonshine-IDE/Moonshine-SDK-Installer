@@ -517,7 +517,7 @@
 					// fixing flex-sdk-description
 					flexConfig = installFolder.resolvePath("flex-sdk-description.xml");
 					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
-					flexConfigContent = flexConfigContent.replace(/FP\d+.\d+/, "FP32.0");
+					flexConfigContent = flexConfigContent.replace(/FP\d+.\d+/, "FP50.2");
 					flexConfigContent = flexConfigContent.replace(/AIR\d+.\d+/, "AIR50.2");
 					FileUtils.writeToFile(flexConfig, flexConfigContent);
 
