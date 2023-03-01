@@ -366,11 +366,11 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 		{
 			return {
 				/*file: HelperConstants.CONFIG_HARMAN_AIR_FILE + "?license=accepted",*/
-				label: "AIR 33.1",
+				label: "AIR 50.2",
 				server: "https://airsdk.harman.com"/*HelperConstants.CONFIG_HARMAN_AIR_SERVER*/,
-				folder: "api/versions/33.1.1.554/sdks",
-				version: "33.1",
-				versionID: "33.1"
+				folder: "api/versions/50.2.1.1/sdks",
+				version: "50.2",
+				versionID: "50.2"
 			};
 		}
 		
