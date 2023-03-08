@@ -19,7 +19,7 @@ Gradle was also updated to 7.5.1 to work with OpenJDK 17.
 
 * Update OpenJDK version to 17.0.5 ([#98](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/98))
 * Update Gradle version to 7.5.1 ([#99](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/99))
-* Update Harman AIR Version for `Apache Flex SDK (Harman AIR) installation to 33.1.1.935 ([#97](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/97))
+* Update Harman AIR Version for `Apache Flex SDK (Harman AIR) installation to 50.2.2.1 ([#103](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/103))
 * Changed license to SSPL ([#95](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/95))
 
 ### Fixed
