@@ -65,6 +65,16 @@
 	</target>
 
 	<target name="runWindows" if="isWindows">
+		<echo>basedir: ${basedir}</echo>
+		<echo>haxe.version: ${haxe.version}</echo>
+		<echo>haxe.download.server: ${haxe.download.server}</echo>
+		<echo>haxe.download.file: ${haxe.download.file}</echo>
+		<echo>haxe.download.file.name.only: ${haxe.download.file.name.only}</echo>
+		<echo>neko.moonshine.directory: ${neko.moonshine.directory}</echo>
+		<echo>haxe.temp.folder: ${haxe.temp.folder}</echo>
+		<echo>haxe.moonshine.directory: ${haxe.moonshine.directory}</echo>
+		<echo>haxe.moonshine.directory.root: ${haxe.moonshine.directory.root}</echo>
+		<echo>haxe.windows.binary.unzip.folder: ${haxe.windows.binary.unzip.folder}</echo>
 		<antcall target="dispose-temp-windows" />
 	</target>
 
@@ -73,26 +83,32 @@
 	</target>
 	
 	<target name="get-haxe-sdk">
+		<echo>Creating temp directory for get-haxe-sdk: ${basedir}/${haxe.temp.folder}</echo>
 		<mkdir dir="${basedir}/${haxe.temp.folder}" />
 		<echo>Downloading Haxe SDK v.${haxe.version}</echo>
+		<echo>Downloading ${haxe.download.server}${haxe.download.file} to ${basedir}</echo>
         <get src="${haxe.download.server}${haxe.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
 	</target>
 
 	<target name="get-neko-sdk">
 		<delete dir="${basedir}/${haxe.temp.folder}" />
 		<mkdir dir="${basedir}/${haxe.temp.folder}" />
+		<echo>creating directory for get-neko-sdk at: ${basedir}/${haxe.temp.folder}</echo>
 		<echo>Downloading Neko SDK v.${neko.version}</echo>
+		<echo>Downloading Neko from ${neko.download.server}${neko.download.file} to ${basedir}</echo>
 		<get src="${neko.download.server}${neko.download.file}" dest="${basedir}" verbose="on" quiet="true"/>
 	</target>
 	
 	<target name="unzip-haxe-sdk">
 		<echo>Starting to unzip: ${basedir}/${haxe.download.file}</echo>
+		<echo>Unzipping Haxe ${basedir}/${haxe.download.file} to ${basedir}/${haxe.temp.folder}</echo>
         <unzip src="${basedir}/${haxe.download.file}" dest="${basedir}/${haxe.temp.folder}"/>
 		<echo>Completed unzipping Haxe SDK</echo>
 	</target>
 
 	<target name="unzip-neko-sdk">
 		<echo>Starting to unzip: ${basedir}/${neko.download.file}</echo>
+		<echo>Unzipping Neko ${basedir}/${neko.download.file} to ${basedir}/${haxe.temp.folder}</echo>
 		<unzip src="${basedir}/${neko.download.file}" dest="${basedir}/${haxe.temp.folder}"/>
 		<echo>Completed unzipping Neko SDK</echo>
 	</target>
@@ -203,6 +219,7 @@
 	<target name="win-copy-haxe-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
         <echo>Moving files to SDK directory ${haxe.moonshine.directory}</echo>
 		<mkdir dir="${haxe.moonshine.directory}"/>
+		<echo>Copying Haxe to directory ${haxe.moonshine.directory} from ${basedir}/${haxe.temp.folder}/haxe_20211022152000_ab0c054</echo>
         <copy todir="${haxe.moonshine.directory}" overwrite="true">
         	<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
         	<fileset dir="${basedir}/${haxe.temp.folder}/haxe_20211022152000_ab0c054">
@@ -215,6 +232,7 @@
 	<target name="win-copy-neko-dir" if="isWindows" description="copies a directory using exec and rsync so that symbolic links are preserved">
 		<echo>Moving files to SDK directory ${neko.moonshine.directory}</echo>
 		<mkdir dir="${neko.moonshine.directory}"/>
+		<echo>Copying Neko to directory ${neko.moonshine.directory} from ${basedir}/${haxe.temp.folder}/${neko.download.file.name.only}</echo>
 		<copy todir="${neko.moonshine.directory}" overwrite="true">
 			<!-- using the AS Ant library I don't see anymore workaround to determine the folder name or copied from an wild-card-named folder -->
 			<fileset dir="${basedir}/${haxe.temp.folder}/${neko.download.file.name.only}">
