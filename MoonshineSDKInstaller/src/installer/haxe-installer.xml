@@ -146,20 +146,6 @@
 			<arg value="--quiet"/>
 		</exec>
 		<echo>Completed FeathersUI setup</echo>
-		<echo>Downloading and installing OpenFl library</echo>
-		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
-			<arg value="install"/>
-			<arg value="openfl"/>
-			<arg value="--quiet"/>
-		</exec>
-		<echo>Completed OpenFl setup</echo>
-		<echo>Downloading and installing Actuate library</echo>
-		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
-			<arg value="install"/>
-			<arg value="actuate"/>
-			<arg value="--quiet"/>
-		</exec>
-		<echo>Completed Actuate setup</echo>
 		<echo>Downloading and installing Lime library</echo>
 		<exec executable="${haxe.moonshine.directory}/haxelib" failonerror="true">
 			<arg value="install"/>
