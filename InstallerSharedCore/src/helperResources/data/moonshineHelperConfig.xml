@@ -246,15 +246,15 @@
 						<mac>181</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.9" displayVersion="v0.9.9">
-			                <path>https://mirrors.estointernet.in/apache/royale/0.9.9/binaries/</path>
-			                <file>apache-royale-0.9.9-bin-js.zip</file>
+						<version version="0.9.10" displayVersion="v0.9.10">
+			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.10/binaries/</path>
+			                <file>apache-royale-0.9.10-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.9" displayVersion="v0.9.9">
-			                <path>https://mirrors.estointernet.in/apache/royale/0.9.9/binaries/</path>
-			                <file>apache-royale-0.9.9-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
+						<version version="0.9.10" displayVersion="v0.9.10">
+			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.10/binaries/</path>
+			                <file>apache-royale-0.9.10-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
@@ -265,15 +265,15 @@
 						<mac>160</mac>
 					</diskMBusage>
 					<windows>
-						<version version="0.9.10" displayVersion="v0.9.10">
+						<version version="0.9.11" displayVersion="v0.9.11">
 			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
-			                <file>apache-royale-0.9.10-SNAPSHOT-bin.zip</file>
+			                <file>apache-royale-0.9.11-SNAPSHOT-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="0.9.10" displayVersion="v0.9.10">
+						<version version="0.9.11" displayVersion="v0.9.11">
 			                <path>https://nightlies.apache.org/Royale/Royale-asjs/</path>
-			                <file>apache-royale-0.9.10-SNAPSHOT-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+			                <file>apache-royale-0.9.11-SNAPSHOT-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
