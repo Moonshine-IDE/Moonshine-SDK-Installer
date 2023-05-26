@@ -247,13 +247,13 @@
 					</diskMBusage>
 					<windows>
 						<version version="0.9.10" displayVersion="v0.9.10">
-			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.10/binaries/</path>
+			                <path>https://dlcdn.apache.org/royale/0.9.10/binaries/</path>
 			                <file>apache-royale-0.9.10-bin-js.zip</file>
 			            </version>
 					</windows>
 					<mac>
 						<version version="0.9.10" displayVersion="v0.9.10">
-			                <path>https://www.apache.org/dyn/closer.lua/royale/0.9.10/binaries/</path>
+			                <path>https://dlcdn.apache.org/royale/0.9.10/binaries/</path>
 			                <file>apache-royale-0.9.10-bin-js.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
