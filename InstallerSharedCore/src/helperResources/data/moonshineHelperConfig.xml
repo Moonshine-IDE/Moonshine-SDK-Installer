@@ -645,17 +645,17 @@
 				<variant>
 					<title>Stable</title> <!-- refer to ComponentVariantVO for type-spelling -->
 					<diskMBusage>
-						<windows>10</windows>
+						<windows>18</windows>
 						<mac>279</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="1.9.7" displayVersion="v1.9.7">
+						<version version="1.14.2" displayVersion="v1.14.2">
 			            	<path>https://moonshine-ide.com/downloads/sliksvn/</path>
-		              		<file>SlikSvn-1.9.7.zip</file>
+		              		<file>SlikSvn-1.14.2.zip</file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="1.14.1" displayVersion="1.14.1">
+						<version version="1.14.2" displayVersion="1.14.2">
 		                	<path></path>
 		              		<file></file>
 		             	</version>
