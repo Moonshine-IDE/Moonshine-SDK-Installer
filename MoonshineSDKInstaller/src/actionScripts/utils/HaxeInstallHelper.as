@@ -68,7 +68,8 @@ package actionScripts.utils
 				"haxelib install feathersui --quiet",
 				"haxelib install openfl --quiet",
 				"haxelib install actuate --quiet",
-				"haxelib install lime --quiet"
+				"haxelib install lime --quiet",
+				"haxelib run openfl setup --quiet"
 			];
 			if (HelperConstants.IS_MACOS)
 			{
