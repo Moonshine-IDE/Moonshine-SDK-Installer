@@ -8,16 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Summary
 
-
+Moonshine SDK Installer 4.5.0 includes version updates for Apache Royale, Apache Flex SDK (Harman AIR), and Haxe.
 
 ### Added
 
 
 ### Changed
 
+* Update Royale to v0.9.11 ([#104](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/104))
+* Update Harman AIR SDK to 50.2.2.6 ([#107](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/107))
+* Update Haxe to 4.2.5 ([#105](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/105))
+
 
 ### Fixed
-
 
 
 
