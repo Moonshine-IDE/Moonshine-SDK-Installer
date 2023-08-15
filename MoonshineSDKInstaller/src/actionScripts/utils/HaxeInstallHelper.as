@@ -69,7 +69,7 @@ package actionScripts.utils
 				"haxelib install openfl --always --quiet",
 				"haxelib install actuate --always --quiet",
 				"haxelib install lime --always --quiet",
-				"haxelib run openfl setup --always --quiet"
+				"haxelib run openfl setup -y"
 			];
 			if (HelperConstants.IS_MACOS)
 			{
