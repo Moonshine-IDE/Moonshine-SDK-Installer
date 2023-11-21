@@ -5,18 +5,18 @@
 	<airHarman version="50.2">
 		<download>
 			<windows>
-				<version version="50.2.2.6" displayVersion="50.2.2.6">
+				<version version="50.2.3.8" displayVersion="50.2.3.8">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/50.2.2.6/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/50.2.2.6/sdks/</path>
+					<folder>api/versions/50.2.3.8/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/50.2.3.8/sdks/</path>
 					<file>AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
-				<version version="50.2.2.6" displayVersion="50.2.2.6">
+				<version version="50.2.3.8" displayVersion="50.2.3.8">
 					<server>https://airsdk.harman.com</server>
-					<folder>api/versions/50.2.2.6/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/50.2.2.6/sdks/</path>
+					<folder>api/versions/50.2.3.8/sdks</folder>
+					<path>https://airsdk.harman.com/api/versions/50.2.3.8/sdks/</path>
 					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
@@ -212,13 +212,13 @@
 						<mac>1530</mac>
 					</diskMBusage>
 					<windows>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v50.2.2.6">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v50.2.3.8">
 			            	<path></path>
 		              		<file></file>
 		            	</version>
 		 			</windows>
 					<mac>
-						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v50.2.2.6">
+						<version version="4.16.1" displayVersion="Flex v4.16.1, AIR v50.2.3.8">
 		                	<path></path>
 		              		<file></file>
 		             </version>
