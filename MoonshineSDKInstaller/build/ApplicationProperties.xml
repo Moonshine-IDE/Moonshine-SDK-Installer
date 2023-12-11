@@ -22,6 +22,7 @@
 	<certSignedAIRPass><![CDATA[]]></certSignedAIRPass>
 	<certSignedWindowsBinary><![CDATA[]]></certSignedWindowsBinary> <!-- Relative path to Windows binary installer certificate (.p12) distributed by signer authorities -->
 	<certSignedWindowsBinaryPass><![CDATA[]]></certSignedWindowsBinaryPass>
+	<thumbprintSMWindowsBinary><![CDATA[]]></thumbprintSMWindowsBinary>
 	<certSignedDevIDKeychainName><![CDATA[]]></certSignedDevIDKeychainName> <!-- apple developer ID name as installed in keychain -->
 	<certSignedMacOSKeychainName><![CDATA[]]></certSignedMacOSKeychainName> <!-- apple developer certificate name as installed in keychain -->
 	<certSignedMacOSKeychainInstallerName><![CDATA[]]></certSignedMacOSKeychainInstallerName> <!-- apple installer certificate name as installed in keychain -->
