@@ -244,16 +244,19 @@ package actionScripts.utils
 			}
 		}
 		
-		private function shellError(event:ProgressEvent):void 
+		private function shellError(event:ProgressEvent):void
 		{
 			if (customProcess)
 			{
 				var output:IDataInput = customProcess.standardError;
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
-				
-				trace("stdError: "+ data);
-				startShell(false);
-				dispatchEvent(new GeneralEvent(EVENT_INSTALL_ERROR, data));
+
+				if (data.toLowerCase().indexOf("cp: /usr/local/bin/lime: permission denied") == -1)
+				{
+					trace("stdError: "+ data);
+					startShell(false);
+					dispatchEvent(new GeneralEvent(EVENT_INSTALL_ERROR, data));
+				}
 			}
 		}
 		
