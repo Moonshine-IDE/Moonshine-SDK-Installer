@@ -250,10 +250,9 @@ package actionScripts.utils
 			{
 				var output:IDataInput = customProcess.standardError;
 				var data:String = output.readUTFBytes(output.bytesAvailable).toLowerCase();
-
+				trace("stdError: "+ data);
 				if (data.toLowerCase().indexOf("cp: /usr/local/bin/lime: permission denied") == -1)
 				{
-					trace("stdError: "+ data);
 					startShell(false);
 					dispatchEvent(new GeneralEvent(EVENT_INSTALL_ERROR, data));
 				}
