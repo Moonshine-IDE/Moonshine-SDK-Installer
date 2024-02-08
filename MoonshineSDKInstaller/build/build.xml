@@ -266,7 +266,7 @@
 		</exec>
 	</target>
 
-	<target name="CompileGUICore" depends="InstallHaxeDependencies">
+	<target name="CompileGUICore">
 		<echo>Compiling GUI Core SWC</echo>
 		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
 			dir="${LibrarySDKInstallerHaxe}"

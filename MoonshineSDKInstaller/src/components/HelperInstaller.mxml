@@ -505,7 +505,7 @@
 					// fixing flex-configs
 					var flexConfig:File = installFolder.resolvePath("frameworks/flex-config.xml");
 					var flexConfigContent:String = FileUtils.readFromFile(flexConfig) as String;
-					flexConfigContent = flexConfigContent.replace(/<target-player>.*?<\/target-player>/g, "<target-player>50.2</target-player>");
+					flexConfigContent = flexConfigContent.replace(/<target-player>.*?<\/target-player>/g, "<target-player>32.0</target-player>");
 					FileUtils.writeToFile(flexConfig, flexConfigContent);
 
 					// fixing air-config
@@ -517,7 +517,7 @@
 					// fixing flex-sdk-description
 					flexConfig = installFolder.resolvePath("flex-sdk-description.xml");
 					flexConfigContent = FileUtils.readFromFile(flexConfig) as String;
-					flexConfigContent = flexConfigContent.replace(/FP\d+.\d+/, "FP50.2");
+					flexConfigContent = flexConfigContent.replace(/FP\d+.\d+/, "FP32.0");
 					flexConfigContent = flexConfigContent.replace(/AIR\d+.\d+/, "AIR50.2");
 					FileUtils.writeToFile(flexConfig, flexConfigContent);
 

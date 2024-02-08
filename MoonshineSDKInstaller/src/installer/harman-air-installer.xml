@@ -113,13 +113,13 @@
 			<replacefilter token="{playerglobalHome}/"
 						   value="libs/player/"/>
 			<replacefilter token="&lt;target-player&gt;27.0&lt;/target-player&gt;"
-						   value="&lt;target-player&gt;50.2&lt;/target-player&gt;"/>
+						   value="&lt;target-player&gt;32.0&lt;/target-player&gt;"/>
 			<replacefilter token="&lt;swf-version&gt;38&lt;/swf-version&gt;"
-						   value="&lt;swf-version&gt;50&lt;/swf-version&gt;"/>
+						   value="&lt;swf-version&gt;43&lt;/swf-version&gt;"/>
 		</replace>
 		<replace file="${basedir}/flex-sdk-description.xml">
 			<replacefilter token="FP27.0"
-						   value="FP50.2"/>
+						   value="FP32.0"/>
 			<replacefilter token="AIR27.0"
 						   value="AIR50.2"/>
 		</replace>
