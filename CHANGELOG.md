@@ -11,7 +11,7 @@ Moonshine SDK Installer 4.6.0 includes version updates for Apache Flex SDK (Harm
 
 ### Changed
 
-* Update Harman AIR SDK to 50.2.4.3 ([#117](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/117)
+* Update Harman AIR SDK to 50.2.4.3 ([#117](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/117))
 
 ### Fixed
 
