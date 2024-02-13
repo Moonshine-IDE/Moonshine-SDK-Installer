@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [4.6.0]
+
+### Summary
+
+Moonshine SDK Installer 4.6.0 includes version updates for Apache Flex SDK (Harman AIR). It contains as well some improvements in Haxe installation.
+
+### Changed
+
+* Update Harman AIR SDK to 50.2.4.3 ([#117](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/117)
+
+### Fixed
+
+* Fixed issue where with installed Flex SDK with Harman Air user wasn't able to build non-Air application ([#116](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/116))
+* Fixed "permission denied" error while installing Haxe ([#113](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/113))
 
 ## Moonshine SDK Installer [4.5.0]
 
