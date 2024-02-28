@@ -134,7 +134,7 @@ package actionScripts.utils
 				setCommand += getSetExportWithoutQuote("DYLD_LIBRARY_PATH", neko.installToPath);
 				setPathCommand += (HelperConstants.IS_MACOS ? "$DYLD_LIBRARY_PATH:" : "%DYLD_LIBRARY_PATH%;");
 
-				setCommand += HelperConstants.HAXE_SYMLINK_COMMANDS.join(";") +";";
+				setCommand += HelperConstants.IS_MACOS ? HelperConstants.HAXE_MAC_SYMLINK_COMMANDS.join(";") +";" : HelperConstants.HAXE_WIN_SYMLINK_COMMANDS.join(";") +";";
 
 				isValidToExecute = true;
 			}

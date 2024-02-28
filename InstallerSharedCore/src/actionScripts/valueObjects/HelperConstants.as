@@ -50,7 +50,7 @@ package actionScripts.valueObjects
 		public static const MOONSHINE_NOTIFIER_FILE_NAME:String = ".MoonshineHelperNewUpdate.xml";
 		public static const INSTALLER_COOKIE:String = "moonshine-installer-local";
 		public static const DEFAULT_SDK_FOLDER_NAME:String = "MoonshineSDKs";
-		public static const HAXE_SYMLINK_COMMANDS:Array = [
+		public static const HAXE_MAC_SYMLINK_COMMANDS:Array = [
 			"ln -s -F -f $NEKO_HOME/libneko.dylib $HAXE_HOME/libneko.dylib",
 			"ln -s -F -f $NEKO_HOME/libneko.2.dylib $HAXE_HOME/libneko.2.dylib",
 			"ln -s -F -f $NEKO_HOME/libneko.2.3.0.dylib $HAXE_HOME/libneko.2.3.0.dylib",
@@ -64,6 +64,21 @@ package actionScripts.valueObjects
 			"ln -s -F -f $NEKO_HOME/mod_tora2.ndll $HAXE_HOME/mod_tora2.ndll",
 			"ln -s -F -f $NEKO_HOME/ui.ndll $HAXE_HOME/ui.ndll",
 			"ln -s -F -f $NEKO_HOME/ssl.ndll $HAXE_HOME/ssl.ndll"
+		];
+		public static const HAXE_WIN_SYMLINK_COMMANDS:Array = [
+			"mklink /H $NEKO_HOME/libneko.dylib $HAXE_HOME/libneko.dylib",
+			"mklink /H $NEKO_HOME/libneko.2.dylib $HAXE_HOME/libneko.2.dylib",
+			"mklink /H $NEKO_HOME/libneko.2.3.0.dylib $HAXE_HOME/libneko.2.3.0.dylib",
+			"mklink /H $NEKO_HOME/std.ndll $HAXE_HOME/std.ndll",
+			"mklink /H $NEKO_HOME/mod_neko2.ndll $HAXE_HOME/mod_neko2.ndll",
+			"mklink /H $NEKO_HOME/mysql.ndll $HAXE_HOME/mysql.ndll",
+			"mklink /H $NEKO_HOME/regexp.ndll $HAXE_HOME/regexp.ndll",
+			"mklink /H $NEKO_HOME/mysql5.ndll $HAXE_HOME/mysql5.ndll",
+			"mklink /H $NEKO_HOME/zlib.ndll $HAXE_HOME/zlib.ndll",
+			"mklink /H $NEKO_HOME/sqlite.ndll $HAXE_HOME/sqlite.ndll",
+			"mklink /H $NEKO_HOME/mod_tora2.ndll $HAXE_HOME/mod_tora2.ndll",
+			"mklink /H $NEKO_HOME/ui.ndll $HAXE_HOME/ui.ndll",
+			"mklink /H $NEKO_HOME/ssl.ndll $HAXE_HOME/ssl.ndll"
 		];
 		
 		public static var IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
