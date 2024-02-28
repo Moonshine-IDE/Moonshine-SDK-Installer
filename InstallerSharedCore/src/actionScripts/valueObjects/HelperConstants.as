@@ -66,9 +66,6 @@ package actionScripts.valueObjects
 			"ln -s -F -f $NEKO_HOME/ssl.ndll $HAXE_HOME/ssl.ndll"
 		];
 		public static const HAXE_WIN_SYMLINK_COMMANDS:Array = [
-			"mklink /H $NEKO_HOME/libneko.dylib $HAXE_HOME/libneko.dylib",
-			"mklink /H $NEKO_HOME/libneko.2.dylib $HAXE_HOME/libneko.2.dylib",
-			"mklink /H $NEKO_HOME/libneko.2.3.0.dylib $HAXE_HOME/libneko.2.3.0.dylib",
 			"mklink /H $NEKO_HOME/std.ndll $HAXE_HOME/std.ndll",
 			"mklink /H $NEKO_HOME/mod_neko2.ndll $HAXE_HOME/mod_neko2.ndll",
 			"mklink /H $NEKO_HOME/mysql.ndll $HAXE_HOME/mysql.ndll",
