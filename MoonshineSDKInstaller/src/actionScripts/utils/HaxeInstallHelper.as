@@ -126,6 +126,12 @@ package actionScripts.utils
 			var haxe:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_HAXE);
 			var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
 
+			if (FileUtils.isPathExists(haxe.installToPath))
+			{
+				setCommand += getSetExportWithoutQuote("HAXE_HOME", haxe.installToPath);
+				setPathCommand += (HelperConstants.IS_MACOS ? "$HAXE_HOME:" : "%HAXE_HOME%;");
+				isValidToExecute = true;
+			}
 			if (FileUtils.isPathExists(neko.installToPath))
 			{
 				setCommand += getSetExportWithoutQuote("NEKO_HOME", neko.installToPath);
@@ -136,13 +142,6 @@ package actionScripts.utils
 
 				setCommand += HelperConstants.IS_MACOS ? HelperConstants.HAXE_MAC_SYMLINK_COMMANDS.join(";") +";" : HelperConstants.HAXE_WIN_SYMLINK_COMMANDS.join(";") +";";
 
-				isValidToExecute = true;
-			}
-
-			if (FileUtils.isPathExists(haxe.installToPath))
-			{
-				setCommand += getSetExportWithoutQuote("HAXE_HOME", haxe.installToPath);
-				setPathCommand += (HelperConstants.IS_MACOS ? "$HAXE_HOME:" : "%HAXE_HOME%;");
 				isValidToExecute = true;
 			}
 			
