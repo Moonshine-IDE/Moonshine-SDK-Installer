@@ -136,7 +136,7 @@ package actionScripts.utils
 			if (FileUtils.isPathExists(neko.installToPath))
 			{
 				setCommand += getSetExportWithoutQuote("NEKO_HOME", neko.installToPath);
-				setPathCommand += (HelperConstants.IS_MACOS ? "NEKO_HOME:" : "%NEKO_HOME%;");
+				setPathCommand += (HelperConstants.IS_MACOS ? "$NEKO_HOME:" : "%NEKO_HOME%;");
 
 				setCommand += getSetExportWithoutQuote("DYLD_LIBRARY_PATH", neko.installToPath);
 				setPathCommand += (HelperConstants.IS_MACOS ? "$DYLD_LIBRARY_PATH:" : "%DYLD_LIBRARY_PATH%;");
