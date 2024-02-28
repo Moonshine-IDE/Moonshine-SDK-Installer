@@ -134,13 +134,17 @@ package actionScripts.utils
 			}
 			if (FileUtils.isPathExists(neko.installToPath))
 			{
-				setCommand += getSetExportWithoutQuote("NEKO_HOME", neko.installToPath);
-				setPathCommand += (HelperConstants.IS_MACOS ? "$NEKO_HOME:" : "%NEKO_HOME%;");
+				if (HelperConstants.IS_MACOS)
+				{
+					setCommand += getSetExportWithoutQuote("NEKO_HOME", neko.installToPath);
+					setPathCommand += (HelperConstants.IS_MACOS ? "$NEKO_HOME:" : "%NEKO_HOME%;");
+				}
 
 				setCommand += getSetExportWithoutQuote("DYLD_LIBRARY_PATH", neko.installToPath);
 				setPathCommand += (HelperConstants.IS_MACOS ? "$DYLD_LIBRARY_PATH:" : "%DYLD_LIBRARY_PATH%;");
 
-				setCommand += HelperConstants.IS_MACOS ? HelperConstants.HAXE_MAC_SYMLINK_COMMANDS.join(";") +";" : HelperConstants.HAXE_WIN_SYMLINK_COMMANDS.join(";") +";";
+				if (HelperConstants.IS_MACOS) 
+					setCommand += HelperConstants.HAXE_MAC_SYMLINK_COMMANDS.join(";") +";";
 
 				isValidToExecute = true;
 			}
