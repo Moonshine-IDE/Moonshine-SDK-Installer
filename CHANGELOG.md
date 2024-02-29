@@ -16,7 +16,7 @@ Moonshine SDK Installer 4.6.0 includes version updates for Apache Flex SDK (Harm
 ### Fixed
 
 * Fixed issue with Flash Player version for Flex SDK with Harman AIR ([#116](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/116))
-* Fixed some issues with the Haxe installation process ([#111](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/111),[#113](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/113), [#114](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/114))
+* Fixed some issues with the Haxe installation process ([#111](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/111),[#113](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/113), [#114](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/114), [#119](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/119))
 
 ## Moonshine SDK Installer [4.5.0]
 
