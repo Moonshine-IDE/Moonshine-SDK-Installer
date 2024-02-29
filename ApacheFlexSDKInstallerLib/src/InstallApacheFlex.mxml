@@ -2586,7 +2586,7 @@ variables are not required because the locations of these pieces are known.
 			context["haxe.download.server"] = downloadURLSplit.join("/") + "/";
 			context["haxe.moonshine.directory"] = haxe.installToPath;
 			context["haxe.version"] = haxe.version;
-			context["verbose"] = true;
+			context["verbose"] = false;
 
 			downloadURLSplit = neko.downloadURL.split("/");
 			nameOnlySplit = downloadURLSplit[downloadURLSplit.length - 1].split(".");
