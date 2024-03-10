@@ -59,10 +59,4 @@ jobs:
         accept-air-license: true
         
     - name: Build with Ant        
-      run: >
-        ant 
-        -buildfile 'MoonshineSDKInstaller/build/build.xml'
-        -Dbuild.is.signed=false 
-        -Dbuild.is.development=${{ inputs.env == 'development' }}
-        -Dapp.version=${{ inputs.version }}
-        all
+      run: ant -buildfile 'MoonshineSDKInstaller/build/build.xml' all
