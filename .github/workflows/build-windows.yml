@@ -58,5 +58,10 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
         
-    - name: Build with Ant
-      run: ant -noinput -buildfile 'MoonshineSDKInstaller/build/build.xml'
+    - name: Build with Ant        
+      run: >
+        ant 
+        -buildfile 'MoonshineSDKInstaller/build/build.xml' 
+        -Dbuild.is.signed=false 
+        -Dbuild.is.development=${{ inputs.env == 'development' }}
+        -Dapp.version=${{ inputs.version }}

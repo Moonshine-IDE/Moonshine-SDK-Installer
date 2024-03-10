@@ -14,7 +14,7 @@
 
 	;Name and file
 	Name "${INSTALLERNAME}"
-	OutFile "DEPLOY\${INSTALLERNAME}-${VERSION}.exe"
+	OutFile "bin\${INSTALLERNAME}-${VERSION}.exe"
 
 	;Default installation folder
 	InstallDir "$PROGRAMFILES64\${INSTALLERNAME}"
@@ -144,7 +144,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 
 	;copy all files
 	SetOutPath "$INSTDIR"
-	File /r "DEPLOY\${INSTALLERNAME}EXE\*"
+	File /r "bin\app\${INSTALLERNAME}EXE\*"
 	
 	;Store installation folder
 	WriteRegStr HKCU "Software\${INSTALLERNAME}" "" $INSTDIR
