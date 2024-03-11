@@ -58,5 +58,8 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
         
-    - name: Build with Ant        
-      run: ant -buildfile MoonshineSDKInstaller/build/build.xml all -Dapp.version=${{ inputs.version }}
+    - name: Show haxe
+      run: (Get-Command haxe).Source
+
+    # - name: Build with Ant        
+    #   run: ant -buildfile MoonshineSDKInstaller/build/build.xml all -Dapp.version=${{ inputs.version }}
