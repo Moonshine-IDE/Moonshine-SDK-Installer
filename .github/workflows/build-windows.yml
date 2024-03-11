@@ -60,10 +60,10 @@ jobs:
 
     - name: Build with Ant        
       run: >
-        ant -buildfile MoonshineSDKInstaller/build/build.xml all 
-        -DHAXEPATH="C:\hostedtoolcache\windows\haxe\4.2.5\x64"
-        -DHAXE_HOME="C:\hostedtoolcache\windows\haxe\4.2.5\x64\lib"
-        -DNSIS_HOME="C:\Program Files (x86)\NSIS"
-        -Dapp.version=${{ inputs.version }}
-        -Dbuild.is.signed=false
-        -Dbuild.is.development=${{ inputs.env != 'production' }}
+        cmd /c 'ant 
+        -buildfile MoonshineSDKInstaller/build/build.xml all 
+        -Dapp.version=1.2.3 
+        -Dbuild.is.signed=false 
+        -Dbuild.is.development=true
+        '
+
