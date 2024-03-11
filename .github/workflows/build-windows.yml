@@ -58,6 +58,13 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
 
+    - name: Install NSIS plugin nsProcess
+      working-directory: MoonshineSDKInstaller/build
+      run: |
+        Invoke-RestMethod -Uri "https://nsis.sourceforge.io/mediawiki/images/2/2f/ExecCmd.zip" -OutFile ExecCmd.7zip
+        7z x ExecCmd.zip -o'ExecCmd' -y
+        mv ExecCmd\ExecCmd.dll "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\ExecCmd.dll"
+
     - name: Build with Ant        
       run: >
         cmd /c 'ant 
