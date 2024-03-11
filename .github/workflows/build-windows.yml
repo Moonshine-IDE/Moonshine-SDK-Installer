@@ -62,6 +62,9 @@ jobs:
       run: >
         cmd /c 'ant 
         -buildfile MoonshineSDKInstaller/build/build.xml all 
+        -DHAXEPATH="C:\hostedtoolcache\windows\haxe\4.2.5\x64"
+        -DHAXE_HOME="C:\hostedtoolcache\windows\haxe\4.2.5\x64\lib"
+        -DNSIS_HOME="C:\Program Files (x86)\NSIS"
         -Dapp.version=1.2.3 
         -Dbuild.is.signed=false 
         -Dbuild.is.development=true
