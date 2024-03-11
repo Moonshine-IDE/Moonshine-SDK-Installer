@@ -58,11 +58,14 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
         
-    - name: Show haxelib
-      run: haxelib config
+    - name: Show nsis
+      run: (Get-Command makensis).Source
 
     - name: Build with Ant        
       run: >
         ant -buildfile MoonshineSDKInstaller/build/build.xml all 
-        -DHAXEPATH="C:\hostedtoolcache\windows\haxe\4.2.5\x64" 
+        -DHAXEPATH="C:\hostedtoolcache\windows\haxe\4.2.5\x64"
+        -DHAXE_HOME="C:\hostedtoolcache\windows\haxe\4.2.5\x64\lib\"
         -Dapp.version=${{ inputs.version }}
+        -Dbuild.is.signed=false
+        -Dbuild.is.development=${{ inputs.env != 'production' }}
