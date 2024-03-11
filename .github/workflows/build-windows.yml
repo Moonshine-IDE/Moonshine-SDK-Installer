@@ -58,8 +58,8 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
         
-    - name: Show haxe
-      run: (Get-Command haxe).Source
+    - name: Show haxelib
+      run: haxelib config
 
     - name: Build with Ant        
       run: >
