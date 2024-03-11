@@ -61,5 +61,8 @@ jobs:
     - name: Show haxe
       run: (Get-Command haxe).Source
 
-    # - name: Build with Ant        
-    #   run: ant -buildfile MoonshineSDKInstaller/build/build.xml all -Dapp.version=${{ inputs.version }}
+    - name: Build with Ant        
+      run: >
+        ant -buildfile MoonshineSDKInstaller/build/build.xml all 
+        -DHAXEPATH="C:\hostedtoolcache\windows\haxe\4.2.5\x64" 
+        -Dapp.version=${{ inputs.version }}
