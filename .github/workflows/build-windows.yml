@@ -59,4 +59,4 @@ jobs:
         accept-air-license: true
         
     - name: Build with Ant        
-      run: ant -buildfile 'MoonshineSDKInstaller/build/build.xml' all
+      run: ant -buildfile MoonshineSDKInstaller/build/build.xml all -Dapp.version=${{ inputs.version }}
