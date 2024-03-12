@@ -108,7 +108,7 @@ jobs:
         -Dbuild.is.development=${{ inputs.env != 'production' }}
 
     - name: Sign using action
-      uses: Moonshine-IDE/digicert-sign-action
+      uses: Moonshine-IDE/digicert-sign-action@main
       with:
         bin-path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-1.2.3.exe
         sm-host: ${{ secrets.SM_HOST }}
