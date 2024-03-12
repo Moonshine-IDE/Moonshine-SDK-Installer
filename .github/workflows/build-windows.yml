@@ -91,7 +91,7 @@ jobs:
         key: smtools-windows
 
     - name: Download smtools
-      if: ${{ steps.cache-smtools.cache-hit != 'true' }}
+      if: ${{ steps.cache-smtools.outputs.cache-hit != 'true' }}
       run: |
         curl ^
         -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
