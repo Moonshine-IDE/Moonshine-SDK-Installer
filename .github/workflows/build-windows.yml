@@ -65,35 +65,48 @@ jobs:
         7z x ExecCmd.zip -o'ExecCmd' -y
         mv ExecCmd\ExecCmd.dll "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\ExecCmd.dll"
 
-    # - name: Put signing certificate in environment variables
-    #   run: |
-    #     echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode --ignore-garbage > Certificate_pkcs12.p12
-    #     echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
-    #     echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
-    #     echo "SM_CLIENT_CERT_FILE=Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
-    #     echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
-    #     echo "SM_THUMBPRINT=${{ secrets.SM_THUMBPRINT }}" >> "$GITHUB_ENV"
+    - name: Setup signing certificate
+      run: |
+        echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode > /d/Certificate_pkcs12.p12
+      shell: bash
 
-    # - name: Download smtools
-    #   shell: cmd
-    #   run: |
-    #     curl ^
-    #     -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
-    #     -H "x-api-key:${{ secrets.SM_API_KEY }}" ^
-    #     -o smtools-windows-x64.msi
-  
-    # - name: Setup SSM KSP for signing
-    #   shell: cmd
-    #   run: |
-    #     msiexec /i smtools-windows-x64.msi /quiet /qn 
-    #     smksp_registrar.exe list 
-    #     smctl.exe keypair ls 
-    #     C:\Windows\System32\certutil.exe -csp "DigiCert Signing Manager KSP" -key -user 
-    #     smksp_cert_sync.exe
+    - name: Set signing variables
+      id: variables
+      run: |
+        echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
+        echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
+        echo "SM_CLIENT_CERT_FILE=D:\\Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
+        echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
+        echo "C:\Program Files (x86)\Windows Kits\10\App Certification Kit" >> $GITHUB_PATH 
+        echo "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools" >> $GITHUB_PATH 
+        echo "C:\Program Files\DigiCert\DigiCert One Signing Manager Tools" >> $GITHUB_PATH
+      shell: bash
 
-    # - name: Show signtool
-    #   shell: cmd
-    #   run: where signtool
+    - name: Cache smtools
+      id: cache-smtools
+      uses: actions/cache@v3
+      with:
+        path: smtools-windows-x64.msi
+        key: smtools-windows
+
+    - name: Download smtools
+      if: ${{ !steps.cache-smtools.cache-hit }}
+      run: |
+        echo cache hit: ${{ steps.cache-smtools.cache-hit }}
+        curl ^
+        -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
+        -H "x-api-key:${{ secrets.SM_API_KEY }}" ^
+        -o smtools-windows-x64.msi
+      shell: cmd
+
+    - name: Setup SSM KSP for signing
+      run: |
+        msiexec /i smtools-windows-x64.msi /quiet /qn 
+        smksp_registrar.exe list 
+        smctl.exe keypair ls 
+        C:\Windows\System32\certutil.exe -csp "DigiCert Signing Manager KSP" -key -user 
+        smksp_cert_sync.exe
+      shell: cmd
 
     - name: Build with Ant  
       shell: cmd      
