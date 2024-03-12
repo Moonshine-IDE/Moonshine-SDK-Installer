@@ -25,12 +25,10 @@
 	<!-- ANCHOR - Tools -->	
 	<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
 	<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
-    <property name="mxmlc_path" value="${FLEX_HOME}/lib/mxmlc.jar"/>
-    <property name="adt_path" value="${FLEX_HOME}/lib/adt.jar"/>
-	<property name="HAXEPATH" value="${env.HAXEPATH}"/>
-	<property name="HAXE_HOME" value="${env.HAXE_HOME}"/>
-	<property name="SIGNTOOL_HOME" value="${env.SIGNTOOL_HOME}"/>
-	<property name="NSIS_HOME" value="${env.NSIS_HOME}"/>
+    <property name="adt.cmd" value="${FLEX_HOME}/lib/adt.jar"/>
+	<property name="haxelib.cmd" value="haxelib"/>
+	<property name="signtool.cmd" value="signtool"/>
+	<property name="nsis.cmd" value="makensis"/>
 	<taskdef 
 		resource="net/sf/antcontrib/antcontrib.properties" 
 		classpath="./ant-contrib-0.6.jar"/>
@@ -128,10 +126,10 @@
 		<echo message="=========="/>
 		<echo message="JAVA_HOME: ${JAVA_HOME}"/>
 		<echo message="FLEX_HOME: ${FLEX_HOME}"/>
-		<echo message="HAXE_HOME: ${HAXE_HOME}"/>
-		<echo message="HAXEPATH: ${HAXEPATH}"/>
-		<echo message="SIGNTOOL_HOME: ${SIGNTOOL_HOME}"/>
-		<echo message="NSIS_HOME: ${NSIS_HOME}"/>
+		<echo message="adt command: ${adt.cmd}"/>
+		<echo message="haxelib command: ${haxelib.cmd}"/>
+		<echo message="signtool command: ${signtool.cmd}"/>
+		<echo message="nsis command: ${nsis.cmd}"/>
     </target>
 
 	<!-- ANCHOR - Init -->
@@ -139,7 +137,7 @@
 		<mkdir dir="./bin"/>
 		<mkdir dir="./bin/app"/>
 
-		<java jar="${adt_path}" fork="true" failonerror="true">
+		<java jar="${adt.cmd}" fork="true" failonerror="true">
 			<arg line="-certificate" />
 			<arg line="-cn MoonshineSelfSignedCertificate" />
 			<arg line="2048-RSA" />
@@ -191,28 +189,28 @@
 	
 	<!-- ANCHOR - Install Haxe Dependencies -->
 	<target name="install-haxe-dependencies">
-		<exec executable="${HAXEPATH}/haxelib"
+		<exec executable="${haxelib.cmd}"
 			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="feathersui"/>
 			<arg value="--quiet"/>
 		</exec>
-		<exec executable="${HAXEPATH}/haxelib"
+		<exec executable="${haxelib.cmd}"
 			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="openfl"/>
 			<arg value="--quiet"/>
 		</exec>
-		<exec executable="${HAXEPATH}/haxelib"
+		<exec executable="${haxelib.cmd}"
 			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="actuate"/>
 			<arg value="--quiet"/>
 		</exec>
-		<exec executable="${HAXEPATH}/haxelib"
+		<exec executable="${haxelib.cmd}"
 			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
@@ -223,7 +221,7 @@
 		<echo message=""/>
 		<echo message="All Installed Haxelib Libraries:"/>
 		<echo message="=========="/>
-		<exec executable="${HAXEPATH}/haxelib">
+		<exec executable="${haxelib.cmd}">
 			<arg value="list"/>
 		</exec>
 		
@@ -231,7 +229,7 @@
 
 	<!-- ANCHOR - Compile GUI Core -->
 	<target name="compile-gui-core">
-		<exec executable="${HAXEPATH}/haxelib"
+		<exec executable="${haxelib.cmd}"
 			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="run"/>
@@ -276,7 +274,7 @@
 
 	<!-- ANCHOR - Compile App -->
 	<target name="compile-app">
-		<java jar="${adt_path}" fork="true" failonerror="true">
+		<java jar="${adt.cmd}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
 			<arg line="-keystore './bin/MoonshineSelfSignedCertificate.p12'" />
@@ -305,7 +303,7 @@
 
 	<!-- ANCHOR - Create Windows Installer -->
 	<target name="create-windows-installer">
-		<exec executable="${NSIS_HOME}/makensis.exe" failonerror="true">
+		<exec executable="${nsis.cmd}" failonerror="true">
 			<arg value="/DVERSION=${app.version}"/>
 			<arg value="/DINSTALLERNAME=${app.name}"/>
 			<arg value="/DEXECUTABLENAME=${app.name}"/>
@@ -318,7 +316,7 @@
 		
 	<!-- ANCHOR - Sign Windows Installer -->
 	<target name="sign-windows-installer" if="${build.is.signed}">
-		<exec executable="${SIGNTOOL_HOME}/signtool.exe" failonerror="true">
+		<exec executable="${signtool.cmd}" failonerror="true">
 			<arg value="sign"/>
 			<arg value="/sha1"/>
 			<arg value="${env.SM_THUMBPRINT}"/>

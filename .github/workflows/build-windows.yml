@@ -112,23 +112,11 @@ jobs:
       shell: cmd      
       run: >
         ant 
-        -buildfile MoonshineSDKInstaller/build/build.xml all 
-        -DHAXEPATH="C:\hostedtoolcache\windows\haxe\4.2.5\x64"
-        -DHAXE_HOME="C:\hostedtoolcache\windows\haxe\4.2.5\x64\lib"
-        -DNSIS_HOME="C:\Program Files (x86)\NSIS"
+        -buildfile MoonshineSDKInstaller/build/build.xml all
         -Dapp.version=${{ inputs.version }}
         -Dbuild.is.signed=true 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
 
-    - name: Sign using action
-      uses: Moonshine-IDE/digicert-sign-action@main
-      with:
-        bin-path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-1.2.3.exe
-        sm-host: ${{ secrets.SM_HOST }}
-        sm-api-key: ${{ secrets.SM_API_KEY }}
-        sm-client-cert-file-b64: ${{ secrets.SM_CLIENT_CERT_FILE_B64 }}
-        sm-client-cert-password: ${{ secrets.SM_CLIENT_CERT_PASSWORD }}
-        sm-code-signing-cert-sha1-hash: ${{ secrets.SM_THUMBPRINT }}    
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
