@@ -65,35 +65,35 @@ jobs:
         7z x ExecCmd.zip -o'ExecCmd' -y
         mv ExecCmd\ExecCmd.dll "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\ExecCmd.dll"
 
-    - name: Put signing certificate in environment variables
-      run: |
-        echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode --ignore-garbage > Certificate_pkcs12.p12
-        echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
-        echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
-        echo "SM_CLIENT_CERT_FILE=Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
-        echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
-        echo "SM_THUMBPRINT=${{ secrets.SM_THUMBPRINT }}" >> "$GITHUB_ENV"
+    # - name: Put signing certificate in environment variables
+    #   run: |
+    #     echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode --ignore-garbage > Certificate_pkcs12.p12
+    #     echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
+    #     echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
+    #     echo "SM_CLIENT_CERT_FILE=Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
+    #     echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
+    #     echo "SM_THUMBPRINT=${{ secrets.SM_THUMBPRINT }}" >> "$GITHUB_ENV"
 
-    - name: Download smtools
-      shell: cmd
-      run: |
-        curl ^
-        -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
-        -H "x-api-key:${{ secrets.SM_API_KEY }}" ^
-        -o smtools-windows-x64.msi
+    # - name: Download smtools
+    #   shell: cmd
+    #   run: |
+    #     curl ^
+    #     -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
+    #     -H "x-api-key:${{ secrets.SM_API_KEY }}" ^
+    #     -o smtools-windows-x64.msi
   
-    - name: Setup SSM KSP for signing
-      shell: cmd
-      run: |
-        msiexec /i smtools-windows-x64.msi /quiet /qn 
-        smksp_registrar.exe list 
-        smctl.exe keypair ls 
-        C:\Windows\System32\certutil.exe -csp "DigiCert Signing Manager KSP" -key -user 
-        smksp_cert_sync.exe
+    # - name: Setup SSM KSP for signing
+    #   shell: cmd
+    #   run: |
+    #     msiexec /i smtools-windows-x64.msi /quiet /qn 
+    #     smksp_registrar.exe list 
+    #     smctl.exe keypair ls 
+    #     C:\Windows\System32\certutil.exe -csp "DigiCert Signing Manager KSP" -key -user 
+    #     smksp_cert_sync.exe
 
-    - name: Show signtool
-      shell: cmd
-      run: where signtool
+    # - name: Show signtool
+    #   shell: cmd
+    #   run: where signtool
 
     - name: Build with Ant  
       shell: cmd      
@@ -107,8 +107,18 @@ jobs:
         -Dbuild.is.signed=false 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
 
+    - name: Sign using action
+      uses: Moonshine-IDE/digicert-sign-action
+      with:
+        bin-path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-1.2.3.exe
+        sm-host: ${{ secrets.SM_HOST }}
+        sm-api-key: ${{ secrets.SM_API_KEY }}
+        sm-client-cert-file-b64: ${{ secrets.SM_CLIENT_CERT_FILE_B64 }}
+        sm-client-cert-password: ${{ secrets.SM_CLIENT_CERT_PASSWORD }}
+        sm-code-signing-cert-sha1-hash: ${{ secrets.SM_THUMBPRINT }}    
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: MoonshineSDKInstaller
-        path: MoonshineSDKInstaller/build/bin/app
+        path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-1.2.3.exe
