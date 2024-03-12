@@ -77,6 +77,7 @@ jobs:
         echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
         echo "SM_CLIENT_CERT_FILE=D:\\Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
         echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
+        echo "SM_THUMBPRINT=${{ secrets.SM_THUMBPRINT }}" >> "$GITHUB_ENV"
         echo "C:\Program Files (x86)\Windows Kits\10\App Certification Kit" >> $GITHUB_PATH 
         echo "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools" >> $GITHUB_PATH 
         echo "C:\Program Files\DigiCert\DigiCert One Signing Manager Tools" >> $GITHUB_PATH
@@ -90,9 +91,8 @@ jobs:
         key: smtools-windows
 
     - name: Download smtools
-      if: ${{ !steps.cache-smtools.cache-hit }}
+      if: ${{ steps.cache-smtools.cache-hit != 'true' }}
       run: |
-        echo cache hit: ${{ steps.cache-smtools.cache-hit }}
         curl ^
         -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
         -H "x-api-key:${{ secrets.SM_API_KEY }}" ^
