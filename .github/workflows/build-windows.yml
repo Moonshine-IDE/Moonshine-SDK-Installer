@@ -58,10 +58,6 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
 
-    - name: Show signtool
-      shell: cmd
-      run: where signtool
-
     - name: Install NSIS plugin nsProcess
       working-directory: MoonshineSDKInstaller/build
       run: |
@@ -77,6 +73,27 @@ jobs:
         echo "SM_CLIENT_CERT_FILE=Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
         echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
         echo "SM_THUMBPRINT=${{ secrets.SM_THUMBPRINT }}" >> "$GITHUB_ENV"
+
+    - name: Download smtools
+      shell: cmd
+      run: |
+        curl ^
+        -X GET https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download ^
+        -H "x-api-key:${{ secrets.SM_API_KEY }}" ^
+        -o smtools-windows-x64.msi
+  
+    - name: Setup SSM KSP for signing
+      shell: cmd
+      run: |
+        msiexec /i smtools-windows-x64.msi /quiet /qn 
+        smksp_registrar.exe list 
+        smctl.exe keypair ls 
+        C:\Windows\System32\certutil.exe -csp "DigiCert Signing Manager KSP" -key -user 
+        smksp_cert_sync.exe
+
+    - name: Show signtool
+      shell: cmd
+      run: where signtool
 
     - name: Build with Ant  
       shell: cmd      
