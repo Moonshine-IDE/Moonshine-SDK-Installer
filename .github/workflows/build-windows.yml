@@ -58,12 +58,25 @@ jobs:
         air-version: "33.1"
         accept-air-license: true
 
+    - name: Show signtool
+      shell: cmd
+      run: where signtool
+
     - name: Install NSIS plugin nsProcess
       working-directory: MoonshineSDKInstaller/build
       run: |
         Invoke-RestMethod -Uri "https://nsis.sourceforge.io/mediawiki/images/2/2f/ExecCmd.zip" -OutFile ExecCmd.zip
         7z x ExecCmd.zip -o'ExecCmd' -y
         mv ExecCmd\ExecCmd.dll "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\ExecCmd.dll"
+
+    - name: Put signing certificate in environment variables
+      run: |
+        echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode > Certificate_pkcs12.p12
+        echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
+        echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
+        echo "SM_CLIENT_CERT_FILE=Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
+        echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
+        echo "SM_THUMBPRINT=${{ secrets.SM_THUMBPRINT }}" >> "$GITHUB_ENV"
 
     - name: Build with Ant  
       shell: cmd      
