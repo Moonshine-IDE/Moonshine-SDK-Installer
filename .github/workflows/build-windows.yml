@@ -117,7 +117,7 @@ jobs:
         -DHAXE_HOME="C:\hostedtoolcache\windows\haxe\4.2.5\x64\lib"
         -DNSIS_HOME="C:\Program Files (x86)\NSIS"
         -Dapp.version=${{ inputs.version }}
-        -Dbuild.is.signed=false 
+        -Dbuild.is.signed=true 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
 
     - name: Sign using action
