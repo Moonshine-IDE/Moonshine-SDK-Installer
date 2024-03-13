@@ -3,11 +3,6 @@
 		This is a library shared ANT tasks to be used for building ElCapitan Sandbox test project.
 	</description>
  	
-	<tstamp>
-		<format property="timestamp" pattern="yyyy-MM-dd_HH-mm-ss" />
-		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
-	</tstamp>
-	
 	<!--
 	//==========================================================================
 	//
@@ -15,12 +10,17 @@
 	//
 	//==========================================================================
 	-->
-	
+
 	<!-- Read local properties -->
 	<property file="local.properties"/>
 
 	<!-- Read all environment properties -->
 	<property environment="env"/>
+
+	<tstamp>
+		<format property="timestamp" pattern="yyyy-MM-dd_HH-mm-ss" />
+		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
+	</tstamp>
 
 	<!-- ANCHOR - Tools -->	
 	<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
@@ -36,10 +36,10 @@
 		resource="flexTasks.tasks" 
 		classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 	
-	<property name="app.version" value="1.0.0"/>
 	<property name="build.is.signed" value="false"/>
 	<property name="build.is.development" value="true"/>
 
+	<!-- ANCHOR - App Properties -->
 	<if>
 		<equals arg1="${build.is.development}" arg2="true"/>
 		<then>
@@ -53,8 +53,20 @@
 			<property name="app.name" value="MoonshineSDKInstaller" />
 		</else>			
 	</if>
+	<property name="app.version" value="1.0.0"/>
+
+	<!-- Detect Operating System -->
+	<condition property="is.windows">
+		<os family="windows"/>
+	</condition>
+	<condition property="is.macos">
+		<os family="mac"/>
+	</condition>
+	<condition property="is.linux">
+		<os family="unix"/>
+	</condition>
 	
-	<if>
+	<!-- <if>
 		<os family="unix"/>
 		<then>
 			<property name="desktopBinaryFilename" value="./bin/app/${app.name}.app"/>
@@ -64,9 +76,9 @@
 			<property name="desktopBinaryFilename" value="./bin/app/${app.name}.exe"/>
 			<property name="windowsBundleFilename" value="./bin/app/${app.name}EXE" />
 		</else>
-	</if>
+	</if> -->
 	
-	<condition property="Is.Keychain.Certificate.Defined">
+	<!-- <condition property="Is.Keychain.Certificate.Defined">
 		<and>
 			<not>
 				<equals arg1="${certSignedMacOSKeychainapp.name}" arg2=""/>
@@ -82,7 +94,7 @@
 			</not>
 		</and>
 	</condition>
-	<echo>Is.Keychain.Certificate.Defined: ${Is.Keychain.Certificate.Defined}</echo>
+	<echo>Is.Keychain.Certificate.Defined: ${Is.Keychain.Certificate.Defined}</echo> -->
 	
 	<!--
 	//==========================================================================
@@ -94,17 +106,42 @@
 	
 	<!-- ANCHOR - All Tasks -->
 	<target name="all">
-		<antcall>
-			<target name="print-info"/>
-			<target name="init"/>
-			<target name="modify-app-descriptor"/>
-			<target name="install-haxe-dependencies"/>
-			<target name="compile-gui-core"/>
-			<target name="compile-swf"/>
-			<target name="compile-app"/>			
-			<target name="create-windows-installer"/>
-			<target name="sign-windows-installer"/>
-		</antcall>
+		<switch value="true">
+			<case value="${is.windows}">
+				<antcall>
+					<!-- Windows Tasks -->
+					<target name="print-info"/>
+					<target name="init"/>
+					<target name="modify-app-descriptor"/>
+					<target name="install-haxe-dependencies"/>
+					<target name="compile-gui-core"/>
+					<target name="compile-swf"/>
+					<target name="compile-app"/>			
+					<target name="create-windows-installer"/>
+					<target name="sign-windows-installer"/>
+				</antcall>
+			</case>
+			<case value="${is.macos}">
+				<antcall>
+					<!-- macOS Tasks -->
+					<target name="print-info"/>
+					<target name="init"/>
+					<target name="modify-app-descriptor"/>
+					<target name="install-haxe-dependencies"/>
+					<target name="compile-gui-core"/>
+					<target name="compile-swf"/>
+					<target name="compile-app"/>			
+				</antcall>
+			</case>
+			<case value="${is.linux}">
+				<antcall>
+					<!-- Linux Tasks -->
+					<echo message="Linux not supported"/>
+				</antcall>
+			</case>
+		</switch>
+
+		
 	</target>
 
 	<!-- ANCHOR - Print Info -->
@@ -277,13 +314,13 @@
 		<java jar="${adt.cmd}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
-			<arg line="-keystore './bin/MoonshineSelfSignedCertificate.p12'" />
+			<arg line="-keystore ./bin/MoonshineSelfSignedCertificate.p12" />
 			<arg line="-storepass moonshine" />
 			<arg line="-tsa 'http://timestamp.digicert.com'" />
 	   		<arg line="-target bundle"/>
-	   		<arg line="${windowsBundleFilename}" />
-	   		<arg line="'./bin/MoonshineSDKInstaller-app.xml'" />
-	   		<arg line="'./bin/MoonshineSDKInstaller.swf'" />
+	   		<arg line="./bin/app/" />
+	   		<arg line="./bin/MoonshineSDKInstaller-app.xml" />
+	   		<arg line="./bin/MoonshineSDKInstaller.swf" />
 			<arg line="./installer"/>
 			<arg line="./images"/>
 			<arg line="./helperResources"/>

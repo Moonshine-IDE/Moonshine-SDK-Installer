@@ -144,7 +144,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 
 	;copy all files
 	SetOutPath "$INSTDIR"
-	File /r "bin\app\${INSTALLERNAME}EXE\*"
+	File /r "bin\app\*"
 	
 	;Store installation folder
 	WriteRegStr HKCU "Software\${INSTALLERNAME}" "" $INSTDIR
