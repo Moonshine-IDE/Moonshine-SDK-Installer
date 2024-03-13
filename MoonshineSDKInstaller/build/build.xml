@@ -63,7 +63,12 @@
 		<os family="mac"/>
 	</condition>
 	<condition property="is.linux">
-		<os family="unix"/>
+		<and>
+    		<os family="unix"/>
+    		<not>
+      			<os family="mac"/>
+    		</not>
+  		</and>
 	</condition>
 	
 	<!-- <if>
@@ -108,6 +113,8 @@
 	<target name="all">
 		<switch value="true">
 			<case value="${is.windows}">
+				<!-- Windows Properties -->
+				<property name="bundle.path" value="bin/app"/>
 				<antcall>
 					<!-- Windows Tasks -->
 					<target name="print-info"/>
@@ -122,6 +129,8 @@
 				</antcall>
 			</case>
 			<case value="${is.macos}">
+				<!-- MacOS Properties -->
+				<property name="bundle.path" value="bin/app/${app.name}.app"/>
 				<antcall>
 					<!-- macOS Tasks -->
 					<target name="print-info"/>
@@ -134,10 +143,8 @@
 				</antcall>
 			</case>
 			<case value="${is.linux}">
-				<antcall>
 					<!-- Linux Tasks -->
 					<echo message="Linux not supported"/>
-				</antcall>
 			</case>
 		</switch>
 
@@ -318,8 +325,8 @@
 			<arg line="-storepass moonshine" />
 			<arg line="-tsa 'http://timestamp.digicert.com'" />
 	   		<arg line="-target bundle"/>
-	   		<arg line="./bin/app/" />
-	   		<arg line="./bin/MoonshineSDKInstaller-app.xml" />
+	   		<arg line="${bundle.path}" />
+	   		<arg line="bin/MoonshineSDKInstaller-app.xml" />
 	   		<arg line="./bin/MoonshineSDKInstaller.swf" />
 			<arg line="./installer"/>
 			<arg line="./images"/>
