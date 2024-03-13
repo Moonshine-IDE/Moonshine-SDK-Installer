@@ -12,5 +12,6 @@ flex-utilities/flex-installer/common/obj/
 flex-utilities/flex-installer/installer/obj/
 flex-utilities/flex-installer/installerBadge/obj/
 
+local.properties
 .DS_Store
 .vscode/

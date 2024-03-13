@@ -4,13 +4,13 @@
 # App Version & Build Config
 
 # App version.
-app.version=1.2.3
+# app.version=1.2.3
 
 # True for dev builds, false for production.
-build.is.development=false
+# build.is.development=false
 
 # Enable signing (true) or not (false).
-build.is.signed=true
+# build.is.signed=true
 
 # Build Tools Paths 
 # Env values used by default. Override only if needed. Use forward slashes for paths.
@@ -19,16 +19,16 @@ build.is.signed=true
 # JAVA_HOME=/path/to/java/sdk
 
 # Flex SDK path (Overrides FLEX_HOME).
-FLEX_HOME=/Users/adrianszuszkiewicz/Downloads/MoonshineSDKs/Flex_SDK/Flex_4.16.1_AIR_50.2
+# FLEX_HOME=/path/to/flex
 
 # Haxelib command path
-# haxelib.cmd=C:/HaxeToolkit/haxe/haxelib.exe
+# haxelib.cmd=haxelib
 
 # Signtool command path
-# signtool.cmd=C:/Program Files (x86)/Windows Kits/10/bin/10.0.22621.0/x64/signtool.exe
+# signtool.cmd=signtool
 
 # NSIS command path
-# nsis.cmd=C:/Program Files (x86)/NSIS/makensis.exe
+# nsis.cmd=makensis
 
 # Signing. 
 # IMPORTANT: Set as Environment Variables in you local system. Do not include in this file.
