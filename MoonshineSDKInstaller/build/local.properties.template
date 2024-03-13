@@ -4,7 +4,7 @@
 # App Version & Build Config
 
 # App version.
-app.version=1.0.0
+app.version=1.2.3
 
 # True for dev builds, false for production.
 build.is.development=false
@@ -19,7 +19,7 @@ build.is.signed=true
 # JAVA_HOME=/path/to/java/sdk
 
 # Flex SDK path (Overrides FLEX_HOME).
-# FLEX_HOME=/path/to/flex/sdk
+FLEX_HOME=/Users/adrianszuszkiewicz/Downloads/MoonshineSDKs/Flex_SDK/Flex_4.16.1_AIR_50.2
 
 # Haxelib command path
 # haxelib.cmd=C:/HaxeToolkit/haxe/haxelib.exe
