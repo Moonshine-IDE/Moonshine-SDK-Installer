@@ -139,7 +139,8 @@
 					<target name="install-haxe-dependencies"/>
 					<target name="compile-gui-core"/>
 					<target name="compile-swf"/>
-					<target name="compile-app"/>			
+					<target name="compile-app"/>
+					<target name="create-macos-pkg"/>			
 				</antcall>
 			</case>
 			<case value="${is.linux}">
@@ -382,6 +383,17 @@
 	//
 	//==========================================================================
 	-->
+
+	<!-- ANCHOR - Create macOS pkg -->
+	<target name="create-macos-pkg">
+		<exec executable="productbuild" failonerror="true">
+			<arg value="--component"/>
+			<arg value="${bundle.path}"/>			
+			<arg value="/Applications"/>
+			<arg value="./bin/${app.name}-${app.version}.pkg"/>
+		</exec>
+		<echo message="Created macOS pkg"/>
+	</target>	
 	
 	<!-- Compile .pkg to distribute through app store -->
 	<target name="buildAppStorePKG" if="${Is.Keychain.Certificate.Defined}">
