@@ -130,7 +130,7 @@
 			</case>
 			<case value="${is.macos}">
 				<!-- MacOS Properties -->
-				<property name="bundle.path" value="bin/app/${app.name}.app"/>
+				<property name="bundle.path" value="bin/app/MoonshineSDKInstaller.app"/>
 				<antcall>
 					<!-- macOS Tasks -->
 					<target name="print-info"/>
@@ -390,7 +390,7 @@
 			<arg value="--component"/>
 			<arg value="${bundle.path}"/>			
 			<arg value="/Applications"/>
-			<arg value="./bin/${app.name}-${app.version}.pkg"/>
+			<arg value="./bin/MoonshineSDKInstaller-${app.version}.pkg"/>
 		</exec>
 		<echo message="Created macOS pkg"/>
 	</target>	
