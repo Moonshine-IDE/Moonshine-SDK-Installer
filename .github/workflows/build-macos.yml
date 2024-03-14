@@ -67,9 +67,9 @@ jobs:
         mac-certkey-pass: ${{ secrets.MAC_CERTKEY_PASS }}
 
     - name: Create pkg
-      run: >
-        productbuild
-        --version ${{ inputs.version }}
+      run: |
+        productbuild \
+        --version ${{ inputs.version }} \
         --identifier net.prominic.MoonshineSDKInstaller \
         --component MoonshineSDKInstaller/build/bin/app/MoonshineSDKInstaller.app \
         /Applications \
