@@ -73,10 +73,27 @@ jobs:
         --identifier net.prominic.MoonshineSDKInstaller \
         --component MoonshineSDKInstaller/build/bin/app/MoonshineSDKInstaller.app \
         /Applications \
-        MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller.pkg
+        MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-unsigned.pkg
+
+    - name: Sign pkg
+      uses: moonshine-ide/macos-sign-installer-action@main
+      with:
+        unsigned-pkg-path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-unsigned.pkg
+        signed-pkg-path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller.pkg
+        mac-keychain-pass: ${{ secrets.MAC_KEYCHAIN_PASS }}
+        mac-installer-certkey: ${{ secrets.MAC_INSTALLER_CERTKEY }}
+        mac-certkey-pass: ${{ secrets.MAC_CERTKEY_PASS }}
+
+    - name: Notarize pkg
+      uses: moonshine-ide/macos-notarize-action@main
+      with:
+        app-path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller.pkg
+        mac-notarization-apple-id: ${{ secrets.MAC_APPLE_ID }}
+        mac-notarization-team-id: ${{ secrets.MAC_APPLE_ID_PASS }}
+        mac-notarization-pass: ${{ secrets.MAC_KEYCHAIN_PASS }}
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: MoonshineSDKInstaller
-        path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-${{ inputs.version }}.pkg
+        path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller.pkg
