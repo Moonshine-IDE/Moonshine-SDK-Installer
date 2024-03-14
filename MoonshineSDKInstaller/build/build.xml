@@ -425,23 +425,23 @@
 		</exec>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s "${certSignedDevIDKeychainName}" ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/Flash\ Player.plugin/Contents/MacOS/FlashPlayer-10.6'/>
+			<arg value='codesign -f --timestamp -v -s ${keychain.name} ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/Flash\ Player.plugin/Contents/MacOS/FlashPlayer-10.6'/>
 		</exec>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s "${certSignedDevIDKeychainName}" ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A/SecurityScopeBookmark'/>
+			<arg value='codesign -f --timestamp -v -s ${keychain.name} ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A/SecurityScopeBookmark'/>
 		</exec>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s "${certSignedDevIDKeychainName}" ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A'/>
+			<arg value='codesign -f --timestamp -v -s ${keychain.name} ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A'/>
 		</exec>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='codesign -f -v -s "${certSignedDevIDKeychainName}" --deep ${desktopBinaryFilename}'/>
+			<arg value='codesign -f -v -s ${keychain.name} --deep ${desktopBinaryFilename}'/>
 		</exec>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='codesign -f --options runtime --timestamp -v -s "${certSignedDevIDKeychainName}" --entitlements ./bin/entitlement.plist ${desktopBinaryFilename}'/>
+			<arg value='codesign -f --options runtime --timestamp -v -s ${keychain.name} --entitlements ./bin/entitlement.plist ${desktopBinaryFilename}'/>
 		</exec>
 		<echo>========== Signing checks on Sandbox APP: spctl -vvv --assess --type exec ${desktopBinaryFilename}</echo>
 		<exec executable="bash">
@@ -473,7 +473,7 @@
 		<copy file="entitlement-non-sandbox.plist" tofile="./bin/entitlement.plist" overwrite="true"/>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='codesign -f --options runtime --timestamp -v -s "${certSignedDevIDKeychainName}" --entitlements ./bin/entitlement.plist ${desktopBinaryFilename}'/>
+			<arg value='codesign -f --options runtime --timestamp -v -s ${keychain.name} --entitlements ./bin/entitlement.plist ${desktopBinaryFilename}'/>
 		</exec>
 		<echo>========== Signing checks on Non-Sandbox APP: spctl -vvv --assess --type exec ${desktopBinaryFilename}</echo>
 		<exec executable="bash">
@@ -494,7 +494,7 @@
 			<arg value="-c"/>
 			<arg value='productbuild --component ${desktopBinaryFilename} /Applications "./bin/app/${app.title}_DONOTUSE.pkg" --sign "Developer ID Installer: Prominic.NET, Inc."'/>
 		</exec>
-		<!-- @devsena; Following part not suppose to go to source distribution. Referring the certificate as "${certSignedDevIDKeychainName}" always fails by unknown reason but if static name referencing  !-->
+		<!-- @devsena; Following part not suppose to go to source distribution. Referring the certificate as ${keychain.name} always fails by unknown reason but if static name referencing  !-->
 		<exec executable="bash" failonerror="true">
 			<arg value="-c"/>
 			<arg value='productsign --sign "Developer ID Installer: Prominic.NET, Inc." "./bin/app/${app.title}_DONOTUSE.pkg" "./bin/app/${app.title}_Signed_NonSandbox.pkg"'/>
