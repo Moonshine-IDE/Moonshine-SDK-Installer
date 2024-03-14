@@ -66,6 +66,15 @@ jobs:
         mac-application-certkey: ${{ secrets.MAC_APPLICATION_CERTKEY }}
         mac-certkey-pass: ${{ secrets.MAC_CERTKEY_PASS }}
 
+    - name: Create pkg
+      run: >
+        productbuild
+        --version ${{ inputs.version }}
+        --identifier net.prominic.MoonshineSDKInstaller \
+        --component MoonshineSDKInstaller/build/bin/app/MoonshineSDKInstaller.app \
+        /Applications \
+        MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller.pkg
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
