@@ -140,7 +140,7 @@
 					<target name="compile-gui-core"/>
 					<target name="compile-swf"/>
 					<target name="compile-app"/>
-					<target name="create-macos-pkg"/>			
+					<!-- <target name="create-macos-pkg"/>			 -->
 				</antcall>
 			</case>
 			<case value="${is.linux}">

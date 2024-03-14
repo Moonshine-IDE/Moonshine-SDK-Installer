@@ -56,6 +56,16 @@ jobs:
         -Dbuild.is.signed=false 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
 
+    # Signing
+
+    - name: Sign App
+      uses: moonshine-ide/macos-sign-app-action@main
+      with:
+        app-path: MoonshineSDKInstaller/build/bin/app/MoonshineSDKInstaller.app
+        mac-keychain-pass: ${{ secrets.MAC_KEYCHAIN_PASS }}
+        mac-application-certkey: ${{ secrets.MAC_APPLICATION_CERTKEY }}
+        mac-certkey-pass: ${{ secrets.MAC_CERTKEY_PASS }}
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
