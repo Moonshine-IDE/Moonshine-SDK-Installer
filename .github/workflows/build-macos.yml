@@ -113,7 +113,7 @@ jobs:
         -Dbuild.is.signed=true 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
         -Dkeychain.name=build.keychain
-        -Dkeychain.pass=${{ secrets.MAC_KEYCHAIN_PASS }}
+        -Dkeychain.password=${{ secrets.MAC_KEYCHAIN_PASS }}
 
     - name: Notarize pkg
       uses: moonshine-ide/macos-notarize-action@main
