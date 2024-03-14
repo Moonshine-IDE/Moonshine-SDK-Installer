@@ -110,7 +110,7 @@ jobs:
         ant 
         -buildfile MoonshineSDKInstaller/build/build.xml all
         -Dapp.version=${{ inputs.version }}
-        -Dbuild.is.signed=false 
+        -Dbuild.is.signed=true 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
         -Dkeychain.name=build.keychain
         -Dkeychain.pass=${{ secrets.MAC_KEYCHAIN_PASS }}

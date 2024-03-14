@@ -369,6 +369,7 @@
 	<!-- ANCHOR - Old Signing -->
 	<target name="old-signing" if="${build.is.signed}">
 		<property name="desktopBinaryFilename" value="./bin/app/${app.name}.app"/>
+		<echo message="Signing: ${desktopBinaryFilename}"/>
 		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="./images/moonshineASHIcons.icns" overwrite="true"/>
 		<replace file="${desktopBinaryFilename}/Contents/Info.plist">
 				<replacetoken><![CDATA[<string>Icon.icns</string>]]></replacetoken>
