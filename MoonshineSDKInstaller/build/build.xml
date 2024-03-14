@@ -71,36 +71,6 @@
   		</and>
 	</condition>
 	
-	<!-- <if>
-		<os family="unix"/>
-		<then>
-			<property name="desktopBinaryFilename" value="./bin/app/${app.name}.app"/>
-			<copy file="entitlement.plist" todir="./bin" overwrite="true"/>
-		</then>
-		<else>
-			<property name="desktopBinaryFilename" value="./bin/app/${app.name}.exe"/>
-			<property name="windowsBundleFilename" value="./bin/app/${app.name}EXE" />
-		</else>
-	</if> -->
-	
-	<!-- <condition property="Is.Keychain.Certificate.Defined">
-		<and>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainapp.name}" arg2=""/>
-			</not>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainapp.name}" arg2="CERT_OSX_KEYCHAIN_INSTALLER"/>
-			</not>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainPass}" arg2=""/>
-			</not>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainPass}" arg2="CERT_OSX_KEYCHAIN_PASS"/>
-			</not>
-		</and>
-	</condition>
-	<echo>Is.Keychain.Certificate.Defined: ${Is.Keychain.Certificate.Defined}</echo> -->
-	
 	<!--
 	//==========================================================================
 	//
@@ -130,7 +100,7 @@
 			</case>
 			<case value="${is.macos}">
 				<!-- MacOS Properties -->
-				<property name="bundle.path" value="bin/app/MoonshineSDKInstaller.app"/>
+				<property name="bundle.path" value="bin/app/${app.name}.app"/>
 				<antcall>
 					<!-- macOS Tasks -->
 					<target name="print-info"/>
@@ -140,7 +110,8 @@
 					<target name="compile-gui-core"/>
 					<target name="compile-swf"/>
 					<target name="compile-app"/>
-					<!-- <target name="create-macos-pkg"/>			 -->
+					<!-- <target name="create-macos-pkg"/> -->
+					<target name="old-signing"/>
 				</antcall>
 			</case>
 			<case value="${is.linux}">
@@ -395,9 +366,10 @@
 		<echo message="Created macOS pkg"/>
 	</target>	
 	
-	<!-- Compile .pkg to distribute through app store -->
-	<target name="buildAppStorePKG" if="${Is.Keychain.Certificate.Defined}">
-		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="${basedir}/images/moonshineASHIcons.icns" overwrite="true"/>
+	<!-- ANCHOR - Old Signing -->
+	<target name="old-signing" if="${build.is.signed}">
+		<property name="desktopBinaryFilename" value="./bin/app/${app.name}.app"/>
+		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="./images/moonshineASHIcons.icns" overwrite="true"/>
 		<replace file="${desktopBinaryFilename}/Contents/Info.plist">
 				<replacetoken><![CDATA[<string>Icon.icns</string>]]></replacetoken>
 				<replacevalue><![CDATA[<string>Icon.icns</string>
@@ -424,7 +396,7 @@
 		</if>
 		<exec executable="bash">
 			<arg value="-c"/>
-			<arg value='security unlock-keychain -p "${certSignedMacOSKeychainPass}"'/>
+			<arg value='security unlock-keychain -p "${keychain.password}"'/>
 		</exec>
 		<exec executable="bash">
 			<arg value="-c"/>
