@@ -117,7 +117,7 @@ jobs:
         -Dkeychain.password=${{ secrets.MAC_KEYCHAIN_PASS }}
 
     - name: Rename pakcage
-      run: mv MoonshineSDKInstaller/build/bin/app/${{ env.app_name }}.pkg MoonshineSDKInstaller/build/bin/msdki.pkg
+      run: mv "MoonshineSDKInstaller/build/bin/app/${{ env.app_name }}.pkg" "MoonshineSDKInstaller/build/bin/msdki.pkg"
 
     - name: Notarize pkg
       uses: moonshine-ide/macos-notarize-action@main
