@@ -87,7 +87,8 @@ jobs:
           -f pkcs12 \
           -P "${{ secrets.MAC_CERTKEY_PASS }}" \
           -T /usr/bin/codesign \
-          -T /usr/bin/productsign
+          -T /usr/bin/productsign \
+          -T /usr/bin/productbuild
 
           security import ./installer_certkey.p12 \
           -k build.keychain \
