@@ -116,13 +116,10 @@ jobs:
         -Dkeychain.name=build.keychain
         -Dkeychain.password=${{ secrets.MAC_KEYCHAIN_PASS }}
 
-    - name: Rename pakcage
-      run: mv "MoonshineSDKInstaller/build/bin/app/${{ env.app_name }}.pkg" "MoonshineSDKInstaller/build/bin/msdki.pkg"
-
     - name: Notarize pkg
       uses: moonshine-ide/macos-notarize-action@main
       with:
-        app-path: MoonshineSDKInstaller/build/bin/msdki.pkg
+        app-path: MoonshineSDKInstaller/build/bin/msdki_signed.pkg
         mac-notarization-apple-id: ${{ secrets.MAC_NOTARIZATION_APPLE_ID }}
         mac-notarization-team-id: ${{ secrets.MAC_NOTARIZATION_TEAM_ID }}
         mac-notarization-pass: ${{ secrets.MAC_NOTARIZATION_PASS }}
@@ -131,5 +128,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: MoonshineSDKInstaller
-        path: MoonshineSDKInstaller/build/bin/msdki.pkg
+        path: MoonshineSDKInstaller/build/bin/msdki_signed.pkg
         if-no-files-found: error

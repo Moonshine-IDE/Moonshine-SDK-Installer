@@ -83,8 +83,6 @@
 	<target name="all">
 		<switch value="true">
 			<case value="${is.windows}">
-				<!-- Windows Properties -->
-				<property name="bundle.path" value="bin/app"/>
 				<antcall>
 					<!-- Windows Tasks -->
 					<target name="print-info"/>
@@ -99,8 +97,6 @@
 				</antcall>
 			</case>
 			<case value="${is.macos}">
-				<!-- MacOS Properties -->
-				<property name="bundle.path" value="bin/app/${app.name}.app"/>
 				<antcall>
 					<!-- macOS Tasks -->
 					<target name="print-info"/>
@@ -110,8 +106,10 @@
 					<target name="compile-gui-core"/>
 					<target name="compile-swf"/>
 					<target name="compile-app"/>
-					<!-- <target name="create-macos-pkg"/> -->
-					<target name="old-signing"/>
+					<target name="sign-macos-app"/>
+					<target name="create-macos-pkg"/>
+					<target name="sign-macos-pkg"/>
+					<!-- <target name="old-signing"/> -->
 				</antcall>
 			</case>
 			<case value="${is.linux}">
@@ -290,6 +288,15 @@
 
 	<!-- ANCHOR - Compile App -->
 	<target name="compile-app">
+		<switch value="true">
+			<case value="${is.windows}">
+				<property name="bundle.path" value="bin/app"/>
+			</case>
+			<case value="${is.macos}">
+				<property name="bundle.path" value="bin/app/msdki.app"/>
+			</case>
+		</switch>
+
 		<java jar="${adt.cmd}" fork="true" failonerror="true">
 			<arg line="-package" />
 			<arg line="-storetype pkcs12" />
@@ -355,16 +362,89 @@
 	//==========================================================================
 	-->
 
+	<!-- ANCHOR - Sign macOS app -->
+	<target name="sign-macos-app" if="build.is.signed">
+		<!-- Show Developer ID Application Certificates -->
+		<exec executable="bash" outputproperty="certs.application.in.keychain">
+            <arg value="-c"/>
+            <arg value="security find-certificate -a | grep -s 'Developer ID Application' | grep -c 'alis'"/>
+        </exec>
+		<!-- Show Developer ID Installer Certificates -->
+		<echo message="certs.application.in.keychain: ${certs.application.in.keychain}"/>
+		<exec executable="bash" outputproperty="certs.installer.in.keychain">
+            <arg value="-c"/>
+            <arg value="security find-certificate -a | grep -s 'Developer ID Installer' | grep -c 'alis'"/>
+        </exec>
+		<echo message="certs.installer.in.keychain: ${certs.installer.in.keychain}"/>
+
+		<exec executable="security">
+			<arg value="unlock-keychain"/>
+			<arg value="-p"/>
+			<arg value="${keychain.password}"/>
+		</exec>
+
+		<exec executable="security" failonerror="true">
+            <arg value="set-key-partition-list"/>
+            <arg value="-S"/>
+            <arg value="apple-tool:,apple:,codesign:,productsign:,productbuild:"/>
+            <arg value="-s"/>
+            <arg value="-k"/>
+            <arg value="${keychain.password}"/>
+            <arg value="${keychain.name}"/>
+        </exec>
+		<echo message="Key partition list set successfully."/>
+
+		<exec executable="codesign" failonerror="true">
+            <arg value="./bin/app/msdki.app"/>
+            <arg value="--sign"/>
+            <arg value="Developer ID Application"/>
+			<arg value="--entitlements"/>
+			<arg value="entitlement-non-sandbox.plist"/>
+            <arg value="--options"/>
+            <arg value="runtime"/>
+            <arg value="--force"/>
+            <arg value="--timestamp"/>
+            <arg value="--verbose"/>
+            <arg value="--deep"/>
+        </exec>  
+
+		<exec executable="codesign" failonerror="true">
+			<arg value="-vvv"/>
+			<arg value="--deep"/>
+			<arg value="--strict"/>
+            <arg value="./bin/app/msdki.app"/>
+        </exec>
+
+		<exec executable="spctl" failonerror="true">
+			<arg value="-vvv"/>
+			<arg value="--assess"/>
+			<arg value="--type"/>
+			<arg value="exec"/>
+            <arg value="./bin/app/msdki.app"/>
+        </exec>
+	</target>
+
 	<!-- ANCHOR - Create macOS pkg -->
 	<target name="create-macos-pkg">
 		<exec executable="productbuild" failonerror="true">
 			<arg value="--component"/>
-			<arg value="${bundle.path}"/>			
+			<arg value="bin/app/msdki.app"/>			
 			<arg value="/Applications"/>
-			<arg value="./bin/MoonshineSDKInstaller-${app.version}.pkg"/>
+			<arg value="./bin/msdki.pkg"/>
 		</exec>
 		<echo message="Created macOS pkg"/>
-	</target>	
+	</target>
+
+	<!-- ANCHOR - Sign macOS pkg -->
+	<target name="sign-macos-pkg" if="build.is.signed">
+		<exec executable="productsign" failonerror="true">
+			<arg value="--sign"/>
+			<arg value="Developer ID Installer"/>
+			<arg value="./bin/msdki.pkg"/>
+			<arg value="./bin/msdki_signed.pkg"/>
+		</exec>
+		<echo message="Signed macOS pkg"/>
+	</target>
 	
 	<!-- ANCHOR - Old Signing -->
 	<target name="old-signing" if="${build.is.signed}">
