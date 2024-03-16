@@ -293,7 +293,7 @@
 				<property name="bundle.path" value="bin/app"/>
 			</case>
 			<case value="${is.macos}">
-				<property name="bundle.path" value="bin/app/msdki.app"/>
+				<property name="bundle.path" value="bin/app/${app.name}.app"/>
 			</case>
 		</switch>
 
@@ -395,7 +395,7 @@
 		<echo message="Key partition list set successfully."/>
 
 		<exec executable="codesign" failonerror="true">
-            <arg value="./bin/app/msdki.app"/>
+            <arg value="./bin/app/${app.name}.app"/>
             <arg value="--sign"/>
             <arg value="Developer ID Application"/>
 			<arg value="--entitlements"/>
@@ -412,7 +412,7 @@
 			<arg value="-vvv"/>
 			<arg value="--deep"/>
 			<arg value="--strict"/>
-            <arg value="./bin/app/msdki.app"/>
+            <arg value="./bin/app/${app.name}.app"/>
         </exec>
 
 		<exec executable="spctl" failonerror="true">
@@ -420,7 +420,7 @@
 			<arg value="--assess"/>
 			<arg value="--type"/>
 			<arg value="exec"/>
-            <arg value="./bin/app/msdki.app"/>
+            <arg value="./bin/app/${app.name}.app"/>
         </exec>
 	</target>
 
@@ -428,9 +428,9 @@
 	<target name="create-macos-pkg">
 		<exec executable="productbuild" failonerror="true">
 			<arg value="--component"/>
-			<arg value="bin/app/msdki.app"/>			
+			<arg value="bin/app/${app.name}.app"/>			
 			<arg value="/Applications"/>
-			<arg value="./bin/msdki.pkg"/>
+			<arg value="./bin/${app.name}-unsigned.pkg"/>
 		</exec>
 		<echo message="Created macOS pkg"/>
 	</target>
@@ -440,154 +440,10 @@
 		<exec executable="productsign" failonerror="true">
 			<arg value="--sign"/>
 			<arg value="Developer ID Installer"/>
-			<arg value="./bin/msdki.pkg"/>
-			<arg value="./bin/msdki_signed.pkg"/>
+			<arg value="./bin/${app.name}-unsigned.pkg"/>
+			<arg value="./bin/${app.name}.pkg"/>
 		</exec>
 		<echo message="Signed macOS pkg"/>
-	</target>
-	
-	<!-- ANCHOR - Old Signing -->
-	<target name="old-signing" if="${build.is.signed}">
-		<property name="desktopBinaryFilename" value="./bin/app/${app.name}.app"/>
-		<echo message="Signing: ${desktopBinaryFilename}"/>
-		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="./images/moonshineASHIcons.icns" overwrite="true"/>
-		<replace file="${desktopBinaryFilename}/Contents/Info.plist">
-				<replacetoken><![CDATA[<string>Icon.icns</string>]]></replacetoken>
-				<replacevalue><![CDATA[<string>Icon.icns</string>
-		<key>ITSAppUsesNonExemptEncryption</key><false/>
-		<key>CFBundleName</key>
-		<string>Moonshine SDK Installer</string>
-		<key>LSApplicationCategoryType</key>
-		<string>public.app-category.developer-tools</string>
-		<key>CFBundleVersion</key>
-		<string>1.0</string>
-		<key>postinstall_script</key>
-		<string>#!/bin/sh
-			open -a /Applications/Moonshine\ SDK\ Installer.app/
-			exit 0</string>]]></replacevalue>
-		</replace>
-		<if>
-			<equals arg1="${build.is.development}" arg2="true"/>
-			<then>
-				<replaceregexp file="${desktopBinaryFilename}/Contents/Info.plist" match="macapp-identifier" replace="net.prominic.MoonshineSDKInstaller-dev" flags="g"/>
-			</then>
-			<else>
-				<replaceregexp file="${desktopBinaryFilename}/Contents/Info.plist" match="macapp-identifier" replace="net.prominic.MoonshineSDKInstaller" flags="g"/>
-			</else>			
-		</if>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='security unlock-keychain -p "${keychain.password}"'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/WebKit.dylib"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="chmod -R 777 ${desktopBinaryFilename}"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/Flash\ Player.plugin/Contents/Info.plist"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Adobe\ AIR_64\ Helper"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/ExtendedAppEntryTemplate64"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/A2712Enabler'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s ${keychain.name} ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/Flash\ Player.plugin/Contents/MacOS/FlashPlayer-10.6'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s ${keychain.name} ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A/SecurityScopeBookmark'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s ${keychain.name} ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f -v -s ${keychain.name} --deep ${desktopBinaryFilename}'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --options runtime --timestamp -v -s ${keychain.name} --entitlements ./bin/entitlement.plist ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Signing checks on Sandbox APP: spctl -vvv --assess --type exec ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='spctl -vvv --assess --type exec ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Hardened runtime checks on Sandbox APP: codesign --display --verbose ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign --display --verbose ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Timestamp check on Sandbox APP: codesign -dvv ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -dvv ${desktopBinaryFilename}'/>
-		</exec>
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='productbuild --component ${desktopBinaryFilename} /Applications "./bin/app/${app.title}.pkg" --sign "Developer ID Installer: Prominic.NET, Inc."'/>
-		</exec>
-		<echo>========== Installer check on Sandbox PKG: pkgutil --check-signature ./bin/app/${app.title}_Signed_NonSandbox.pkg</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='pkgutil --check-signature "./bin/app/${app.title}.pkg"'/>
-		</exec>
-		
-
-		<!-- @devsena: Avail non-sandbox entitlement to be use in upcoming process -->
-		<copy file="entitlement-non-sandbox.plist" tofile="./bin/entitlement.plist" overwrite="true"/>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --options runtime --timestamp -v -s ${keychain.name} --entitlements ./bin/entitlement.plist ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Signing checks on Non-Sandbox APP: spctl -vvv --assess --type exec ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='spctl -vvv --assess --type exec ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Hardened runtime checks: codesign --display --verbose ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign --display --verbose ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Timestamp check: codesign -dvv ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -dvv ${desktopBinaryFilename}'/>
-		</exec>
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='productbuild --component ${desktopBinaryFilename} /Applications "./bin/app/${app.title}_DONOTUSE.pkg" --sign "Developer ID Installer: Prominic.NET, Inc."'/>
-		</exec>
-		<!-- @devsena; Following part not suppose to go to source distribution. Referring the certificate as ${keychain.name} always fails by unknown reason but if static name referencing  !-->
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='productsign --sign "Developer ID Installer: Prominic.NET, Inc." "./bin/app/${app.title}_DONOTUSE.pkg" "./bin/app/${app.title}_Signed_NonSandbox.pkg"'/>
-		</exec>
-		<echo>========== Installer check on Non-Sandbox PKG: pkgutil --check-signature ./bin/app/${app.title}_Signed_NonSandbox.pkg</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='pkgutil --check-signature "./bin/app/${app.title}_Signed_NonSandbox.pkg"'/>
-		</exec>
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='rm "./bin/app/${app.title}_DONOTUSE.pkg"'/>
-		</exec>
 	</target>
 	
 	<!--
