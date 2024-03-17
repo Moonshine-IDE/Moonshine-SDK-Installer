@@ -55,7 +55,7 @@ jobs:
       - name: Download windows installer
         uses: actions/download-artifact@v4
         with:
-          name: masdki-windows
+          name: msdki-windows
 
       - name: Download macos installer
         uses: actions/download-artifact@v4
