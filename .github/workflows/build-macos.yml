@@ -130,7 +130,7 @@ jobs:
     - name: Sign Pack with Ant
       run: >
         ant 
-        -buildfile MoonshineSDKInstaller/build/build.xml sign-pack
+        -buildfile MoonshineSDKInstaller/build/build.xml pack-and-sign
         -Dkeychain.name=build.keychain
         -Dnotarytool.profile="notarytool-profile"
 
