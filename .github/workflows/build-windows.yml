@@ -111,5 +111,6 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: MoonshineSDKInstaller
+        name: msdki-windows
         path: MoonshineSDKInstaller/build/bin/msdki.exe
+        if-no-files-found: error
