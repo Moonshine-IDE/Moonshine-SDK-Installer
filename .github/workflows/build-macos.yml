@@ -50,6 +50,7 @@ jobs:
         flex-version: "4.16.1"
         air-version: "33.1"
         accept-air-license: true
+        air-license-base64: ${{ secrets.AIR_LICENSE_BASE64 }} 
 
     # Prepare signing
 

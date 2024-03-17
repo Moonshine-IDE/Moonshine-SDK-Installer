@@ -47,12 +47,7 @@ jobs:
         flex-version: "4.16.1"
         air-version: "33.1"
         accept-air-license: true
-
-    - name: Setup Flex Adt License
-      run: |
-        echo "${FLEX_HOME}"
-        # echo "${{ secrets.FLEX_ADT_LIC }}" | base64 --decode > ${FLEX_HOME}/lib/adt.lic
-      shell: bash        
+        air-license-base64: ${{ secrets.AIR_LICENSE_BASE64 }}       
 
     - name: Install NSIS plugin nsProcess
       working-directory: MoonshineSDKInstaller/build
