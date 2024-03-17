@@ -123,16 +123,11 @@ jobs:
     - name: Build with Ant      
       run: >
         ant 
-        -buildfile MoonshineSDKInstaller/build/build.xml build
+        -buildfile MoonshineSDKInstaller/build/build.xml build pack-and-sign
         -Dapp.version=${{ inputs.version }}
         -Dbuild.is.development=${{ inputs.env != 'production' }}
-
-    - name: Sign Pack with Ant
-      run: >
-        ant 
-        -buildfile MoonshineSDKInstaller/build/build.xml pack-and-sign
         -Dkeychain.name=build.keychain
-        -Dnotarytool.profile="notarytool-profile"
+        -Dnotarytool.profile="notarytool-profile"       
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4

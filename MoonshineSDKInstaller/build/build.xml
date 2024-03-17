@@ -376,6 +376,9 @@
 
 	<!-- ANCHOR - Sign macOS app -->
 	<target name="sign-macos-app">
+		<echo message="Kechain: ${keychain.name}"/>
+		<echo message="Notarytool Profile: ${notarytool.profile}"/>
+
 		<!-- Show Nuber of Developer ID Application Certificates -->
 		<exec executable="bash" outputproperty="certs.application.in.keychain">
             <arg value="-c"/>
