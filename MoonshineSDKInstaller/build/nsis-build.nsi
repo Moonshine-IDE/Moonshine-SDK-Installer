@@ -14,7 +14,7 @@
 
 	;Name and file
 	Name "${INSTALLERNAME}"
-	OutFile "bin\${INSTALLERNAME}-${VERSION}.exe"
+	OutFile "bin\msdki.exe"
 
 	;Default installation folder
 	InstallDir "$PROGRAMFILES64\${INSTALLERNAME}"

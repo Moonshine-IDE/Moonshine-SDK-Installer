@@ -361,7 +361,7 @@
 			<arg value="SHA256"/>
 			<arg value="/fd"/>
 			<arg value="SHA256"/>
-			<arg value="./bin/${app.name}-${app.version}.exe"/>
+			<arg value="./bin/msdki.exe"/>
 		</exec>
 		<echo message="Signed Windows Installer"/>
 	 </target>	

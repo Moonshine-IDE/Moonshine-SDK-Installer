@@ -102,9 +102,9 @@ jobs:
       shell: cmd      
       run: >
         ant 
-        -buildfile MoonshineSDKInstaller/build/build.xml all
+        -buildfile MoonshineSDKInstaller/build/build.xml
+        build pack-and-sign
         -Dapp.version=${{ inputs.version }}
-        -Dbuild.is.signed=true 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
 
 
@@ -112,4 +112,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: MoonshineSDKInstaller
-        path: MoonshineSDKInstaller/build/bin/MoonshineSDKInstaller-${{ inputs.version }}.exe
+        path: MoonshineSDKInstaller/build/bin/msdki.exe
