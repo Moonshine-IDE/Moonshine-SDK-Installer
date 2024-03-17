@@ -64,11 +64,11 @@ jobs:
 
       - name: Debug artifacts
         run: ls .
-
+        
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          name: v${{ inputs.version }} ${{ inputs.env }}
+          name: Moonshine SDK Installer ${{ inputs.version }} ${{ inputs.env == 'production' && ' ' || 'Development' }}
           tag_name: ${{ env.tag }}
           target_commitish: ${{ github.sha }}
           body: |
