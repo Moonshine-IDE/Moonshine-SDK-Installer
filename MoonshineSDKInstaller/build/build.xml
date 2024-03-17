@@ -1,4 +1,4 @@
-<project name="MoonshineBuildScriptLibrary" basedir="." default="all" >
+<project name="MoonshineBuildScriptLibrary" basedir="." default="build" >
 	<description>
 		This is a library shared ANT tasks to be used for building ElCapitan Sandbox test project.
 	</description>
@@ -22,7 +22,7 @@
 		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
 	</tstamp>
 
-	<!-- ANCHOR - Tools -->	
+	<!-- ANCHOR - Tool Properties -->	
 	<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
 	<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
     <property name="adt.cmd" value="${FLEX_HOME}/lib/adt.jar"/>
@@ -36,7 +36,6 @@
 		resource="flexTasks.tasks" 
 		classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 	
-	<property name="build.is.signed" value="false"/>
 	<property name="build.is.development" value="true"/>
 
 	<!-- ANCHOR - App Properties -->
@@ -74,24 +73,30 @@
 	<!--
 	//==========================================================================
 	//
-	//  TASKS
+	//  WORKFLOWS
 	//
 	//==========================================================================
 	-->
 	
-	<!-- ANCHOR - All Tasks -->
-	<target name="all">
+	<!-- ANCHOR - Build Workflow -->
+	<target name="build">
+		<antcall>
+			<target name="print-info"/>
+			<target name="init"/>
+			<target name="modify-app-descriptor"/>
+			<target name="install-haxe-dependencies"/>
+			<target name="compile-gui-core"/>
+			<target name="compile-swf"/>
+			<target name="compile-app"/>			
+		</antcall>
+	</target>
+
+	<!-- ANCHOR - Pack Sign Workflow -->
+	<target name="pack-sign">
 		<switch value="true">
 			<case value="${is.windows}">
 				<antcall>
-					<!-- Windows Tasks -->
-					<target name="print-info"/>
-					<target name="init"/>
-					<target name="modify-app-descriptor"/>
-					<target name="install-haxe-dependencies"/>
-					<target name="compile-gui-core"/>
-					<target name="compile-swf"/>
-					<target name="compile-app"/>			
+					<!-- Windows Tasks -->		
 					<target name="create-windows-installer"/>
 					<target name="sign-windows-installer"/>
 				</antcall>
@@ -99,34 +104,41 @@
 			<case value="${is.macos}">
 				<antcall>
 					<!-- macOS Tasks -->
-					<target name="print-info"/>
-					<target name="init"/>
-					<target name="modify-app-descriptor"/>
-					<target name="install-haxe-dependencies"/>
-					<target name="compile-gui-core"/>
-					<target name="compile-swf"/>
-					<target name="compile-app"/>
 					<target name="sign-macos-app"/>
 					<target name="create-macos-pkg"/>
 					<target name="sign-macos-pkg"/>
-					<!-- <target name="old-signing"/> -->
+					<target name="notarize-macos-pkg"/>
 				</antcall>
 			</case>
 			<case value="${is.linux}">
 					<!-- Linux Tasks -->
-					<echo message="Linux not supported"/>
+					<echo message="Linux not supported yet."/>
 			</case>
-		</switch>
-
-		
+		</switch>		
 	</target>
+
+	<!-- ANCHOR - Clean Workflow -->
+	<target name="clean">
+		<delete dir="./bin"/>
+		<delete dir="installer"/>
+		<delete dir="images"/>
+		<delete dir="helperResources"/>
+		<delete dir="shellScripts"/>
+	</target>
+
+	<!--
+	//==========================================================================
+	//
+	//  COMMON SUBTASKS
+	//
+	//==========================================================================
+	-->
 
 	<!-- ANCHOR - Print Info -->
     <target name="print-info">
         <echo message="Build Properties:"/>
 		<echo message="=========="/>
 		<echo message="Is Development: ${build.is.development}"/>
-		<echo message="Is Signed: ${build.is.signed}"/>
 		<echo message="OS: ${os.name}"/>
 		<echo message=""/>
 		<echo message="App Properties:"/>
@@ -290,10 +302,10 @@
 	<target name="compile-app">
 		<switch value="true">
 			<case value="${is.windows}">
-				<property name="bundle.path" value="bin/app"/>
+				<property name="app.path" value="bin/app"/>
 			</case>
 			<case value="${is.macos}">
-				<property name="bundle.path" value="bin/app/${app.name}.app"/>
+				<property name="app.path" value="bin/app/${app.name}.app"/>
 			</case>
 		</switch>
 
@@ -304,7 +316,7 @@
 			<arg line="-storepass moonshine" />
 			<arg line="-tsa 'http://timestamp.digicert.com'" />
 	   		<arg line="-target bundle"/>
-	   		<arg line="${bundle.path}" />
+	   		<arg line="${app.path}" />
 	   		<arg line="bin/MoonshineSDKInstaller-app.xml" />
 	   		<arg line="./bin/MoonshineSDKInstaller.swf" />
 			<arg line="./installer"/>
@@ -319,7 +331,7 @@
 	<!--
 	//==========================================================================
 	//
-	//  WINDOWS
+	//  WINDOWS SUBTASKS
 	//
 	//==========================================================================
 	-->
@@ -338,7 +350,7 @@
 	</target>
 		
 	<!-- ANCHOR - Sign Windows Installer -->
-	<target name="sign-windows-installer" if="${build.is.signed}">
+	<target name="sign-windows-installer">
 		<exec executable="${signtool.cmd}" failonerror="true">
 			<arg value="sign"/>
 			<arg value="/sha1"/>
@@ -357,42 +369,25 @@
 	<!--
 	//==========================================================================
 	//
-	//  MACOS
+	//  MACOS SUBTASKS
 	//
 	//==========================================================================
 	-->
 
 	<!-- ANCHOR - Sign macOS app -->
-	<target name="sign-macos-app" if="build.is.signed">
-		<!-- Show Developer ID Application Certificates -->
+	<target name="sign-macos-app">
+		<!-- Show Nuber of Developer ID Application Certificates -->
 		<exec executable="bash" outputproperty="certs.application.in.keychain">
             <arg value="-c"/>
             <arg value="security find-certificate -a | grep -s 'Developer ID Application' | grep -c 'alis'"/>
         </exec>
-		<!-- Show Developer ID Installer Certificates -->
+		<!-- Show Number of Developer ID Installer Certificates -->
 		<echo message="certs.application.in.keychain: ${certs.application.in.keychain}"/>
 		<exec executable="bash" outputproperty="certs.installer.in.keychain">
             <arg value="-c"/>
             <arg value="security find-certificate -a | grep -s 'Developer ID Installer' | grep -c 'alis'"/>
         </exec>
 		<echo message="certs.installer.in.keychain: ${certs.installer.in.keychain}"/>
-
-		<exec executable="security">
-			<arg value="unlock-keychain"/>
-			<arg value="-p"/>
-			<arg value="${keychain.password}"/>
-		</exec>
-
-		<exec executable="security" failonerror="true">
-            <arg value="set-key-partition-list"/>
-            <arg value="-S"/>
-            <arg value="apple-tool:,apple:,codesign:,productsign:,productbuild:"/>
-            <arg value="-s"/>
-            <arg value="-k"/>
-            <arg value="${keychain.password}"/>
-            <arg value="${keychain.name}"/>
-        </exec>
-		<echo message="Key partition list set successfully."/>
 
 		<exec executable="codesign" failonerror="true">
             <arg value="./bin/app/${app.name}.app"/>
@@ -430,36 +425,33 @@
 			<arg value="--component"/>
 			<arg value="bin/app/${app.name}.app"/>			
 			<arg value="/Applications"/>
-			<arg value="./bin/${app.name}-unsigned.pkg"/>
+			<arg value="./bin/msdki-unsigned.pkg"/>
 		</exec>
 		<echo message="Created macOS pkg"/>
 	</target>
 
 	<!-- ANCHOR - Sign macOS pkg -->
-	<target name="sign-macos-pkg" if="build.is.signed">
+	<target name="sign-macos-pkg">
 		<exec executable="productsign" failonerror="true">
 			<arg value="--sign"/>
 			<arg value="Developer ID Installer"/>
-			<arg value="./bin/${app.name}-unsigned.pkg"/>
-			<arg value="./bin/${app.name}.pkg"/>
+			<arg value="./bin/msdki-unsigned.pkg"/>
+			<arg value="./bin/msdki.pkg"/>
 		</exec>
 		<echo message="Signed macOS pkg"/>
 	</target>
-	
-	<!--
-	//==========================================================================
-	//
-	//  GLOBAL
-	//
-	//==========================================================================
-	-->
-	
-	<!-- ANCHOR - Clean -->
-	<target name="clean">
-		<delete dir="./bin"/>
-		<delete dir="installer"/>
-		<delete dir="images"/>
-		<delete dir="helperResources"/>
-		<delete dir="shellScripts"/>
+
+	<!-- ANCHOR - Notarize macOS pkg -->
+	<target name="notarize-macos-pkg">
+		<exec executable="xcrun" failonerror="true">
+			<arg value="notarytool"/>
+			<arg value="submit"/>
+			<arg value="./bin/msdki.pkg"/>
+			<arg value="--keychain-profile"/>
+			<arg value="${notarytool.profile}"/>
+			<arg value="--wait"/>
+		</exec>
+		<echo message="Notarized macOS pkg"/>
 	</target>
+
 </project>

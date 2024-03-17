@@ -106,27 +106,37 @@ jobs:
           -k "${{ secrets.MAC_KEYCHAIN_PASS }}" \
           build.keychain
 
+    - name: Unlock keychain
+      shell: bash
+      run: |
+        security unlock-keychain -p "${{ secrets.MAC_KEYCHAIN_PASS }}" build.keychain    
+    
+    - name: Create notarization profile
+      shell: bash
+      run: |
+        xcrun notarytool \
+        store-credentials "notarytool-profile" \
+        --apple-id ${{ secrets.MAC_NOTARIZATION_APPLE_ID }} \
+        --team-id ${{ secrets.MAC_NOTARIZATION_TEAM_ID }} \
+        --password ${{ secrets.MAC_NOTARIZATION_PASS }}"
+
     - name: Build with Ant      
       run: >
         ant 
-        -buildfile MoonshineSDKInstaller/build/build.xml all
+        -buildfile MoonshineSDKInstaller/build/build.xml build
         -Dapp.version=${{ inputs.version }}
-        -Dbuild.is.signed=true 
         -Dbuild.is.development=${{ inputs.env != 'production' }}
-        -Dkeychain.name=build.keychain
-        -Dkeychain.password=${{ secrets.MAC_KEYCHAIN_PASS }}
 
-    - name: Notarize pkg
-      uses: moonshine-ide/macos-notarize-action@main
-      with:
-        app-path: MoonshineSDKInstaller/build/bin/${{ env.app_name }}.pkg
-        mac-notarization-apple-id: ${{ secrets.MAC_NOTARIZATION_APPLE_ID }}
-        mac-notarization-team-id: ${{ secrets.MAC_NOTARIZATION_TEAM_ID }}
-        mac-notarization-pass: ${{ secrets.MAC_NOTARIZATION_PASS }}
+    - name: Sign Pack with Ant
+      run: >
+        ant 
+        -buildfile MoonshineSDKInstaller/build/build.xml sign-pack
+        -Dkeychain.name=build.keychain
+        -Dnotarytool.profile="notarytool-profile"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: MoonshineSDKInstaller
-        path: MoonshineSDKInstaller/build/bin/${{ env.app_name }}.pkg
+        path: MoonshineSDKInstaller/build/bin/msdki.pkg
         if-no-files-found: error
