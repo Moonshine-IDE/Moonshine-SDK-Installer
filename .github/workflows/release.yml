@@ -1,0 +1,47 @@
+name: MANUAL - Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "An Environment"
+        required: true
+        type: choice
+        options:
+          - development
+          - production
+      version:
+        description: "A Version"
+        required: true
+        type: string
+
+env:
+  tag: v${{ inputs.version }}${{ inputs.env == 'production' && ' ' || '-Dev' }}
+
+jobs:
+
+  build-windows:
+    name: Build on Windows
+    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-windows.yml@42-github-actions-slow-refactor
+    secrets: inherit
+    with:
+      env: ${{ inputs.env }}
+      version: ${{ inputs.version }}
+
+  build-macos:
+    name: Build on MacOS
+    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-macos.yml@42-github-actions-slow-refactor
+    secrets: inherit
+    with:
+      env: ${{ inputs.env }}
+      version: ${{ inputs.version }}
+
+  release:
+    name: Draft Development Release
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print info
+        run: |
+          echo "Stub workflow"
