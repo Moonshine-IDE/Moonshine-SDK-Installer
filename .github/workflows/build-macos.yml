@@ -118,7 +118,7 @@ jobs:
         store-credentials "notarytool-profile" \
         --apple-id ${{ secrets.MAC_NOTARIZATION_APPLE_ID }} \
         --team-id ${{ secrets.MAC_NOTARIZATION_TEAM_ID }} \
-        --password ${{ secrets.MAC_NOTARIZATION_PASS }}"
+        --password ${{ secrets.MAC_NOTARIZATION_PASS }}
 
     - name: Build with Ant      
       run: >
