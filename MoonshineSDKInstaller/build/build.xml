@@ -1,6 +1,11 @@
 <project name="MoonshineBuildScriptLibrary" basedir="." default="build" >
 	<description>
-		This is a library shared ANT tasks to be used for building ElCapitan Sandbox test project.
+		This is ANT script for building Moonshine SDK Installer for Windows and macOS.
+		
+		Usage:
+		ant build - Builds the project to executable app.
+		ant pack-and-sign - Packs and signs the app for the target OS.
+		ant clean - Cleans the project.
 	</description>
  	
 	<!--

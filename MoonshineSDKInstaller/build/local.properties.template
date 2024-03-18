@@ -1,53 +1,47 @@
-# Local Testing Configuration
-# Note: These settings are for local testing only. All properties will be overridden by CI/CD build.
+# Properties configuration file for the local build process. The CI/CD pipeline will override these.
 
-# App Version & Build Config
+# App Properties
+# Defines the version of the application being built.
+app.version=1.2.3
 
-# App version.
-# app.version=1.2.3
+# Build Properties
+# Indicates if the build is for development purposes. Set to 'false' for production builds.
+build.is.development=true
 
-# True for dev builds, false for production.
-# build.is.development=false
+# Tool Properties
+# Specifies the environment variables used by build tools. The default values are typically 
+# sufficient. Override these settings only if necessary. For paths, always use forward slashes 
+# regardless of the operating system.
 
-# Enable signing (true) or not (false).
-# build.is.signed=true
-
-# Build Tools Paths 
-# Env values used by default. Override only if needed. Use forward slashes for paths.
-
-# JDK path (Overrides JAVA_HOME).
+# Path to the Java SDK installation. Uncomment and set the correct path if the JAVA_HOME 
+# environment variable is not set or if you need to use a different version.
 # JAVA_HOME=/path/to/java/sdk
 
-# Flex SDK path (Overrides FLEX_HOME).
+# Path to the Apache Flex SDK installation. Uncomment and set if using Flex in your project.
 # FLEX_HOME=/path/to/flex
 
-# Haxelib command path
+# Commands for various tools. These defaults usually don't need to be changed. Uncomment and 
+# modify only if your environment requires different command names or paths.
 # haxelib.cmd=haxelib
-
-# Signtool command path
 # signtool.cmd=signtool
-
-# NSIS command path
 # nsis.cmd=makensis
 
-# Signing. 
-# IMPORTANT: Set as Environment Variables in you local system. Do not include in this file.
+# Windows Signing Properties
+# For signing Windows applications, ensure these environment variables are set in your system:
+# SM_API_KEY: API key for digicert signing service.
+# SM_CLIENT_CERT_FILE: Path to the client certificate file.
+# SM_CLIENT_CERT_PASSWORD: Password for the client certificate.
+# SM_HOST: Hostname of the signing service.
+# SM_THUMBPRINT: Thumbprint of the signing certificate.
 
-# For Windows signing:
+# Mac Signing and Notarization Properties
+# For signing and notarizing Mac applications, provide the following:
 
-# API key for signing.
-# SM_API_KEY
+# Name of the keychain containing Developer ID Application and Developer ID Installer signing identities.
+# Uncomment and set the name of your keychain. Make sure the certificates have permissions to be used 
+# by codesign, productsign and productbuild.
+# keychain.name=
 
-# Client cert file path.
-# SM_CLIENT_CERT_FILE
-
-# Client cert file password.
-# SM_CLIENT_CERT_PASSWORD
-
-# Signing service host.
-# SM_HOST
-
-# Cert thumbprint for signing.
-# SM_THUMBPRINT
-
-# Use secret management for secure handling.
+# Notary tool profile name, containing Apple ID, Team ID, and an app-specific password for notarization.
+# Ensure this profile is configured with the necessary credentials.
+# notarytool.profile=
