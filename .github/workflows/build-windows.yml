@@ -110,6 +110,7 @@ jobs:
         build pack-and-sign
         -Dapp.version=${{ inputs.version }}
         -Dbuild.is.development=${{ inputs.env != 'production' }}
+        -Dbuild.number=${{ github.run_number }}
 
 
     - name: Upload Artifact

@@ -188,6 +188,9 @@
 		<copy todir="./shellScripts" overwrite="true">
 			<fileset dir="../src/shellScripts"/>
 		</copy>
+
+		<!-- Set Build Number in the App -->
+		<echo file="./images/appProperties.txt" append="false">${build.number}</echo>
 		
 		<replaceregexp 
 			file="./bin/MoonshineSDKInstaller-app.xml" 
