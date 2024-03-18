@@ -340,8 +340,9 @@
 	<target name="create-windows-installer">
 		<exec executable="${nsis.cmd}" failonerror="true">
 			<arg value="/DVERSION=${app.version}"/>
-			<arg value="/DINSTALLERNAME=${app.name}"/>
-			<arg value="/DEXECUTABLENAME=${app.name}"/>
+			<arg value="/DAPP_NAME=${app.name}"/>
+			<arg value="/DAPP_TITLE=${app.name}"/>
+			<arg value="/DINSTALLER_NAME=${app.name}-${app.version}"/>
 			<arg value="/DAPPID=${app.id}"/>
 			<arg value="/DTIMESTAMP=${timestamp.time}"/>
 			<arg value="./nsis-build.nsi"/>
@@ -361,7 +362,7 @@
 			<arg value="SHA256"/>
 			<arg value="/fd"/>
 			<arg value="SHA256"/>
-			<arg value="./bin/msdki.exe"/>
+			<arg value="./bin/${app.name}-${app.version}.exe"/>
 		</exec>
 		<echo message="Signed Windows Installer"/>
 	 </target>	
@@ -439,7 +440,7 @@
 			<arg value="--sign"/>
 			<arg value="Developer ID Installer"/>
 			<arg value="./bin/msdki-unsigned.pkg"/>
-			<arg value="./bin/msdki.pkg"/>
+			<arg value="./bin/${app.name}-${app.version}.pkg"/>
 		</exec>
 		<echo message="Signed macOS pkg"/>
 	</target>
@@ -449,7 +450,7 @@
 		<exec executable="xcrun" failonerror="true">
 			<arg value="notarytool"/>
 			<arg value="submit"/>
-			<arg value="./bin/msdki.pkg"/>
+			<arg value="./bin/${app.name}-${app.version}.pkg"/>
 			<arg value="--keychain-profile"/>
 			<arg value="${notarytool.profile}"/>
 			<arg value="--wait"/>

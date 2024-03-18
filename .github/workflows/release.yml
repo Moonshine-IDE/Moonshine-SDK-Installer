@@ -16,6 +16,7 @@ on:
         type: string
 
 env:
+  app_name: ${{ inputs.env == 'production' && 'MoonshineSDKInstaller' || 'MoonshineSDKInstallerDevelopment' }}
   tag: v${{ inputs.version }}${{ inputs.env == 'production' && ' ' || '-Dev' }}
 
 jobs:
@@ -55,12 +56,12 @@ jobs:
       - name: Download windows installer
         uses: actions/download-artifact@v4
         with:
-          name: msdki-windows
+          name: msdki-windows-setup
 
       - name: Download macos installer
         uses: actions/download-artifact@v4
         with:
-          name: msdki-macos
+          name: msdki-macos-setup
 
       - name: Debug artifacts
         run: ls .
@@ -76,6 +77,6 @@ jobs:
           draft: true
           prerelease: ${{ inputs.env == 'development' }}
           files: |
-            msdki.exe
-            msdki.pkg
+            ${{ env.app_name }}-${{ inputs.version }}.exe
+            ${{ env.app_name }}-${{ inputs.version }}.pkg
           fail_on_unmatched_files: true
