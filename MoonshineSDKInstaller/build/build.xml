@@ -42,6 +42,7 @@
 		classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 	
 	<property name="build.is.development" value="true"/>
+	<property name="build.number" value="0"/>
 
 	<!-- ANCHOR - App Properties -->
 	<if>
