@@ -1,4 +1,10 @@
-# Properties configuration file for the local build process. The CI/CD pipeline will override these.
+# Local Configuration Properties
+# ---------------------------------------------------------------------
+# This file serves as a template for local developer settings. To use:
+# 1. Copy this file and rename the copy to 'local.properties'.
+# 2. Uncomment and set any properties as needed for your local development environment.
+# Note: The CI/CD system does not use this file, so changes here will not affect automated builds.
+# ---------------------------------------------------------------------
 
 # App Properties
 # Defines the version of the application being built.
