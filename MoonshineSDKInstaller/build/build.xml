@@ -168,6 +168,7 @@
 	<target name="init">
 		<mkdir dir="./bin"/>
 		<mkdir dir="./bin/app"/>
+		<mkdir dir="./bin/deploy"/>
 
 		<java jar="${adt.cmd}" fork="true" failonerror="true">
 			<arg line="-certificate" />
@@ -373,6 +374,9 @@
 			<arg value="SHA256"/>
 			<arg value="./bin/${app.name}-${app.version}.exe"/>
 		</exec>
+		<move 
+			file="./bin/${app.name}-${app.version}.exe" 
+			tofile="./bin/deploy/${app.name}-${app.version}.exe"/>
 		<echo message="Signed Windows Installer"/>
 	 </target>	
 	
@@ -449,7 +453,7 @@
 			<arg value="--sign"/>
 			<arg value="Developer ID Installer"/>
 			<arg value="./bin/msdki-unsigned.pkg"/>
-			<arg value="./bin/${app.name}-${app.version}.pkg"/>
+			<arg value="./bin/deploy/${app.name}-${app.version}.pkg"/>
 		</exec>
 		<echo message="Signed macOS pkg"/>
 	</target>
@@ -459,7 +463,7 @@
 		<exec executable="xcrun" failonerror="true">
 			<arg value="notarytool"/>
 			<arg value="submit"/>
-			<arg value="./bin/${app.name}-${app.version}.pkg"/>
+			<arg value="./bin/deploy/${app.name}-${app.version}.pkg"/>
 			<arg value="--keychain-profile"/>
 			<arg value="${notarytool.profile}"/>
 			<arg value="--wait"/>
