@@ -23,7 +23,7 @@ jobs:
 
   build-windows:
     name: Build on Windows
-    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-windows.yml@42-github-actions-slow-refactor
+    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-windows.yml@42-github-actions-preview
     secrets: inherit
     with:
       env: ${{ inputs.env }}
@@ -31,7 +31,7 @@ jobs:
 
   build-macos:
     name: Build on MacOS
-    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-macos.yml@42-github-actions-slow-refactor
+    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-macos.yml@42-github-actions-preview
     secrets: inherit
     with:
       env: ${{ inputs.env }}
