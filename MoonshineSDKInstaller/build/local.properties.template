@@ -8,10 +8,12 @@
 
 # App Properties
 # Defines the version of the application being built.
+
 app.version=1.2.3
 
 # Build Properties
 # Indicates if the build is for development purposes. Set to 'false' for production builds.
+
 build.is.development=true
 
 # Tool Properties
@@ -19,21 +21,23 @@ build.is.development=true
 # sufficient. Override these settings only if necessary. For paths, always use forward slashes 
 # regardless of the operating system.
 
-# Path to the Java SDK installation. Uncomment and set the correct path if the JAVA_HOME 
-# environment variable is not set or if you need to use a different version.
-# JAVA_HOME=/path/to/java/sdk
+# Path to the Java SDK and Apache Flex SDK installations. Uncomment and set the correct path if the JAVA_HOME 
+# or FLEX_HOME environment variable is not set or if you need to use a different version.
 
-# Path to the Apache Flex SDK installation. Uncomment and set if using Flex in your project.
+# JAVA_HOME=/path/to/java/sdk
 # FLEX_HOME=/path/to/flex
 
 # Commands for various tools. These defaults usually don't need to be changed. Uncomment and 
 # modify only if your environment requires different command names or paths.
+
 # haxelib.cmd=haxelib
 # signtool.cmd=signtool
 # nsis.cmd=makensis
 
 # Windows Signing Properties
-# For signing Windows applications, ensure these environment variables are set in your system:
+# For signing Windows applications, put the following properties as Environment Variables in 
+# you system. Do not put them in this file.
+
 # SM_API_KEY: API key for digicert signing service.
 # SM_CLIENT_CERT_FILE: Path to the client certificate file.
 # SM_CLIENT_CERT_PASSWORD: Password for the client certificate.
@@ -44,10 +48,11 @@ build.is.development=true
 # For signing and notarizing Mac applications, provide the following:
 
 # Name of the keychain containing Developer ID Application and Developer ID Installer signing identities.
-# Uncomment and set the name of your keychain. Make sure the certificates have permissions to be used 
+# Uncomment and set the name of your keychain. Make sure the certificate private keys have permissions to be used 
 # by codesign, productsign and productbuild.
-# keychain.name=
+
+# keychain.name=login.keychain
 
 # Notary tool profile name, containing Apple ID, Team ID, and an app-specific password for notarization.
-# Ensure this profile is configured with the necessary credentials.
+
 # notarytool.profile=
