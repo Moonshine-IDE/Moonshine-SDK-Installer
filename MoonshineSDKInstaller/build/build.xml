@@ -289,7 +289,6 @@
 			   incremental="false"
 			   keep-generated-actionscript="false"
 			   allow-source-path-overlap="true">
-			<load-config filename="${FLEX_HOME}/frameworks/air-config.xml"/>
 			<source-path path-element="../src"/>
 			<source-path path-element="../../flex-utilities/flex-installer/common/src"/>
 			<source-path path-element="../../flex-utilities/flex-installer/ant_on_air/external"/>
