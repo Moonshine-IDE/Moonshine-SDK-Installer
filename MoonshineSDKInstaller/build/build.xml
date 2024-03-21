@@ -278,33 +278,40 @@
 
 	<!-- ANCHOR - Compile SWF -->
 	<target name="compile-swf">
-		<mxmlc file="../src/MoonshineSDKInstaller.mxml" 
-			   output="./bin/MoonshineSDKInstaller.swf" 
-			   swf-version="41" 
-			   configname="air" 
-			   fork="true" 
-			   optimize="true" 
-			   debug="false" 
-			   actionscript-file-encoding="UTF-8" 
-			   incremental="false"
-			   keep-generated-actionscript="false"
-			   allow-source-path-overlap="true">
-			<source-path path-element="../src"/>
-			<source-path path-element="../../flex-utilities/flex-installer/common/src"/>
-			<source-path path-element="../../flex-utilities/flex-installer/ant_on_air/external"/>
-			<source-path path-element="../../flex-utilities/flex-installer/ant_on_air/src"/>
-			<source-path path-element="../../flex-utilities/flex-installer/ant_on_air/locale/{locale}"/>
-			<source-path path-element="../../ApacheFlexSDKInstallerLib/src"/>
-			<source-path path-element="../../InstallerSharedCore/src"/>
-			<compiler.library-path dir="../../ApacheFlexSDKInstallerLib/libs" append="true">
-				<include name="*.swc" />
-			</compiler.library-path>
-			<library-path dir="./bin" includes="*.swc" append="true" />
-			<compiler.library-path dir="../../MoonshineSDKInstallerGUICore/bin/flash/bin" append="true">
-				<include name="*.swc" />
-			</compiler.library-path>
-		</mxmlc>
-		<echo message="Compiled SWF"/>
+		<exec executable="${JAVA_HOME}/bin/java" failonerror="true">
+			<arg value="-Dflexcompiler=${FLEX_HOME}/bin/mxmlc"/>
+			<arg value="-jar"/>
+			<arg value="${FLEX_HOME}/lib/mxmlc.jar"/>
+			
+			<!-- Compiler arguments -->
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="../src/MoonshineSDKInstaller.mxml"/>
+			<arg value="-output=./bin/MoonshineSDKInstaller.swf"/>
+			<arg value="-swf-version=41"/>
+			<arg value="+configname=air"/>
+			<arg value="-optimize=true"/>
+			<arg value="-debug=false"/>
+			<arg value="-actionscript-file-encoding=UTF-8"/>
+			<arg value="-incremental=false"/>
+			<arg value="-keep-generated-actionscript=false"/>
+			<arg value="-allow-source-path-overlap=true"/>
+			
+			<!-- Source-path arguments -->
+			<arg value="-source-path=../src"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/common/src"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/ant_on_air/external"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/ant_on_air/src"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/ant_on_air/locale/{locale}"/>
+			<arg value="-source-path=../../ApacheFlexSDKInstallerLib/src"/>
+			<arg value="-source-path=../../InstallerSharedCore/src"/>
+			
+			<!-- Library-path arguments -->
+			<arg value="-library-path+=../../ApacheFlexSDKInstallerLib/libs"/>
+			<arg value="-library-path+=./bin"/>
+			<arg value="-library-path+=../../MoonshineSDKInstallerGUICore/bin/flash/bin"/>
+			
+		</exec>
+    	<echo message="Compiled SWF"/>
 	</target>
 
 	<!-- ANCHOR - Compile App -->
@@ -318,22 +325,26 @@
 			</case>
 		</switch>
 
-		<java jar="${adt.cmd}" fork="true" failonerror="true">
-			<arg line="-package" />
-			<arg line="-storetype pkcs12" />
-			<arg line="-keystore ./bin/MoonshineSelfSignedCertificate.p12" />
-			<arg line="-storepass moonshine" />
-			<arg line="-tsa 'http://timestamp.digicert.com'" />
-	   		<arg line="-target bundle"/>
-	   		<arg line="${app.path}" />
-	   		<arg line="bin/MoonshineSDKInstaller-app.xml" />
-	   		<arg line="./bin/MoonshineSDKInstaller.swf" />
-			<arg line="./installer"/>
-			<arg line="./images"/>
-			<arg line="./helperResources"/>
-			<arg line="./shellScripts"/>
-	   		<!-- Add folders to be bundled in the AIR file here -->
-		</java>
+		<exec executable="${JAVA_HOME}/bin/java" failonerror="true">
+			<arg value="-jar"/>
+			<arg value="${adt.cmd}"/>
+			<arg value="-package"/>
+			<arg value="-storetype"/>
+			<arg value="pkcs12"/>
+			<arg value="-keystore"/>
+			<arg value="./bin/MoonshineSelfSignedCertificate.p12"/>
+			<arg value="-storepass"/>
+			<arg value="moonshine"/>
+			<arg value="-tsa"/>
+			<arg value="http://timestamp.digicert.com"/>
+			<arg value="-target"/>
+			<arg value="bundle"/>
+			<arg value="${app.path}"/>
+			<arg value="bin/MoonshineSDKInstaller-app.xml"/>
+			<arg value="./bin/MoonshineSDKInstaller.swf"/>
+			<arg line="./installer ./images ./helperResources ./shellScripts"/>
+		</exec>
+
 		<echo message="Compiled App"/>
 	 </target>
 	
