@@ -156,7 +156,8 @@
 		<echo message=""/>
 		<echo message="Tools:"/>
 		<echo message="=========="/>
-		<echo message="JAVA_HOME: ${JAVA_HOME}"/>
+		<echo message="Global JAVA_HOME: ${env.JAVA_HOME}"/>
+		<echo message="Workflow JAVA_HOME: ${JAVA_HOME}"/>
 		<echo message="FLEX_HOME: ${FLEX_HOME}"/>
 		<echo message="adt command: ${adt.cmd}"/>
 		<echo message="haxelib command: ${haxelib.cmd}"/>
