@@ -13,14 +13,14 @@
 ;General
 
 	;Name and file
-	Name "${INSTALLERNAME}"
-	OutFile "DEPLOY\${INSTALLERNAME}-${VERSION}.exe"
+	Name "${APP_NAME}"
+	OutFile "bin\${INSTALLER_NAME}.exe"
 
 	;Default installation folder
-	InstallDir "$PROGRAMFILES64\${INSTALLERNAME}"
+	InstallDir "$PROGRAMFILES64\${APP_NAME}"
 	
 	;Get installation folder from registry if available
-	InstallDirRegKey HKCU "Software\${INSTALLERNAME}" ""
+	InstallDirRegKey HKCU "Software\${APP_NAME}" ""
 
 	;Request application privileges for Windows Vista and higher
 	RequestExecutionLevel admin
@@ -28,7 +28,7 @@
 ;--------------------------------
 ;Start of running process check
 
-!define APP_NAME find_close_terminate
+#!define APP_NAME find_close_terminate
 !define WND_PROCESS_TITLE "MoonshineSDKInstaller"
 !define TO_MS 2000
 !define SYNC_TERM 0x00100001
@@ -72,22 +72,22 @@ LangString stopMsg 0 "Stopping ${WND_PROCESS_TITLE} Application"
 ;End of running process check
 	
 Function .onInit
-	!insertmacro TerminateApp "${EXECUTABLENAME}.exe"
+	!insertmacro TerminateApp "${APP_TITLE}.exe"
 	
 	ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"TimeStamp"
 	StrCmp $R0 "" done
 	StrCmp $R0 "${TIMESTAMP}" 0 done
 	MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
-		"This version of ${EXECUTABLENAME} is already installed. Do you want to run the current installation?$\n$\n \
-		Yes - Start ${EXECUTABLENAME} now$\n \
+		"This version of ${APP_TITLE} is already installed. Do you want to run the current installation?$\n$\n \
+		Yes - Start ${APP_TITLE} now$\n \
 		No - Do a fresh install$\n \
 		Cancel - Cancel this installation" \
 		IDYES run_application IDNO run_uninstaller
 		Abort
 	run_application:
 		ClearErrors
-		Exec "$INSTDIR\${EXECUTABLENAME}.exe"
+		Exec "$INSTDIR\${APP_TITLE}.exe"
 		Abort
 	run_uninstaller:
 		ClearErrors
@@ -114,8 +114,8 @@ FunctionEnd
 	!define MUI_HEADERIMAGE
 	;!define MUI_HEADERIMAGE_BITMAP "header.bmp"
 	;!define MUI_WELCOMEFINISHPAGE_BITMAP "wizard.bmp"
-	!define MUI_FINISHPAGE_RUN "$INSTDIR\${EXECUTABLENAME}.exe"
-	!define MUI_FINISHPAGE_RUN_TEXT "Run ${EXECUTABLENAME}"
+	!define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_TITLE}.exe"
+	!define MUI_FINISHPAGE_RUN_TEXT "Run ${APP_TITLE}"
 	!define MUI_FINISHPAGE_NOAUTOCLOSE
 	;!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
 	;!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
@@ -144,16 +144,16 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 
 	;copy all files
 	SetOutPath "$INSTDIR"
-	File /r "DEPLOY\${INSTALLERNAME}EXE\*"
+	File /r "bin\app\*"
 	
 	;Store installation folder
-	WriteRegStr HKCU "Software\${INSTALLERNAME}" "" $INSTDIR
+	WriteRegStr HKCU "Software\${APP_NAME}" "" $INSTDIR
 	
 	;Create uninstaller
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 	
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
-		"DisplayName" "${INSTALLERNAME}"
+		"DisplayName" "${APP_NAME}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"Publisher" "Prominic.NET, Inc."
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
@@ -165,7 +165,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"HelpLink" "https://moonshine-ide.com/faq/"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
-		"DisplayIcon" "$\"$INSTDIR\${EXECUTABLENAME}.exe$\""
+		"DisplayIcon" "$\"$INSTDIR\${APP_TITLE}.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
 		"UninstallString" "$\"$INSTDIR\uninstall.exe$\""
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}" \
@@ -183,7 +183,7 @@ Section "Moonshine-SDK-Installer" SecMoonshineSDKInstaller
 		"EstimatedSize" "$0"
 	
 	;Create Start Menu entry
-	CreateShortCut "$SMPROGRAMS\${INSTALLERNAME} (64-bit).lnk" "$INSTDIR\${EXECUTABLENAME}.exe"
+	CreateShortCut "$SMPROGRAMS\${APP_NAME} (64-bit).lnk" "$INSTDIR\${APP_TITLE}.exe"
 
 SectionEnd
 
@@ -192,12 +192,11 @@ SectionEnd
 
 Section "Uninstall"
 
-	RMDir /r "$INSTDIR\*"
-	RMDir "$INSTDIR"
+	RMDir /r "$INSTDIR"
 	
-	Delete "$SMPROGRAMS\${INSTALLERNAME}.lnk"
+	Delete "$SMPROGRAMS\${APP_NAME}.lnk"
 	
-	DeleteRegKey /ifempty HKCU "Software\${INSTALLERNAME}"
+	DeleteRegKey /ifempty HKCU "Software\${APP_NAME}"
 	
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPID}"
 SectionEnd

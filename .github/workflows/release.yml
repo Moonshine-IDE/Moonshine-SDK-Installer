@@ -16,13 +16,14 @@ on:
         type: string
 
 env:
+  app_name: ${{ inputs.env == 'production' && 'MoonshineSDKInstaller' || 'MoonshineSDKInstallerDevelopment' }}
   tag: v${{ inputs.version }}${{ inputs.env == 'production' && ' ' || '-Dev' }}
 
 jobs:
 
   build-windows:
     name: Build on Windows
-    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-windows.yml@42-github-actions-slow-refactor
+    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-windows.yml@master
     secrets: inherit
     with:
       env: ${{ inputs.env }}
@@ -30,7 +31,7 @@ jobs:
 
   build-macos:
     name: Build on MacOS
-    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-macos.yml@42-github-actions-slow-refactor
+    uses: moonshine-ide/moonshine-sdk-installer/.github/workflows/build-macos.yml@master
     secrets: inherit
     with:
       env: ${{ inputs.env }}
@@ -44,4 +45,38 @@ jobs:
     steps:
       - name: Print info
         run: |
-          echo "Stub workflow"
+          echo "Ref: ${{ github.ref_name }}"
+          echo "Env: ${{ inputs.env }}"
+          echo "Version: ${{ inputs.version }}"
+          echo "Tag: ${{ env.tag }}"
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download windows installer
+        uses: actions/download-artifact@v4
+        with:
+          name: msdki-windows-setup
+
+      - name: Download macos installer
+        uses: actions/download-artifact@v4
+        with:
+          name: msdki-macos-setup
+
+      - name: Debug artifacts
+        run: ls .
+        
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Moonshine SDK Installer ${{ inputs.version }} ${{ inputs.env == 'production' && ' ' || 'Development' }}
+          tag_name: ${{ env.tag }}
+          target_commitish: ${{ github.sha }}
+          body: |
+            This is a ${{ inputs.env }} release of MSDKI.
+          draft: true
+          prerelease: ${{ inputs.env == 'development' }}
+          files: |
+            ${{ env.app_name }}-${{ inputs.version }}.exe
+            ${{ env.app_name }}-${{ inputs.version }}.pkg
+          fail_on_unmatched_files: true

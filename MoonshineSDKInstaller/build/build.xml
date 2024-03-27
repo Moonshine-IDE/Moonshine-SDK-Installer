@@ -1,12 +1,13 @@
-<project name="MoonshineBuildScriptLibrary" basedir="." default="checkOS" >
+<project name="MoonshineBuildScriptLibrary" basedir="." default="build" >
 	<description>
-		This is a library shared ANT tasks to be used for building ElCapitan Sandbox test project.
+		This is ANT script for building Moonshine SDK Installer for Windows and macOS.
+		
+		Usage:
+		ant build - Builds the project to executable app.
+		ant pack-and-sign - Packs and signs the app for the target OS.
+		ant clean - Cleans the project.
 	</description>
  	
-	<tstamp>
-		<format property="timestamp" pattern="yyyy-MM-dd_HH-mm-ss" />
-	</tstamp>
-	
 	<!--
 	//==========================================================================
 	//
@@ -14,701 +15,471 @@
 	//
 	//==========================================================================
 	-->
-	
-	<!-- Unchanging the following value will make script build 'locally'. 
-		 Updating this by command-line injection will act script to build at Bamboo.
-		 Expected value for command-line injection are 'true' or 'false' -->
-	<property name="HELPER_IS_DESKTOP" value="HELPER_IS_DESKTOP"/>
-	
-	<!-- Compilers and Flex SDK configuration -->
-	<xmlproperty file="ApplicationProperties.xml" keeproot="false" semanticattributes="true" prefix="APP_PROPERTIES"/>
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="ant-contrib-0.6.jar"/>
-	<property name="keepDebugFiles" value="${APP_PROPERTIES.keepDebugFiles}" />
-	<property name="deploy_dir" value="DEPLOY"/>
-	<property name="debug_dir" value="bin-debug"/>
-	
-	<!-- Determining the run at local system or cloud -->
-	<property name="localOrCloud" value="${svn.revision}"/>
-	<if>
-		<equals arg1="${localOrCloud}" arg2="&#36;&#123;svn.revision}"/>
-		<then>
-			<property name="HELPER_IS_DESKTOP" value="HELPER_IS_DESKTOP"/>
-		</then>
-		<else>
-			<property name="HELPER_IS_DESKTOP" value="${HELPER_IS_DESKTOP}"/>
-		</else>
-	</if>
-	
-	<if>
-		<!-- This expected value means its not running on Bamboo -->
-		<equals arg1="${HELPER_IS_DESKTOP}" arg2="HELPER_IS_DESKTOP"/>
-		<then>
-			<echo>Reading properties from local ApplicationProperties</echo>
-			<property name="IsDesktopBuild" value="${APP_PROPERTIES.isDesktop}"/>
-			<property name="IsDevelopmentBuild" value="${APP_PROPERTIES.isDevelopmentVersion}"/>
-			<property name="BuildVersion" value="${APP_PROPERTIES.buildVersion}"/>
-			<property name="Is.Signed.Build" value="${APP_PROPERTIES.isSignedBuild}"/>
-			<property name="certSignedAIR" value="${APP_PROPERTIES.certSignedAIR}" />
-			<property name="certSignedAIRPassword" value="${APP_PROPERTIES.certSignedAIRPass}" />
-			<property name="certSignedWindowsBinary" value="${APP_PROPERTIES.certSignedWindowsBinary}" />
-			<property name="certSignedWindowsBinaryPassword" value="${APP_PROPERTIES.certSignedWindowsBinaryPass}" />
-			<property name="thumbprintSMWindowsBinary" value="${APP_PROPERTIES.thumbprintSMWindowsBinary}" />
-			<property name="certSignedDevIDKeychainName" value="${APP_PROPERTIES.certSignedDevIDKeychainName}" />
-			<property name="certSignedMacOSKeychainName" value="${APP_PROPERTIES.certSignedMacOSKeychainName}" />
-			<property name="certSignedMacOSKeychainInstallerName" value="${APP_PROPERTIES.certSignedMacOSKeychainInstallerName}" />
-			<property name="certSignedMacOSKeychainPass" value="${APP_PROPERTIES.certSignedMacOSKeychainPass}" />
-			<property name="svn.revision" value="3913"/>
-			<condition property="HAXE_LIB_DIRECTORY" value="${APP_PROPERTIES.haxeLibDirectory}">
-				<and>
-					<isset property="APP_PROPERTIES.haxeLibDirectory"/>
-					<not>
-						<equals arg1="${APP_PROPERTIES.haxeLibDirectory}" arg2=""/>
-					</not>
-				</and>
-			</condition>
-			<!-- fall back to default Haxe install location, if available -->
-			<condition property="HAXE_LIB_DIRECTORY" value="c:/HaxeToolkit/haxe">
-				<and>
-					<os family="windows" />
-					<available file="c:/HaxeToolkit/haxe/haxelib.exe" />
-				</and>
-			</condition>
-			<condition property="HAXE_LIB_DIRECTORY" value="/usr/local/lib/haxe">
-				<and>
-					<os family="mac" />
-					<available file="/usr/local/lib/haxe/haxelib" />
-				</and>
-			</condition>
-		</then>
-		<else>
-			<echo>Reading properties from Bamboo Variables</echo>
-			<property name="IsDesktopBuild" value="${HELPER_IS_DESKTOP}"/>
-			<property name="IsDevelopmentBuild" value="${HELPER_IS_DEVELOPMENT_VERSION}"/>
-			<property name="BuildVersion" value="${HELPER_VERSION}"/>
-			<property name="Is.Signed.Build" value="${IS_SIGNED_BUILD}"/>
-			<property name="certSignedAIR" value="${CERT_WIN_AIR}" />
-			<property name="certSignedAIRPassword" value="${CERT_WIN_AIR_PASS}" />
-			<property name="certSignedWindowsBinary" value="${CERT_WIN_INSTALLER}" />
-			<property name="certSignedWindowsBinaryPassword" value="${CERT_WIN_INSTALLER_PASS}" />
-			<property name="thumbprintSMWindowsBinary" value="${THUMBPRINT_SM_WIN_BINARY}" />
-			<property name="certSignedDevIDKeychainName" value="${CERT_DEV_ID_KEYCHAIN}" />
-			<property name="certSignedMacOSKeychainName" value="${CERT_OSX_KEYCHAIN}" />
-			<property name="certSignedMacOSKeychainInstallerName" value="${CERT_OSX_KEYCHAIN_INSTALLER}" />
-			<property name="certSignedMacOSKeychainPass" value="${CERT_OSX_KEYCHAIN_PASS}" />
-			<property name="svn.revision" value="${svn.revision}" />
-			<property name="HAXE_LIB_DIRECTORY" value="${HAXE_LIB}"/>
-		</else>
-	</if>
-	
-	<echo>OS BIT : ${os.arch}</echo>
-	<if>
-		<os family="windows"/>
-		<then>
-			<if>
-				<os arch="x86"/>
-				<then>
-					<propertycopy property="FLEX_HOME" from="APP_PROPERTIES.winSDKPath" silent="true" />
-				</then>
-				<else>
-					<propertycopy property="FLEX_HOME" from="APP_PROPERTIES.winSDKPath64" silent="true" />
-				</else>
-			</if>
-		</then>
-		<else>
-			<propertycopy property="FLEX_HOME" from="APP_PROPERTIES.unixSDKPath" silent="true" />
-		</else>
-	</if>
-	
-	<condition property="Is.FLEX_HOME.Not.Exists" else="false">
-		<or>
-			<and>
-				<equals arg1="${FLEX_HOME}" arg2=""/>
-			</and>
-			<not>
-				<available file="${FLEX_HOME}"/>
-			</not>
-		</or>
-	</condition>
-	
+
+	<!-- Read local properties -->
+	<property file="local.properties"/>
+
 	<!-- Read all environment properties -->
 	<property environment="env"/>
-	<!-- Check and set if Flex SDK already setup as environment variable -->
-	<propertycopy property="FLEX_HOME" from="env.FLEX_HOME" silent="true" override="${Is.FLEX_HOME.Not.Exists}"/>
-	<propertycopy property="SIGNTOOL_HOME" from="env.SIGNTOOL_HOME" silent="true"/>
-	<propertycopy property="NSIS_HOME" from="env.NSIS_HOME" silent="true"/>
-	<!-- try to fall back to HAXE_STD_PATH, if available -->
-	<condition property="HAXE_LIB_DIRECTORY" value="${env.HAXE_STD_PATH}/..">
-		<and>
-			<os family="windows" />
-			<available file="${env.HAXE_STD_PATH}/../haxelib.exe" />
-		</and>
-	</condition>
-	<condition property="HAXE_LIB_DIRECTORY" value="${env.HAXE_STD_PATH}/..">
-		<and>
-			<os family="mac" />
-			<available file="${env.HAXE_STD_PATH}/../haxelib" />
-		</and>
-	</condition>
-	<echo>SDK : ${FLEX_HOME}</echo>
-	<echo>SIGNTOOL: ${SIGNTOOL_HOME}</echo>
-	<echo>NSIS: ${NSIS_HOME}</echo>
-	<echo>Haxe: ${HAXE_LIB_DIRECTORY}</echo>
-	
-    <!-- Path to your Flex SDK with AIR 3.1 overlaid -->
-	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
-    <property name="mxmlc_path" value="${FLEX_HOME}/lib/mxmlc.jar" />
-    <property name="adt_path" value="${FLEX_HOME}/lib/adt.jar" />
- 
-    <!-- Application configuration -->
-    <property name="swfFilename" value="${debug_dir}/MoonshineSDKInstaller.swf" />
-	<property name="applicationSourceDirectory" value="../src"/>
-	<property name="LibraryHelperSharedCore" value="../../InstallerSharedCore"/>
-	<property name="LibrarySDKInstallerHaxe" value="../../MoonshineSDKInstallerGUICore"/>
-	<property name="desktopMainSource" value="${applicationSourceDirectory}/MoonshineSDKInstaller.mxml" />
-	<property name="desktopApplicationDescriptor" value="${debug_dir}/MoonshineSDKInstaller-app.xml" />
-	<property name="desktopApplicationDescriptorOriginal" value="${applicationSourceDirectory}/MoonshineSDKInstaller-app.xml" />
-	<property name="apacheInstallerSourceDirectory" value="../../flex-utilities/flex-installer"/>
-	<property name="mashLibrarySourceDirectory" value="../../ApacheFlexSDKInstallerLib"/>
-	
-	<!-- Desktop configuration -->
-	<property name="certSelfSignedNameOnly" value="MoonshineSelfSignedCertificate" />
-	<property name="certSelfSigned" value="MoonshineSelfSignedCertificate.p12" />
-	<property name="certSelfSignedPassword" value="moonshine" />
-	
-	<condition property="Is.Keychain.Certificate.Defined">
-		<and>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainInstallerName}" arg2=""/>
-			</not>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainInstallerName}" arg2="CERT_OSX_KEYCHAIN_INSTALLER"/>
-			</not>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainPass}" arg2=""/>
-			</not>
-			<not>
-				<equals arg1="${certSignedMacOSKeychainPass}" arg2="CERT_OSX_KEYCHAIN_PASS"/>
-			</not>
-		</and>
-	</condition>
-	<echo>Is.Keychain.Certificate.Defined: ${Is.Keychain.Certificate.Defined}</echo>
-	
+
 	<tstamp>
+		<format property="timestamp" pattern="yyyy-MM-dd_HH-mm-ss" />
 		<format property="timestamp.time" pattern="MM/dd/yyyy hh:mm aa"/>
 	</tstamp>
+
+	<!-- ANCHOR - Tool Properties -->	
+	<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
+	<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+    <property name="adt.cmd" value="${FLEX_HOME}/lib/adt.jar"/>
+	<property name="haxelib.cmd" value="haxelib"/>
+	<property name="signtool.cmd" value="signtool"/>
+	<property name="nsis.cmd" value="makensis"/>
+	<taskdef 
+		resource="net/sf/antcontrib/antcontrib.properties" 
+		classpath="./ant-contrib-0.6.jar"/>
+	<taskdef 
+		resource="flexTasks.tasks" 
+		classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+	
+	<property name="build.is.development" value="true"/>
+	<property name="build.number" value="0"/>
+
+	<!-- ANCHOR - App Properties -->
+	<if>
+		<equals arg1="${build.is.development}" arg2="true"/>
+		<then>
+			<property name="app.id" value="net.prominic.MoonshineSDKInstaller-dev"/>
+			<property name="app.title" value="Moonshine SDK Installer Development"/>
+			<property name="app.name" value="MoonshineSDKInstallerDevelopment" />
+		</then>
+		<else>
+			<property name="app.id" value="net.prominic.MoonshineSDKInstaller"/>
+			<property name="app.title" value="Moonshine SDK Installer"/>
+			<property name="app.name" value="MoonshineSDKInstaller" />
+		</else>			
+	</if>
+	<property name="app.version" value="1.0.0"/>
+
+	<!-- Detect Operating System -->
+	<condition property="is.windows">
+		<os family="windows"/>
+	</condition>
+	<condition property="is.macos">
+		<os family="mac"/>
+	</condition>
+	<condition property="is.linux">
+		<and>
+    		<os family="unix"/>
+    		<not>
+      			<os family="mac"/>
+    		</not>
+  		</and>
+	</condition>
 	
 	<!--
 	//==========================================================================
 	//
-	//  TASKS
+	//  WORKFLOWS
 	//
 	//==========================================================================
 	-->
 	
-	<!-- OS Check and decision on opening Task -->
-	<target name="checkOS">
-		<if>
-			<os family="windows"/>
-			<then>
-				<antcall target="disposeTempWindows"></antcall>
-			</then>
-		<elseif>
-			<os family="unix"/>
-			<then>
-				<antcall target="disposeTempUNIX"></antcall>
-			</then>
-		</elseif>
-		</if>
+	<!-- ANCHOR - Build Workflow -->
+	<target name="build">
+		<antcall>
+			<target name="print-info"/>
+			<target name="init"/>
+			<target name="modify-app-descriptor"/>
+			<target name="install-haxe-dependencies"/>
+			<target name="compile-gui-core"/>
+			<target name="compile-swf"/>
+			<target name="compile-app"/>			
+		</antcall>
 	</target>
 
-	<!-- Create a certificate if it doesn't exist already -->
-	<target name="createCertificate" unless="certSelfSigned.exists">
-		<echo>Self-signed .p12 certificate generation</echo>
-		<java jar="${adt_path}" fork="true" failonerror="true">
+	<!-- ANCHOR - Pack And Sign Workflow -->
+	<target name="pack-and-sign">
+		<switch value="true">
+			<case value="${is.windows}">
+				<antcall>
+					<!-- Windows Tasks -->		
+					<target name="create-windows-installer"/>
+					<target name="sign-windows-installer"/>
+				</antcall>
+			</case>
+			<case value="${is.macos}">
+				<antcall>
+					<!-- macOS Tasks -->
+					<target name="sign-macos-app"/>
+					<target name="create-macos-pkg"/>
+					<target name="sign-macos-pkg"/>
+					<target name="notarize-macos-pkg"/>
+				</antcall>
+			</case>
+			<case value="${is.linux}">
+					<!-- Linux Tasks -->
+					<echo message="Linux not supported yet."/>
+			</case>
+		</switch>		
+	</target>
+
+	<!-- ANCHOR - Clean Workflow -->
+	<target name="clean">
+		<delete dir="./bin"/>
+		<delete dir="installer"/>
+		<delete dir="images"/>
+		<delete dir="helperResources"/>
+		<delete dir="shellScripts"/>
+	</target>
+
+	<!--
+	//==========================================================================
+	//
+	//  COMMON SUBTASKS
+	//
+	//==========================================================================
+	-->
+
+	<!-- ANCHOR - Print Info -->
+    <target name="print-info">
+        <echo message="Build Properties:"/>
+		<echo message="=========="/>
+		<echo message="Is Development: ${build.is.development}"/>
+		<echo message="OS: ${os.name}"/>
+		<echo message=""/>
+		<echo message="App Properties:"/>
+		<echo message="=========="/>
+		<echo message="App Name: ${app.name}"/>
+		<echo message="App Title: ${app.title}"/>
+		<echo message="App ID: ${app.id}"/>
+		<echo message="App Version: ${app.version}"/>
+		<echo message=""/>
+		<echo message="Tools:"/>
+		<echo message="=========="/>
+		<echo message="Global JAVA_HOME: ${env.JAVA_HOME}"/>
+		<echo message="Workflow JAVA_HOME: ${JAVA_HOME}"/>
+		<echo message="FLEX_HOME: ${FLEX_HOME}"/>
+		<echo message="adt command: ${adt.cmd}"/>
+		<echo message="haxelib command: ${haxelib.cmd}"/>
+		<echo message="signtool command: ${signtool.cmd}"/>
+		<echo message="nsis command: ${nsis.cmd}"/>
+    </target>
+
+	<!-- ANCHOR - Init -->
+	<target name="init">
+		<mkdir dir="./bin"/>
+		<mkdir dir="./bin/app"/>
+		<mkdir dir="./bin/deploy"/>
+
+		<java jar="${adt.cmd}" fork="true" failonerror="true">
 			<arg line="-certificate" />
-			<arg line="-cn '${certSelfSignedNameOnly}'" />
+			<arg line="-cn MoonshineSelfSignedCertificate" />
 			<arg line="2048-RSA" />
-	   		<arg line="${certSelfSigned}" />
-	   		<arg line="${certSelfSignedPassword}"/>
+	   		<arg line="./bin/MoonshineSelfSignedCertificate.p12" />
+	   		<arg line="moonshine"/>
 		</java>
-		<copy file="${certSelfSigned}" todir="${debug_dir}" overwrite="true"/>
-	 </target>
+		<echo message="Created Self-Signed Certificate"/>
+	</target>
+
+	<!-- ANCHOR - Modify App Descriptor -->
+	<target name="modify-app-descriptor">
+		<copy file="../src/MoonshineSDKInstaller-app.xml" todir="./bin" overwrite="true"/>
+		<copy todir="./installer" overwrite="true">
+			<fileset dir="../src/installer"/>
+		</copy>
+		<copy todir="./images" overwrite="true">
+			<fileset dir="../src/assets/images"/>
+		</copy>
+		<copy todir="./helperResources" overwrite="true">
+			<fileset dir="../../InstallerSharedCore/src/helperResources"/>
+		</copy>
+		<copy todir="./shellScripts" overwrite="true">
+			<fileset dir="../src/shellScripts"/>
+		</copy>
+
+		<!-- Set Build Number in the App -->
+		<echo file="./images/appProperties.txt" append="false">${build.number}</echo>
+		
+		<replaceregexp 
+			file="./bin/MoonshineSDKInstaller-app.xml" 
+			match="filenameToBeReplacedByANT" 
+			replace="${app.name}" />
+		<replaceregexp 
+			file="./bin/MoonshineSDKInstaller-app.xml" 
+			match="nameToBeReplacedByANT" 
+			replace="${app.title} ${app.version}" 
+			encoding="utf-8" />
+		<replaceregexp 
+			file="./bin/MoonshineSDKInstaller-app.xml" 
+			match="idToBeReplacedByANT" 
+			replace="${app.id}" />
+		<replaceregexp 
+			file="./bin/MoonshineSDKInstaller-app.xml" 
+			match="0.0.0" 
+			replace="${app.version}" />
+		<replace 
+			file="./bin/MoonshineSDKInstaller-app.xml" 
+			token="[This value will be overwritten by Flash Builder in the output app.xml]" 
+			value="./bin/MoonshineSDKInstaller.swf" />
+		<echo message="Modified App Descriptor"/>
+	</target>
 	
-	<target name="InstallHaxeDependencies">
-		<echo>Installing Haxe Libraries</echo>
-		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
-			dir="${LibrarySDKInstallerHaxe}"
+	<!-- ANCHOR - Install Haxe Dependencies -->
+	<target name="install-haxe-dependencies">
+		<exec executable="${haxelib.cmd}"
+			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="feathersui"/>
 			<arg value="--quiet"/>
 		</exec>
-		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
-			dir="${LibrarySDKInstallerHaxe}"
+		<exec executable="${haxelib.cmd}"
+			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="openfl"/>
 			<arg value="--quiet"/>
 		</exec>
-		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
-			dir="${LibrarySDKInstallerHaxe}"
+		<exec executable="${haxelib.cmd}"
+			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="actuate"/>
 			<arg value="--quiet"/>
 		</exec>
-		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
-			dir="${LibrarySDKInstallerHaxe}"
+		<exec executable="${haxelib.cmd}"
+			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="install"/>
 			<arg value="lime"/>
 			<arg value="--quiet"/>
 		</exec>
+		<echo message="Installed Haxe Dependencies"/>
+		<echo message=""/>
+		<echo message="All Installed Haxelib Libraries:"/>
+		<echo message="=========="/>
+		<exec executable="${haxelib.cmd}">
+			<arg value="list"/>
+		</exec>
+		
 	</target>
 
-	<target name="CompileGUICore" depends="InstallHaxeDependencies">
-		<echo>Compiling GUI Core SWC</echo>
-		<exec executable="${HAXE_LIB_DIRECTORY}/haxelib"
-			dir="${LibrarySDKInstallerHaxe}"
+	<!-- ANCHOR - Compile GUI Core -->
+	<target name="compile-gui-core">
+		<exec executable="${haxelib.cmd}"
+			dir="../../MoonshineSDKInstallerGUICore"
 			failonerror="true">
 			<arg value="run"/>
 			<arg value="openfl"/>
 			<arg value="build"/>
 			<arg value="flash"/>
 		</exec>
+		<echo message="Compiled GUI Core"/>
 	</target>
+
+	<!-- ANCHOR - Compile SWF -->
+	<target name="compile-swf">
+		<exec executable="${JAVA_HOME}/bin/java" failonerror="true">
+			<arg value="-Dflexcompiler=${FLEX_HOME}/bin/mxmlc"/>
+			<arg value="-jar"/>
+			<arg value="${FLEX_HOME}/lib/mxmlc.jar"/>
+			
+			<!-- Compiler arguments -->
+			<arg value="+flexlib=${FLEX_HOME}/frameworks"/>
+			<arg value="../src/MoonshineSDKInstaller.mxml"/>
+			<arg value="-output=./bin/MoonshineSDKInstaller.swf"/>
+			<arg value="-swf-version=41"/>
+			<arg value="+configname=air"/>
+			<arg value="-optimize=true"/>
+			<arg value="-debug=false"/>
+			<arg value="-actionscript-file-encoding=UTF-8"/>
+			<arg value="-incremental=false"/>
+			<arg value="-keep-generated-actionscript=false"/>
+			<arg value="-allow-source-path-overlap=true"/>
+			
+			<!-- Source-path arguments -->
+			<arg value="-source-path=../src"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/common/src"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/ant_on_air/external"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/ant_on_air/src"/>
+			<arg value="-source-path=../../flex-utilities/flex-installer/ant_on_air/locale/{locale}"/>
+			<arg value="-source-path=../../ApacheFlexSDKInstallerLib/src"/>
+			<arg value="-source-path=../../InstallerSharedCore/src"/>
+			
+			<!-- Library-path arguments -->
+			<arg value="-library-path+=../../ApacheFlexSDKInstallerLib/libs"/>
+			<arg value="-library-path+=./bin"/>
+			<arg value="-library-path+=../../MoonshineSDKInstallerGUICore/bin/flash/bin"/>
+			
+		</exec>
+    	<echo message="Compiled SWF"/>
+	</target>
+
+	<!-- ANCHOR - Compile App -->
+	<target name="compile-app">
+		<switch value="true">
+			<case value="${is.windows}">
+				<property name="app.path" value="bin/app"/>
+			</case>
+			<case value="${is.macos}">
+				<property name="app.path" value="bin/app/${app.name}.app"/>
+			</case>
+		</switch>
+
+		<exec executable="${JAVA_HOME}/bin/java" failonerror="true">
+			<arg value="-jar"/>
+			<arg value="${adt.cmd}"/>
+			<arg value="-package"/>
+			<arg value="-storetype"/>
+			<arg value="pkcs12"/>
+			<arg value="-keystore"/>
+			<arg value="./bin/MoonshineSelfSignedCertificate.p12"/>
+			<arg value="-storepass"/>
+			<arg value="moonshine"/>
+			<arg value="-tsa"/>
+			<arg value="http://timestamp.digicert.com"/>
+			<arg value="-target"/>
+			<arg value="bundle"/>
+			<arg value="${app.path}"/>
+			<arg value="bin/MoonshineSDKInstaller-app.xml"/>
+			<arg value="./bin/MoonshineSDKInstaller.swf"/>
+			<arg line="./installer ./images ./helperResources ./shellScripts"/>
+		</exec>
+
+		<echo message="Compiled App"/>
+	 </target>
 	
 	<!--
 	//==========================================================================
 	//
-	//  WINDOWS
+	//  WINDOWS SUBTASKS
 	//
 	//==========================================================================
 	-->
-	
-	<!-- Windows signed packaging initiator -->
-	<target name="signedSigningBuild" if="${Is.Signed.Build}">
-		<antcall target="CompileSWFWindowsSignedPackage"></antcall>
-	</target>
 
-	<!-- Windows packaging/signing Task -->
-	<target name="CompileSWFWindowsSignedPackage" depends="CompileSWF">
-		<echo># Signed Process Running - Preparing Bundle</echo>
-		<java jar="${adt_path}" fork="true" failonerror="true">
-			<arg line="-package" />
-			<arg line="-storetype pkcs12" />
-			<arg line="-keystore '${certSelfSigned}'" />
-			<arg line="-storepass '${certSelfSignedPassword}'" />
-			<arg line="-tsa 'http://timestamp.digicert.com'" />
-	   		<arg line="-target bundle"/>
-			<!--arg line="-target native"/-->
-	   		<arg line="${windowsBundleFilename}" />
-	   		<arg line="'${desktopApplicationDescriptor}'" />
-	   		<arg line="'${swfFilename}'" />
-			<arg line="installer"/>
-			<arg line="images"/>
-			<arg line="helperResources"/>
-			<arg line="shellScripts"/>
-	   		<!-- Add folders to be bundled in the AIR file here -->
-		</java>
-		<echo># Signed Process Running - Signing Executable</echo>
-		<exec executable="${SIGNTOOL_HOME}/signtool.exe" failonerror="true">
-			<arg value="sign"/>
-			<arg value="/f"/>
-			<arg value="${debug_dir}/${certSelfSigned}"/>
-			<arg value="/p"/>
-			<arg value="${certSelfSignedPassword}"/>
-			<arg value="${windowsBundleFilename}/${executableName}.exe"/>
-		</exec>
-		<echo># Signed Process Running - Praparing Installer</echo>
-		<exec executable="${NSIS_HOME}/makensis.exe" failonerror="true">
-			<arg value="/DVERSION=${BuildVersion}"/>
-			<arg value="/DINSTALLERNAME=${installerName}"/>
-			<arg value="/DEXECUTABLENAME=${executableName}"/>
-			<arg value="/DAPPID=${applicationID}"/>
+	<!-- ANCHOR - Create Windows Installer -->
+	<target name="create-windows-installer">
+		<exec executable="${nsis.cmd}" failonerror="true">
+			<arg value="/DVERSION=${app.version}"/>
+			<arg value="/DAPP_NAME=${app.name}"/>
+			<arg value="/DAPP_TITLE=${app.name}"/>
+			<arg value="/DINSTALLER_NAME=${app.name}-${app.version}"/>
+			<arg value="/DAPPID=${app.id}"/>
 			<arg value="/DTIMESTAMP=${timestamp.time}"/>
-			<arg value="nsis-build.nsi"/>
+			<arg value="./nsis-build.nsi"/>
 		</exec>
-		<!-- NOTE: If we do the installer name in this format ${installerName}-${versionNumber}
-			then we don't require this following sleep. But if change the latter format with some
-			static value, i.e. ${installerName}-Installer, the signing process failed with
-			process hold-up error. A sleep of seconds fix this problem for now. -->
-		<sleep seconds="2"/>
-		<echo># Signed Process Running - Signing Installer:</echo>
-		<exec executable="${SIGNTOOL_HOME}/signtool.exe" failonerror="true">
-			<env key="SM_CLIENT_CERT_FILE" value="${env.SM_CLIENT_CERT_FILE}"/>
-			<env key="SM_CLIENT_CERT_PASSWORD" value="${env.SM_CLIENT_CERT_PASSWORD}"/>
-			<env key="SM_API_KEY" value="${env.SM_API_KEY}"/>
-			<env key="SM_HOST" value="${env.SM_HOST}"/>
-			<env key="SM_THUMBPRINT" value="${env.SM_THUMBPRINT}"/>
+		<echo message="Created Windows Installer"/>
+	</target>
+		
+	<!-- ANCHOR - Sign Windows Installer -->
+	<target name="sign-windows-installer">
+		<exec executable="${signtool.cmd}" failonerror="true">
 			<arg value="sign"/>
 			<arg value="/sha1"/>
-			<arg value="${thumbprintSMWindowsBinary}"/>
+			<arg value="${env.SM_THUMBPRINT}"/>
 			<arg value="/tr"/>
 			<arg value="http://timestamp.digicert.com"/>
 			<arg value="/td"/>
 			<arg value="SHA256"/>
 			<arg value="/fd"/>
 			<arg value="SHA256"/>
-			<arg value="${deploy_dir}/${installerName}-${BuildVersion}.exe"/>
+			<arg value="./bin/${app.name}-${app.version}.exe"/>
 		</exec>
-		<!--antcall target="zipCaptiveBundle"></antcall-->
-	 </target>
-	
-	<!-- Windows self-signed packaging initiator -->
-	<target name="normalSigningBuild" unless="${Is.Signed.Build}">
-		<antcall target="CompileSWFWindowsSelfSignedPackage"></antcall>
-	</target>
-
-	 <!-- Windows packaging/signing Task -->
-	<target name="CompileSWFWindowsSelfSignedPackage" depends="CompileSWF">
-		<echo>Self-signed Process Running</echo>
-		<java jar="${adt_path}" fork="true" failonerror="true">
-			<arg line="-package" />
-			<arg line="-storetype pkcs12" />
-			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
-			<arg line="-storepass '${certSelfSignedPassword}'" />
-			<arg line="-tsa 'http://timestamp.digicert.com'" />
-	   		<arg line="-target bundle"/>
-	   		<arg line="${windowsBundleFilename}" />
-	   		<arg line="'${desktopApplicationDescriptor}'" />
-	   		<arg line="'${swfFilename}'" />
-			<arg line="installer"/>
-			<arg line="images"/>
-			<arg line="helperResources"/>
-			<arg line="shellScripts"/>
-	   		<!-- Add folders to be bundled in the AIR file here -->
-		</java>
-		<!-- <antcall target="zipCaptiveBundle"></antcall> -->
-	 </target>
-	
-	<target name="zipCaptiveBundle">
-		<zip destfile="${desktopBinaryFilename}.zip" basedir="${desktopBinaryFilename}"/>
-	</target>
+		<move 
+			file="./bin/${app.name}-${app.version}.exe" 
+			tofile="./bin/deploy/${app.name}-${app.version}.exe"/>
+		<echo message="Signed Windows Installer"/>
+	 </target>	
 	
 	<!--
 	//==========================================================================
 	//
-	//  MACOS
+	//  MACOS SUBTASKS
 	//
 	//==========================================================================
 	-->
-	
-	<!-- Compile .app to next use in .pkg building -->
-	<!--target name="compile app project" depends="compile dmg project"-->
-	<target name="compile app project" depends="CompileSWF">
-		<java jar="${adt_path}" fork="true" failonerror="true">
-			<arg line="-package" />
-			<arg line="-storetype pkcs12" />
-			<arg line="-keystore '${debug_dir}/${certSelfSigned}'" />
-			<arg line="-storepass '${certSelfSignedPassword}'" />
-			<arg line=" -tsa 'http://timestamp.digicert.com'" />
-			<arg line="-target bundle"/>
-			<arg line="'${desktopBinaryFilename}'" />
-			<arg line="'${desktopApplicationDescriptor}'" />
-			<arg line="'${swfFilename}'" />
-			<arg line="installer"/>
-			<arg line="images"/>
-			<arg line="helperResources"/>
-			<arg line="shellScripts"/>
-			<!-- Add folders to be bundled in the AIR file here -->
-		</java>
-	</target>
-	
-	<!-- Compile .pkg to distribute through app store -->
-	<target name="buildAppStorePKG" depends="compile app project" if="${Is.Keychain.Certificate.Defined}">
-		<copy tofile="${desktopBinaryFilename}/Contents/Resources/Icon.icns" file="${basedir}/images/moonshineASHIcons.icns" overwrite="true"/>
-		<replace file="${desktopBinaryFilename}/Contents/Info.plist">
-				<replacetoken><![CDATA[<string>Icon.icns</string>]]></replacetoken>
-				<replacevalue><![CDATA[<string>Icon.icns</string>
-		<key>ITSAppUsesNonExemptEncryption</key><false/>
-		<key>CFBundleName</key>
-		<string>Moonshine SDK Installer</string>
-		<key>LSApplicationCategoryType</key>
-		<string>public.app-category.developer-tools</string>
-		<key>CFBundleVersion</key>
-		<string>1.0</string>
-		<key>postinstall_script</key>
-		<string>#!/bin/sh
-			open -a /Applications/Moonshine\ SDK\ Installer.app/
-			exit 0</string>]]></replacevalue>
-		</replace>
-		<if>
-			<equals arg1="${IsDevelopmentBuild}" arg2="true"/>
-			<then>
-				<replaceregexp file="${desktopBinaryFilename}/Contents/Info.plist" match="macapp-identifier" replace="net.prominic.MoonshineSDKInstaller-dev" flags="g"/>
-			</then>
-			<else>
-				<replaceregexp file="${desktopBinaryFilename}/Contents/Info.plist" match="macapp-identifier" replace="net.prominic.MoonshineSDKInstaller" flags="g"/>
-			</else>			
-		</if>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='security unlock-keychain -p "${certSignedMacOSKeychainPass}"'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/WebKit.dylib"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="chmod -R 777 ${desktopBinaryFilename}"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/Flash\ Player.plugin/Contents/Info.plist"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Adobe\ AIR_64\ Helper"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value="rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/ExtendedAppEntryTemplate64"/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='rm ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/A2712Enabler'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s "${certSignedDevIDKeychainName}" ${desktopBinaryFilename}/Contents/Frameworks/Adobe\ AIR.framework/Versions/1.0/Resources/Flash\ Player.plugin/Contents/MacOS/FlashPlayer-10.6'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s "${certSignedDevIDKeychainName}" ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A/SecurityScopeBookmark'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --timestamp -v -s "${certSignedDevIDKeychainName}" ${desktopBinaryFilename}/Contents/Resources/META-INF/AIR/extensions/karar.santanu.SecurityScopeBookmark/META-INF/ANE/MacOS-x86-64/SecurityScopeBookmark.framework/Versions/A'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f -v -s "${certSignedDevIDKeychainName}" --deep ${desktopBinaryFilename}'/>
-		</exec>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --options runtime --timestamp -v -s "${certSignedDevIDKeychainName}" --entitlements ${debug_dir}/entitlement.plist ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Signing checks on Sandbox APP: spctl -vvv --assess --type exec ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='spctl -vvv --assess --type exec ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Hardened runtime checks on Sandbox APP: codesign --display --verbose ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign --display --verbose ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Timestamp check on Sandbox APP: codesign -dvv ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -dvv ${desktopBinaryFilename}'/>
-		</exec>
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='productbuild --component ${desktopBinaryFilename} /Applications "${deploy_dir}/${applicationName}.pkg" --sign "Developer ID Installer: Prominic.NET, Inc."'/>
-		</exec>
-		<echo>========== Installer check on Sandbox PKG: pkgutil --check-signature ${deploy_dir}/${applicationName}_Signed_NonSandbox.pkg</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='pkgutil --check-signature "${deploy_dir}/${applicationName}.pkg"'/>
-		</exec>
-		
 
-		<!-- @devsena: Avail non-sandbox entitlement to be use in upcoming process -->
-		<copy file="entitlement-non-sandbox.plist" tofile="${debug_dir}/entitlement.plist" overwrite="true"/>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -f --options runtime --timestamp -v -s "${certSignedDevIDKeychainName}" --entitlements ${debug_dir}/entitlement.plist ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Signing checks on Non-Sandbox APP: spctl -vvv --assess --type exec ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='spctl -vvv --assess --type exec ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Hardened runtime checks: codesign --display --verbose ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign --display --verbose ${desktopBinaryFilename}'/>
-		</exec>
-		<echo>========== Timestamp check: codesign -dvv ${desktopBinaryFilename}</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='codesign -dvv ${desktopBinaryFilename}'/>
-		</exec>
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='productbuild --component ${desktopBinaryFilename} /Applications "${deploy_dir}/${applicationName}_DONOTUSE.pkg" --sign "Developer ID Installer: Prominic.NET, Inc."'/>
-		</exec>
-		<!-- @devsena; Following part not suppose to go to source distribution. Referring the certificate as "${certSignedDevIDKeychainName}" always fails by unknown reason but if static name referencing  !-->
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='productsign --sign "Developer ID Installer: Prominic.NET, Inc." "${deploy_dir}/${applicationName}_DONOTUSE.pkg" "${deploy_dir}/${applicationName}_Signed_NonSandbox.pkg"'/>
-		</exec>
-		<echo>========== Installer check on Non-Sandbox PKG: pkgutil --check-signature ${deploy_dir}/${applicationName}_Signed_NonSandbox.pkg</echo>
-		<exec executable="bash">
-			<arg value="-c"/>
-			<arg value='pkgutil --check-signature "${deploy_dir}/${applicationName}_Signed_NonSandbox.pkg"'/>
-		</exec>
-		<exec executable="bash" failonerror="true">
-			<arg value="-c"/>
-			<arg value='rm "${deploy_dir}/${applicationName}_DONOTUSE.pkg"'/>
-		</exec>
+	<!-- ANCHOR - Sign macOS app -->
+	<target name="sign-macos-app">
+		<echo message="Kechain: ${keychain.name}"/>
+		<echo message="Notarytool Profile: ${notarytool.profile}"/>
+
+		<!-- Show Nuber of Developer ID Application Certificates -->
+		<exec executable="bash" outputproperty="certs.application.in.keychain">
+            <arg value="-c"/>
+            <arg value="security find-certificate -a | grep -s 'Developer ID Application' | grep -c 'alis'"/>
+        </exec>
+		<!-- Show Number of Developer ID Installer Certificates -->
+		<echo message="certs.application.in.keychain: ${certs.application.in.keychain}"/>
+		<exec executable="bash" outputproperty="certs.installer.in.keychain">
+            <arg value="-c"/>
+            <arg value="security find-certificate -a | grep -s 'Developer ID Installer' | grep -c 'alis'"/>
+        </exec>
+		<echo message="certs.installer.in.keychain: ${certs.installer.in.keychain}"/>
+
+		<exec executable="codesign" failonerror="true">
+            <arg value="./bin/app/${app.name}.app"/>
+            <arg value="--sign"/>
+            <arg value="Developer ID Application"/>
+			<arg value="--entitlements"/>
+			<arg value="entitlement-non-sandbox.plist"/>
+            <arg value="--options"/>
+            <arg value="runtime"/>
+            <arg value="--force"/>
+            <arg value="--timestamp"/>
+            <arg value="--verbose"/>
+            <arg value="--deep"/>
+        </exec>  
+
+		<exec executable="codesign" failonerror="true">
+			<arg value="-vvv"/>
+			<arg value="--deep"/>
+			<arg value="--strict"/>
+            <arg value="./bin/app/${app.name}.app"/>
+        </exec>
+
+		<exec executable="spctl" failonerror="true">
+			<arg value="-vvv"/>
+			<arg value="--assess"/>
+			<arg value="--type"/>
+			<arg value="exec"/>
+            <arg value="./bin/app/${app.name}.app"/>
+        </exec>
 	</target>
-	
-	<!--
-	//==========================================================================
-	//
-	//  GLOBAL
-	//
-	//==========================================================================
-	-->
-	
-	<!-- delete and recreate the DEPLOY dir -->
-	<target name="init">
-		<delete dir="${deploy_dir}"/>
-		<delete dir="${debug_dir}" />
-		<mkdir dir="${deploy_dir}" />
-		<mkdir dir="${debug_dir}" />
+
+	<!-- ANCHOR - Create macOS pkg -->
+	<target name="create-macos-pkg">
+		<exec executable="productbuild" failonerror="true">
+			<arg value="--component"/>
+			<arg value="bin/app/${app.name}.app"/>			
+			<arg value="/Applications"/>
+			<arg value="./bin/msdki-unsigned.pkg"/>
+		</exec>
+		<echo message="Created macOS pkg"/>
 	</target>
-	
-	<!-- modify in the descriptor file -->
-	<target name="modifyDescriptor" depends="init" if="${IsDesktopBuild}">
-		<copy file="${desktopApplicationDescriptorOriginal}" todir="${debug_dir}" overwrite="true"/>
-		<copy todir="${basedir}/installer" overwrite="true">
-			<fileset dir="${applicationSourceDirectory}/installer"/>
-		</copy>
-		<copy todir="${basedir}/images" overwrite="true">
-			<fileset dir="${applicationSourceDirectory}/assets/images"/>
-		</copy>
-		<copy todir="${basedir}/helperResources" overwrite="true">
-			<fileset dir="${LibraryHelperSharedCore}/src/helperResources"/>
-		</copy>
-		<copy todir="${basedir}/shellScripts" overwrite="true">
-			<fileset dir="${applicationSourceDirectory}/shellScripts"/>
-		</copy>
-		
-		<!-- modify field values based upon isDevelopment tag -->
-		<if>
-			<equals arg1="${IsDevelopmentBuild}" arg2="true"/>
-			<then>
-				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller-dev"/>
-				<property name="applicationName" value="Moonshine SDK Installer Development"/>
-				<property name="executableName" value="MoonshineSDKInstallerDevelopment" />
-				<property name="installerName" value="MoonshineSDKInstallerDevelopment" />
-			</then>
-			<else>
-				<property name="applicationID" value="net.prominic.MoonshineSDKInstaller"/>
-				<property name="applicationName" value="Moonshine SDK Installer"/>
-				<property name="executableName" value="Moonshine SDK Installer" />
-				<property name="installerName" value="MoonshineSDKInstaller" />
-			</else>			
-		</if>
-		
-		<if>
-			<os family="unix"/>
-			<then>
-				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.app"/>
-				<copy file="entitlement.plist" todir="${debug_dir}" overwrite="true"/>
-			</then>
-			<else>
-				<property name="desktopBinaryFilename" value="${deploy_dir}/${installerName}.exe"/>
-				<property name="windowsBundleFilename" value="${deploy_dir}/${installerName}EXE" />
-				<if>
-					<equals arg1="${Is.Signed.Build}" arg2="true"/>
-					<then>
-						<copy file="${certSignedWindowsBinary}" todir="${debug_dir}" overwrite="true"/>
-						 <script language="javascript">
-						  	arr = project.getProperty('certSignedWindowsBinary').split('/');
-						  	project.setProperty('certSignedWindowsBinary', project.getProperty('debug_dir') + '/' + arr[arr.length - 1]);
-						 </script>
-					</then>
-				</if>
-			</else>
-		</if>
-		
-		<!-- Check if the self-signed certificate exists -->
-		<available file="${certSelfSigned}" property="certSelfSigned.exists" />
-		<if>
-			<equals arg1="${certSelfSigned.exists}" arg2="true"/>
-			<then>
-				<copy file="${certSelfSigned}" todir="${debug_dir}" overwrite="true"/>
-			</then>
-			<else>
-				<antcall target="createCertificate"></antcall>
-			</else>
-		</if>
-		
-		<replaceregexp file="${desktopApplicationDescriptor}" match="filenameToBeReplacedByANT" replace="${executableName}" />
-		<replaceregexp file="${desktopApplicationDescriptor}" match="nameToBeReplacedByANT" replace="${applicationName} ${BuildVersion}" encoding="utf-8" />
-		<replaceregexp file="${desktopApplicationDescriptor}" match="idToBeReplacedByANT" replace="${applicationID}" />
-		<replaceregexp file="${desktopApplicationDescriptor}" match="0.0.0" replace="${BuildVersion}" />
-		<replace file="${desktopApplicationDescriptor}" token="[This value will be overwritten by Flash Builder in the output app.xml]" value="${swfFilename}" />
+
+	<!-- ANCHOR - Sign macOS pkg -->
+	<target name="sign-macos-pkg">
+		<exec executable="productsign" failonerror="true">
+			<arg value="--sign"/>
+			<arg value="Developer ID Installer"/>
+			<arg value="./bin/msdki-unsigned.pkg"/>
+			<arg value="./bin/deploy/${app.name}-${app.version}.pkg"/>
+		</exec>
+		<echo message="Signed macOS pkg"/>
 	</target>
-	
-	<target name="createBuildInfoFile" depends="modifyDescriptor">
-		<echo file="${basedir}/images/appProperties.txt" append="false">${svn.revision}</echo>
+
+	<!-- ANCHOR - Notarize macOS pkg -->
+	<target name="notarize-macos-pkg">
+		<exec executable="xcrun" failonerror="true">
+			<arg value="notarytool"/>
+			<arg value="submit"/>
+			<arg value="./bin/deploy/${app.name}-${app.version}.pkg"/>
+			<arg value="--keychain-profile"/>
+			<arg value="${notarytool.profile}"/>
+			<arg value="--wait"/>
+		</exec>
+		<echo message="Notarized macOS pkg"/>
 	</target>
-	
-	<!-- Compile SWF to build directory for desktop packaging -->
-	<target name="CompileSWF" depends="createBuildInfoFile, CompileGUICore">
-		<echo>${swfFilename}</echo>
-		<mxmlc file="${desktopMainSource}" 
-			   output="${swfFilename}" 
-			   swf-version="41" 
-			   configname="air" 
-			   fork="true" 
-			   optimize="true" 
-			   debug="false" 
-			   actionscript-file-encoding="UTF-8" 
-			   incremental="false"
-			   keep-generated-actionscript="false"
-			   allow-source-path-overlap="true">
-			<load-config filename="${FLEX_HOME}/frameworks/air-config.xml"/>
-			<source-path path-element="${applicationSourceDirectory}"/>
-			<source-path path-element="${apacheInstallerSourceDirectory}/common/src"/>
-			<source-path path-element="${apacheInstallerSourceDirectory}/ant_on_air/external"/>
-			<source-path path-element="${apacheInstallerSourceDirectory}/ant_on_air/src"/>
-			<source-path path-element="${apacheInstallerSourceDirectory}/ant_on_air/locale/{locale}"/>
-			<source-path path-element="${mashLibrarySourceDirectory}/src"/>
-			<source-path path-element="${LibraryHelperSharedCore}/src"/>
-			<compiler.library-path dir="${mashLibrarySourceDirectory}/libs" append="true">
-				<include name="*.swc" />
-			</compiler.library-path>
-			<library-path dir="${debug_dir}" includes="*.swc" append="true" />
-			<compiler.library-path dir="${LibrarySDKInstallerHaxe}/bin/flash/bin" append="true">
-				<include name="*.swc" />
-			</compiler.library-path>
-		</mxmlc>
-	</target>
-	
-	<!-- Deletes temporary files for Windows -->
-	<target name="disposeTempWindows" depends="normalSigningBuild,signedSigningBuild">
-		<if>
-			<equals arg1="${keepDebugFiles}" arg2="false"/>
-			<then>
-				<delete dir="${deploy_dir}/MoonshineSDKInstallerEXE" />
-				<delete dir="${debug_dir}" />
-				<delete dir="installer"/>
-				<delete dir="images"/>
-				<delete dir="helperResources"/>
-				<delete dir="shellScripts"/>
-			</then>
-		</if>
-	</target>
-	
-	<!-- Deletes temporary files for OSX -->
-	<target name="disposeTempUNIX" depends="buildAppStorePKG">
-		<if>
-			<equals arg1="${keepDebugFiles}" arg2="false"/>
-			<then>
-				<delete dir="${debug_dir}" />
-				<delete dir="installer"/>
-				<delete dir="images"/>
-				<delete dir="helperResources"/>
-				<delete dir="shellScripts"/>
-			</then>
-		</if>
-	</target>
+
 </project>
