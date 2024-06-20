@@ -497,15 +497,15 @@
 						<mac>10</mac>			
 					</diskMBusage>
 					<windows>
-						<version version="3.6.0" displayVersion="v3.6.0">
+						<version version="3.9.8" displayVersion="v3.9.8">
 			                <path>https://moonshine-ide.com/downloads/maven/</path>
-			                <file>apache-maven-3.6.0-bin.zip</file>
+			                <file>apache-maven-3.9.8-bin.zip</file>
 			            </version>
 					</windows>
 					<mac>
-						<version version="3.6.0" displayVersion="v3.6.0">
+						<version version="3.9.8" displayVersion="v3.9.8">
 			                <path>https://moonshine-ide.com/downloads/maven/</path>
-			                <file>apache-maven-3.6.0-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
+			                <file>apache-maven-3.9.8-bin.tar.gz</file> <!-- flexSDK.tar.gz -->
 			            </version>
 					</mac>
 				</variant>
