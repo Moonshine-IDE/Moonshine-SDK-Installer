@@ -41,9 +41,9 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
-    - uses: krdlab/setup-haxe@v1.5.1
+    - uses: krdlab/setup-haxe@master
       with:
-        haxe-version: 4.3.4
+        haxe-version: 4.3.6
 
     - uses: joshtynjala/setup-apache-flex-action@v2.2.0
       with:
