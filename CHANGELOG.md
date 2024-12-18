@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [4.7.0]
+
+### Summary
+
+Moonshine SDK Installer 4.7.0 includes version updates for Apache Flex SDK (Harman AIR), Apache Royale and Apache Maven. 
+
+### Changed
+
+* Update Apache Maven to 3.9.8 ([#120](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/120))
+* Update Harman AIR SDK to AIR 51.1.3.1 ([#121](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/121))
+* Update Apache Royale to 0.9.12 and Nightly to 0.9.13 ([#122](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/122))
+
 ## Moonshine SDK Installer [4.6.0]
 
 ### Summary
