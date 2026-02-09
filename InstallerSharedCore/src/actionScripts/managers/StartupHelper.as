@@ -63,7 +63,7 @@ import flash.events.EventDispatcher;
 				// for macOS ~/Downloads directory
 				HelperConstants.DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
 			}
-			else
+			else if (HelperConstants.IS_WINDOWS)
 			{
 				// Windows download directory
 				if (HelperConstants.CUSTOM_PATH_SDK_WINDOWS)

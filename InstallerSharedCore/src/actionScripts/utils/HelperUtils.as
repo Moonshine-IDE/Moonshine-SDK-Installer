@@ -286,7 +286,7 @@ import mx.utils.StringUtil;
 		
 		public static function convertString(path:String):String
 		{
-			if (!HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
 			{
 				path= path.split(" ").join("^ ");
 				path= path.split("(").join("^(");
@@ -306,10 +306,10 @@ import mx.utils.StringUtil;
 		/**
 		 * Returns encoded string to run on Windows' shell
 		 */
-		public static function getEncodedForShell(value:String, forceOSXEncode:Boolean=false, forceWindowsEncode:Boolean=false):String
+		public static function getEncodedForShell(value:String, forceBashEncode:Boolean=false, forceWindowsEncode:Boolean=false):String
 		{
 			var tmpValue:String = "";
-			if (HelperConstants.IS_MACOS || forceOSXEncode)
+			if (!HelperConstants.IS_WINDOWS || forceBashEncode)
 			{
 				// @note
 				// in case of /bash one should send the value surrounded by $''
@@ -318,7 +318,7 @@ import mx.utils.StringUtil;
 				tmpValue = value.replace(/(")/g, '\\"');
 				tmpValue = value.replace(/(')/g, "\\'");
 			}
-			else if (!HelperConstants.IS_MACOS || forceWindowsEncode)
+			else if (HelperConstants.IS_WINDOWS || forceWindowsEncode)
 			{
 				for (var i:int; i < value.length; i++)
 				{

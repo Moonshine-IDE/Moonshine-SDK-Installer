@@ -220,7 +220,7 @@
 			private function prepareBeforeDownloads():void
 			{
 				// save custom path as necessary
-				if (!HelperConstants.IS_MACOS && HelperConstants.CUSTOM_PATH_SDK_WINDOWS)
+				if (HelperConstants.IS_WINDOWS && HelperConstants.CUSTOM_PATH_SDK_WINDOWS)
 				{
 					CookieManager.getInstance().setWindowsCustomPath(HelperConstants.CUSTOM_PATH_SDK_WINDOWS);
 				}
@@ -611,7 +611,7 @@
 					itemDownloading.isSelectedToDownload = false;
 					itemDownloading.isAlreadyDownloaded = true;
 
-					if (!HelperConstants.IS_MACOS) onGitSVNInstallWindows(itemDownloading);
+					if (HelperConstants.IS_WINDOWS) onGitSVNInstallWindows(itemDownloading);
 					moonshineNotifier.notifyMoonshineWithUpdate();
 
 					flush();

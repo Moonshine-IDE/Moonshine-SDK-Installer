@@ -130,7 +130,7 @@ package actionScripts.managers
 			
 			var tmpArr:Array = queue[0].com.split("&&");
 			
-			if (!HelperConstants.IS_MACOS) tmpArr.unshift("/c");
+			if (HelperConstants.IS_WINDOWS) tmpArr.unshift("/c");
 			else tmpArr.unshift("-c");
 			customInfo.arguments = Vector.<String>(tmpArr);
 			
@@ -141,7 +141,7 @@ package actionScripts.managers
 		private function renewProcessInfo():NativeProcessStartupInfo
 		{
 			customInfo = new NativeProcessStartupInfo();
-			customInfo.executable = !HelperConstants.IS_MACOS ? new File("c:\\Windows\\System32\\cmd.exe") : new File("/bin/bash");
+			customInfo.executable = HelperConstants.IS_WINDOWS ? new File("c:\\Windows\\System32\\cmd.exe") : new File("/bin/bash");
 			
 			return customInfo;
 		}

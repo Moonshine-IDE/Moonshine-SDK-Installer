@@ -73,18 +73,18 @@ package actionScripts.utils
 			nativeProcessStartupInfo = new NativeProcessStartupInfo();
 			nativeProcess = new NativeProcess();
 			
-			if (HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
+			{
+				args.unshift("/c");
+			}
+			else
 			{
 				// we want one liner command on macOS
 				// unlike on Windows
 				args = new <String>["-c", args.join(" ")];
 			}
-			else
-			{
-				args.unshift("/c");
-			}
 			
-			nativeProcessStartupInfo.executable = HelperConstants.IS_MACOS ? new File("/bin/bash") : new File("c:\\Windows\\System32\\cmd.exe");
+			nativeProcessStartupInfo.executable = HelperConstants.IS_WINDOWS ? new File("c:\\Windows\\System32\\cmd.exe") : new File("/bin/bash");
 			nativeProcessStartupInfo.arguments = args;
 			if (buildDirectory) nativeProcessStartupInfo.workingDirectory = buildDirectory;
 			

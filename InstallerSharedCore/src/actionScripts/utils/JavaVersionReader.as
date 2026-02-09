@@ -122,7 +122,7 @@ package actionScripts.utils
 		{
 			var tmpLine:String = value.substring(
 				value.indexOf("version \""),
-				value.indexOf(HelperConstants.IS_MACOS ? "\n" : "\r\n")
+				value.indexOf(HelperConstants.IS_WINDOWS ? "\r\n" : "\n")
 			);
 			var firstIndex:int = tmpLine.indexOf("\"")+1;
 			var version:String = tmpLine.substring(firstIndex, tmpLine.indexOf("\"", firstIndex+1));

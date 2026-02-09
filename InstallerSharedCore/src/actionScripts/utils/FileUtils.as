@@ -31,7 +31,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package actionScripts.utils
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.OutputProgressEvent;
@@ -43,12 +42,12 @@ package actionScripts.utils
 	import flash.utils.ByteArray;
 	import flash.utils.clearInterval;
 	import flash.utils.setTimeout;
+	import actionScripts.valueObjects.HelperConstants;
 	
 	public class FileUtils
 	{
 		public static const DATA_FORMAT_STRING:String = "dataAsString";
 		public static const DATA_FORMAT_BYTEARRAY:String = "dataAsByteArray";
-		public static const IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
 
 		private static const WINDOWS_INSTALL_DIRECTORIES:Array = ["Program files", "Program Files (x86)"];
 
@@ -60,6 +59,7 @@ package actionScripts.utils
 		 */
 		public static function isPathExists(value:String):Boolean
 		{
+			if (value == null) return false;
 			if (!pathCheckingFile) pathCheckingFile = new File();
 			try {
 				pathCheckingFile.nativePath = value;
@@ -390,7 +390,7 @@ package actionScripts.utils
 		 */
 		public static function isRelativePath(value:String):Boolean
 		{
-			var searchRegExp:RegExp = IS_MACOS ? new RegExp("~/.*.$", "i") : new RegExp(".*:\\|\/", "i");
+			var searchRegExp:RegExp = HelperConstants.IS_WINDOWS ? new RegExp(".*:\\|\/", "i") : new RegExp("~/.*.$", "i");
 			var results:Array = searchRegExp.exec(value);
 			if (results != null) return false;
 				

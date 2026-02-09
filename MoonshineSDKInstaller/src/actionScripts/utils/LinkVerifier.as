@@ -66,18 +66,18 @@ package actionScripts.utils
 			this.component = component;
 			
 			var npInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-			npInfo.executable = HelperConstants.IS_MACOS ? 
-				File.documentsDirectory.resolvePath("/bin/bash") : 
-				new File("c:\\Windows\\System32\\cmd.exe");
+			npInfo.executable = HelperConstants.IS_WINDOWS ? 
+				new File("c:\\Windows\\System32\\cmd.exe") :
+				File.documentsDirectory.resolvePath("/bin/bash");
 			
 			var command:String = "curl --head --fail "+ (directURL ? directURL : component.downloadURL);
-			if (HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
 			{
-				npInfo.arguments = Vector.<String>(["-c", command]);
+				npInfo.arguments = Vector.<String>(["/c", command]);
 			}
 			else
 			{
-				npInfo.arguments = Vector.<String>(["/c", command]);
+				npInfo.arguments = Vector.<String>(["-c", command]);
 			}
 			
 			startShell(true);

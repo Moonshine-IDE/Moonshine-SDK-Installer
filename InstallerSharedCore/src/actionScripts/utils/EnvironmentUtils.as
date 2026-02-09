@@ -64,7 +64,7 @@ package actionScripts.utils
 			// in sandbox Moonshine unless the folder opened
 			// by file-browser dialog once, let's keep this
 			// for Windows only
-			if (!HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
 			{
 				// it's possible that data returns in
 				// multiple standard_output_data
@@ -93,15 +93,15 @@ package actionScripts.utils
 			}
 			else if (data != "")
 			{
-				if (HelperConstants.IS_MACOS)
-				{
-					// gets Mac system arch
-					HelperConstants.SYSTEM_ARCH = data;
-				}
-				else
+				if (HelperConstants.IS_WINDOWS)
 				{
 					// gets Windows environment list
 					environmentData += data + "\r\n";
+				}
+				else
+				{
+					// gets Mac system arch
+					HelperConstants.SYSTEM_ARCH = data;
 				}
 			}
 		}

@@ -72,7 +72,7 @@ package actionScripts.valueObjects
 		private function getType():String
 		{
 			// flex
-			var compilerExtension:String = HelperConstants.IS_MACOS ? "" : ".bat";
+			var compilerExtension:String = HelperConstants.IS_WINDOWS ? ".bat" : "";
 			var compilerFile:File = path.resolvePath(FLEX_SDK_COMPILER + compilerExtension);
 			if (compilerFile.exists)
 			{

@@ -97,7 +97,7 @@ package actionScripts.utils
 						'<target name="unzipAIRSDK" if="${shouldUnzip}">'
 				);
 			}
-			else
+			else if (HelperConstants.IS_WINDOWS)
 			{
 				// on Windows using `value="${download.dir}/${air.sdk.url.file}"`
 				// throws error#1000: out of memory

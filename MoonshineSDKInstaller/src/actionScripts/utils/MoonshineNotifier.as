@@ -65,8 +65,8 @@ package actionScripts.utils
 		{
 			// send update notification to Moonshine
 			// mac specific
-			if (HelperConstants.IS_MACOS) sendUpdateNotificationToMoonshine();
-			else findMoonshineProcessWindows();
+			if (HelperConstants.IS_WINDOWS) findMoonshineProcessWindows();
+			else sendUpdateNotificationToMoonshine();
 		}
 		
 		private function onNotifierFileWriteError(value:String):void

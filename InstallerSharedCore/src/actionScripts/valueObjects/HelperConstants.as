@@ -33,6 +33,7 @@ package actionScripts.valueObjects
 {
 	import flash.desktop.NativeApplication;
 	import flash.filesystem.File;
+	import flash.system.Capabilities;
 	
 	import actionScripts.utils.HelperUtils;
 	
@@ -78,7 +79,9 @@ package actionScripts.valueObjects
 			"mklink /H $NEKO_HOME\\ssl.ndll $HAXE_HOME\\ssl.ndll"
 		];
 		
-		public static var IS_MACOS:Boolean = !NativeApplication.supportsSystemTrayIcon;
+		public static var IS_WINDOWS:Boolean = Capabilities.version.indexOf("WIN") != -1;
+		public static var IS_MACOS:Boolean = Capabilities.version.indexOf("MAC") != -1;
+		public static var IS_LINUX:Boolean = Capabilities.version.indexOf("LNX") != -1;
 		public static var IS_RUNNING_IN_MOON:Boolean;
 		public static var IS_INSTALLER_READY:Boolean;
 		public static var DEFAULT_INSTALLATION_PATH:File;
@@ -101,6 +104,11 @@ package actionScripts.valueObjects
 				// /Users/$user/Library/Containers/com.moonshine-ide/Data
 				// thus, we need to determine more practical path out of it
 				DEFAULT_INSTALLATION_PATH = HelperUtils.getMacOSDownloadsDirectory();
+				return DEFAULT_INSTALLATION_PATH;
+			}
+			else if (IS_LINUX)
+			{
+				DEFAULT_INSTALLATION_PATH = File.userDirectory.resolvePath(".appdata/net.prominic.MoonshineSDKInstaller/Local Store");
 				return DEFAULT_INSTALLATION_PATH;
 			}
 			

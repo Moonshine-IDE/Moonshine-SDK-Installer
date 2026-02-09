@@ -91,7 +91,7 @@ package actionScripts.utils
 				return;
 			}
 
-			if (HelperConstants.IS_MACOS)
+			if (!HelperConstants.IS_WINDOWS)
 			{
 				onCommandLineExecutionWith(setCommand);
 			}
@@ -119,9 +119,9 @@ package actionScripts.utils
 		
 		private function getPlatformCommand():String
 		{
-			var setCommand:String = HelperConstants.IS_MACOS ? "" : "@echo off\r\n";
+			var setCommand:String = HelperConstants.IS_WINDOWS ? "@echo off\r\n" : "";
 			var isValidToExecute:Boolean;
-			var setPathCommand:String = HelperConstants.IS_MACOS ? "export PATH=" : "set PATH=";
+			var setPathCommand:String = HelperConstants.IS_WINDOWS ? "set PATH=" : "export PATH=";
 			var defaultOrCustomSDKPath:String;
 			var haxe:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_HAXE);
 			var neko:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_NEKO);
@@ -129,7 +129,7 @@ package actionScripts.utils
 			if (FileUtils.isPathExists(haxe.installToPath))
 			{
 				setCommand += getSetExportWithoutQuote("HAXE_HOME", haxe.installToPath);
-				setPathCommand += (HelperConstants.IS_MACOS ? "$HAXE_HOME:" : "%HAXE_HOME%;");
+				setPathCommand += (HelperConstants.IS_WINDOWS ? "%HAXE_HOME%;" : "$HAXE_HOME:");
 				isValidToExecute = true;
 			}
 			if (FileUtils.isPathExists(neko.installToPath))
@@ -137,11 +137,11 @@ package actionScripts.utils
 				if (HelperConstants.IS_MACOS)
 				{
 					setCommand += getSetExportWithoutQuote("NEKO_HOME", neko.installToPath);
-					setPathCommand += (HelperConstants.IS_MACOS ? "NEKO_HOME:" : "%NEKO_HOME%;");
+					setPathCommand += (HelperConstants.IS_WINDOWS ? "%NEKO_HOME%;" : "NEKO_HOME:");
 				}
 
 				setCommand += getSetExportWithoutQuote("DYLD_LIBRARY_PATH", neko.installToPath);
-				setPathCommand += (HelperConstants.IS_MACOS ? "$DYLD_LIBRARY_PATH:" : "%DYLD_LIBRARY_PATH%;");
+				setPathCommand += (HelperConstants.IS_WINDOWS ? "%DYLD_LIBRARY_PATH%;" : "$DYLD_LIBRARY_PATH:");
 
 				if (HelperConstants.IS_MACOS) setCommand += HelperConstants.HAXE_MAC_SYMLINK_COMMANDS.join(";") +";";
 
@@ -151,16 +151,16 @@ package actionScripts.utils
 			// if nothing found in above three don't run
 			if (!isValidToExecute) return null;
 
-			if (HelperConstants.IS_MACOS)
-			{
-				setCommand += setPathCommand + "$PATH;";
-				setCommand += haxeSetupCommands.join(";");
-			}
-			else
+			if (HelperConstants.IS_WINDOWS)
 			{
 				// need to set PATH under application shell
 				setCommand += setPathCommand + "%PATH%\r\n";
 				setCommand += haxeSetupCommands.join("\r\n");
+			}
+			else
+			{
+				setCommand += setPathCommand + "$PATH;";
+				setCommand += haxeSetupCommands.join(";");
 			}
 			
 			return setCommand;
@@ -168,22 +168,22 @@ package actionScripts.utils
 
 		private function getSetExportWithoutQuote(field:String, path:String):String
 		{
-			if (HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
 			{
-				return getSetExportWithQuote(field, path);
+				return "set "+ field +"="+ path +"\r\n";
 			}
 
-			return "set "+ field +"="+ path +"\r\n";
+			return getSetExportWithQuote(field, path);
 		}
 
 		private function getSetExportWithQuote(field:String, path:String):String
 		{
-			if (HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
 			{
-				return "export "+ field +"='"+ path +"';";
+				return "set "+ field +"=\""+ path +"\"\r\n";
 			}
 
-			return "set "+ field +"=\""+ path +"\"\r\n";
+			return "export "+ field +"='"+ path +"';";
 		}
 		
 		private function getBatchFilePath():File
@@ -212,10 +212,11 @@ package actionScripts.utils
 			var haxe:ComponentVO = HelperUtils.getComponentByType(ComponentTypes.TYPE_HAXE);
 
 			customInfo = new NativeProcessStartupInfo();
-			customInfo.executable = HelperConstants.IS_MACOS ?
-					File.documentsDirectory.resolvePath("/bin/bash") : new File("c:\\Windows\\System32\\cmd.exe");
+			customInfo.executable = HelperConstants.IS_WINDOWS ?
+					new File("c:\\Windows\\System32\\cmd.exe") :
+					File.documentsDirectory.resolvePath("/bin/bash");
 
-			customInfo.arguments = Vector.<String>([HelperConstants.IS_MACOS ? "-c" : "/c", command]);
+			customInfo.arguments = Vector.<String>([(HelperConstants.IS_WINDOWS ? "/c" : "-c"), command]);
 			customProcess = new NativeProcess();
 			customInfo.workingDirectory = new File(haxe.installToPath);
 			startShell(true);

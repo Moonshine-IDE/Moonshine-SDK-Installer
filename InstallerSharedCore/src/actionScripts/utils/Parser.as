@@ -160,17 +160,17 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 			HelperConstants.CONFIG_ADOBE_AIR_VERSION = xmlData.airAdobe.@version.toString();
 			HelperConstants.CONFIG_HARMAN_AIR_VERSION = xmlData.airHarman.@version.toString();
 			HelperConstants.CONFIG_HARMAN_AIR_OBJECT = {
-				server: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.server),
-				folder: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.folder),
-				file: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file) +"?license=accepted",
-				path: String(xmlData.airHarman.download[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path),
+				server: String(xmlData.airHarman.download[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.server),
+				folder: String(xmlData.airHarman.download[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.folder),
+				file: String(xmlData.airHarman.download[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.file) +"?license=accepted",
+				path: String(xmlData.airHarman.download[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.path),
 				label: "AIR "+ HelperConstants.CONFIG_HARMAN_AIR_VERSION,
 				version: HelperConstants.CONFIG_HARMAN_AIR_VERSION,
 				versionID: HelperConstants.CONFIG_HARMAN_AIR_VERSION
 			};
 
 			// store 64-bit windows url
-			if (!HelperConstants.IS_MACOS)
+			if (HelperConstants.IS_WINDOWS)
 			{
 				HelperConstants.WINDOWS_64BIT_DOWNLOAD_DIRECTORY = (File.getRootDirectories()[0] as File).nativePath +"Program Files"+ File.separator +"MoonshineSDKInstaller";
 				HelperConstants.INSTALLER_UPDATE_CHECK_URL = String(xmlData.installerUpdateCheckUrl);
@@ -188,7 +188,11 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 					{
 						continue;
 					}
-					else if (!HelperConstants.IS_MACOS && (availableInOS.indexOf("win") == -1))
+					else if (HelperConstants.IS_WINDOWS && (availableInOS.indexOf("win") == -1))
+					{
+						continue;
+					}
+					else if (!HelperConstants.IS_MACOS && !HelperConstants.IS_WINDOWS)
 					{
 						continue;
 					}
@@ -225,14 +229,14 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 				var variantCount:int = XMLList(comp.download.variant).length();
 				if (variantCount == 1)
 				{
-					getDisplayVersionByArch(tmpComponent, comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+					getDisplayVersionByArch(tmpComponent, comp.download.variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"]);
 
-					//tmpComponent.version = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
-					//tmpComponent.displayVersion = String(comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
-					//tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString()
-					//	+ comp.download.variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
+					//tmpComponent.version = String(comp.download.variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.@version);
+					//tmpComponent.displayVersion = String(comp.download.variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.@displayVersion);
+					//tmpComponent.downloadURL = comp.download.variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.path.toString()
+					//	+ comp.download.variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.file.toString();
 					tmpComponent.installToPath = getInstallDirectoryPath(tmpComponent.type, tmpComponent.version);
-					tmpComponent.sizeInMb = int(comp.download.variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+					tmpComponent.sizeInMb = int(comp.download.variant.diskMBusage[HelperConstants.IS_WINDOWS ? "windows" : "mac"]);
 				}
 				else
 				{
@@ -244,13 +248,13 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 					{
 						tmpVariant = new ComponentVariantVO();
 
-						getDisplayVersionByArch(tmpVariant, variant[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+						getDisplayVersionByArch(tmpVariant, variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"]);
 
-						//tmpVariant.version = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@version);
-						//tmpVariant.displayVersion = String(variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.@displayVersion);
+						//tmpVariant.version = String(variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.@version);
+						//tmpVariant.displayVersion = String(variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.@displayVersion);
 						tmpVariant.title = String(variant.title) +" - "+ tmpVariant.version;
-						//tmpVariant.downloadURL = variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.path.toString() + variant[HelperConstants.IS_MACOS ? "mac" : "windows"].version.file.toString();
-						tmpVariant.sizeInMb = int(variant.diskMBusage[HelperConstants.IS_MACOS ? "mac" : "windows"]);
+						//tmpVariant.downloadURL = variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.path.toString() + variant[HelperConstants.IS_WINDOWS ? "windows" : "mac"].version.file.toString();
+						tmpVariant.sizeInMb = int(variant.diskMBusage[HelperConstants.IS_WINDOWS ? "windows" : "mac"]);
 						
 						tmpComponent.downloadVariants.add(tmpVariant);
 						if (variant.hasOwnProperty("@isSelected"))
@@ -276,7 +280,7 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 				// con contain platform specific or global values
 				if (comp.pathValidation.hasOwnProperty('windows'))
 				{
-					tmpComponent.pathValidation = String(comp.pathValidation[HelperConstants.IS_MACOS ? "mac" : "windows"]).split(",");
+					tmpComponent.pathValidation = String(comp.pathValidation[HelperConstants.IS_WINDOWS ? "windows" : "mac"]).split(",");
 				}
 				else
 				{
@@ -287,9 +291,9 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 				// can contain platform specific or global values
 				if (comp.license.hasOwnProperty('windows'))
 				{
-					tmpComponent.licenseUrl = String(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].url);
-					tmpComponent.licenseTitle = String(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].title);
-					setDescriptionBy(comp.license[HelperConstants.IS_MACOS ? "mac" : "windows"].description, tmpComponent);
+					tmpComponent.licenseUrl = String(comp.license[HelperConstants.IS_WINDOWS ? "windows" : "mac"].url);
+					tmpComponent.licenseTitle = String(comp.license[HelperConstants.IS_WINDOWS ? "windows" : "mac"].title);
+					setDescriptionBy(comp.license[HelperConstants.IS_WINDOWS ? "windows" : "mac"].description, tmpComponent);
 				}
 				else
 				{
@@ -313,7 +317,11 @@ import moonshine.haxeScripts.valueObjects.PackageVO;
 					{
 						continue;
 					}
-					else if (!HelperConstants.IS_MACOS && (availableInOS.indexOf("win") == -1))
+					else if (HelperConstants.IS_WINDOWS && (availableInOS.indexOf("win") == -1))
+					{
+						continue;
+					}
+					else if (!HelperConstants.IS_MACOS && !HelperConstants.IS_WINDOWS)
 					{
 						continue;
 					}

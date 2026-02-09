@@ -76,7 +76,7 @@ package actionScripts.managers
 			itemTestCount = -1;
 			HelperConstants.IS_DETECTION_IN_PROCESS = true;
 			dispatchEvent(new Event(EVENT_DETECTION_BEGINS));
-			if (!HelperConstants.IS_MACOS && !environmentUtil)
+			if (HelperConstants.IS_WINDOWS && !environmentUtil)
 			{
 				environmentUtil = new EnvironmentUtils();
 				environmentUtil.addEventListener(EnvironmentUtils.ENV_READ_COMPLETED, onEnvReadCompleted, false, 0, true);
@@ -309,9 +309,17 @@ package actionScripts.managers
 						macGitDetector.test(onXCodePathDetection);
 						break;
 					case ComponentTypes.TYPE_SVN:
+						var svnDefaultPaths:Array = null;
 						if (HelperConstants.IS_MACOS)
 						{
-							var svnDefaultPaths:Array = ["/usr/local/bin/svn", "/opt/local/bin/svn", "/opt/homebrew/bin/svn"];
+							svnDefaultPaths = ["/usr/local/bin/svn", "/opt/local/bin/svn", "/opt/homebrew/bin/svn"];
+						}
+						else if (HelperConstants.IS_LINUX)
+						{
+							svnDefaultPaths = ["/usr/bin"];
+						}
+						if (svnDefaultPaths != null)
+						{
 							for each(var svnPath:String in svnDefaultPaths)
 							{
 								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
@@ -328,9 +336,17 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_ANT:
+						var antDefaultPaths:Array = null;
 						if (HelperConstants.IS_MACOS)
 						{
-							var antDefaultPaths:Array = ["/usr/local", "/opt/homebrew"];
+							antDefaultPaths = ["/usr/local", "/opt/homebrew"];
+						}
+						else if (HelperConstants.IS_LINUX)
+						{
+							antDefaultPaths = ["/usr"];
+						}
+						if (antDefaultPaths != null)
+						{
 							for each(var antPath:String in antDefaultPaths)
 							{
 								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
@@ -347,9 +363,17 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_MAVEN:
+						var mvnDefaultPaths:Array = null;
 						if (HelperConstants.IS_MACOS)
 						{
-							var mvnDefaultPaths:Array = ["/usr/local", "/opt/homebrew"];
+							mvnDefaultPaths = ["/usr/local", "/opt/homebrew"];
+						}
+						else if (HelperConstants.IS_LINUX)
+						{
+							mvnDefaultPaths = ["/usr"];
+						}
+						if (mvnDefaultPaths != null)
+						{
 							for each(var mvnPath:String in mvnDefaultPaths)
 							{
 								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
@@ -369,31 +393,61 @@ package actionScripts.managers
 						new NotesDominoDetector(notifyMoonshineOnDetection);
 						break;
 					case ComponentTypes.TYPE_HAXE:
-						var haxeDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/lib/haxe" : "c:\\HaxeToolkit\\haxe";
-						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
-								item.type,
-								haxeDefaultPath,
-								item.pathValidation
-						);
+						var haxeDefaultPath:String = null;
+						if (HelperConstants.IS_WINDOWS)
+						{
+							haxeDefaultPath = "c:\\HaxeToolkit\\haxe";
+						}
+						else if (HelperConstants.IS_MACOS)
+						{
+							haxeDefaultPath = "/usr/local/lib/haxe";
+						}
+						else if (HelperConstants.IS_LINUX)
+						{
+							haxeDefaultPath = "/usr/bin";
+						}
+						if (haxeDefaultPath != null)
+						{
+							item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+									item.type,
+									haxeDefaultPath,
+									item.pathValidation
+							);
+						}
 						if (item.isAlreadyDownloaded)
 						{
 							item.installToPath = haxeDefaultPath;
 						}
 						break;
 					case ComponentTypes.TYPE_NEKO:
-						var nekoDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/lib/neko" : "c:\\HaxeToolkit\\neko";
-						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
-								item.type,
-								nekoDefaultPath,
-								item.pathValidation
-						);
+						var nekoDefaultPath:String = null;
+						if (HelperConstants.IS_WINDOWS)
+						{
+							nekoDefaultPath = "c:\\HaxeToolkit\\neko";
+						}
+						else if (HelperConstants.IS_MACOS)
+						{
+							nekoDefaultPath = "/usr/local/lib/neko";
+						}
+						else if (HelperConstants.IS_LINUX)
+						{
+							nekoDefaultPath = "/usr/bin";
+						}
+						if (nekoDefaultPath != null)
+						{
+							item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+									item.type,
+									nekoDefaultPath,
+									item.pathValidation
+							);
+						}
 						if (item.isAlreadyDownloaded)
 						{
 							item.installToPath = nekoDefaultPath;
 						}
 						break;
 					case ComponentTypes.TYPE_VAGRANT:
-						var vagrantDefaultPath:String = HelperConstants.IS_MACOS ? "/usr/local/bin" : "C:\\HashiCorp\\Vagrant";
+						var vagrantDefaultPath:String = HelperConstants.IS_WINDOWS ? "C:\\HashiCorp\\Vagrant" : "/usr/local/bin";
 						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
 								item.type,
 								vagrantDefaultPath,
