@@ -446,6 +446,37 @@ package actionScripts.managers
 							item.installToPath = nekoDefaultPath;
 						}
 						break;
+					case ComponentTypes.TYPE_NODEJS:
+						var nodeDefaultPaths:Array = null;
+						if (HelperConstants.IS_WINDOWS)
+						{
+							nodeDefaultPaths = ["C:\\Program Files\\nodejs"];
+						}
+						else if (HelperConstants.IS_MACOS)
+						{
+							nodeDefaultPaths = ["/usr/local", "/opt/homebrew"];
+						}
+						else if (HelperConstants.IS_LINUX)
+						{
+							nodeDefaultPaths = ["/usr"];
+						}
+						if (nodeDefaultPaths != null)
+						{
+							for each(var nodePath:String in nodeDefaultPaths)
+							{
+								item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
+										item.type,
+										nodePath,
+										item.pathValidation
+								);
+								if (item.isAlreadyDownloaded)
+								{
+									item.installToPath = nodePath;
+									break;
+								}
+							}
+						}
+						break;
 					case ComponentTypes.TYPE_VAGRANT:
 						var vagrantDefaultPath:String = HelperConstants.IS_WINDOWS ? "C:\\HashiCorp\\Vagrant" : "/usr/local/bin";
 						item.isAlreadyDownloaded = HelperUtils.isValidExecutableBy(
