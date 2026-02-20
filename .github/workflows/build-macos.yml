@@ -36,14 +36,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v3
+    - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '11'
 
     - uses: krdlab/setup-haxe@master
       with:
-        haxe-version: 4.3.6
+        haxe-version: 4.3.7
 
     - uses: joshtynjala/setup-apache-flex-action@v2.2.0
       with:
