@@ -52,6 +52,9 @@ jobs:
         accept-air-license: true
         air-license-base64: ${{ secrets.AIR_LICENSE_BASE64 }}       
 
+    - name: Install NSIS
+      run: choco install nsis -y
+
     - name: Install NSIS plugin nsProcess
       working-directory: MoonshineSDKInstaller/build
       run: |
