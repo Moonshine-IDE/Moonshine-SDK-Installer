@@ -337,7 +337,7 @@
 			<arg value="-storepass"/>
 			<arg value="moonshine"/>
 			<arg value="-tsa"/>
-			<arg value="http://timestamp.digicert.com/sha256/timestamp"/>
+			<arg value="http://timestamp.digicert.com"/>
 			<arg value="-target"/>
 			<arg value="bundle"/>
 			<arg value="${app.path}"/>
