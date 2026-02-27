@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## Moonshine SDK Installer [4.8.0]
+
+### Summary
+
+Moonshine SDK Installer 4.8.0 includes a version update for Harman AIR SDK.
+
+### Changed
+
+* Update Harman AIR SDK to 51.3.1.1 ([#127](https://github.com/Moonshine-IDE/Moonshine-SDK-Installer/issues/127))
+
 ## Moonshine SDK Installer [4.7.0]
 
 ### Summary
