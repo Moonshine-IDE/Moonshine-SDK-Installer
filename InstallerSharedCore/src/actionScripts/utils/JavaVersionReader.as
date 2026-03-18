@@ -48,6 +48,7 @@ package actionScripts.utils
 		public static const ENV_READ_ERROR:String = "ENV_READ_ERROR";
 		
 		public var component:ComponentVO;
+		public var pathToRead:String;
 		
 		private var errorCloseData:String;
 		private var outputData:String = "";
@@ -55,6 +56,8 @@ package actionScripts.utils
 		
 		public function readVersion(javaPath:String=null, onComplete:Function=null):void
 		{
+			pathToRead = javaPath;
+
 			if (!FileUtils.isPathExists(javaPath))
 			{
 				this.dispatchEvent(new HelperEvent(ENV_READ_ERROR, "Invalid Java Path"));

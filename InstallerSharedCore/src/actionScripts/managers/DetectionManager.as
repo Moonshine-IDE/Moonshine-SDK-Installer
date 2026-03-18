@@ -151,19 +151,32 @@ package actionScripts.managers
 						item.isAlreadyDownloaded = model.moonshineBridge.isGrailsPresent();
 						break;
 					case ComponentTypes.TYPE_OPENJAVA:
-						if (model.moonshineBridge.isJavaPresent() && model.moonshineBridge.javaVersionForTypeahead)
+						if (model.moonshineBridge.isJavaPresent())
 						{
-							if ((model.moonshineBridge.javaVersionForTypeahead != "1.8.0"))
+							if (model.moonshineBridge.javaVersionForTypeahead)
 							{
-								item.isAlreadyDownloaded = true;
-							}
-							else if (model.moonshineBridge.javaVersionForTypeahead == "1.8.0" && model.moonshineBridge.isJava8Present())
-							{
-								item.isAlreadyDownloaded = true;
+								if ((model.moonshineBridge.javaVersionForTypeahead != "1.8.0"))
+								{
+									item.isAlreadyDownloaded = true;
+								}
+								else if (model.moonshineBridge.javaVersionForTypeahead == "1.8.0" && model.moonshineBridge.isJava8Present())
+								{
+									item.isAlreadyDownloaded = true;
+								}
+								else
+								{
+									item.isAlreadyDownloaded = false;
+								}
 							}
 							else
 							{
-								item.isAlreadyDownloaded = false;
+								// Moonshine has Java configured, but it hasn't
+								// yet detected the version, so we need to
+								// figure out the version manually.
+								var javaVersionReader:JavaVersionReader = new JavaVersionReader();
+								javaVersionReader.component = item;
+								addJavaVersionReaderEvents(javaVersionReader);
+								javaVersionReader.readVersion(model.moonshineBridge.javaPathForTypeahead);
 							}
 						}
 						else
@@ -172,11 +185,24 @@ package actionScripts.managers
 						}
 						break;
 					case ComponentTypes.TYPE_OPENJAVA_V8:
-						if (model.moonshineBridge.isJava8Present() && model.moonshineBridge.javaVersionInJava8Path)
+						if (model.moonshineBridge.isJava8Present())
 						{
-							item.isAlreadyDownloaded =
-								(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionInJava8Path, "1.8.0") != 1) ? 
-								true : false;
+							if (model.moonshineBridge.javaVersionInJava8Path)
+							{
+								item.isAlreadyDownloaded =
+									(HelperUtils.isNewUpdateVersion(model.moonshineBridge.javaVersionInJava8Path, "1.8.0") != 1) ? 
+									true : false;
+							}
+							else
+							{
+								// Moonshine has Java 8 configured, but it hasn't
+								// yet detected the version, so we need to
+								// figure out the version manually.
+								var javaVersionReader:JavaVersionReader = new JavaVersionReader();
+								javaVersionReader.component = item;
+								addJavaVersionReaderEvents(javaVersionReader);
+								javaVersionReader.readVersion(model.moonshineBridge.java8Path);
+							}
 						}
 						else
 						{
@@ -584,7 +610,7 @@ package actionScripts.managers
 			if ((reader.component.version == "1.8.0" && versionFindIndex == -1) || 
 				(reader.component.version != "1.8.0" && versionFindIndex != 0))
 			{
-				reader.component.installToPath = environmentUtil.environments.JAVA_HOME.nativePath;
+				reader.component.installToPath = reader.pathToRead;
 				reader.component.isAlreadyDownloaded = true;
 			}
 			

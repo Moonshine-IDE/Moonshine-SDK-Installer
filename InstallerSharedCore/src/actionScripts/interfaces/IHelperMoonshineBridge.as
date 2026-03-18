@@ -58,6 +58,8 @@ package actionScripts.interfaces
 		function get playerglobalExists():Boolean;
 		function set playerglobalExists(value:Boolean):void;
 		function get javaVersionForTypeahead():String;
+		function get javaPathForTypeahead():String;
 		function get javaVersionInJava8Path():String;
+		function get java8Path():String;
 	}
 }

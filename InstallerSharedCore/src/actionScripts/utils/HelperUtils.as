@@ -124,19 +124,25 @@ import mx.utils.StringUtil;
 			var _currentMinor:int = -1;
 			var _currentRevision:int = -1;
 			
-			var currentVersionIndexes:Array = currentVersion.split(".");
-			_currentMajor = parseInt(currentVersionIndexes[0]);
-			if (currentVersionIndexes.length > 1) _currentMinor = parseInt(currentVersionIndexes[1]);
-			if (currentVersionIndexes.length > 2) _currentRevision = parseInt(currentVersionIndexes[2]);
+			if (currentVersion != null && currentVersion.length > 0)
+			{
+				var currentVersionIndexes:Array = currentVersion.split(".");
+				_currentMajor = parseInt(currentVersionIndexes[0]);
+				if (currentVersionIndexes.length > 1) _currentMinor = parseInt(currentVersionIndexes[1]);
+				if (currentVersionIndexes.length > 2) _currentRevision = parseInt(currentVersionIndexes[2]);
+			}
 			
 			var uv1:Number = -1;
 			var uv2:Number = -1;
 			var uv3:Number = -1;
 
-			var updateVersionIndexes:Array = updateVersion.split(".");
-			uv1 = Number(updateVersionIndexes[0]);
-			if (updateVersionIndexes.length > 1) uv2 = Number(updateVersionIndexes[1]);
-			if (updateVersionIndexes.length > 2) uv3 = Number(updateVersionIndexes[2]);
+			if (updateVersion != null && updateVersion.length > 0)
+			{
+				var updateVersionIndexes:Array = updateVersion.split(".");
+				uv1 = Number(updateVersionIndexes[0]);
+				if (updateVersionIndexes.length > 1) uv2 = Number(updateVersionIndexes[1]);
+				if (updateVersionIndexes.length > 2) uv3 = Number(updateVersionIndexes[2]);
+			}
 			
 			if ((uv1 != -1) && (uv1 > _currentMajor)) return 1;
 			else if ((uv2 != -1) && (uv1 >= _currentMajor) && (uv2 > _currentMinor)) return 1;
