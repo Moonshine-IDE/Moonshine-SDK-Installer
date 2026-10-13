@@ -6,17 +6,17 @@
 		<download>
 			<windows>
 				<version version="51.3.1.1" displayVersion="51.3.1.1">
-					<server>https://airsdk.harman.com</server>
+					<server>https://airsdk.wxlift.com</server>
 					<folder>api/versions/51.3.1.1/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/51.3.1.1/sdks/</path>
+					<path>https://airsdk.wxlift.com/api/versions/51.3.1.1/sdks/</path>
 					<file>AIRSDK_Flex_Windows.zip</file>
 				</version>
 			</windows>
 			<mac>
 				<version version="51.3.1.1" displayVersion="51.3.1.1">
-					<server>https://airsdk.harman.com</server>
+					<server>https://airsdk.wxlift.com</server>
 					<folder>api/versions/51.3.1.1/sdks</folder>
-					<path>https://airsdk.harman.com/api/versions/51.3.1.1/sdks/</path>
+					<path>https://airsdk.wxlift.com/api/versions/51.3.1.1/sdks/</path>
 					<file>AIRSDK_Flex_MacOS.zip</file>
 				</version>
 			</mac>
